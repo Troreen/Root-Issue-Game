@@ -24,8 +24,10 @@
 
 #include <Editor.h>
 #include <p4/p4.h>
+#include <unordered_set>
 
 constexpr int MAX_OBJECTDEFINTION_TEXT_LENGTH = 256;
+constexpr std::string_view ANIMATION_GRAPH_DIRECTORY = "animations/Animation Graphs";
 
 using namespace Tga;
 
@@ -47,6 +49,60 @@ struct ObjectEditorPreviewSettings
 };
 
 static ObjectEditorPreviewSettings locPreviewSettings = {};
+
+namespace
+{
+	std::string BuildAnimationGraphScriptPrefix(const std::string_view& aObjectPath)
+	{
+		std::filesystem::path scriptPrefix = std::filesystem::path(aObjectPath);
+		scriptPrefix.replace_extension("");
+
+		std::string prefix = scriptPrefix.generic_string();
+		for (char& character : prefix)
+		{
+			if (character == '/')
+			{
+				character = '_';
+			}
+		}
+
+		return prefix;
+	}
+
+	std::filesystem::path BuildAnimationGraphScriptPath(const std::string_view& aObjectPath, const std::string_view& aScriptName)
+	{
+		return std::filesystem::path(ANIMATION_GRAPH_DIRECTORY) / (BuildAnimationGraphScriptPrefix(aObjectPath) + "_" + std::string(aScriptName));
+	}
+
+	std::string GetAnimationGraphDirectoryString()
+	{
+		return std::filesystem::path(ANIMATION_GRAPH_DIRECTORY).string();
+	}
+
+	bool HasPrefix(const std::string_view& aValue, const std::string_view& aPrefix)
+	{
+		return aValue.size() >= aPrefix.size() && aValue.compare(0, aPrefix.size(), aPrefix) == 0;
+	}
+
+	std::string GetDisplayNameForScript(
+		const std::string_view& aScriptPath,
+		const std::string_view& aLegacyPrefix,
+		const std::string_view& aAnimationGraphPrefix)
+	{
+		if (HasPrefix(aScriptPath, aLegacyPrefix) && aScriptPath.size() > aLegacyPrefix.size())
+		{
+			return std::string(aScriptPath.substr(aLegacyPrefix.size() + 1));
+		}
+
+		const std::string filename = std::filesystem::path(aScriptPath).filename().string();
+		if (HasPrefix(filename, aAnimationGraphPrefix) && filename.size() > aAnimationGraphPrefix.size())
+		{
+			return filename.substr(aAnimationGraphPrefix.size());
+		}
+
+		return std::string(aScriptPath);
+	}
+}
 
 static void UpdatePreviewShaders()
 {
@@ -414,10 +470,7 @@ void ObjectDefinitionDocument::DrawObjectDefinitionPanel()
 
 			if (ImGui::Button("Create", ImVec2(120, 0)))
 			{
-				std::filesystem::path path = myObjectDefinition->GetPath();
-				path.replace_extension(""); 
-				path += "_";
-				path += std::string_view(locCreateScriptData.name);
+				std::filesystem::path path = BuildAnimationGraphScriptPath(myObjectDefinition->GetPath(), locCreateScriptData.name);
 
 				std::string pathString = path.string();
 
@@ -444,26 +497,49 @@ void ObjectDefinitionDocument::DrawObjectDefinitionPanel()
 		if (showScripts)
 		{
 			static std::vector<std::string_view> scripts;
+			static std::unordered_set<std::string_view> uniqueScripts;
 
 			std::filesystem::path objectPath = myObjectDefinition->GetPath();
 			objectPath.replace_extension("");
 
 			scripts.clear();
+			uniqueScripts.clear();
 
 			EditorScriptManager& editorScriptManager = EditorScriptManager::GetInstance();
 
 			std::string objectPathString = objectPath.string();
+			const std::string animationGraphDirectory = GetAnimationGraphDirectoryString();
+			const std::string animationGraphPrefix = BuildAnimationGraphScriptPrefix(myObjectDefinition->GetPath()) + "_";
 			editorScriptManager.GetAllScriptsThatStartsWithPath(objectPathString, scripts);
+
+			std::vector<std::string_view> animationGraphScripts;
+			editorScriptManager.GetAllScriptsThatStartsWithPath(animationGraphDirectory, animationGraphScripts);
+
+			for (const std::string_view& script : animationGraphScripts)
+			{
+				const std::filesystem::path scriptPath(script);
+				const std::string filename = scriptPath.filename().string();
+
+				if (HasPrefix(filename, animationGraphPrefix))
+				{
+					scripts.push_back(script);
+				}
+			}
 
 			for (auto s : scripts)
 			{
+				if (!uniqueScripts.insert(s).second)
+				{
+					continue;
+				}
+
 				ImGuiTreeNodeFlags flags = itemFlags;
 
 				if (mySelectedScript == s)
 					flags |= ImGuiTreeNodeFlags_Selected;
 
-				// just show the scripts name relative to the objects path:
-				ImGui::TreeNodeEx(s.data() + objectPathString.size() + 1, flags);
+				const std::string displayName = GetDisplayNameForScript(s, objectPathString, animationGraphPrefix);
+				ImGui::TreeNodeEx(displayName.c_str(), flags);
 
 				if (ImGui::IsItemClicked())
 				{

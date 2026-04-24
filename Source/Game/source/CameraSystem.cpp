@@ -481,6 +481,26 @@ void CameraSystem::RenderDebugUi()
     bool& showCollisionShapes = GameDebugSettings::ShowColliderDebugLines();
     ImGui::Checkbox("Show Collision Shapes", &showCollisionShapes);
 
+    bool& enableCollisionDebugLog = GameDebugSettings::EnableCollisionDebugLog();
+    ImGui::Checkbox("Log Collision Checks", &enableCollisionDebugLog);
+
+    bool& logCollisionPairChecks = GameDebugSettings::LogCollisionPairChecks();
+    ImGui::BeginDisabled(!enableCollisionDebugLog);
+    ImGui::Checkbox("Log Collision Non-Hits", &logCollisionPairChecks);
+    bool& logCollisionResolutionDetails = GameDebugSettings::LogCollisionResolutionDetails();
+    ImGui::Checkbox("Log Collision Resolution Details", &logCollisionResolutionDetails);
+    int& maxCollisionDebugLogs = GameDebugSettings::MaxCollisionDebugLogsPerFrame();
+    ImGui::SliderInt("Collision Log Cap / Frame", &maxCollisionDebugLogs, 1, 500);
+    ImGui::EndDisabled();
+
+    bool& enableColliderDrawerDebugLog = GameDebugSettings::EnableColliderDrawerDebugLog();
+    ImGui::Checkbox("Log Collider Drawers", &enableColliderDrawerDebugLog);
+
+    ImGui::BeginDisabled(!enableColliderDrawerDebugLog);
+    int& maxColliderDrawerDebugLogs = GameDebugSettings::MaxColliderDrawerDebugLogsPerFrame();
+    ImGui::SliderInt("Collider Drawer Log Cap / Frame", &maxColliderDrawerDebugLogs, 1, 100);
+    ImGui::EndDisabled();
+
     float debugFovDegrees = RadiansToDegrees(myDebugCamFovRadians);
     if (ImGui::SliderFloat("Debug FOV (deg)", &debugFovDegrees, kDebugCamFovMinDegrees, kDebugCamFovMaxDegrees, "%.1f"))
     {

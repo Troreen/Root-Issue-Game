@@ -114,6 +114,42 @@ namespace GameDebugSettings
         return value;
     }
 
+    inline bool& EnableCollisionDebugLog()
+    {
+        static bool value = false;
+        return value;
+    }
+
+    inline bool& LogCollisionPairChecks()
+    {
+        static bool value = false;
+        return value;
+    }
+
+    inline bool& LogCollisionResolutionDetails()
+    {
+        static bool value = false;
+        return value;
+    }
+
+    inline int& MaxCollisionDebugLogsPerFrame()
+    {
+        static int value = 80;
+        return value;
+    }
+
+    inline bool& EnableColliderDrawerDebugLog()
+    {
+        static bool value = false;
+        return value;
+    }
+
+    inline int& MaxColliderDrawerDebugLogsPerFrame()
+    {
+        static int value = 20;
+        return value;
+    }
+
     inline bool& ShowVfxDebugLines()
     {
         static bool value = false;

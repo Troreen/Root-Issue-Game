@@ -62,12 +62,8 @@
       "is-dynamic": false,
       "is-per-instance": false,
       "name": "colliderIsTrigger",
-      "type": "Float3",
-      "value": [
-        0.0,
-        0.0,
-        0.0
-      ]
+      "type": "Bool",
+      "value": false
     },
     {
       "description": "",

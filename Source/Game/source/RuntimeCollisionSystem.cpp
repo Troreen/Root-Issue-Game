@@ -2,6 +2,7 @@
 
 #include "BoxColliderComponent.h"
 #include "CollisionLayerRules.h"
+#include "DebugSettings.h"
 #include "GameObject.h"
 #include "ObjectLayer.h"
 #include "SphereColliderComponent.h"
@@ -10,6 +11,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -155,12 +157,133 @@ namespace
             aLayer == ObjectLayer::Player ||
             aLayer == ObjectLayer::BasicMeleeEnemy;
     }
+
+    const char* ToRuleName(CollisionRule aRule)
+    {
+        switch (aRule)
+        {
+        case CollisionRule::Ignore:
+            return "Ignore";
+        case CollisionRule::Block:
+            return "Block";
+        case CollisionRule::Trigger:
+            return "Trigger";
+        default:
+            return "Unknown";
+        }
+    }
+
+    const char* ToPhaseName(CollisionPhase aPhase)
+    {
+        switch (aPhase)
+        {
+        case CollisionPhase::Enter:
+            return "Enter";
+        case CollisionPhase::Stay:
+            return "Stay";
+        case CollisionPhase::Exit:
+            return "Exit";
+        default:
+            return "Unknown";
+        }
+    }
+
+    std::string ToString(const Vector3f& aVector)
+    {
+        std::ostringstream stream;
+        stream << "(" << aVector.x << ", " << aVector.y << ", " << aVector.z << ")";
+        return stream.str();
+    }
+
+    Vector3f GetCenter(const CommonUtilities::AABB3D<float>& anAabb)
+    {
+        return (anAabb.GetMin() + anAabb.GetMax()) * 0.5f;
+    }
+
+    Vector3f GetSize(const CommonUtilities::AABB3D<float>& anAabb)
+    {
+        return anAabb.GetMax() - anAabb.GetMin();
+    }
+
+    Vector3f GetOverlapDepths(
+        const CommonUtilities::AABB3D<float>& aFirstAabb,
+        const CommonUtilities::AABB3D<float>& aSecondAabb)
+    {
+        return Vector3f(
+            (std::min)(aFirstAabb.GetMax().x, aSecondAabb.GetMax().x) -
+                (std::max)(aFirstAabb.GetMin().x, aSecondAabb.GetMin().x),
+            (std::min)(aFirstAabb.GetMax().y, aSecondAabb.GetMax().y) -
+                (std::max)(aFirstAabb.GetMin().y, aSecondAabb.GetMin().y),
+            (std::min)(aFirstAabb.GetMax().z, aSecondAabb.GetMax().z) -
+                (std::max)(aFirstAabb.GetMin().z, aSecondAabb.GetMin().z));
+    }
+
+    const char* GetColliderTypeName(const GameObject& anObject)
+    {
+        if (anObject.GetComponent<BoxColliderComponent>())
+        {
+            return "Box";
+        }
+
+        if (anObject.GetComponent<SphereColliderComponent>())
+        {
+            return "SphereAABB";
+        }
+
+        return "None";
+    }
+
+    std::string DescribeObject(const GameObject& anObject)
+    {
+        std::ostringstream stream;
+        stream << "'" << anObject.GetName() << "'"
+            << " id=" << anObject.GetCollisionId()
+            << " layer=" << ToLayerName(anObject.GetLayer())
+            << " collider=" << GetColliderTypeName(anObject)
+            << " origin=" << ToString(anObject.GetTransform().GetPosition());
+        return stream.str();
+    }
+
+    std::string DescribeAabb(const CommonUtilities::AABB3D<float>& anAabb)
+    {
+        std::ostringstream stream;
+        stream << "min=" << ToString(anAabb.GetMin())
+            << " max=" << ToString(anAabb.GetMax())
+            << " center=" << ToString(GetCenter(anAabb))
+            << " size=" << ToString(GetSize(anAabb));
+        return stream.str();
+    }
 }
 
 void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someGameObjects)
 {
     const CollisionLayerRuleTable rules = BuildCollisionRules();
     myContacts.clear();
+
+    const bool logCollisionDebug = GameDebugSettings::EnableCollisionDebugLog();
+    const bool logPairChecks = GameDebugSettings::LogCollisionPairChecks();
+    const bool logResolutionDetails = GameDebugSettings::LogCollisionResolutionDetails();
+    int collisionDebugLogBudget = (std::max)(1, GameDebugSettings::MaxCollisionDebugLogsPerFrame());
+    int skippedCollisionDebugLogs = 0;
+    static std::uint64_t collisionDebugFrameIndex = 0;
+    ++collisionDebugFrameIndex;
+
+    auto logCollisionDebugLine = [&](const std::string& aText)
+        {
+            if (!logCollisionDebug)
+            {
+                return;
+            }
+
+            if (collisionDebugLogBudget <= 0)
+            {
+                ++skippedCollisionDebugLogs;
+                return;
+            }
+
+            --collisionDebugLogBudget;
+            std::cout << "[CollisionDebug][frame " << collisionDebugFrameIndex << "] " << aText << "\n";
+        };
 
     std::unordered_map<std::uint64_t, CollisionPairState> collisionPairsThisFrame;
     std::unordered_map<std::uint64_t, GameObject*> liveColliderObjectsById;
@@ -213,6 +336,18 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
         RefreshRuntimeCollider(*object);
     }
 
+    if (logCollisionDebug)
+    {
+        std::ostringstream stream;
+        stream << "live=" << liveColliderObjectsById.size()
+            << " players=" << playerObjects.size()
+            << " enemies=" << enemyObjects.size()
+            << " worldStatic=" << worldStaticObjects.size()
+            << " triggers=" << triggerObjects.size()
+            << " pickups=" << pickupObjects.size();
+        logCollisionDebugLine(stream.str());
+    }
+
     auto registerContact = [&](GameObject* aFirst, GameObject* aSecond, const Vector3f& aNormal, const float aPenetration)
         {
             const std::uint64_t pairKey = MakeCollisionPairKey(*aFirst, *aSecond);
@@ -237,14 +372,40 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
                 ? CollisionPhase::Stay
                 : CollisionPhase::Enter;
             myContacts.push_back(contact);
+
+            if (logCollisionDebug && (logResolutionDetails || contact.phase != CollisionPhase::Stay))
+            {
+                std::ostringstream stream;
+                stream << "contact phase=" << ToPhaseName(contact.phase)
+                    << " normal=" << ToString(aNormal)
+                    << " penetration=" << aPenetration
+                    << " first=" << DescribeObject(*aFirst)
+                    << " second=" << DescribeObject(*aSecond);
+                logCollisionDebugLine(stream.str());
+            }
         };
 
     auto resolveBlock = [&](GameObject& aDynamicObject, GameObject& anObstacleObject, const bool aRegisterContact)
         {
+            const std::uint64_t pairKey = MakeCollisionPairKey(aDynamicObject, anObstacleObject);
+            const bool isNewPair = myCollisionPairsLastFrame.find(pairKey) == myCollisionPairsLastFrame.end();
+            const Vector3f originBefore = aDynamicObject.GetTransform().GetPosition();
             const CommonUtilities::AABB3D<float> dynamicAabb = aDynamicObject.GetHitbox();
             const CommonUtilities::AABB3D<float> obstacleAabb = anObstacleObject.GetHitbox();
+            const Vector3f overlaps = GetOverlapDepths(dynamicAabb, obstacleAabb);
             if (!Has3DOverlap(dynamicAabb, obstacleAabb))
             {
+                if (logCollisionDebug && logPairChecks)
+                {
+                    std::ostringstream stream;
+                    stream << "block miss rule=" << ToRuleName(CollisionRule::Block)
+                        << " dynamic=" << DescribeObject(aDynamicObject)
+                        << " obstacle=" << DescribeObject(anObstacleObject)
+                        << " dynamicAabb={" << DescribeAabb(dynamicAabb) << "}"
+                        << " obstacleAabb={" << DescribeAabb(obstacleAabb) << "}"
+                        << " overlapDepths=" << ToString(overlaps);
+                    logCollisionDebugLine(stream.str());
+                }
                 return false;
             }
 
@@ -253,11 +414,41 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
             float penetration = 0.0f;
             if (!TryCompute3DSeparation(dynamicAabb, obstacleAabb, separation, normal, penetration))
             {
+                if (logCollisionDebug)
+                {
+                    std::ostringstream stream;
+                    stream << "block overlap but separation failed"
+                        << " dynamic=" << DescribeObject(aDynamicObject)
+                        << " obstacle=" << DescribeObject(anObstacleObject)
+                        << " dynamicAabb={" << DescribeAabb(dynamicAabb) << "}"
+                        << " obstacleAabb={" << DescribeAabb(obstacleAabb) << "}"
+                        << " overlapDepths=" << ToString(overlaps);
+                    logCollisionDebugLine(stream.str());
+                }
                 return false;
             }
 
             aDynamicObject.GetTransform().Translate(separation);
             RefreshRuntimeCollider(aDynamicObject);
+
+            if (logCollisionDebug && (logResolutionDetails || isNewPair))
+            {
+                const CommonUtilities::AABB3D<float> resolvedAabb = aDynamicObject.GetHitbox();
+                std::ostringstream stream;
+                stream << "block hit"
+                    << " dynamic=" << DescribeObject(aDynamicObject)
+                    << " obstacle=" << DescribeObject(anObstacleObject)
+                    << " originBefore=" << ToString(originBefore)
+                    << " originAfter=" << ToString(aDynamicObject.GetTransform().GetPosition())
+                    << " dynamicAabbBefore={" << DescribeAabb(dynamicAabb) << "}"
+                    << " dynamicAabbAfter={" << DescribeAabb(resolvedAabb) << "}"
+                    << " obstacleAabb={" << DescribeAabb(obstacleAabb) << "}"
+                    << " overlapDepths=" << ToString(overlaps)
+                    << " separation=" << ToString(separation)
+                    << " normal=" << ToString(normal)
+                    << " penetration=" << penetration;
+                logCollisionDebugLine(stream.str());
+            }
 
             if (aRegisterContact)
             {
@@ -271,9 +462,33 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
         {
             const CommonUtilities::AABB3D<float> firstAabb = aFirst.GetHitbox();
             const CommonUtilities::AABB3D<float> secondAabb = aSecond.GetHitbox();
+            const Vector3f overlaps = GetOverlapDepths(firstAabb, secondAabb);
             if (!Has3DOverlap(firstAabb, secondAabb))
             {
+                if (logCollisionDebug && logPairChecks)
+                {
+                    std::ostringstream stream;
+                    stream << "trigger miss"
+                        << " first=" << DescribeObject(aFirst)
+                        << " second=" << DescribeObject(aSecond)
+                        << " firstAabb={" << DescribeAabb(firstAabb) << "}"
+                        << " secondAabb={" << DescribeAabb(secondAabb) << "}"
+                        << " overlapDepths=" << ToString(overlaps);
+                    logCollisionDebugLine(stream.str());
+                }
                 return false;
+            }
+
+            if (logCollisionDebug)
+            {
+                std::ostringstream stream;
+                stream << "trigger hit"
+                    << " first=" << DescribeObject(aFirst)
+                    << " second=" << DescribeObject(aSecond)
+                    << " firstAabb={" << DescribeAabb(firstAabb) << "}"
+                    << " secondAabb={" << DescribeAabb(secondAabb) << "}"
+                    << " overlapDepths=" << ToString(overlaps);
+                logCollisionDebugLine(stream.str());
             }
 
             registerContact(&aFirst, &aSecond, Vector3f::Zero, 0.0f);
@@ -385,6 +600,22 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
         contact.second = secondIt->second;
         contact.phase = CollisionPhase::Exit;
         myContacts.push_back(contact);
+
+        if (logCollisionDebug)
+        {
+            std::ostringstream stream;
+            stream << "contact phase=Exit"
+                << " first=" << DescribeObject(*contact.first)
+                << " second=" << DescribeObject(*contact.second);
+            logCollisionDebugLine(stream.str());
+        }
+    }
+
+    if (logCollisionDebug && skippedCollisionDebugLogs > 0)
+    {
+        std::cout << "[CollisionDebug][frame " << collisionDebugFrameIndex << "] skipped "
+            << skippedCollisionDebugLogs
+            << " log lines because Collision Log Cap / Frame was reached\n";
     }
 
     myCollisionPairsLastFrame = std::move(collisionPairsThisFrame);

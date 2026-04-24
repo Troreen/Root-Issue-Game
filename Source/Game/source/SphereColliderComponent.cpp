@@ -4,13 +4,16 @@
 
 #include <tge/engine.h>
 #include <tge/graphics/GraphicsEngine.h>
+#include <tge/graphics/GraphicsStateStack.h>
 #include <tge/drawers/LineDrawer.h>
 #include <tge/primitives/LinePrimitive.h>
 #include <tge/math/color.h>
+#include <tge/math/Matrix4x4.h>
 
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <sstream>
 
 static constexpr int kCircleSegments = 32;
 static constexpr float kPi = 3.14159265358979323846f;
@@ -114,7 +117,70 @@ void SphereColliderComponent::Render()
         ? Tga::Color{ 1.f, 0.f, 1.f, 1.f }
         : Tga::Color{ 0.f, 0.5f, 1.f, 1.f };
 
-    Tga::LineDrawer& drawer = Tga::Engine::GetInstance()->GetGraphicsEngine().GetLineDrawer();
+    auto& graphicsEngine = Tga::Engine::GetInstance()->GetGraphicsEngine();
+    Tga::GraphicsStateStack& graphicsStateStack = graphicsEngine.GetGraphicsStateStack();
+    Tga::LineDrawer& drawer = graphicsEngine.GetLineDrawer();
+
+    auto logDrawerDebugLine = [](const std::string& aText)
+    {
+        if (!GameDebugSettings::EnableColliderDrawerDebugLog())
+        {
+            return;
+        }
+
+        static int lastFrameKey = -1;
+        static int budget = 0;
+        static int skipped = 0;
+
+        const float totalTime = Tga::Engine::GetInstance()
+            ? static_cast<float>(Tga::Engine::GetInstance()->GetTotalTime())
+            : 0.0f;
+        const int frameKey = static_cast<int>(totalTime * 60.0f);
+        if (frameKey != lastFrameKey)
+        {
+            if (skipped > 0)
+            {
+                std::cout << "[ColliderDrawerDebug] skipped " << skipped
+                    << " log lines because Collider Drawer Log Cap / Frame was reached\n";
+            }
+
+            lastFrameKey = frameKey;
+            budget = (std::max)(1, GameDebugSettings::MaxColliderDrawerDebugLogsPerFrame());
+            skipped = 0;
+        }
+
+        if (budget <= 0)
+        {
+            ++skipped;
+            return;
+        }
+
+        --budget;
+        std::cout << "[ColliderDrawerDebug] " << aText << "\n";
+    };
+
+    if (GameDebugSettings::EnableColliderDrawerDebugLog())
+    {
+        const Vector3f ownerPosition = GetOwner()
+            ? GetOwner()->GetTransform().GetPosition()
+            : Vector3f(0.0f, 0.0f, 0.0f);
+
+        std::ostringstream stream;
+        stream << "Sphere owner='" << (GetOwner() ? GetOwner()->GetName() : "<none>") << "'"
+            << " ownerOrigin=(" << ownerPosition.x << ", " << ownerPosition.y << ", " << ownerPosition.z << ")"
+            << " radius=" << myRadius
+            << " offset=(" << myOffset.x << ", " << myOffset.y << ", " << myOffset.z << ")"
+            << " center=(" << center.x << ", " << center.y << ", " << center.z << ")"
+            << " aabbMin=(" << center.x - r << ", " << center.y - r << ", " << center.z - r << ")"
+            << " aabbMax=(" << center.x + r << ", " << center.y + r << ", " << center.z + r << ")"
+            << " graphicsTransformPosBefore=(" << graphicsStateStack.GetPosition().x
+            << ", " << graphicsStateStack.GetPosition().y
+            << ", " << graphicsStateStack.GetPosition().z << ")";
+        logDrawerDebugLine(stream.str());
+    }
+
+    graphicsStateStack.Push();
+    graphicsStateStack.SetTransform(Tga::Matrix4x4f::CreateIdentityMatrix());
 
     // Draw 3 axis-aligned circles (XY, XZ, YZ planes)
     auto drawCircle = [&](int axisA, int axisB)
@@ -183,6 +249,8 @@ void SphereColliderComponent::Render()
     drawPivotAxis(axisX);
     drawPivotAxis(axisY);
     drawPivotAxis(axisZ);
+
+    graphicsStateStack.Pop();
 #endif
 }
 

@@ -256,7 +256,11 @@ void Tga::EditorScriptManager::SaveAll()
 			JsonData jsonData;
 			p.second.script->WriteToJson(jsonData);
 
-			fs::permissions(path, fs::perms::all);
+			std::filesystem::create_directories(path.parent_path());
+			if (std::filesystem::exists(path))
+			{
+				fs::permissions(path, fs::perms::all);
+			}
 			std::ofstream out(path, std::ios::trunc);
 			out << jsonData.json.dump(2);
 			out.close();

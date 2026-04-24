@@ -1,15 +1,95 @@
 #include "BoxColliderComponent.h"
+#include "AnimatedMeshComponent.h"
 #include "GameObject.h"
 #include "DebugSettings.h"
+#include "MeshComponent.h"
 
 #include <algorithm>
 #include <iostream>
+#include <memory>
+#include <sstream>
 
 #include <tge/engine.h>
 #include <tge/graphics/GraphicsEngine.h>
+#include <tge/graphics/GraphicsStateStack.h>
 #include <tge/drawers/LineDrawer.h>
 #include <tge/primitives/LinePrimitive.h>
 #include <tge/math/color.h>
+#include <tge/math/Matrix4x4.h>
+#include <tge/model/Model.h>
+
+namespace
+{
+    bool TryGetModelLocalBounds(const Tga::Model& aModel, Vector3f& outMin, Vector3f& outMax)
+    {
+        if (aModel.GetMeshCount() == 0)
+        {
+            return false;
+        }
+
+        bool hasBounds = false;
+        Vector3f combinedMin(0.0f, 0.0f, 0.0f);
+        Vector3f combinedMax(0.0f, 0.0f, 0.0f);
+
+        for (unsigned int meshIndex = 0; meshIndex < static_cast<unsigned int>(aModel.GetMeshCount()); ++meshIndex)
+        {
+            const Tga::BoxSphereBounds& bounds = aModel.GetMeshData(meshIndex).Bounds;
+            const Vector3f meshMin(
+                bounds.Center.x - bounds.BoxExtents.x,
+                bounds.Center.y - bounds.BoxExtents.y,
+                bounds.Center.z - bounds.BoxExtents.z);
+            const Vector3f meshMax(
+                bounds.Center.x + bounds.BoxExtents.x,
+                bounds.Center.y + bounds.BoxExtents.y,
+                bounds.Center.z + bounds.BoxExtents.z);
+
+            if (!hasBounds)
+            {
+                combinedMin = meshMin;
+                combinedMax = meshMax;
+                hasBounds = true;
+                continue;
+            }
+
+            combinedMin.x = (std::min)(combinedMin.x, meshMin.x);
+            combinedMin.y = (std::min)(combinedMin.y, meshMin.y);
+            combinedMin.z = (std::min)(combinedMin.z, meshMin.z);
+            combinedMax.x = (std::max)(combinedMax.x, meshMax.x);
+            combinedMax.y = (std::max)(combinedMax.y, meshMax.y);
+            combinedMax.z = (std::max)(combinedMax.z, meshMax.z);
+        }
+
+        if (!hasBounds)
+        {
+            return false;
+        }
+
+        outMin = combinedMin;
+        outMax = combinedMax;
+        return true;
+    }
+
+    bool TryGetOwnerVisualLocalBounds(const GameObject& anOwner, Vector3f& outMin, Vector3f& outMax)
+    {
+        if (const MeshComponent* mesh = anOwner.GetComponent<MeshComponent>())
+        {
+            if (auto model = mesh->GetModelInstance().GetModel())
+            {
+                return TryGetModelLocalBounds(*model, outMin, outMax);
+            }
+        }
+
+        if (const AnimatedMeshComponent* mesh = anOwner.GetComponent<AnimatedMeshComponent>())
+        {
+            if (auto model = mesh->GetModelInstance().GetModel())
+            {
+                return TryGetModelLocalBounds(*model, outMin, outMax);
+            }
+        }
+
+        return false;
+    }
+}
 
 BoxColliderComponent::BoxColliderComponent(const Vector3f& aSize, const Vector3f& aOffset, bool anIsTrigger, bool aConstantUpdate)
     : myIsTrigger(anIsTrigger)
@@ -115,23 +195,100 @@ void BoxColliderComponent::Render()
     const auto& max = debugAabb.GetMax();
 
     const Tga::Vector3f minCorner = { min.x, min.y, min.z };
-    const Tga::Vector3f maxCorner = { max.x, max.y, max.z };
+    const Tga::Vector3f size = { max.x - min.x, max.y - min.y, max.z - min.z };
 
-    const Tga::Vector3f bottomNearLeft = { minCorner.x, minCorner.y, minCorner.z };
-    const Tga::Vector3f bottomNearRight = { maxCorner.x, minCorner.y, minCorner.z };
-    const Tga::Vector3f bottomFarRight = { maxCorner.x, minCorner.y, maxCorner.z };
-    const Tga::Vector3f bottomFarLeft = { minCorner.x, minCorner.y, maxCorner.z };
+    const Tga::Vector3f bottomNearLeft = { 0.0f, 0.0f, 0.0f };
+    const Tga::Vector3f bottomNearRight = { size.x, 0.0f, 0.0f };
+    const Tga::Vector3f bottomFarRight = { size.x, 0.0f, size.z };
+    const Tga::Vector3f bottomFarLeft = { 0.0f, 0.0f, size.z };
 
-    const Tga::Vector3f topNearLeft = { minCorner.x, maxCorner.y, minCorner.z };
-    const Tga::Vector3f topNearRight = { maxCorner.x, maxCorner.y, minCorner.z };
-    const Tga::Vector3f topFarRight = { maxCorner.x, maxCorner.y, maxCorner.z };
-    const Tga::Vector3f topFarLeft = { minCorner.x, maxCorner.y, maxCorner.z };
+    const Tga::Vector3f topNearLeft = { 0.0f, size.y, 0.0f };
+    const Tga::Vector3f topNearRight = { size.x, size.y, 0.0f };
+    const Tga::Vector3f topFarRight = { size.x, size.y, size.z };
+    const Tga::Vector3f topFarLeft = { 0.0f, size.y, size.z };
 
     Tga::Color col = myIsTrigger
         ? Tga::Color{ 1.f, 0.f, 1.f, 1.f }
         : Tga::Color{ 0.f, 1.f, 0.f, 1.f };
 
-    Tga::LineDrawer& drawer = Tga::Engine::GetInstance()->GetGraphicsEngine().GetLineDrawer();
+    auto& graphicsEngine = Tga::Engine::GetInstance()->GetGraphicsEngine();
+    Tga::GraphicsStateStack& graphicsStateStack = graphicsEngine.GetGraphicsStateStack();
+    Tga::LineDrawer& drawer = graphicsEngine.GetLineDrawer();
+
+    auto logDrawerDebugLine = [](const std::string& aText)
+    {
+        if (!GameDebugSettings::EnableColliderDrawerDebugLog())
+        {
+            return;
+        }
+
+        static int lastFrameKey = -1;
+        static int budget = 0;
+        static int skipped = 0;
+
+        const float totalTime = Tga::Engine::GetInstance()
+            ? static_cast<float>(Tga::Engine::GetInstance()->GetTotalTime())
+            : 0.0f;
+        const int frameKey = static_cast<int>(totalTime * 60.0f);
+        if (frameKey != lastFrameKey)
+        {
+            if (skipped > 0)
+            {
+                std::cout << "[ColliderDrawerDebug] skipped " << skipped
+                    << " log lines because Collider Drawer Log Cap / Frame was reached\n";
+            }
+
+            lastFrameKey = frameKey;
+            budget = (std::max)(1, GameDebugSettings::MaxColliderDrawerDebugLogsPerFrame());
+            skipped = 0;
+        }
+
+        if (budget <= 0)
+        {
+            ++skipped;
+            return;
+        }
+
+        --budget;
+        std::cout << "[ColliderDrawerDebug] " << aText << "\n";
+    };
+
+    if (GameDebugSettings::EnableColliderDrawerDebugLog())
+    {
+        Vector3f visualLocalMin(0.0f, 0.0f, 0.0f);
+        Vector3f visualLocalMax(0.0f, 0.0f, 0.0f);
+        const bool hasVisualBounds = GetOwner()
+            ? TryGetOwnerVisualLocalBounds(*GetOwner(), visualLocalMin, visualLocalMax)
+            : false;
+
+        std::ostringstream stream;
+        stream << "Box owner='" << (GetOwner() ? GetOwner()->GetName() : "<none>") << "'"
+            << " ownerOrigin=(" << (GetOwner() ? GetOwner()->GetTransform().GetPosition().x : 0.0f)
+            << ", " << (GetOwner() ? GetOwner()->GetTransform().GetPosition().y : 0.0f)
+            << ", " << (GetOwner() ? GetOwner()->GetTransform().GetPosition().z : 0.0f) << ")"
+            << " visualBounds=" << (hasVisualBounds ? "yes" : "no");
+        if (hasVisualBounds)
+        {
+            stream << " visualLocalMin=(" << visualLocalMin.x << ", " << visualLocalMin.y << ", " << visualLocalMin.z << ")"
+                << " visualLocalMax=(" << visualLocalMax.x << ", " << visualLocalMax.y << ", " << visualLocalMax.z << ")";
+        }
+        stream
+            << " size=(" << mySize.x << ", " << mySize.y << ", " << mySize.z << ")"
+            << " offset=(" << myOffset.x << ", " << myOffset.y << ", " << myOffset.z << ")"
+            << " aabbMin=(" << min.x << ", " << min.y << ", " << min.z << ")"
+            << " aabbMax=(" << max.x << ", " << max.y << ", " << max.z << ")"
+            << " drawLocalMin=(0, 0, 0)"
+            << " drawLocalMax=(" << size.x << ", " << size.y << ", " << size.z << ")"
+            << " drawTransformPos=(" << minCorner.x << ", " << minCorner.y << ", " << minCorner.z << ")"
+            << " graphicsTransformPosBefore=(" << graphicsStateStack.GetPosition().x
+            << ", " << graphicsStateStack.GetPosition().y
+            << ", " << graphicsStateStack.GetPosition().z << ")";
+        logDrawerDebugLine(stream.str());
+    }
+
+    graphicsStateStack.Push();
+    graphicsStateStack.SetTransform(Tga::Matrix4x4f::CreateIdentityMatrix());
+    graphicsStateStack.ApplyTransform(Tga::Matrix4x4f::CreateFromTranslation(minCorner));
 
     auto drawEdge = [&](const Tga::Vector3f& a, const Tga::Vector3f& b)
     {
@@ -159,11 +316,11 @@ void BoxColliderComponent::Render()
 
     const Tga::Color centerColor = Tga::Color{ 1.f, 1.f, 0.f, 1.f };
     const Tga::Vector3f colliderCenter = {
-        (min.x + max.x) * 0.5f,
-        (min.y + max.y) * 0.5f,
-        (min.z + max.z) * 0.5f
+        size.x * 0.5f,
+        size.y * 0.5f,
+        size.z * 0.5f
     };
-    const float centerHalfExtent = std::max(10.0f, std::max(mySize.x, std::max(mySize.y, mySize.z)) * 0.15f);
+    const float centerHalfExtent = (std::max)(10.0f, (std::max)(mySize.x, (std::max)(mySize.y, mySize.z)) * 0.15f);
 
     auto drawMarkerAxis = [&](const Tga::Vector3f& aCenter, const Tga::Vector3f& anAxis, const float aHalfExtent, const Tga::Color& aColor)
     {
@@ -181,13 +338,19 @@ void BoxColliderComponent::Render()
     if (const GameObject* owner = GetOwner())
     {
         const Vector3f ownerPosition = owner->GetTransform().GetPosition();
-        const Tga::Vector3f objectOrigin = { ownerPosition.x, ownerPosition.y, ownerPosition.z };
+        const Tga::Vector3f objectOrigin = {
+            ownerPosition.x - min.x,
+            ownerPosition.y - min.y,
+            ownerPosition.z - min.z
+        };
         constexpr float originHalfExtent = 35.0f;
         const Tga::Color originColor = Tga::Color{ 1.f, 0.35f, 0.f, 1.f };
         drawMarkerAxis(objectOrigin, { 1.f, 0.f, 0.f }, originHalfExtent, originColor);
         drawMarkerAxis(objectOrigin, { 0.f, 1.f, 0.f }, originHalfExtent, originColor);
         drawMarkerAxis(objectOrigin, { 0.f, 0.f, 1.f }, originHalfExtent, originColor);
     }
+
+    graphicsStateStack.Pop();
 #endif
 }
 
@@ -226,9 +389,15 @@ void BoxColliderComponent::UpdateAABB()
         return;
     }
 
-    const Vector3f pos = owner->GetTransform().GetPosition() + myOffset;
-    const Vector3f half = mySize * 0.5f;
+    Vector3f min = owner->GetTransform().GetPosition() + myOffset;
+    Vector3f localVisualMin(0.0f, 0.0f, 0.0f);
+    Vector3f localVisualMax(0.0f, 0.0f, 0.0f);
+    if (TryGetOwnerVisualLocalBounds(*owner, localVisualMin, localVisualMax))
+    {
+        min += localVisualMin;
+    }
+    const Vector3f max = min + mySize;
 
-    myAABB = CommonUtilities::AABB3D<float>(pos - half, pos + half);
+    myAABB = CommonUtilities::AABB3D<float>(min, max);
     owner->SetHitbox(myAABB);
 }
