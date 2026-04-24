@@ -1,0 +1,116 @@
+{
+    "parent-object-definition":  "",
+    "properties":  [
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "factoryType",
+                           "type":  "StringId",
+                           "value":  "StaticWorld"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "typeId",
+                           "type":  "StringId",
+                           "value":  "SK_A_HealingObject"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "name",
+                           "type":  "StringId",
+                           "value":  "SK_A_HealingObject"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "model",
+                           "type":  "Model",
+                           "value":  {
+                                         "path":  "Assets\\\\Art\\\\3D\\\\Level Assets\\\\SK_A_HealingObject.fbx",
+                                         "textures":  [
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ]
+                                                      ]
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "animation_graph",
+                           "type":  "StringId",
+                           "value":  "AnimationGraphs\\\\Grafik\\\\SK_A_HealingObject.tgscript"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "animation_graph_template",
+                           "type":  "StringId",
+                           "value":  "idle_only"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "animation_model_property",
+                           "type":  "StringId",
+                           "value":  "model"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "animation_auto_bootstrap",
+                           "type":  "Bool",
+                           "value":  true
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_idle",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "AnimationClips\\\\Grafik\\\\SK_A_HealingObject_idle.tgac"
+                                     }
+                       }
+                   ]
+}

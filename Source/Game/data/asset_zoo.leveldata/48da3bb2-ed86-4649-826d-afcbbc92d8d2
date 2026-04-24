@@ -1,0 +1,20 @@
+{
+  "name": "Environment_Architecture_RuinStairs",
+  "object-definition": "RuinStairs",
+  "path": "Objects/Environment/Architecture",
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    4251.671875,
+    0.0,
+    -1375.0
+  ]
+}

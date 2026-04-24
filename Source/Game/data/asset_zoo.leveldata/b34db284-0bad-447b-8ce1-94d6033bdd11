@@ -1,0 +1,20 @@
+{
+  "name": "Environment_Architecture_HealingObject",
+  "object-definition": "HealingObject",
+  "path": "Objects/Environment/Architecture",
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    3051.672119140625,
+    0.0,
+    -2175.0
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "switch",
+  "object-definition": "switch",
+  "path": "additive_blend_sprite",
+  "properties": [
+    {
+      "name": "text",
+      "type": "StringId",
+      "value": "This sprite is drawn using additive blend\\n\\n\"Directly adds a pixel's color values to the background, creating a brightened effect\"\\n\\nFlip the switch to see multiple sprites using additive blend"
+    },
+    {
+      "name": "active_func",
+      "type": "StringId",
+      "value": "additive_blend_sprite"
+    },
+    {
+      "name": "active",
+      "type": "Bool",
+      "value": false
+    }
+  ],
+  "rotation": [
+    -179.99989318847656,
+    30.0,
+    -179.99989318847656
+  ],
+  "scale": [
+    0.7500000596046448,
+    0.7500002384185791,
+    0.9999996423721313
+  ],
+  "translation": [
+    565.1130981445313,
+    180.0000762939453,
+    -975.9140014648438
+  ]
+}

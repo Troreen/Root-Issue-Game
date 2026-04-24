@@ -1,0 +1,20 @@
+{
+  "name": "Environment_Architecture_RuinFence_3x3x1",
+  "object-definition": "RuinFence_3x3x1",
+  "path": "Objects/Environment/Architecture",
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    4251.671875,
+    0.0,
+    -1775.0
+  ]
+}

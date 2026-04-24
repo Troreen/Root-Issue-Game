@@ -1,0 +1,16 @@
+{
+  "animation_source_path": "animations\\FBX\\Player\\A_Player_Attack_Basic01.fbx",
+  "preview_model_path": "animations\\FBX\\Player\\A_Player_Idle.fbx",
+  "start_time": 0.0,
+  "end_time": 1.1,
+  "playback_rate": 1.0,
+  "is_looping": false,
+  "is_sync": false,
+  "cycle_offset": 0.0,
+  "cycle_count": 1.0,
+  "events": [
+    { "time": 0.25, "id": "attack_windup" },
+    { "time": 0.52, "id": "attack_hit" },
+    { "time": 0.9, "id": "attack_recover" }
+  ]
+}

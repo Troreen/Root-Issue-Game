@@ -1,0 +1,11 @@
+{
+  "animation_source_path": "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Walk.fbx",
+  "cycle_count": 1.0,
+  "cycle_offset": 0.0,
+  "end_time": 2.0,
+  "is_looping": true,
+  "is_sync": false,
+  "playback_rate": 1.0,
+  "preview_model_path": "animations\\SK\\SK_CH_Enemy_Heavy.fbx",
+  "start_time": 0.0
+}

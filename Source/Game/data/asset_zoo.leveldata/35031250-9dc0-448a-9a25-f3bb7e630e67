@@ -1,0 +1,20 @@
+{
+  "name": "test_enemy",
+  "object-definition": "test_enemy",
+  "path": "Objects",
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -3170.1435546875,
+    0.0,
+    -1575.0
+  ]
+}

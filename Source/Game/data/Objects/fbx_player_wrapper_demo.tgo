@@ -1,0 +1,167 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "StaticWorld"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "typeId",
+      "type": "StringId",
+      "value": "fbx_player_wrapper_demo"
+    },
+    {
+      "description": "Demo model loaded from the FBX folder",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "animations\\SK\\SK_CH_Player.fbx",
+        "textures": [
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "description": "Wrapper demo graph using FBX-backed clips",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_graph",
+      "type": "StringId",
+      "value": "Objects\\fbx_player_wrapper_demo_graph.tgscript"
+    },
+    {
+      "description": "Use authored assets in this demo",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_auto_bootstrap",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_model_property",
+      "type": "StringId",
+      "value": "model"
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_idle",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\A_Player_Idle.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_walk",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\A_Player_Walk.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_run",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\A_Player_Run.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_attack_basic01",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\A_Player_Attack_Basic01.tgac"
+      }
+    },
+    {
+      "description": "Idle to walk blend",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "move_blend",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "Locomotion to run blend",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "run_blend",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "Global animation speed scale",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "anim_speed",
+      "type": "Float",
+      "value": 1.0
+    },
+    {
+      "description": "Overlay attack clip on top of locomotion",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "attack_weight",
+      "type": "Float",
+      "value": 0.0
+    }
+  ]
+}

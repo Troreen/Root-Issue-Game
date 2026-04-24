@@ -1,0 +1,102 @@
+{
+  "links": [
+    {
+      "id": 0,
+      "sourcePin": 3,
+      "targetPin": 1
+    },
+    {
+      "id": 1,
+      "sourcePin": 5,
+      "targetPin": 2
+    }
+  ],
+  "nodes": [
+    {
+      "customData": null,
+      "id": 0,
+      "name": "",
+      "position": [
+        636.0,
+        214.0
+      ],
+      "type": "Animate Model"
+    },
+    {
+      "customData": null,
+      "id": 1,
+      "name": "",
+      "position": [
+        333.0,
+        251.0
+      ],
+      "type": "Play Clip"
+    },
+    {
+      "customData": null,
+      "id": 2,
+      "name": "",
+      "position": [
+        86.0,
+        254.0
+      ],
+      "type": "Read Animation Clip Property"
+    }
+  ],
+  "pins": [
+    {
+      "datatype": "StringId",
+      "id": 0,
+      "name": "Model Property Name",
+      "node": 0,
+      "role": "Input",
+      "type": "Property",
+      "value": "model"
+    },
+    {
+      "datatype": "Pose",
+      "id": 1,
+      "name": "Value",
+      "node": 0,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Animation Clip",
+      "id": 2,
+      "name": "Clip",
+      "node": 1,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 3,
+      "name": "Pose",
+      "node": 1,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 4,
+      "name": "Name",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": "clip_interact_ground"
+    },
+    {
+      "datatype": "Animation Clip",
+      "id": 5,
+      "name": "Value",
+      "node": 2,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    }
+  ]
+}

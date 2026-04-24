@@ -1,0 +1,51 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "Model",
+      "type": "Model",
+      "value": {
+        "path": "models\\SK_Flower_Power.fbx",
+        "textures": [
+          [
+            "textures\\Particle_Chest_c.dds",
+            "textures\\Particle_Chest_N.dds",
+            "textures\\Particle_Chest_M.dds",
+            "textures\\Particle_Chest_fx.dds"
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "Pickup"
+    }
+  ]
+}

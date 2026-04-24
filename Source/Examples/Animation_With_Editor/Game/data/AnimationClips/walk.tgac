@@ -1,0 +1,11 @@
+{
+  "animation_source_path": "Character\\Character_walk.fbx",
+  "cycle_count": 1.0,
+  "cycle_offset": 0.0,
+  "end_time": 1.3200000524520874,
+  "is_looping": true,
+  "is_sync": true,
+  "playback_rate": 1.0,
+  "preview_model_path": "Character\\Character.fbx",
+  "start_time": 0.0
+}

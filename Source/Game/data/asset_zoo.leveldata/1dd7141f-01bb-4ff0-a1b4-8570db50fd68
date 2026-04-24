@@ -1,0 +1,20 @@
+{
+  "name": "Environment_Level1_Grass_6x6",
+  "object-definition": "Grass_6x6",
+  "path": "Objects/Environment/Level1",
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -3451.672119140625,
+    0.0,
+    1775.0
+  ]
+}

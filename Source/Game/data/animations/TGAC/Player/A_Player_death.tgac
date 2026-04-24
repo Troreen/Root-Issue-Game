@@ -1,0 +1,11 @@
+{
+  "animation_source_path": "animations\\FBX\\Player\\A_Player_Death.fbx",
+  "cycle_count": 1.0,
+  "cycle_offset": 0.0,
+  "end_time": 1.6666666269302368,
+  "is_looping": true,
+  "is_sync": false,
+  "playback_rate": 1.0,
+  "preview_model_path": "animations\\SK\\SK_CH_Player.fbx",
+  "start_time": 0.0
+}

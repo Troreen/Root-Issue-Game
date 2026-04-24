@@ -1,0 +1,20 @@
+{
+  "name": "platform_no_wall(2)",
+  "object-definition": "platform_no_wall",
+  "path": "environment",
+  "rotation": [
+    0.0,
+    180.0,
+    0.0
+  ],
+  "scale": [
+    0.9999979734420776,
+    1.0,
+    0.9999979734420776
+  ],
+  "translation": [
+    246.98699951171875,
+    -100.0,
+    -933.0
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "door",
+  "object-definition": "door",
+  "path": "",
+  "properties": [
+    {
+      "name": "plate_name",
+      "type": "StringId",
+      "value": "door_plate"
+    }
+  ],
+  "rotation": [
+    90.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -300.0,
+    0.0,
+    300.0
+  ]
+}

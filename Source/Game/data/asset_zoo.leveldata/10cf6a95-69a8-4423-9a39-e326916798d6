@@ -1,0 +1,20 @@
+{
+  "name": "Environment_Decorations_Level1_Bush_01",
+  "object-definition": "Bush_01",
+  "path": "Objects/Environment/Decorations/Level1",
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -1350.557373046875,
+    0.0,
+    -200.0
+  ]
+}

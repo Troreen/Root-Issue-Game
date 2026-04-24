@@ -1,0 +1,69 @@
+{
+    "parent-object-definition":  "",
+    "properties":  [
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "factoryType",
+                           "type":  "StringId",
+                           "value":  "StaticWorld"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "typeId",
+                           "type":  "StringId",
+                           "value":  "SM_EN_RockWall_3x3_02_Lvl(1-3)"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "name",
+                           "type":  "StringId",
+                           "value":  "SM_EN_RockWall_3x3_02_Lvl(1-3)"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "model",
+                           "type":  "Model",
+                           "value":  {
+                                         "path":  "Assets\\\\Art\\\\3D\\\\Level Assets\\\\SM_EN_RockWall_3x3_02_Lvl(1-3).fbx",
+                                         "textures":  [
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ]
+                                                      ]
+                                     }
+                       }
+                   ]
+}

@@ -1,0 +1,95 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_idle",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "AnimationClips\\idle.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_interact_ground",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "AnimationClips\\interact_ground.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_jog",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "AnimationClips\\jog.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_walk",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "AnimationClips\\walk.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "Character\\Character.fbx",
+        "textures": [
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": true,
+      "is-per-instance": false,
+      "name": "walk_jog_blend",
+      "type": "Float",
+      "value": 0.0
+    }
+  ]
+}

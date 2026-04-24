@@ -1,0 +1,87 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "active",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "active_func",
+      "type": "StringId",
+      "value": ""
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "radius",
+      "type": "Float",
+      "value": 200.0
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "switch",
+      "type": "Model",
+      "value": {
+        "path": "models\\switch.fbx",
+        "textures": [
+          [
+            "textures\\platform_c.dds",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "switch",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "text",
+      "type": "StringId",
+      "value": "This is some example text to test if it works as I think \\n\\nNot sure if it does though."
+    }
+  ]
+}

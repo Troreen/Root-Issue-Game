@@ -1,0 +1,11 @@
+{
+  "animation_source_path": "Character\\Character_interact_ground.fbx",
+  "cycle_count": 1.0,
+  "cycle_offset": 0.0,
+  "end_time": 5.182000160217285,
+  "is_looping": false,
+  "is_sync": false,
+  "playback_rate": 1.0,
+  "preview_model_path": "Character\\Character.fbx",
+  "start_time": 0.0
+}

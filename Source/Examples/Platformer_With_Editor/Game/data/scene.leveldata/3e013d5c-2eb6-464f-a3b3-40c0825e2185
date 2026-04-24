@@ -1,0 +1,37 @@
+{
+  "name": "switch",
+  "object-definition": "switch",
+  "path": "alpha_threshold",
+  "properties": [
+    {
+      "name": "text",
+      "type": "StringId",
+      "value": "Here is a sprite, testing pixel alpha against a threashold\\n\\nNo blending is done, if alpha is less than the threashold, it is not rendered.\\n\\nFlip the switch to let the threashold oscillate between 0 and 1 over time"
+    },
+    {
+      "name": "active_func",
+      "type": "StringId",
+      "value": "alpha_threshold"
+    },
+    {
+      "name": "active",
+      "type": "Bool",
+      "value": false
+    }
+  ],
+  "rotation": [
+    -1.3970052350487094e-05,
+    89.99996948242188,
+    0.0
+  ],
+  "scale": [
+    0.7499994039535522,
+    0.7499999403953552,
+    0.9999988675117493
+  ],
+  "translation": [
+    1109.173095703125,
+    180.0,
+    -5.140573193784803e-05
+  ]
+}

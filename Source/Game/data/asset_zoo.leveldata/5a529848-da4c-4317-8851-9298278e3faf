@@ -1,0 +1,20 @@
+{
+  "name": "Environment_Architecture_RuinDoor",
+  "object-definition": "RuinDoor",
+  "path": "Objects/Environment/Architecture",
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    3451.672119140625,
+    0.0,
+    -1775.0
+  ]
+}

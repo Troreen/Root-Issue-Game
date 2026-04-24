@@ -1,0 +1,20 @@
+{
+  "name": "test_pickup(7)",
+  "object-definition": "test_pickup",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    147.60531616210938,
+    7.819019317626953,
+    464.89361572265625
+  ]
+}

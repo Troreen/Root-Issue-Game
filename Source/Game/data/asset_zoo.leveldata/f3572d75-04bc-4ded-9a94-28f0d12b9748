@@ -1,0 +1,20 @@
+{
+  "name": "Environment_Decorations_Level3_Spire_01",
+  "object-definition": "Spire_01",
+  "path": "Objects/Environment/Decorations/Level3",
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    3251.672119140625,
+    0.0,
+    200.0
+  ]
+}

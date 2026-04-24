@@ -1,0 +1,20 @@
+{
+  "name": "Environment_Level1_Dirt_3x3",
+  "object-definition": "Dirt_3x3",
+  "path": "Objects/Environment/Level1",
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -3851.672119140625,
+    0.0,
+    1375.0
+  ]
+}

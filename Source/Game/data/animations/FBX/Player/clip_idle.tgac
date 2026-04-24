@@ -1,0 +1,12 @@
+{
+  "animation_source_path": "animations\\FBX\\Player\\A_Player_Idle.fbx",
+  "preview_model_path": "animations\\FBX\\Player\\A_Player_Idle.fbx",
+  "start_time": 0.0,
+  "end_time": 1.2,
+  "playback_rate": 1.0,
+  "is_looping": true,
+  "is_sync": true,
+  "cycle_offset": 0.0,
+  "cycle_count": 1.0,
+  "events": []
+}

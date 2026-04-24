@@ -1,0 +1,20 @@
+{
+  "name": "switch-front",
+  "object-definition": "switch-front",
+  "path": "example switch",
+  "rotation": [
+    0.0,
+    29.999996185302734,
+    0.0
+  ],
+  "scale": [
+    0.7499997615814209,
+    0.7499998807907104,
+    1.0
+  ],
+  "translation": [
+    396.5555114746094,
+    88.22530364990234,
+    1095.3525390625
+  ]
+}

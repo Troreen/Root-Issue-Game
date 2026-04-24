@@ -1,0 +1,478 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "Player"
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "layer",
+      "type": "StringId",
+      "value": "Player"
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "StringId",
+      "value": "box"
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderSize",
+      "type": "Float3",
+      "value": [
+        100.0,
+        180.0,
+        100.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderOffset",
+      "type": "Float3",
+      "value": [
+        0.0,
+        100.0,
+        0.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderIsTrigger",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "typeId",
+      "type": "StringId",
+      "value": "Player"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "name",
+      "type": "StringId",
+      "value": "Wrapper Demo Player"
+    },
+    {
+      "description": "Player model for TGAC demo",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "animations\\\\SK\\\\SK_CH_Player.fbx",
+        "textures": [
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "description": "Expanded player graph with locomotion, combo, charge, ranged, hurt and death branches",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_graph",
+      "type": "StringId",
+      "value": "Objects\\\\Player\\\\animation_graph.tgscript"
+    },
+    {
+      "description": "Use authored clip assets",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_auto_bootstrap",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_model_property",
+      "type": "StringId",
+      "value": "model"
+    },
+    {
+      "description": "Enable in-game LEFT/RIGHT/HOME toggles",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_demo_toggles",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_idle",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Idle.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_walk",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Walk.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_run",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Run.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_attack_basic01",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Attack_Basic01.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_attack_basic02",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Attack_Basic02.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_attack_basic03",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Attack_Basic03.tgac"
+      }
+    },
+    {
+      "description": "Heavy charge windup",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_attack_charge",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Attack_Charge.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_attack_interrupt",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Attack_Interrupt.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_attack_roll",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Attack_Roll.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_death",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_death.tgac"
+      }
+    },
+    {
+      "description": "Heavy attack release",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_heavy",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Heavy.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_hurt",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_hurt.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_ranged_attack",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Ranged_Attack.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_ranged_charge",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Ranged_Charge.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_ranged_charge_idle",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Ranged_Charge_Idle.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_roll",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Roll.tgac"
+      }
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_walk",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_run",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_attack_basic01",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_roll",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_attack_basic02",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_attack_basic03",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_attack_charge",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_attack_interrupt",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_attack_roll",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_death",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_heavy",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_hurt",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_ranged_attack",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_ranged_charge",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_ranged_charge_idle",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "Global speed scale",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "anim_speed",
+      "type": "Float",
+      "value": 1.0
+    }
+  ]
+}

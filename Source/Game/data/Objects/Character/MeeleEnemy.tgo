@@ -1,0 +1,285 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "BasicMeleeEnemy"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "animations\\SK\\SK_CH_Enemy_Basic.fbx",
+        "textures": [
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "name",
+      "type": "StringId",
+      "value": "MeeleEnemy"
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_auto_bootstrap",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_graph",
+      "type": "StringId",
+      "value": "AnimationGraphs\\\\Grafik\\\\SK_CH_MeeleEnemy.tgscript"
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_graph_template",
+      "type": "StringId",
+      "value": "idle_only"
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_model_property",
+      "type": "StringId",
+      "value": "model"
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_aggro",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Aggro.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_aggro_walk",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Aggro_Walk.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_attack",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Attack.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_death",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Death.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_hurt",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Hurt.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_idle",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Idle.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_idle_aggro",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Aggro_Idle.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_spawn",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": ""
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_walk",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Walk.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_aggro",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_aggro_walk",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_attack",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_death",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_hurt",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_idle",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_idle_aggro",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_walk",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "Combat",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "damage",
+      "type": "Int",
+      "value": 10
+    },
+    {
+      "description": "",
+      "group": "Combat",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "health",
+      "type": "Int",
+      "value": 100
+    }
+  ]
+}

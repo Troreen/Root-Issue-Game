@@ -1,0 +1,11 @@
+{
+  "animation_source_path": "Character\\Character_idle.fbx",
+  "cycle_count": 1.0,
+  "cycle_offset": 0.0,
+  "end_time": 2.4489998817443848,
+  "is_looping": true,
+  "is_sync": false,
+  "playback_rate": 1.0,
+  "preview_model_path": "Character\\Character.fbx",
+  "start_time": 0.0
+}

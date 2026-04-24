@@ -1,0 +1,20 @@
+{
+  "name": "Props_Smashroom_02_Lvl_1_3_",
+  "object-definition": "Smashroom_02_Lvl(1-3)",
+  "path": "Objects/Props",
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    3051.672119140625,
+    0.0,
+    1975.0
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Grass_3x3(19)",
+  "object-definition": "Grass_3x3",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    1400.0,
+    300.0,
+    5700.0
+  ]
+}

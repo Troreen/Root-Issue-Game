@@ -1,0 +1,11 @@
+{
+  "animation_source_path": "animations\\FBX\\NPC\\A_NPC_Idle.fbx",
+  "cycle_count": 1.0,
+  "cycle_offset": 0.0,
+  "end_time": 1.7333333492279053,
+  "is_looping": true,
+  "is_sync": false,
+  "playback_rate": 1.0,
+  "preview_model_path": "animations\\SK\\SK_CH_NPC.fbx",
+  "start_time": 0.0
+}

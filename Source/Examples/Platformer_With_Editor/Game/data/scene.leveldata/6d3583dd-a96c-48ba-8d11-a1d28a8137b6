@@ -1,0 +1,32 @@
+{
+  "name": "switch",
+  "object-definition": "switch",
+  "path": "example switch",
+  "properties": [
+    {
+      "name": "active",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "name": "text",
+      "type": "StringId",
+      "value": "In this example there are switches created in editor as tgo-files\\nThe code in this example show how to get data from the editor to the game.\\n\\n'A' and 'D' to move left/right\\n'W' or 'Space' to jump\\n'E' to interact"
+    }
+  ],
+  "rotation": [
+    0.0,
+    29.999996185302734,
+    0.0
+  ],
+  "scale": [
+    0.7499998211860657,
+    0.7500001788139343,
+    0.9999997615814209
+  ],
+  "translation": [
+    394.2108154296875,
+    156.56027221679688,
+    1108.318359375
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Environment_Architecture_Lever",
+  "object-definition": "Lever",
+  "path": "Objects/Environment/Architecture",
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    3051.672119140625,
+    0.0,
+    -1775.0
+  ]
+}

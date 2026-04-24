@@ -1,0 +1,60 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "idle",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "character\\idle.fbx"
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "jump",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "character\\jump.fbx"
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "poke",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "character\\poke.fbx"
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "run",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "character\\run.fbx"
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "sneak",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": ""
+      }
+    }
+  ]
+}

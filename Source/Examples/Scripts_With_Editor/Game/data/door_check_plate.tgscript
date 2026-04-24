@@ -1,0 +1,153 @@
+{
+  "links": [
+    {
+      "id": 0,
+      "sourcePin": 3,
+      "targetPin": 0
+    },
+    {
+      "id": 1,
+      "sourcePin": 1,
+      "targetPin": 5
+    },
+    {
+      "id": 2,
+      "sourcePin": 2,
+      "targetPin": 9
+    }
+  ],
+  "nodes": [
+    {
+      "customData": null,
+      "id": 0,
+      "name": "",
+      "position": [
+        360.0,
+        261.0
+      ],
+      "type": "CheckPressurePlate"
+    },
+    {
+      "customData": null,
+      "id": 1,
+      "name": "",
+      "position": [
+        100.0,
+        265.0
+      ],
+      "type": "Read String Property"
+    },
+    {
+      "customData": null,
+      "id": 2,
+      "name": "",
+      "position": [
+        680.0,
+        166.0
+      ],
+      "type": "Write Bool Property"
+    },
+    {
+      "customData": null,
+      "id": 3,
+      "name": "",
+      "position": [
+        679.0,
+        328.0
+      ],
+      "type": "Write Bool Property"
+    }
+  ],
+  "pins": [
+    {
+      "datatype": "StringId",
+      "id": 0,
+      "name": "EntityName",
+      "node": 0,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": null,
+      "id": 1,
+      "name": "OnPressed",
+      "node": 0,
+      "role": "Output",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": null,
+      "id": 2,
+      "name": "OnReleased",
+      "node": 0,
+      "role": "Output",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 3,
+      "name": "Value",
+      "node": 1,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 4,
+      "name": "Name",
+      "node": 1,
+      "role": "Input",
+      "type": "Property",
+      "value": "plate_name"
+    },
+    {
+      "datatype": null,
+      "id": 5,
+      "name": "Run",
+      "node": 2,
+      "role": "Input",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 7,
+      "name": "Name",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": "entity_visibility"
+    },
+    {
+      "datatype": null,
+      "id": 9,
+      "name": "Run",
+      "node": 3,
+      "role": "Input",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 11,
+      "name": "Name",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": "entity_visibility"
+    },
+    {
+      "datatype": "Bool",
+      "id": 12,
+      "name": "Value",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": true
+    }
+  ]
+}

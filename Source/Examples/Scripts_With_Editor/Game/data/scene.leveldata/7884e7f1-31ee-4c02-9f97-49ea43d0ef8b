@@ -1,0 +1,27 @@
+{
+  "name": "sign(1)",
+  "object-definition": "sign",
+  "path": "",
+  "properties": [
+    {
+      "name": "message",
+      "type": "StringId",
+      "value": "Another message!"
+    }
+  ],
+  "rotation": [
+    89.9999771118164,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    0.9999996423721313,
+    0.9999996423721313
+  ],
+  "translation": [
+    400.0,
+    -0.00019070319831371307,
+    200.0
+  ]
+}

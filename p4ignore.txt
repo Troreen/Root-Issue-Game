@@ -1,0 +1,13 @@
+Local/
+Lib/
+Temp/
+
+**.cso
+**.obj
+
+Makefile
+*.sln
+.vs
+
+Bin/ # Remove this line if the Bin directory is used as the binary distribuition for the team
+bin/ # Remove this line if the bin directory is used as the binary distribuition for the team

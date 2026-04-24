@@ -1,0 +1,6 @@
+{028ae3ff-3b4d-4cfb-a640-86afb7d24115} bank:/Master
+{9a97c32b-4a36-00b9-2009-0c514621478d} bank:/Master.strings
+{b22a7e6c-5bf8-4e09-88b7-88ad1f686a23} bus:/
+{93b08175-98b8-4baf-9190-d1dc4219a9fc} bus:/MUSIC
+{799de0d2-e91b-4f58-9cef-d4405c26a767} bus:/SFX
+{49438915-d939-4eb1-963e-fb4c2c75936c} event:/VineBoom

@@ -1,0 +1,20 @@
+{
+  "name": "Player",
+  "object-definition": "Player",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    0.0,
+    -56.634681701660156,
+    256.849609375
+  ]
+}
