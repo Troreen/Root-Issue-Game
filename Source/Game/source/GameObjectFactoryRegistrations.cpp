@@ -124,6 +124,7 @@ namespace
             const Vector3f colliderSize =
                 aData.GetPropertyOr<Vector3f>("colliderSize", Vector3f(0.0f, 0.0f, 0.0f));
             const bool constantUpdate = aData.GetPropertyOr<bool>("colliderConstantUpdate", false);
+            const bool pivotBottomMiddle = aData.GetPropertyOr<bool>("colliderPivotBottomMiddle", false);
             if (colliderSize.x <= 0.0f || colliderSize.y <= 0.0f || colliderSize.z <= 0.0f)
             {
                 std::cout << "[Factory] Invalid colliderSize for object '" << aData.name
@@ -131,7 +132,7 @@ namespace
                 return;
             }
 
-            anObject.AddComponent<BoxColliderComponent>(colliderSize, offset, isTrigger, constantUpdate);
+            anObject.AddComponent<BoxColliderComponent>(colliderSize, offset, isTrigger, constantUpdate, pivotBottomMiddle);
             return;
         }
 

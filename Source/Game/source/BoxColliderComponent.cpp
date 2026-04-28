@@ -1,12 +1,9 @@
 #include "BoxColliderComponent.h"
-#include "AnimatedMeshComponent.h"
 #include "GameObject.h"
 #include "DebugSettings.h"
-#include "MeshComponent.h"
 
 #include <algorithm>
 #include <iostream>
-#include <memory>
 #include <sstream>
 
 #include <tge/engine.h>
@@ -16,85 +13,17 @@
 #include <tge/primitives/LinePrimitive.h>
 #include <tge/math/color.h>
 #include <tge/math/Matrix4x4.h>
-#include <tge/model/Model.h>
 
-namespace
-{
-    bool TryGetModelLocalBounds(const Tga::Model& aModel, Vector3f& outMin, Vector3f& outMax)
-    {
-        if (aModel.GetMeshCount() == 0)
-        {
-            return false;
-        }
-
-        bool hasBounds = false;
-        Vector3f combinedMin(0.0f, 0.0f, 0.0f);
-        Vector3f combinedMax(0.0f, 0.0f, 0.0f);
-
-        for (unsigned int meshIndex = 0; meshIndex < static_cast<unsigned int>(aModel.GetMeshCount()); ++meshIndex)
-        {
-            const Tga::BoxSphereBounds& bounds = aModel.GetMeshData(meshIndex).Bounds;
-            const Vector3f meshMin(
-                bounds.Center.x - bounds.BoxExtents.x,
-                bounds.Center.y - bounds.BoxExtents.y,
-                bounds.Center.z - bounds.BoxExtents.z);
-            const Vector3f meshMax(
-                bounds.Center.x + bounds.BoxExtents.x,
-                bounds.Center.y + bounds.BoxExtents.y,
-                bounds.Center.z + bounds.BoxExtents.z);
-
-            if (!hasBounds)
-            {
-                combinedMin = meshMin;
-                combinedMax = meshMax;
-                hasBounds = true;
-                continue;
-            }
-
-            combinedMin.x = (std::min)(combinedMin.x, meshMin.x);
-            combinedMin.y = (std::min)(combinedMin.y, meshMin.y);
-            combinedMin.z = (std::min)(combinedMin.z, meshMin.z);
-            combinedMax.x = (std::max)(combinedMax.x, meshMax.x);
-            combinedMax.y = (std::max)(combinedMax.y, meshMax.y);
-            combinedMax.z = (std::max)(combinedMax.z, meshMax.z);
-        }
-
-        if (!hasBounds)
-        {
-            return false;
-        }
-
-        outMin = combinedMin;
-        outMax = combinedMax;
-        return true;
-    }
-
-    bool TryGetOwnerVisualLocalBounds(const GameObject& anOwner, Vector3f& outMin, Vector3f& outMax)
-    {
-        if (const MeshComponent* mesh = anOwner.GetComponent<MeshComponent>())
-        {
-            if (auto model = mesh->GetModelInstance().GetModel())
-            {
-                return TryGetModelLocalBounds(*model, outMin, outMax);
-            }
-        }
-
-        if (const AnimatedMeshComponent* mesh = anOwner.GetComponent<AnimatedMeshComponent>())
-        {
-            if (auto model = mesh->GetModelInstance().GetModel())
-            {
-                return TryGetModelLocalBounds(*model, outMin, outMax);
-            }
-        }
-
-        return false;
-    }
-}
-
-BoxColliderComponent::BoxColliderComponent(const Vector3f& aSize, const Vector3f& aOffset, bool anIsTrigger, bool aConstantUpdate)
+BoxColliderComponent::BoxColliderComponent(
+    const Vector3f& aSize,
+    const Vector3f& aOffset,
+    bool anIsTrigger,
+    bool aConstantUpdate,
+    bool aPivotBottomMiddle)
     : myIsTrigger(anIsTrigger)
     , myIsInside(false)
     , myConstantUpdate(aConstantUpdate)
+    , myPivotBottomMiddle(aPivotBottomMiddle)
     , mySize(aSize)
     , myOffset(aOffset)
 {
@@ -255,26 +184,14 @@ void BoxColliderComponent::Render()
 
     if (GameDebugSettings::EnableColliderDrawerDebugLog())
     {
-        Vector3f visualLocalMin(0.0f, 0.0f, 0.0f);
-        Vector3f visualLocalMax(0.0f, 0.0f, 0.0f);
-        const bool hasVisualBounds = GetOwner()
-            ? TryGetOwnerVisualLocalBounds(*GetOwner(), visualLocalMin, visualLocalMax)
-            : false;
-
         std::ostringstream stream;
         stream << "Box owner='" << (GetOwner() ? GetOwner()->GetName() : "<none>") << "'"
             << " ownerOrigin=(" << (GetOwner() ? GetOwner()->GetTransform().GetPosition().x : 0.0f)
             << ", " << (GetOwner() ? GetOwner()->GetTransform().GetPosition().y : 0.0f)
             << ", " << (GetOwner() ? GetOwner()->GetTransform().GetPosition().z : 0.0f) << ")"
-            << " visualBounds=" << (hasVisualBounds ? "yes" : "no");
-        if (hasVisualBounds)
-        {
-            stream << " visualLocalMin=(" << visualLocalMin.x << ", " << visualLocalMin.y << ", " << visualLocalMin.z << ")"
-                << " visualLocalMax=(" << visualLocalMax.x << ", " << visualLocalMax.y << ", " << visualLocalMax.z << ")";
-        }
-        stream
             << " size=(" << mySize.x << ", " << mySize.y << ", " << mySize.z << ")"
             << " offset=(" << myOffset.x << ", " << myOffset.y << ", " << myOffset.z << ")"
+            << " pivotBottomMiddle=" << (myPivotBottomMiddle ? "true" : "false")
             << " aabbMin=(" << min.x << ", " << min.y << ", " << min.z << ")"
             << " aabbMax=(" << max.x << ", " << max.y << ", " << max.z << ")"
             << " drawLocalMin=(0, 0, 0)"
@@ -376,6 +293,17 @@ const Vector3f& BoxColliderComponent::GetOffset() const
     return myOffset;
 }
 
+void BoxColliderComponent::SetPivotBottomMiddle(bool aPivotBottomMiddle)
+{
+    myPivotBottomMiddle = aPivotBottomMiddle;
+    UpdateAABB();
+}
+
+bool BoxColliderComponent::IsPivotBottomMiddle() const
+{
+    return myPivotBottomMiddle;
+}
+
 const CommonUtilities::AABB3D<float>& BoxColliderComponent::GetAABB() const
 {
     return myAABB;
@@ -389,13 +317,11 @@ void BoxColliderComponent::UpdateAABB()
         return;
     }
 
-    Vector3f min = owner->GetTransform().GetPosition() + myOffset;
-    Vector3f localVisualMin(0.0f, 0.0f, 0.0f);
-    Vector3f localVisualMax(0.0f, 0.0f, 0.0f);
-    if (TryGetOwnerVisualLocalBounds(*owner, localVisualMin, localVisualMax))
-    {
-        min += localVisualMin;
-    }
+    const Vector3f anchorToMinOffset = myPivotBottomMiddle
+        ? Vector3f(-mySize.x * 0.5f, 0.0f, -mySize.z * 0.5f)
+        : Vector3f(-mySize.x, 0.0f, 0.0f);
+
+    const Vector3f min = owner->GetTransform().GetPosition() + anchorToMinOffset + myOffset;
     const Vector3f max = min + mySize;
 
     myAABB = CommonUtilities::AABB3D<float>(min, max);

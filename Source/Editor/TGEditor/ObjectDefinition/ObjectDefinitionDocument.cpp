@@ -628,19 +628,23 @@ void ObjectDefinitionDocument::DrawObjectDefinitionPanel()
 	{
 		StringId groupName;
 		bool showGroup = true;
+		bool groupHasTreeNode = false;
 
 		std::span<const ScenePropertyDefinition> properties = myObjectDefinition->GetProperties();
 		for (int i = 0; i < properties.size(); i++)
 		{
 			if (properties[i].groupName != groupName)
 			{
-				if (!groupName.IsEmpty() && showGroup)
+				if (groupHasTreeNode && showGroup)
 				{
 					ImGui::TreePop();
 				}
 
 				groupName = properties[i].groupName;
-				showGroup = ImGui::TreeNodeEx(groupName.GetString(), categoryFlags);
+				groupHasTreeNode = !groupName.IsEmpty();
+				showGroup = groupHasTreeNode
+					? ImGui::TreeNodeEx(groupName.GetString(), categoryFlags)
+					: true;
 			}
 
 			if (showGroup)
@@ -683,7 +687,7 @@ void ObjectDefinitionDocument::DrawObjectDefinitionPanel()
 			}
 		}
 
-		if (!groupName.IsEmpty() && showGroup)
+		if (groupHasTreeNode && showGroup)
 		{
 			ImGui::TreePop();
 		}

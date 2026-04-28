@@ -9,13 +9,13 @@
       "name": "Model",
       "type": "Model",
       "value": {
-        "path": "models\\Particle_Chest.fbx",
+        "path": "models\\Default_1x1_Cube.fbx",
         "textures": [
           [
-            "textures\\Particle_Chest_c.dds",
-            "textures\\Particle_Chest_N.dds",
-            "textures\\Particle_Chest_M.dds",
-            "textures\\Particle_Chest_fx.dds"
+            "",
+            "",
+            "",
+            ""
           ],
           [
             "",
@@ -43,6 +43,15 @@
       "group": "",
       "is-dynamic": false,
       "is-per-instance": false,
+      "name": "typeId",
+      "type": "StringId",
+      "value": "test_static"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
       "name": "factoryType",
       "type": "StringId",
       "value": "StaticWorld"
@@ -58,29 +67,16 @@
     },
     {
       "description": "",
-      "group": "Collider",
+      "group": "Collision",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "colliderIsTrigger",
-      "type": "Bool",
-      "value": false
+      "name": "colliderType",
+      "type": "StringId",
+      "value": "box"
     },
     {
       "description": "",
-      "group": "Collider",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderOffset",
-      "type": "Float3",
-      "value": [
-        0.0,
-        0.0,
-        0.0
-      ]
-    },
-    {
-      "description": "",
-      "group": "Collider",
+      "group": "Collision",
       "is-dynamic": false,
       "is-per-instance": false,
       "name": "colliderSize",
@@ -93,12 +89,34 @@
     },
     {
       "description": "",
-      "group": "Collider",
+      "group": "Collision",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "colliderType",
-      "type": "StringId",
-      "value": "box"
+      "name": "colliderOffset",
+      "type": "Float3",
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderIsTrigger",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": false
     }
   ]
 }

@@ -14,7 +14,8 @@ public:
     explicit BoxColliderComponent(const Vector3f& aSize = { 1.0f, 1.0f, 1.0f },
                                   const Vector3f& aOffset = { 0.0f, 0.0f, 0.0f },
                                   bool anIsTrigger = false,
-                                  bool aConstantUpdate = false);
+                                  bool aConstantUpdate = false,
+                                  bool aPivotBottomMiddle = false);
 
     bool OnTriggerEnter();
     bool OnTriggerExit();
@@ -33,6 +34,9 @@ public:
     void SetOffset(const Vector3f& aOffset);
     const Vector3f& GetOffset() const;
 
+    void SetPivotBottomMiddle(bool aPivotBottomMiddle);
+    bool IsPivotBottomMiddle() const;
+
     const CommonUtilities::AABB3D<float>& GetAABB() const;
 
 private:
@@ -41,6 +45,7 @@ private:
     bool myIsTrigger;
     bool myIsInside;
     bool myConstantUpdate;
+    bool myPivotBottomMiddle;
 
     Vector3f mySize;
     Vector3f myOffset;

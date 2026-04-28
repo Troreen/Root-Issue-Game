@@ -60,12 +60,17 @@
       "is-dynamic": false,
       "is-per-instance": false,
       "name": "colliderIsTrigger",
-      "type": "Float3",
-      "value": [
-        0.0,
-        0.0,  
-        0.0
-      ]
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": true
     },
     {
       "description": "",
@@ -335,7 +340,7 @@
       }
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -344,7 +349,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -353,7 +358,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -362,7 +367,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -371,7 +376,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -380,7 +385,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -389,7 +394,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -398,7 +403,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -407,7 +412,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -416,7 +421,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -425,7 +430,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -434,7 +439,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -443,7 +448,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -452,7 +457,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -461,7 +466,7 @@
       "value": 0.0
     },
     {
-      "description": "1.0 selects this clip",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
@@ -470,7 +475,7 @@
       "value": 0.0
     },
     {
-      "description": "Global speed scale",
+      "description": "Global speed scale for demo graph",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
