@@ -1,0 +1,16 @@
+#pragma once
+#include "PlayerState.h"
+
+class PlayerState_Shoot : public PlayerState
+{
+public:
+
+	void Update(float aDeltaTime, PlayerControllerComponent& aPlayerController) override;
+	void ResetValues() override;
+
+private:
+
+	bool myFired;
+	float myChargeTimer;
+	float myFireTimer;
+};

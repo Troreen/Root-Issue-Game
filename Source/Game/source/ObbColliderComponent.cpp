@@ -295,7 +295,7 @@ void ObbColliderComponent::UpdateObb()
 
     const Vector3f anchorToCenter = myPivotBottomMiddle
         ? myAxes[1] * (mySize.y * 0.5f)
-        : myAxes[0] * (-mySize.x * 0.5f) + myAxes[1] * (mySize.y * 0.5f) + myAxes[2] * (mySize.z * 0.5f);
+        : myAxes[0] * (mySize.x * 0.5f) + myAxes[1] * (mySize.y * 0.5f) + myAxes[2] * (mySize.z * 0.5f);
     myCenter = owner->GetTransform().GetPosition() + anchorToCenter + myOffset;
 
     const Vector3f half = GetHalfExtents();
@@ -324,5 +324,4 @@ void ObbColliderComponent::UpdateObb()
     }
 
     myAABB = CommonUtilities::AABB3D<float>(minBounds, maxBounds);
-    owner->SetHitbox(myAABB);
 }

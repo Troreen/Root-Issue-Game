@@ -116,9 +116,7 @@ void BoxColliderComponent::Render()
 
     UpdateAABB();
 
-    const CommonUtilities::AABB3D<float>& debugAabb = GetOwner()
-        ? GetOwner()->GetHitbox()
-        : myAABB;
+    const CommonUtilities::AABB3D<float>& debugAabb = myAABB;
 
     const auto& min = debugAabb.GetMin();
     const auto& max = debugAabb.GetMax();
@@ -319,11 +317,10 @@ void BoxColliderComponent::UpdateAABB()
 
     const Vector3f anchorToMinOffset = myPivotBottomMiddle
         ? Vector3f(-mySize.x * 0.5f, 0.0f, -mySize.z * 0.5f)
-        : Vector3f(-mySize.x, 0.0f, 0.0f);
+        : Vector3f(0.0f, 0.0f, 0.0f);
 
     const Vector3f min = owner->GetTransform().GetPosition() + anchorToMinOffset + myOffset;
     const Vector3f max = min + mySize;
 
     myAABB = CommonUtilities::AABB3D<float>(min, max);
-    owner->SetHitbox(myAABB);
 }

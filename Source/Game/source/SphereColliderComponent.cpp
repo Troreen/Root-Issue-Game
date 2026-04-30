@@ -23,6 +23,7 @@ SphereColliderComponent::SphereColliderComponent(float aRadius, const Vector3f& 
     , myIsInside(false)
     , myRadius(aRadius)
     , myOffset(aOffset)
+    , myAABB(Vector3f::Zero, Vector3f::Zero)
 {
 }
 
@@ -281,6 +282,11 @@ const CommonUtilities::Sphere<float>& SphereColliderComponent::GetSphere() const
     return mySphere;
 }
 
+const CommonUtilities::AABB3D<float>& SphereColliderComponent::GetAABB() const
+{
+    return myAABB;
+}
+
 void SphereColliderComponent::UpdateSphere()
 {
     auto* owner = GetOwner();
@@ -292,7 +298,6 @@ void SphereColliderComponent::UpdateSphere()
     const Vector3f pos = owner->GetTransform().GetPosition() + myOffset;
     mySphere.InitWithCenterAndRadius(pos, myRadius);
 
-    // Also update the owner's AABB hitbox to be a bounding box of the sphere
     const Vector3f half(myRadius, myRadius, myRadius);
-    owner->SetHitbox(CommonUtilities::AABB3D<float>(pos - half, pos + half));
+    myAABB = CommonUtilities::AABB3D<float>(pos - half, pos + half);
 }

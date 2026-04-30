@@ -21,6 +21,9 @@ namespace Tga
 	class EditorViewport 
 	{
 	public:
+		
+		EditorViewport(bool someNoCameraMovement = false);
+		
 		void Init();
 
 		void DrawAndUpdateViewportWindow(float aDeltaTime, ViewportInterface& aViewportInterface);
@@ -76,6 +79,8 @@ namespace Tga
 		Camera myCamera;
 		float myCameraFocusDistance = 1000.f;
 		Vector3f myCameraRotation = { 0.f, 0.f, 0.f };
+
+		bool myCameraInUIEditor;
 	};
 
 	const Vector2i& EditorViewport::GetViewportSize() const

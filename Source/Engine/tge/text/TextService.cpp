@@ -66,6 +66,10 @@ namespace Tga
 		std::string myName;
 		std::unique_ptr<TextureResource> myTexture;
 		ComPtr<ID3D11ShaderResourceView> myAtlasView;
+		float myAscender;
+		float myDescender;
+		float myLineGap;
+		float myLineHeight;
 	};
 }
 
@@ -647,8 +651,9 @@ float Tga::TextService::GetSentenceHeight(Tga::Text& aText)
 	return maxY;
 }
 
-bool TextService::Draw(Tga::Text& aText, Tga::SpriteShader* aCustomShader)
+bool TextService::Draw(Tga::Text& aText, Tga::SpriteShader* aCustomShader, bool forceInstant)
 {
+	SpriteDrawer& spriteDrawer = Tga::Engine::GetInstance()->GetGraphicsEngine().GetSpriteDrawer();
 	const InternalTextAndFontData* fontData = aText.myFont.myData.get();
 	if (!fontData || !fontData->myTexture)
 	{
@@ -687,8 +692,6 @@ bool TextService::Draw(Tga::Text& aText, Tga::SpriteShader* aCustomShader)
 		midY = 0.5f * (maxY + minY);
 	}
 
-	SpriteSharedData spriteSharedData = {};
-
 	GraphicsStateStack& graphicsStateStack = Engine::GetInstance()->GetGraphicsEngine().GetGraphicsStateStack();
 	graphicsStateStack.Push();
 	if (fontData->myFontHeightWidth < 18)
@@ -700,11 +703,11 @@ bool TextService::Draw(Tga::Text& aText, Tga::SpriteShader* aCustomShader)
 		graphicsStateStack.SetSamplerState(SamplerFilter::Bilinear, SamplerAddressMode::Clamp);
 	}
 
-	spriteSharedData.myTexture = fontData->myTexture.get();
-	spriteSharedData.myCustomShader = aCustomShader;
+	aText.mySharedData.myTexture = fontData->myTexture.get();
+	aText.mySharedData.myCustomShader = aCustomShader;
 
 	{
-		SpriteBatchScope batchScope = Engine::GetInstance()->GetGraphicsEngine().GetSpriteDrawer().BeginBatch(spriteSharedData);
+		SpriteBatchScope batchScope = Engine::GetInstance()->GetGraphicsEngine().GetSpriteDrawer().BeginBatch(aText.mySharedData);
 
 		float drawX = 0.f;
 		float drawY = 0.f;
@@ -713,7 +716,7 @@ bool TextService::Draw(Tga::Text& aText, Tga::SpriteShader* aCustomShader)
 		float diffX = midX;
 		float diffY = midY;
 
-		float c=0.f, s=0.f;
+		float c = 0.f, s = 0.f;
 		if (rotation != 0.0f)
 		{
 			c = cos(rotation);
@@ -724,11 +727,10 @@ bool TextService::Draw(Tga::Text& aText, Tga::SpriteShader* aCustomShader)
 		{
 			TextToRender charInfo = processNextCharacter(*fontData, str[i], scale, drawX, drawY, maxDrawY);
 
-			Sprite2DInstanceData spriteInstance = {};
 
 			if (rotation != 0.0f)
 			{
-				spriteInstance.myRotation = rotation;
+				aText.myInstanceData[i].myRotation = rotation;
 
 				float x = charInfo.myPosition.x - diffX;
 				float y = charInfo.myPosition.y - diffY;
@@ -737,17 +739,74 @@ bool TextService::Draw(Tga::Text& aText, Tga::SpriteShader* aCustomShader)
 				charInfo.myPosition.y = (x * s + y * c) + diffY;
 			}
 
-			spriteInstance.myPivot = { 0.f, 0.f };
-			spriteInstance.myPosition = charInfo.myPosition + aText.myPosition;
-			spriteInstance.mySize = charInfo.mySize * scale;
-			spriteInstance.myColor = aText.myColor;
-			spriteInstance.myTextureRect = { charInfo.myUvStart.x, charInfo.myUvStart.y, charInfo.myUvEnd.x, charInfo.myUvEnd.y };
+			aText.myInstanceData[i].myPivot = { 0.f, 0.f };
+			aText.myInstanceData[i].myPosition = charInfo.myPosition + aText.myPosition;
+			aText.myInstanceData[i].mySize = charInfo.mySize * scale;
+			aText.myInstanceData[i].myColor = aText.myColor;
+			aText.myInstanceData[i].myTextureRect = { charInfo.myUvStart.x, charInfo.myUvStart.y, charInfo.myUvEnd.x, charInfo.myUvEnd.y };
+			aText.myInstanceData[i].myRenderOrder = aText.myRenderOrder + i + 1;
 
-			batchScope.Draw(spriteInstance);
+
+#ifndef _DEBUG
+			if (forceInstant)
+#else
+			forceInstant;
+			if (true)
+#endif
+				batchScope.Draw(aText.myInstanceData[i]);
+			else
+				spriteDrawer.Draw(aText.mySharedData, aText.myInstanceData[i]);
 		}
 	}
 
 	graphicsStateStack.Pop();
 
 	return true;
+}
+
+float TextService::GetTextBlockHeight(const Text& text) const
+{
+	const auto* fd = text.myFont.myData.get();
+	if (!fd || text.myText.empty())
+		return 0.0f;
+
+	int lineCount = 1;
+	for (char c : text.myText)
+		if (c == '\n')
+			++lineCount;
+
+	const float asc = fd->myAscender * text.myScale;
+	const float desc = fd->myDescender * text.myScale;
+	const float lineHeight = fd->myLineHeight * text.myScale;
+
+	return (lineCount - 1) * lineHeight + asc + desc;
+}
+
+float TextService::MeasureWidth(const Tga::Text& textTemplate,
+	const std::string& str) const
+{
+	Tga::Text temp = textTemplate;
+	temp.SetText(str);
+	return temp.GetWidth();
+}
+
+float TextService::GetLineHeight(const Text& text) const
+{
+	const auto* fd = text.myFont.myData.get();
+	if (!fd) return 0.0f;
+	return fd->myLineHeight * text.myScale;
+}
+
+float TextService::GetAscender(const Text& text) const
+{
+	const auto* fd = text.myFont.myData.get();
+	if (!fd) return 0.0f;
+	return fd->myAscender * text.myScale;
+}
+
+float TextService::GetDescender(const Text& text) const
+{
+	const auto* fd = text.myFont.myData.get();
+	if (!fd) return 0.0f;
+	return fd->myDescender * text.myScale;
 }

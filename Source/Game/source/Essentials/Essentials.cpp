@@ -12,7 +12,13 @@ Essentials::Essentials()
 
 	globalAudioManager = std::make_unique<AudioManager>();
 
+	globalConsoleManager = std::make_unique<Console>();
+
 	ShutdownQueued = false;
+
+	myCursor = std::make_unique<Cursor>();
+
+	globalCanvasManager = std::make_unique<Tga::CanvasObjectDefinitionManager>();
 }
 
 Essentials::~Essentials()

@@ -43,6 +43,7 @@
 #include <tge/scene/ScenePropertyTypes.h>
 
 #include <p4/p4.h>
+#include <Canvas/CanvasDefinitionDocument.h>
 
 static bool _imgui_demo_open = false;
 static bool _imgui_style_editor_open = false;
@@ -248,6 +249,28 @@ void Tga::Editor::CreateNewObjectDefinition()
 	);
 }
 
+void Tga::Editor::CreateNewCanvasDefinition()
+{
+	FileDialog::SaveFile(
+		FileDialog::FileType::canvas,
+		[this](const char* path)
+		{
+
+			fs::path p = path;
+			if (p.extension().empty())
+			{
+				p = p.replace_extension(".canvas");
+			}
+
+			myCanvasObjectDefinitionManager.CreateOrGet(p);
+
+			std::unique_ptr<CanvasDefinitionDocument> sceneDocument = std::make_unique<CanvasDefinitionDocument>();
+			sceneDocument->Init(path);
+			AddDocument(std::move(sceneDocument));
+		}
+	);
+}
+
 void Tga::Editor::CreateNewAnimationClip()
 {
 	FileDialog::SaveFile(
@@ -361,6 +384,11 @@ void Tga::Editor::Update(float aTimeDelta, InputManager& inputManager)
 						if (ImGui::MenuItem("New object definition..."))
 						{
 							CreateNewObjectDefinition();
+						}
+
+						if (ImGui::MenuItem("New canvas definition..."))
+						{
+							CreateNewCanvasDefinition();
 						}
 
 						if (ImGui::MenuItem("New animation clip..."))

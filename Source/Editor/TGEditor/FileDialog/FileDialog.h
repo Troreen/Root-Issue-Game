@@ -12,6 +12,7 @@ namespace FileDialog {
 		tgs,
 		tgo,
 		tgac,
+		canvas,
 		Count
 	};
 

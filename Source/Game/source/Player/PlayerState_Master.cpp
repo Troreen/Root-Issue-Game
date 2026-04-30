@@ -5,6 +5,9 @@
 PlayerState_Master::PlayerState_Master()
 {
 	myWalkState = std::make_unique<PlayerState_Walk>();
+	myAttackState = std::make_unique<PlayerState_Attack>();
+	myChargeAttackState = std::make_unique<PlayerState_Charge_Attack>();
+	myShootState = std::make_unique<PlayerState_Shoot>();
 }
 
 PlayerState_Master& PlayerState_Master::Instance()

@@ -12,5 +12,6 @@ public:
 private:
 
 	float myWalkSpeed;
+	//Test
 };
 

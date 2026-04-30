@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include <ParticlePool.h>
+
 namespace Tga
 {
     class Texture;
@@ -52,6 +54,8 @@ public:
     void BeginSceneTransition(const std::string& aFromScene, const std::string& aToScene);
     bool ReloadDefinitions();
     void ClearActiveEffects();
+
+    bool SpawnPoolParticle(const ParticleType& aParticleType, const ParticleSettings& someSettings);
 
     int GetActiveCount() const;
     int GetCapacity() const;
@@ -102,6 +106,7 @@ private:
     float CalculateDurationSeconds(const EffectDefinition& aDefinition) const;
 
     std::unordered_map<std::string, EffectDefinition> myDefinitions;
+    std::unordered_map<ParticleType, ParticlePool> myParticlePools;
     std::vector<ActiveEffect> myActiveEffects;
 
     static constexpr int kMaxActiveEffects = 512;
@@ -115,6 +120,8 @@ public:
 
     static bool SpawnWorldEffect(const std::string& anEffectId, const CommonUtilities::Vector3<float>& aPosition, float aSizeMultiplier = 1.0f, float anOwnerForwardSign = 1.0f);
     static bool SpawnScreenEffect(const std::string& anEffectId, const CommonUtilities::Vector2<float>& aPosition, float aSizeMultiplier = 1.0f);
+
+    static bool SpawnParticle(const ParticleType& aParticleType, const ParticleSettings& someSettings);
 
 private:
     static VfxSystem* ourSystem;

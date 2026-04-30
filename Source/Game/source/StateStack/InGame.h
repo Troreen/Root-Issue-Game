@@ -12,7 +12,6 @@ public:
 	void Render() override;
 
 private:
-	void OnSceneLoaded() override;
 	void ConsumeCollisionContacts(const std::vector<CollisionContact>& someContacts);
 
 	RuntimeCollisionSystem myRuntimeCollisionSystem;

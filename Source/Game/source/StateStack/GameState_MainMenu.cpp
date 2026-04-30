@@ -128,105 +128,30 @@ void MainMenu::Init(CameraSystem& aCamera, const char* argv[])
 	}
 
 	engine;
-
-	/*RegisterAnimationGraphNodesOnce();*/
+	argv;
 
 	myCameraSystem->Init();
-	
-
-	/*RegisterGameObjectFactories();*/
-
-	/*myInputHandler.SetWindowHandle(*engine.GetHWND());
-	myInputHandler.SetAutoMouseCapture(true);*/
 
 	mySceneName.clear();
 	myCameraSystem->SetSceneName(mySceneName);
 
 	myVfxSystem.Init();
 	VfxService::Set(&myVfxSystem);
-
-	SceneManager& sceneManager = *Essentials::globalSceneManager;
-	sceneManager.RefreshSceneList();
-
-	StartSceneLoadAsync("Levels/PipelineTest.tgs", true);
-
-	if (argv[1] == nullptr)
-	{
-		StartSceneLoadAsync("Levels/PipelineTest.tgs", true);
-	}
-	else
-	{
-		StartSceneLoadAsync(argv[1], true);
-	}
 }
 
 eState MainMenu::Update()
 {
 	myTimer.Update();
 	myInputHandler.UpdateInput();
-	/*TryRecoverWindowFocus();*/
 	const float deltaTime = myTimer.GetDeltaTime();
 
-	//PollSceneLoadCompletion();
-
-	SceneManager& sceneManager = *Essentials::globalSceneManager;
-	if (sceneManager.HasRequestedScene())
-	{
-		const std::string requested = sceneManager.ConsumeRequestedScene();
-
-		if (!requested.empty() && requested != mySceneLoadTarget && requested != mySceneName)
-		{
-			if (myIsSceneLoading)
-			{
-				myQueuedSceneRequest = requested;
-			}
-			else
-			{
-				StartSceneLoadAsync(requested);
-			}
-		}
-	}
-
-	if (myIsSceneLoading)
-	{
-		return eState::COUNT;
-	}
-
-	if (myInputHandler.IsKeyPressed(Keys::F2))
-	{
-		gEnableFrustumCulling = !gEnableFrustumCulling;
-		std::cout << "[RenderDebug] Frustum culling " << (gEnableFrustumCulling ? "enabled" : "disabled") << "\n";
-	}
-
-	if (myInputHandler.IsKeyPressed(Keys::F3))
-	{
-		DumpSceneVisibilitySnapshot(myGameObjects, *myCameraSystem);
-	}
-
-	myCameraSystem->UpdateDebugCamera(deltaTime, myInputHandler);
-	/*myCameraSystem->Update(deltaTime);*/
-
-	for (auto& object : myGameObjects)
-	{
-		if (!object || !object->IsActive())
-		{
-			continue;
-		}
-
-		object->Update(deltaTime);
-		if (object->GetName() == "Player")
-		{
-			myPlayer = object.get();
-		}
-	}
 
 	myVfxSystem.Update(deltaTime);
 
-	if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eVineBoom))
+	if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eMusicLoop))
 	{
-		Essentials::globalAudioManager->PlayMusic(SoundID::eVineBoom);
+		Essentials::globalAudioManager->PlayMusic(SoundID::eMusicLoop);
 	}
-
 	Essentials::globalAudioManager->Update(deltaTime);
 	return eState::COUNT;
 }
@@ -238,6 +163,19 @@ void MainMenu::Render()
 		RenderLoadingScreen();
 		return;
 	}
+	Tga::Engine& engine = *Tga::Engine::GetInstance();
+	auto& graphicsEngine = engine.GetGraphicsEngine();
+	auto& graphicsStateStack = graphicsEngine.GetGraphicsStateStack();
 
+	const Tga::Vector2ui resolution = engine.GetRenderSize();
+	Tga::Text text("Text/arial.ttf", Tga::FontSize_72);
+	text.SetText("You are in MainMenu!");
+	text.SetPosition({
+	0.5f * static_cast<float>(resolution.x) - 0.5f * text.GetWidth(),
+	0.5f * static_cast<float>(resolution.y)
+		});
+	graphicsStateStack.SetDefaultCamera();
+
+	text.Render();
 	RenderDefault();
 }

@@ -8,6 +8,10 @@
 #include "EnumKeys.h"
 #include "AudioManager.h"
 #include "CameraSystem.h"
+#include "Console/Console.h"
+#include <tge/graphics/DX11.h>
+#include "tge/UI/CanvasObjectDefinitionManager.h"
+#include "Cursor.h"
 
 class GameObject;
 
@@ -41,9 +45,13 @@ public:
 	static inline Tga::Engine* globalEngine;
 	static inline std::unique_ptr<CameraSystem> globalCamera;
 	static inline std::unique_ptr<SceneManager> globalSceneManager;
-
-
 	static inline std::unique_ptr<AudioManager> globalAudioManager;
+	static inline std::unique_ptr<Tga::CanvasObjectDefinitionManager> globalCanvasManager;
+	static inline std::unique_ptr<Cursor> myCursor;
+
+
+	static inline std::unique_ptr<Console> globalConsoleManager;
+
 
 	static inline bool ShutdownQueued;
 

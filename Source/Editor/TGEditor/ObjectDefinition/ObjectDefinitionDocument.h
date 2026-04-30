@@ -1,37 +1,14 @@
 #pragma once
 
 #include <imgui.h>
-
 #include <Document/Document.h>
 #include <Scene/SceneSelection.h>
 #include <Tools/Viewport/Viewport.h>
 #include <tge/scene/SceneObjectDefinition.h>
-#include <tge/script/ScriptRuntimeInstance.h>
+#include "LivePreviewData.h"
 
 namespace Tga
-{ 
-
-enum class LivePreviewMode
 {
-	Stopped,
-	Paused,
-	Running
-};
-
-struct LivePreviewData
-{
-	LivePreviewMode mode;
-	ScriptPinId pinToTrigger;
-	int frameNumber;
-
-	std::unordered_map<StringId, ModelSpacePose> poses;
-
-	std::unordered_map<StringId, Property> dynamicProperties;
-	std::unordered_map<StringId, Property> staticProperties;
-
-	std::unordered_set<StringId> enabledScripts;
-	std::vector<std::pair<StringId, ScriptRuntimeInstance>> scriptInstances;
-};
 
 class ObjectDefinitionDocument : public Document, public ViewportInterface
 {
@@ -67,7 +44,9 @@ public:
 	void SetActiveScript(const std::string_view& aScriptPath);
 
 	virtual bool HasTransformableSelection() override;
+
 private:
+
 	void DrawObjectDefinitionPanel();
 	void DrawPropertyPanel();
 	void DrawPreviewSettings();

@@ -446,7 +446,6 @@ void ObjectDefinitionDocument::DrawObjectDefinitionPanel()
 
 	ImGuiTreeNodeFlags sectionFlags = ImGuiTreeNodeFlags_DefaultOpen;
 	ImGuiTreeNodeFlags categoryFlags = ImGuiTreeNodeFlags_DefaultOpen;
-	ImGuiTreeNodeFlags itemFlags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 
 	if (Editor::GetEditor()->GetEditorConfiguration().enableVisualScripts)
 	{
@@ -533,13 +532,8 @@ void ObjectDefinitionDocument::DrawObjectDefinitionPanel()
 					continue;
 				}
 
-				ImGuiTreeNodeFlags flags = itemFlags;
-
-				if (mySelectedScript == s)
-					flags |= ImGuiTreeNodeFlags_Selected;
-
 				const std::string displayName = GetDisplayNameForScript(s, objectPathString, animationGraphPrefix);
-				ImGui::TreeNodeEx(displayName.c_str(), flags);
+				ImGui::Selectable(displayName.c_str(), mySelectedScript == s);
 
 				if (ImGui::IsItemClicked())
 				{
@@ -649,12 +643,7 @@ void ObjectDefinitionDocument::DrawObjectDefinitionPanel()
 
 			if (showGroup)
 			{
-				ImGuiTreeNodeFlags flags = itemFlags;
-
-				if (mySelectedProperty == properties[i].name)
-					flags |= ImGuiTreeNodeFlags_Selected;
-
-				ImGui::TreeNodeEx(properties[i].name.GetString(), flags);
+				ImGui::Selectable(properties[i].name.GetString(), mySelectedProperty == properties[i].name);
 				if(ImGui::BeginDragDropSource()) 
 				{
 					struct Payload { PropertyTypeId type; StringId name; };

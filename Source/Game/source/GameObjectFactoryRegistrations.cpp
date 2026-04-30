@@ -11,6 +11,7 @@
 #include "GameObjectFactory.h"
 #include "MeshComponent.h"
 #include "AnimatedMeshComponent.h"
+#include "ParticleEmitterComponent.h"
 #include "ModelTextureOverrides.h"
 #include "ObbColliderComponent.h"
 #include "ObjectLayer.h"
@@ -200,7 +201,7 @@ namespace
             const bool pivotBottomMiddle = aData.GetPropertyOr<bool>("colliderPivotBottomMiddle", true);
             const Vector3f anchorToCenter = pivotBottomMiddle
                 ? Vector3f(0.0f, radius, 0.0f)
-                : Vector3f(-radius, radius, radius);
+                : Vector3f(radius, radius, radius);
             anObject.AddComponent<SphereColliderComponent>(radius, offset + anchorToCenter, isTrigger);
             return;
         }
@@ -344,7 +345,9 @@ namespace
         DamageableComponent* damageable = object->AddComponent<DamageableComponent>(health);
         damageable->SetCurrentHealth(health);
         damageable->SetDamagePerHit(damage);
-
+        ParticleEmitterComponent* emitter = object->AddComponent<ParticleEmitterComponent>();
+        emitter->AddParticleWithShape(ParticleType::Test, EmissionShape::Sphere);
+        emitter->AddParticleWithShape(ParticleType::Blood, EmissionShape::Cone);
         return object;
     }
 
@@ -356,15 +359,7 @@ namespace
         ApplyCommonModel(*object, aData);
         ApplyAuthoredCollider(*object, aData);
         object->AddComponent<PlayerControllerComponent>();
-
-        auto bullet = std::make_shared<GameObject>();
-        bullet->SetLayer(ObjectLayer::Projectile);
-
-        ApplyCommonModel(*bullet, aData);
-        bullet->AddComponent<BulletComponent>();
-        bullet->SetActive(false);
-
-        //player->SetBullet(bullet);
+        object->AddComponent<BulletComponent>();
         return object;
     }
 

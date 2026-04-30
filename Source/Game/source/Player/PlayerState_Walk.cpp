@@ -8,11 +8,13 @@
 #include "BulletComponent.h"
 #include <memory>
 #include "AnimationGraphComponent.h"
+#include "GameObjectFactory.h"
+#include "SceneObjectData.h"
 
 
 PlayerState_Walk::PlayerState_Walk()
 {
-	myWalkSpeed = 300.f;
+	myWalkSpeed = 600.f;
 }
 
 void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aPlayerController)
@@ -52,27 +54,19 @@ void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aPlay
 		player->GetTransform().Translate(direction);
 		player->GetTransform().SetYawPitchRollRadians({ std::atan2f(direction.x, direction.z), 0, 0 });
 	}
-	
+
+
 	if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::SPACE)))
 	{
-		GameObject& bullet = aPlayerController.GetBullet();
-
-		bullet.GetComponent<BulletComponent>()->SetSpeedDirectionPosition(100, direction, aPlayerController.GetOwner()->GetTransform().GetPosition());
-		
+		myWalkAnimation = 0;
+		aPlayerController.SetState(PlayerState_Master::Instance().myChargeAttackState.get());
 	}
-
-
+	else if (Essentials::globalInputManager.get()->IsKeyPressed(static_cast<int>(Keys::RETURN)))
+	{
+		myWalkAnimation = 0;
+		aPlayerController.SetState(PlayerState_Master::Instance().myAttackState.get());
+	}
 	aPlayerController.GetOwner()->GetComponent<AnimationGraphComponent>()->SetFloatParameter("w_walk", myWalkAnimation);
-	const float offset = 1000.f;
-	const float yaw = 45.0f * 3.14159265359f / 180.0f;
-	const float pitch = 35.0f * 3.14159265359f / 180.0f;
 
-	CommonUtilities::Quaternion<float> targetRotation = CommonUtilities::Quaternion<float>::CreateFromYawPitchRoll(yaw, pitch, 0);
-
-	/*CommonUtilities::Quaternion<float> oldRotation = Essentials::globalCamera->GetCamera().GetTransform().GetRotation();
-
-	CommonUtilities::Quaternion<float> newRotation = oldRotation * targetRotation;*/
-
-	Essentials::globalCamera->SetCameraTransformFromScene(CommonUtilities::Vector3<float>{ -offset, offset, -offset } + player->GetTransform().GetPosition(), targetRotation);
 }
 

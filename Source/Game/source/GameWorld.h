@@ -59,6 +59,8 @@ private:
     void ClearSceneObjects();
     void UnloadActiveLevel(bool aClearSceneName);
 
+    void RegisterCommands(const char* argv[]);
+
     void RenderDefault();
     void RenderLoadingScreen();
 
@@ -85,6 +87,8 @@ private:
     bool myEnableAmbientLight;
 
     Tga::Text myLoadingText;
-    
+
     StateStack myWorldStateStack;
+
+    unsigned int mySwitchState;
 };

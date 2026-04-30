@@ -2,6 +2,7 @@
 
 #include <tge/drawers/SpriteDrawer.h>
 #include <tge/engine.h>
+#include <tge/texture/TextureManager.h>
 #include <tge/graphics/GraphicsEngine.h>
 
 ParticlePool::ParticlePool()
@@ -13,6 +14,10 @@ ParticlePool::ParticlePool()
 
 void ParticlePool::Init(size_t aPoolSize)
 {
+	//TODO: Temporary Code
+	mySpriteData.myTexture = Tga::Engine::GetInstance()->GetTextureManager().GetWhiteSquareTexture();
+	// end
+
 	myPoolSize = aPoolSize;
 	myParticles.resize(myPoolSize);
 	myInstances.resize(myPoolSize);
@@ -53,16 +58,28 @@ void ParticlePool::Render() const
 {
 	Tga::SpriteBatchScope batch = Tga::Engine::GetInstance()->GetGraphicsEngine().GetSpriteDrawer().BeginBatch(mySpriteData);
 
+	//std::cout << "nbr of active particles to render: " << myNbrOfActiveParticles << std::endl;
+
 	batch.Draw(myInstances.data(), myNbrOfActiveParticles);
 }
 
 void ParticlePool::Create(const ParticleSettings& someParticleSettings)
 {
+
+	//std::cout << "Create called" << std::endl;
+
 	if (myFirstAvailable != nullptr)
 	{
 		Particle* newParticle = myFirstAvailable;
 		myFirstAvailable = newParticle->GetNext();
 
+
+
 		newParticle->Init(someParticleSettings);
+	}
+	
+	else
+	{
+		//std::cout << "Particle pool exhausted\n";
 	}
 }

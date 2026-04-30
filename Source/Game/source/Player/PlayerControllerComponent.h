@@ -15,13 +15,16 @@ public:
 	void OnUpdate(float aDeltaTime) override;
 	void Render() override;
 
-	void SetBullet(std::shared_ptr<GameObject> aBullet);
-	GameObject& GetBullet();
+	void SetBullet(std::unique_ptr<GameObject> aBullet);
+	void SetState(PlayerState* aState);
 
 private:
 	float mySpeed = 300.f;
 	PlayerState* myState;
 
-	std::shared_ptr<GameObject> myBullet;
+	CommonUtilities::Vector3<float> myCameraOffset;
+	CommonUtilities::Vector3<float> myPosition;
+	CommonUtilities::Quaternion<float> myCameraRotation;
+	std::vector<std::unique_ptr<GameObject>> myBullets;
 };
 

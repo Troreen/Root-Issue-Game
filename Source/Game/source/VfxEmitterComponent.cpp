@@ -1,8 +1,6 @@
 //#include "VfxEmitterComponent.h"
 //
 //#include "GameObject.h"
-//#include "PlayerController.h"
-//#include "SchnozController.h"
 //#include "VfxSystem.h"
 //
 //#include <algorithm>
@@ -17,12 +15,16 @@
 //        return value;
 //    }
 //
+//    // TODO: Update to work with new component system
+//
 //    float ResolveOwnerForwardSign(const GameObject* anOwner)
 //    {
 //        if (!anOwner)
 //        {
 //            return 1.0f;
 //        }
+//
+//        
 //
 //        if (const auto* playerController = anOwner->GetComponent<PlayerController>())
 //        {

@@ -20,6 +20,13 @@ namespace Tga
 		locAssetBrowserGetSelectionFunction = aGetFunction;
 	};
 
+	StringId GetAssetBrowserSelection()
+	{
+		return locAssetBrowserGetSelectionFunction
+			? locAssetBrowserGetSelectionFunction()
+			: StringId{};
+	}
+
 	// Workaround to ensure this object file is included
 	// called from Engine.cpp
 	void EnsureScenePropertiesAreLoaded() {}

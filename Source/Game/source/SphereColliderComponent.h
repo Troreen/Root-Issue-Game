@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include <CommonUtilities/AABB3D.hpp>
 #include <CommonUtilities/Sphere.hpp>
 #include <CommonUtilities/Vector3.hpp>
 
@@ -34,6 +35,7 @@ public:
     const Vector3f& GetOffset() const;
 
     const CommonUtilities::Sphere<float>& GetSphere() const;
+    const CommonUtilities::AABB3D<float>& GetAABB() const;
 
 private:
     void UpdateSphere();
@@ -44,4 +46,5 @@ private:
     float myRadius;
     Vector3f myOffset;
     CommonUtilities::Sphere<float> mySphere;
+    CommonUtilities::AABB3D<float> myAABB;
 };

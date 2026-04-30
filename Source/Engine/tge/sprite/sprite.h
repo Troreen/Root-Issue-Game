@@ -31,6 +31,7 @@ namespace Tga
 		TextureRext myTextureRect = { 0.0f, 0.0f, 1.0f, 1.0f };
 		float myRotation = 0.f;
 		bool myIsHidden = false;
+		int myRenderOrder = 0;
 	};
 
 	struct Sprite3DInstanceData

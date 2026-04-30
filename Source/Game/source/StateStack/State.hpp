@@ -38,6 +38,7 @@ enum class eState
     eMainMenu,
     eOptions,
     ePlaying,
+    eSplashScreen,
     ePopState,
     ePopStack,
     COUNT
@@ -138,8 +139,6 @@ protected:
             object->Init(*engine);
             myGameObjects.push_back(std::move(object));
         }
-
-        OnSceneLoaded();
     }
     void ClearSceneObjects()
     {
@@ -293,6 +292,4 @@ protected:
     bool myEnableAmbientLight;
 
     Tga::Text myLoadingText;
-
-    virtual void OnSceneLoaded() {}
 };

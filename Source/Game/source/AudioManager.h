@@ -9,6 +9,7 @@ enum SoundID
 {
 	eVineBoom,
 	eMusicLoop,
+	eStep,
 	eUnknown
 };
 

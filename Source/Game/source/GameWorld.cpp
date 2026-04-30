@@ -23,12 +23,16 @@
 #include <tge/script/Nodes/CommonMathNodes.h>
 #include <tge/script/Nodes/CommonNodes.h>
 
+#include "PlayerControllerComponent.h"
+
 #include "Essentials.h"
 
 #include "StateStack.hpp"
 #include "InGame.h"
 #include "MainMenu.h"
 #include "Options.h"
+#include "SplashScreen.h"
+
 
 namespace
 {
@@ -223,28 +227,43 @@ void GameWorld::Init(const char* argv[])
 {
 	myWorldStateStack;
 	myWorldStateStack.PushStack(std::vector<State*>());
-	myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
+	myWorldStateStack.GetCurrentStateStack()->push_back(new SplashScreen());
 
 	myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 
 	Essentials::globalAudioManager->Init();
+#ifdef _DEBUG
+	RegisterCommands(argv);
+#endif
 }
 
 void GameWorld::Update(float deltaTime, const char* argv[])
 {
-	myWorldStateStack.GetCurrentState()->Update();
-	if (Essentials::GetEssentials().globalInputManager->IsKeyReleased(static_cast<int>(Keys::P)))
+	switch (myWorldStateStack.GetCurrentState()->Update())
 	{
-		myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
+	case eState::eMainMenu:
+		myWorldStateStack.GetCurrentStateStack()->push_back(new MainMenu());
 
 		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
-	}
-	if (Essentials::GetEssentials().globalInputManager->IsKeyReleased(static_cast<int>(Keys::O)))
-	{
-		
-		auto* camera = myWorldStateStack.GetCurrentStateStack()->back()->GetCameraSystem();
+		break;
+	case eState::eOptions:
+		myWorldStateStack.GetCurrentStateStack()->push_back(new Options());
+		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
+		break;
+	case eState::ePlaying:
+		myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
+		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
+		break;
+	case eState::ePopState:
 		myWorldStateStack.PopState();
-		myWorldStateStack.GetCurrentStateStack()->back()->SetCamera(*camera);
+		myWorldStateStack.GetCurrentStateStack()->back()->SetCamera(myCameraSystem);
+		break;
+	case eState::ePopStack:
+		myWorldStateStack.PopStack();
+		break;
+	default:
+		return;
+
 
 	}
 
@@ -255,6 +274,7 @@ void GameWorld::Update(float deltaTime, const char* argv[])
 
 	myCameraSystem.UpdateDebugCamera(deltaTime, myInputHandler);
 	myCameraSystem.Update(deltaTime);
+	
 
 	for (auto& object : myGameObjects)
 	{
@@ -262,7 +282,6 @@ void GameWorld::Update(float deltaTime, const char* argv[])
 		{
 			continue;
 		}
-
 		object->Update(deltaTime);
 	}
 
@@ -378,6 +397,82 @@ void GameWorld::UnloadActiveLevel(const bool aClearSceneName)
 	ClearSceneObjects();
 }
 
+void GameWorld::RegisterCommands(const char* argv[])
+{
+	auto Console = Essentials::GetEssentials().globalConsoleManager.get();
+	Console->Toggle();
+	Console->InitCommands();
+
+	Console->RegisterCommand("Debug", "LS", "load", "Load state. Example: LS 1, LS 2",
+		[this, argv](const std::vector<std::string>& args)
+		{
+			switch (static_cast<int>(args[0][0]))
+			{
+			case 49:
+				myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
+				myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
+				break;
+				// TEMP STATES!
+			case 50:
+				myWorldStateStack.GetCurrentStateStack()->push_back(new Options());
+				myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
+				break;
+			case 51:
+				myWorldStateStack.GetCurrentStateStack()->push_back(new MainMenu());
+				myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
+				break;
+				// END TEMP STATES
+			default:
+				break;
+			}
+		}
+	);
+
+	Console->RegisterCommand("Debug", "PS", "pop", "Pop current state.",
+		[this](const std::vector<std::string>& /*args*/)
+		{
+			myWorldStateStack.PopState();
+		}
+	);
+
+	//Console->RegisterCommand("Debug", "GM", "GODMODE", "Enter god mode.",
+	//	[this](const std::vector<std::string>& /*args*/)
+	//	{
+	//		auto GetState = myWorldStateStack.GetCurrentState()->GetPlayer()->GetComponent<PlayerControllerComponent>()->GetState();
+
+
+	//		if (GetState->GetSpeed() > 1000.0f)
+	//		{
+	//			GetState->SetSpeed(600.0f);
+	//		}
+	//		else
+	//		{
+	//			GetState->SetSpeed(1800.0f);
+	//		}
+	//	}
+	/*);*/
+	Console->RegisterCommand("Debug", "LPS", "Load scene", "Load playable scene. Use name of the scene.",
+		[this, argv](const std::vector<std::string>& args)
+		{
+			std::string name;
+			for (int i = 0; i < args[0].size(); i++)
+			{
+				name = name + args[0][i];
+			}
+			std::cout << name << std::endl;
+
+			std::string fullname = "Levels/" + name + ".tgs";
+			myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
+			myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
+			StartSceneLoadAsync(fullname, true);
+
+			return;
+		}
+
+	);
+	Console->ListCommands();
+}
+
 void GameWorld::TryRecoverWindowFocus()
 {
 	if (myPendingFocusRecoveryFrames <= 0)
@@ -422,6 +517,10 @@ void GameWorld::ApplyLoadedScene(std::vector<std::unique_ptr<GameObject>>&& some
 
 void GameWorld::Render()
 {
+#ifdef _DEBUG
+	auto Console = Essentials::GetEssentials().globalConsoleManager.get();
+	Console->Draw();
+#endif
 	myWorldStateStack.GetCurrentState()->Render();
 }
 

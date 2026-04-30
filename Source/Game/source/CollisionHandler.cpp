@@ -32,7 +32,7 @@
 //
 //// ---------------------------------------------------------------------------
 //// Helper: get the AABB for any game object.
-//// Prefers BoxColliderComponent if present, otherwise falls back to GetHitbox().
+//// Prefers BoxColliderComponent bounds if present.
 //// ---------------------------------------------------------------------------
 //static AABB3D<float> GetEffectiveAABB(const GameObject& aObj)
 //{
@@ -42,8 +42,7 @@
 //		return box->GetAABB();
 //	}
 //
-//	// SphereCollider also updates the owner hitbox to a bounding box
-//	return aObj.GetHitbox();
+//	return CommonUtilities::AABB3D<float>({ 0, 0, 0 }, { 0, 0, 0 });
 //}
 //
 //// ---------------------------------------------------------------------------
@@ -246,7 +245,7 @@
 //	bool anyCollision = false;
 //
 //	SchnozController& schnoz = *inoutSchnoz.GetComponent<SchnozController>();
-//	const AABB3D<float>& schnozAABB = schnoz.GetOwner()->GetHitbox();
+//	const AABB3D<float>& schnozAABB = schnoz.GetOwner()->GetComponent<BoxColliderComponent>()->GetAABB();
 //	const Vector3f& schnozMin = schnozAABB.GetMin();
 //	const Vector3f& schnozMax = schnozAABB.GetMax();
 //	const Vector3f schnozCenter = (schnozMin + schnozMax) * 0.5f;
@@ -393,8 +392,8 @@
 //				continue;
 //			}
 //
-//			const AABB3D<float> aabb1 = (*inoutSchnozList1[i]).GetComponent<SchnozController>()->GetOwner()->GetHitbox();
-//			const AABB3D<float> aabb2 = (*inoutSchnozList2[j]).GetComponent<SchnozController>()->GetOwner()->GetHitbox();
+//			const AABB3D<float> aabb1 = (*inoutSchnozList1[i]).GetComponent<SchnozController>()->GetOwner()->GetComponent<BoxColliderComponent>()->GetAABB();
+//			const AABB3D<float> aabb2 = (*inoutSchnozList2[j]).GetComponent<SchnozController>()->GetOwner()->GetComponent<BoxColliderComponent>()->GetAABB();
 //
 //
 //			if (IntersectionAABBAABB(aabb1, aabb2))
@@ -422,7 +421,7 @@
 //
 //	GameObject* SchnozID = &inoutSchnoz;
 //	const AABB3D<float> playerAABB = GetEffectiveAABB(*inoutPlayer.GetOwner());
-//	const AABB3D<float> schnozAABB = inoutSchnoz.GetComponent<SchnozController>()->GetOwner()->GetHitbox();
+//	const AABB3D<float> schnozAABB = inoutSchnoz.GetComponent<SchnozController>()->GetOwner()->GetComponent<BoxColliderComponent>()->GetAABB();
 //	float stompTolerance = 0;
 //
 //	if (IntersectionAABBAABB(playerAABB, schnozAABB))
@@ -490,7 +489,7 @@
 //	GameObject* bossID = &inoutBoss;
 //	const AABB3D<float> playerAABB = GetEffectiveAABB(*inoutPlayer.GetOwner());
 //	BossAnimator* bossAnimator = inoutBoss.GetComponent<BossAnimator>();
-//	const AABB3D<float> bossAABB = bossAnimator->GetOwner()->GetHitbox();
+//	const AABB3D<float> bossAABB = bossAnimator->GetOwner()->GetComponent<BoxColliderComponent>()->GetAABB();
 //
 //	if (bossAnimator->GetCurrentAnimationIndex() != bossAnimator->Dead)
 //	{

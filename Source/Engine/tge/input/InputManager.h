@@ -8,6 +8,36 @@
 
 namespace Tga
 {
+	enum class GamepadButton
+	{
+		A,
+		B,
+		X,
+		Y,
+		LB,
+		RB,
+		Dpad_Up,
+		Dpad_Down,
+		Dpad_Right,
+		Dpad_Left,
+		Start,
+		Back,
+
+		Count
+	};
+	struct ControllerState
+	{
+		bool connected = false;
+
+		float leftTrigger;
+		float rightTrigger;
+
+		Tga::Vector2f leftStick;
+		Tga::Vector2f rightStick;
+
+		bool buttons[static_cast<int>(GamepadButton::Count)] = {};
+	};
+
 /// <summary>
 /// Very bare-bones InputManager to show the ropes of this assignment
 /// Has nothing more than keyboard key checks but the
@@ -64,6 +94,53 @@ public:
 
 	void BindAction(std::wstring Action, void (*actionInputFunction)());
 	void BindAxis(std::wstring Axis, void (*axisInputFunction)(Vector2f axisValue));
+
+	//NEW CODE
+	void UpdateInput();
+
+	bool IsButtonPressed(GamepadButton aButton) const;
+	bool IsButtonDown(GamepadButton aButton) const;
+	bool IsButtonReleased(GamepadButton aButton) const;
+	bool IsConnected() const;
+
+	Tga::Vector2f LeftStick() const;
+	Tga::Vector2f RightStick() const;
+
+	bool LeftStickHeldLeft();
+	bool LeftStickHeldRight();
+	bool LeftStickHeldUp();
+	bool LeftStickHeldDown();
+
+	bool RightStickHeldLeft();
+	bool RightStickHeldRight();
+	bool RightStickHeldUp();
+	bool RightStickHeldDown();
+
+
+
+	bool PressingPlayerMovingLeft();
+	bool PressingPlayerMovingRight();
+	bool PressingJump() const;
+	bool ReleasingJump();
+
+	bool PressingToggleUp();
+	bool PressingToggleLeft() const;
+	bool PressingToggleRight() const;
+	bool PressingToggleDown();
+	bool PressingConfirm() const;
+
+
+	float LeftTrigger() const;
+	float RightTrigger() const;
+
+	bool AnyInputPressed() const;
+
+private:
+	Tga::Vector2f ApplyDeadzone(const Tga::Vector2f& aStickValue, float aDeadzoneValue);
+	Tga::Vector2f NormalizeStick(const Tga::Vector2f& aStickValue);
+
+	ControllerState myCurrentControllerState;
+	ControllerState myPreviousControllerState;
 };
 
 } // namespace Tga

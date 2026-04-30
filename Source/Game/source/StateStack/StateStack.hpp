@@ -30,6 +30,10 @@ public:
 	{
 		return stateStack.empty();
 	}
+	bool IsStackEmpty()
+	{
+		return stateStack.back().empty();
+	}
 
 	State* GetCurrentState()
 	{
@@ -48,13 +52,25 @@ public:
 	}
 	void PopState()
 	{
+		if (stateStack.back().size() < 2)
+		{
+			std::cout << "[WARNING] TRIED TO POP A STACK WITH ONLY ONE STATE!!!" << std::endl;
+			return;
+		}
 		if (!stateStack.empty() && !stateStack.back().empty())
 		{
-			auto &Camera = *stateStack.back().back()->GetCameraSystem();
+			auto& Camera = *stateStack.back().back()->GetCameraSystem();
 			delete stateStack.back().back();
 			stateStack.back().pop_back();
-			Camera = *stateStack.back().back()->GetCameraSystem();
-			Essentials::SetPlayer(*stateStack.back().back()->GetPlayer());
+			if (stateStack.back().empty())
+			{
+				stateStack.pop_back();
+			}
+			if (!stateStack.empty() && !stateStack.back().empty())
+			{
+				Camera = *stateStack.back().back()->GetCameraSystem();
+				Essentials::SetPlayer(*stateStack.back().back()->GetPlayer());
+			}
 		}
 	}
 

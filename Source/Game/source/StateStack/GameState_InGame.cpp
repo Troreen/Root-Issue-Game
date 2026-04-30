@@ -5,11 +5,6 @@
 
 #include "MeshComponent.h"
 #include "GameObject.h"
-#include "BoxColliderComponent.h"
-#include "CapsuleColliderComponent.h"
-#include "ObbColliderComponent.h"
-#include "PickUpComponent.h"
-#include "SphereColliderComponent.h"
 
 namespace
 {
@@ -113,107 +108,6 @@ namespace
 				<< " Lower near plane or move camera back.\n";
 		}
 	}
-
-	bool IsTriggerContactObject(const GameObject& anObject)
-	{
-		if (anObject.GetLayer() == ObjectLayer::Trigger || anObject.GetLayer() == ObjectLayer::Pickup)
-		{
-			return true;
-		}
-
-		if (const auto* box = anObject.GetComponent<BoxColliderComponent>())
-		{
-			return box->IsTrigger();
-		}
-
-		if (const auto* sphere = anObject.GetComponent<SphereColliderComponent>())
-		{
-			return sphere->IsTrigger();
-		}
-
-		if (const auto* capsule = anObject.GetComponent<CapsuleColliderComponent>())
-		{
-			return capsule->IsTrigger();
-		}
-
-		if (const auto* obb = anObject.GetComponent<ObbColliderComponent>())
-		{
-			return obb->IsTrigger();
-		}
-
-		return false;
-	}
-
-	void DispatchTriggerPhase(GameObject& anObject, const CollisionPhase aPhase)
-	{
-		if (!IsTriggerContactObject(anObject))
-		{
-			return;
-		}
-
-		if (auto* box = anObject.GetComponent<BoxColliderComponent>())
-		{
-			if (aPhase == CollisionPhase::Enter)
-			{
-				box->OnTriggerEnter();
-			}
-			else if (aPhase == CollisionPhase::Exit)
-			{
-				box->OnTriggerExit();
-			}
-		}
-
-		if (auto* sphere = anObject.GetComponent<SphereColliderComponent>())
-		{
-			if (aPhase == CollisionPhase::Enter)
-			{
-				sphere->OnTriggerEnter();
-			}
-			else if (aPhase == CollisionPhase::Exit)
-			{
-				sphere->OnTriggerExit();
-			}
-		}
-
-		if (auto* capsule = anObject.GetComponent<CapsuleColliderComponent>())
-		{
-			if (aPhase == CollisionPhase::Enter)
-			{
-				capsule->OnTriggerEnter();
-			}
-			else if (aPhase == CollisionPhase::Exit)
-			{
-				capsule->OnTriggerExit();
-			}
-		}
-
-		if (auto* obb = anObject.GetComponent<ObbColliderComponent>())
-		{
-			if (aPhase == CollisionPhase::Enter)
-			{
-				obb->OnTriggerEnter();
-			}
-			else if (aPhase == CollisionPhase::Exit)
-			{
-				obb->OnTriggerExit();
-			}
-		}
-	}
-
-	GameObject* FindPickupObject(const CollisionContact& aContact)
-	{
-		if (aContact.first && (aContact.first->GetLayer() == ObjectLayer::Pickup || aContact.first->GetComponent<PickUpComponent>()))
-		{
-			return aContact.first;
-		}
-
-		if (aContact.second && (aContact.second->GetLayer() == ObjectLayer::Pickup || aContact.second->GetComponent<PickUpComponent>()))
-		{
-			return aContact.second;
-		}
-
-		return nullptr;
-	}
 }
 
 
@@ -305,7 +199,7 @@ eState InGame::Update()
 		DumpSceneVisibilitySnapshot(myGameObjects, *myCameraSystem);
 	}
 
-	myCameraSystem->UpdateDebugCamera(deltaTime, myInputHandler);
+	/*myCameraSystem->UpdateDebugCamera(deltaTime, myInputHandler);*/
 	/*myCameraSystem->Update(deltaTime);*/
 
 	for (auto& object : myGameObjects)
@@ -322,14 +216,11 @@ eState InGame::Update()
 		}
 	}
 
-	myRuntimeCollisionSystem.Run(myGameObjects);
-	ConsumeCollisionContacts(myRuntimeCollisionSystem.GetContacts());
-
 	myVfxSystem.Update(deltaTime);
 
-	if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eVineBoom))
+	if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eMusicLoop))
 	{
-		Essentials::globalAudioManager->PlayMusic(SoundID::eVineBoom);
+		Essentials::globalAudioManager->PlayMusic(SoundID::eMusicLoop);
 	}
 
 	Essentials::globalAudioManager->Update(deltaTime);
@@ -345,36 +236,4 @@ void InGame::Render()
 	}
 
 	RenderDefault();
-}
-
-void InGame::OnSceneLoaded()
-{
-	myRuntimeCollisionSystem.AuditRequiredColliders(myGameObjects);
-}
-
-void InGame::ConsumeCollisionContacts(const std::vector<CollisionContact>& someContacts)
-{
-	for (const CollisionContact& contact : someContacts)
-	{
-		if (!contact.first || !contact.second)
-		{
-			continue;
-		}
-
-		if (contact.phase == CollisionPhase::Enter || contact.phase == CollisionPhase::Exit)
-		{
-			DispatchTriggerPhase(*contact.first, contact.phase);
-			DispatchTriggerPhase(*contact.second, contact.phase);
-		}
-
-		if (contact.phase == CollisionPhase::Enter || contact.phase == CollisionPhase::Stay)
-		{
-			GameObject* pickup = FindPickupObject(contact);
-			if (pickup && pickup->IsActive())
-			{
-				pickup->RemoveAllComponents();
-				pickup->SetActive(false);
-			}
-		}
-	}
 }

@@ -135,6 +135,11 @@ static void ZoomCamera(Camera& aCamera, const Vector2f& aMouseDelta, float& aFoc
 	aCamera.GetTransform().SetPosition((targetPoint)+(aCamera.GetTransform().GetForward() * -aFocusDistance));
 }
 
+Tga::EditorViewport::EditorViewport(bool someNoCameraMovement)
+{
+	myCameraInUIEditor = someNoCameraMovement;
+}
+
 void EditorViewport::Init()
 {
 	myIdAnimatedModelShader.Init("Shaders/animated_model_shader_VS", "Shaders/id_shader_ps");

@@ -58,5 +58,4 @@ void ColliderComponent::UpdateHitbox()
     const Vector3f half = mySize * 0.5f;
 
     myAabb = CommonUtilities::AABB3D<float>(pos - half, pos + half);
-    owner->SetHitbox(myAabb);
 }

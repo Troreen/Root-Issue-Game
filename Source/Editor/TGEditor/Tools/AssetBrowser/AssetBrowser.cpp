@@ -18,6 +18,7 @@
 
 #include <IconFontHeaders/IconsLucide.h>
 #include <p4/p4.h>
+#include "Canvas/CanvasDefinitionDocument.h"
 
 #define HIDE_LEVELDATA_DIRECTORIES 
 
@@ -329,6 +330,20 @@ void AssetBrowser::Draw()
 								// move this logic somewhere else?
 
 								std::unique_ptr<ObjectDefinitionDocument> sceneDocument = std::make_unique<ObjectDefinitionDocument>();
+								sceneDocument->Init(path.string());
+
+								Editor::GetEditor()->AddDocument(std::move(sceneDocument));
+							}
+						}
+
+						if (absPath.extension() == ".canvas")
+						{
+							if (itemStatus.doubleClicked)
+							{
+								// todo: check if already open!
+								// move this logic somewhere else?
+
+								std::unique_ptr<CanvasDefinitionDocument> sceneDocument = std::make_unique<CanvasDefinitionDocument>();
 								sceneDocument->Init(path.string());
 
 								Editor::GetEditor()->AddDocument(std::move(sceneDocument));

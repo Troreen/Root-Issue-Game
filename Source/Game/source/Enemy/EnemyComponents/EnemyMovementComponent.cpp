@@ -1,25 +1,42 @@
 #include "EnemyMovementComponent.h"
 #include "GameObject.h"
-#include <random>
+#include <iostream>
 
 void EnemyMovementComponent::OnStart()
 {
+	std::random_device seed;
+	std::mt19937 rndEngine(seed());
+
+	myRandomEngine = rndEngine;
 }
 
 void EnemyMovementComponent::OnUpdate(float /*aDeltaTime*/)
 {
+	auto& pos = GetOwner()->GetTransform().GetPosition();
+
+	std::cout << "Position: " << pos.x << ", " << pos.y << ", " << pos.z << std::endl;
 }
 
-void EnemyMovementComponent::MoveTowards(GameObject* aTarget, float aDeltaTime)
+void EnemyMovementComponent::MoveTowardsTarget(GameObject* aTarget, float aDeltaTime)
 {
 	auto& transform = GetOwner()->GetTransform();
 	const Vector3f& targetPos = aTarget->GetTransform().GetPosition();
 	Vector3f diff = targetPos - transform.GetPosition();
+	diff.y = 0.0f;
+
+	if (diff.Length() < 0.001f)
+	{
+		myVelocity = { 0.0f, 0.0f, 0.0f };
+		return;
+	}
+
 	Vector3f direction = diff.GetNormalized();
 
-	RotateTowardsTarget(aTarget);
+	RotateTowards(direction, aDeltaTime);
 
-	transform.Translate(direction * mySpeed * aDeltaTime);
+	myVelocity = direction * mySpeed;
+
+	transform.Translate(myVelocity * aDeltaTime);
 }
 
 void EnemyMovementComponent::MoveRandomly(float aDeltaTime)
@@ -34,6 +51,9 @@ void EnemyMovementComponent::MoveRandomly(float aDeltaTime)
 	}
 	else
 	{
+		/*float rotationSpeed = 2.0f;
+		float t = rotationSpeed * aDeltaTime;*/
+
 		float randomAngle = GetRandomAngleDegreeToRad(-180.0f, 180.0f);
 
 		CommonUtilities::Quaternion<float> turnRotation = CommonUtilities::Quaternion<float>::CreateFromAxisAngle(Vector3f::UnitY, randomAngle);
@@ -42,24 +62,51 @@ void EnemyMovementComponent::MoveRandomly(float aDeltaTime)
 
 		CommonUtilities::Quaternion<float> newRotation = oldRotation * turnRotation;
 
+		/*CommonUtilities::Quaternion<float> targetRotation = oldRotation * turnRotation;
+
+		CommonUtilities::Quaternion<float> newRotation = Quaternion::Slerp(oldRotation, targetRotation, t);*/
+
 		transform.SetRotation(newRotation);
 
 		myMoveDistance = 0.0f;
 	}
 }
 
-void EnemyMovementComponent::RotateTowardsTarget(GameObject* aTarget)
+void EnemyMovementComponent::MoveForward(float aDeltaTime)
 {
 	auto& transform = GetOwner()->GetTransform();
-	const Vector3f& targetPos = aTarget->GetTransform().GetPosition();
+	Vector3f forward = transform.GetForward();
 
-	Vector3f diff = targetPos - transform.GetPosition();
+	myVelocity = forward * mySpeed;
+	transform.Translate(myVelocity * aDeltaTime);
+}
 
-	float angle = std::atan2(diff.x, diff.z);
+const CommonUtilities::Vector3<float>& EnemyMovementComponent::GetVelocity() const
+{
+	return myVelocity;
+}
 
-	CommonUtilities::Quaternion<float> rotation = CommonUtilities::Quaternion<float>::CreateFromAxisAngle(Vector3f::UnitY, angle);
+void EnemyMovementComponent::StopMoving()
+{
+	myVelocity = { 0.0f, 0.0f, 0.0f };
+}
 
-	transform.SetRotation(rotation);
+void EnemyMovementComponent::RotateTowards(const CommonUtilities::Vector3<float>& aDirection, float aDeltaTime)
+{
+	auto& transform = GetOwner()->GetTransform();
+
+	float rotationSpeed = 5.0f;
+	float t = std::clamp(rotationSpeed * aDeltaTime, 0.0f, 1.0f);
+
+	float angle = std::atan2(aDirection.x, aDirection.z);
+
+	CommonUtilities::Quaternion<float> turnRotation = CommonUtilities::Quaternion<float>::CreateFromAxisAngle(Vector3f::UnitY, angle);
+
+	CommonUtilities::Quaternion<float> oldRotation = transform.GetRotation();
+
+	CommonUtilities::Quaternion<float> newRotation = CommonUtilities::Quaternion<float>::Slerp(oldRotation, turnRotation, t);
+
+	transform.SetRotation(newRotation);
 }
 
 float EnemyMovementComponent::GetRandomAngleDegreeToRad(float aMin, float aMax)
@@ -68,9 +115,7 @@ float EnemyMovementComponent::GetRandomAngleDegreeToRad(float aMin, float aMax)
 	float minRadians = aMin * pi / 180.0f;
 	float maxRadians = aMax * pi / 180.0f;
 
-	std::random_device seed;
-	std::mt19937 rndEngine(seed());
 	std::uniform_real_distribution<float> rndDist(minRadians, maxRadians);
 
-	return rndDist(rndEngine);
+	return rndDist(myRandomEngine);
 }

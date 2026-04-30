@@ -1,7 +1,6 @@
 #pragma once
 
 #include <CommonUtilities/Transform.hpp>
-#include <CommonUtilities/AABB3D.hpp>
 #include "Component.h"
 #include "ObjectLayer.h"
 #include <cstdint>
@@ -64,10 +63,6 @@ public:
     ObjectLayer GetLayer() const;
 
     std::uint64_t GetCollisionId() const;
-
-    const CommonUtilities::AABB3D<float>& GetHitbox() const;
-    void SetHitbox(const CommonUtilities::AABB3D<float> aAABB);
-    bool HasHitbox() const;
 
     template <typename T, typename... Args>
     T* AddComponent(Args&&... someArgs)
@@ -142,9 +137,6 @@ private:
     Tga::Engine* myEngine = nullptr;
     ObjectLayer myLayer = ObjectLayer::WorldStatic;
     std::uint64_t myCollisionId = 0;
-
-    CommonUtilities::AABB3D<float> myAABB;
-    bool myHasAABB = false;
 
     std::vector<std::unique_ptr<Component>> myComponents;
 };

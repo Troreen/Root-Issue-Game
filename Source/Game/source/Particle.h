@@ -1,9 +1,16 @@
 #pragma once
 
 #include <CommonUtilities/Vector.hpp>
+#include <CommonUtilities/Transform.hpp>
 #include <tge/sprite/sprite.h>
-#include <tge/math/Matrix4x4.h>
+#include <tge/math/CommonMath.h>
 
+enum class ParticleType
+{
+	Test,
+	Blood,
+	COUNT
+};
 
 struct ParticleSettings 
 {
@@ -36,7 +43,8 @@ private:
 
 	float myTimeLeft;
 	ParticleSettings mySettings;
-	Tga::Matrix4x4f myTransform;
+	CommonUtilities::Transform<float> myTransform;
+	
 	Tga::Sprite3DInstanceData myInstance;
 
 	Particle* myNext;

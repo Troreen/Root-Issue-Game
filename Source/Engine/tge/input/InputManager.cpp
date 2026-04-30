@@ -2,6 +2,12 @@
 
 #include "InputManager.h"
 #include "Windowsx.h"
+#include "EnumKeys.h"
+
+#include <Xinput.h>
+
+
+#pragma comment(lib, "Xinput.lib")
 
 using namespace Tga;
 
@@ -215,4 +221,278 @@ void InputManager::Update()
 	
 	myPreviousState = myCurrentState;
 	myCurrentState = myTentativeState;
+}
+
+#include <algorithm>
+
+
+
+//NEW CODE!!
+void InputManager::UpdateInput()
+{
+	myPreviousControllerState = myCurrentControllerState;
+
+	XINPUT_STATE xState{};
+	ZeroMemory(&xState, sizeof(XINPUT_STATE));
+
+	DWORD result = XInputGetState(0, &xState);
+	if (result != ERROR_SUCCESS)
+	{
+		myCurrentControllerState = {};
+		myCurrentControllerState.connected = false;
+		return;
+	}
+	myCurrentControllerState.connected = true;
+
+	XINPUT_GAMEPAD& g = xState.Gamepad;
+
+	myCurrentControllerState.buttons[static_cast<int>(GamepadButton::A)] = g.wButtons & XINPUT_GAMEPAD_A;
+	myCurrentControllerState.buttons[static_cast<int>(GamepadButton::B)] = g.wButtons & XINPUT_GAMEPAD_B;
+	myCurrentControllerState.buttons[static_cast<int>(GamepadButton::X)] = g.wButtons & XINPUT_GAMEPAD_X;
+	myCurrentControllerState.buttons[static_cast<int>(GamepadButton::Y)] = g.wButtons & XINPUT_GAMEPAD_Y;
+	myCurrentControllerState.buttons[static_cast<int>(GamepadButton::LB)] = g.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER;
+	myCurrentControllerState.buttons[static_cast<int>(GamepadButton::RB)] = g.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER;
+	myCurrentControllerState.buttons[static_cast<int>(GamepadButton::Dpad_Up)] = g.wButtons & XINPUT_GAMEPAD_DPAD_UP;
+	myCurrentControllerState.buttons[static_cast<int>(GamepadButton::Dpad_Down)] = g.wButtons & XINPUT_GAMEPAD_DPAD_DOWN;
+	myCurrentControllerState.buttons[static_cast<int>(GamepadButton::Dpad_Right)] = g.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT;
+	myCurrentControllerState.buttons[static_cast<int>(GamepadButton::Dpad_Left)] = g.wButtons & XINPUT_GAMEPAD_DPAD_LEFT;
+	myCurrentControllerState.buttons[static_cast<int>(GamepadButton::Start)] = g.wButtons & XINPUT_GAMEPAD_START;
+	myCurrentControllerState.buttons[static_cast<int>(GamepadButton::Back)] = g.wButtons & XINPUT_GAMEPAD_BACK;
+
+	const float deadzone = 0.15f;
+
+	Tga::Vector2f LS;
+	LS.x = g.sThumbLX;
+	LS.y = g.sThumbLY;
+	LS = ApplyDeadzone(LS, deadzone);
+	myCurrentControllerState.leftStick = NormalizeStick(LS);
+
+	Tga::Vector2f RS;
+	RS.x = g.sThumbRX;
+	RS.y = g.sThumbRY;
+	RS = ApplyDeadzone(RS, deadzone);
+	myCurrentControllerState.rightStick = NormalizeStick(RS);
+
+	myCurrentControllerState.leftTrigger = static_cast<float>(g.bLeftTrigger) / 255.f;
+	myCurrentControllerState.rightTrigger = static_cast<float>(g.bRightTrigger) / 255.f;
+}
+
+bool InputManager::IsButtonPressed(GamepadButton aButton) const
+{
+	return myCurrentControllerState.buttons[static_cast<int>(aButton)] && !myPreviousControllerState.buttons[static_cast<int>(aButton)];
+}
+
+bool InputManager::IsButtonDown(GamepadButton aButton) const
+{
+	return myCurrentControllerState.buttons[static_cast<int>(aButton)];
+}
+
+bool InputManager::IsButtonReleased(GamepadButton aButton) const
+{
+	return !myCurrentControllerState.buttons[static_cast<int>(aButton)] && myPreviousControllerState.buttons[static_cast<int>(aButton)];
+}
+
+bool InputManager::IsConnected() const
+{
+	return myCurrentControllerState.connected;
+}
+
+Tga::Vector2f InputManager::LeftStick() const
+{
+	return myCurrentControllerState.leftStick;
+}
+
+Tga::Vector2f InputManager::RightStick() const
+{
+	return myCurrentControllerState.rightStick;
+}
+
+bool InputManager::LeftStickHeldLeft()
+{
+	return LeftStick().x < -0.5f;
+}
+
+bool InputManager::LeftStickHeldRight()
+{
+	return LeftStick().x > 0.5f;
+}
+
+bool InputManager::RightStickHeldRight()
+{
+	return RightStick().x > 0.5f;
+}
+
+bool InputManager::RightStickHeldLeft()
+{
+	return RightStick().x < -0.5f;
+}
+
+
+bool InputManager::RightStickHeldUp()
+{
+	return RightStick().y > 0.5f;
+}
+
+bool InputManager::RightStickHeldDown()
+{
+	return RightStick().y < -0.5f;
+}
+
+
+bool InputManager::LeftStickHeldUp()
+{
+	return LeftStick().y > 0.5f;
+}
+
+bool InputManager::LeftStickHeldDown()
+{
+	return LeftStick().y < -0.5f;
+}
+
+float InputManager::LeftTrigger() const
+{
+	return myCurrentControllerState.leftTrigger;
+}
+
+float InputManager::RightTrigger() const
+{
+	return myCurrentControllerState.rightTrigger;
+}
+
+
+bool InputManager::PressingPlayerMovingLeft()
+{
+	return (
+		IsKeyHeld(static_cast<int>(EngineCU::Keys::A)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::A)) ||
+		IsKeyHeld(static_cast<int>(EngineCU::Keys::LEFT)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::LEFT)) ||
+		IsButtonDown(Tga::GamepadButton::Dpad_Left) && !IsButtonReleased(Tga::GamepadButton::Dpad_Left) ||
+		LeftStickHeldLeft() || RightStickHeldLeft() || LeftTrigger()
+		);
+}
+
+
+bool InputManager::PressingPlayerMovingRight()
+{
+	return (
+		IsKeyHeld(static_cast<int>(EngineCU::Keys::D)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::D)) ||
+		IsKeyHeld(static_cast<int>(EngineCU::Keys::RIGHT)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::RIGHT)) ||
+		IsButtonDown(Tga::GamepadButton::Dpad_Right) && !IsButtonReleased(Tga::GamepadButton::Dpad_Right) ||
+		LeftStickHeldRight() || RightStickHeldRight() || RightTrigger()
+		);
+}
+
+bool InputManager::PressingJump() const
+{
+	return (
+		(IsButtonPressed(Tga::GamepadButton::A) && !IsButtonReleased(Tga::GamepadButton::A)) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::W)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::W)) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::SPACE)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::SPACE)) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::UP)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::UP))
+		);
+}
+
+bool InputManager::ReleasingJump()
+{
+	return (
+		IsKeyReleased(static_cast<int>(EngineCU::Keys::SPACE)) ||
+		IsKeyReleased(static_cast<int>(EngineCU::Keys::W)) ||
+		IsKeyReleased(static_cast<int>(EngineCU::Keys::UP)) ||
+		IsButtonReleased(Tga::GamepadButton::A)
+		);
+}
+
+
+
+bool InputManager::PressingToggleUp()
+{
+	return (
+		IsButtonPressed(Tga::GamepadButton::Dpad_Up) && !IsButtonReleased(Tga::GamepadButton::Dpad_Up) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::W)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::W)) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::UP)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::UP))/*||
+		LeftStickHeldUp()*/
+		);
+}
+
+
+bool InputManager::PressingToggleDown()
+{
+	return (
+		IsButtonPressed(Tga::GamepadButton::Dpad_Down) && !IsButtonReleased(Tga::GamepadButton::Dpad_Down) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::S)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::S)) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::DOWN)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::DOWN)) /*||
+		LeftStickHeldDown()*/
+		);
+}
+
+bool InputManager::PressingConfirm() const
+{
+	return (
+		IsButtonPressed(Tga::GamepadButton::A) && !IsButtonReleased(Tga::GamepadButton::A) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::SPACE)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::SPACE)) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::ENTER)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::ENTER))
+		);
+}
+
+
+bool InputManager::PressingToggleLeft() const
+{
+	return (
+		IsButtonPressed(Tga::GamepadButton::Dpad_Left) && !IsButtonReleased(Tga::GamepadButton::Dpad_Left) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::A)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::A)) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::LEFT)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::LEFT))
+		);
+}
+
+bool InputManager::PressingToggleRight() const
+{
+	return (
+		IsButtonPressed(Tga::GamepadButton::Dpad_Right) && !IsButtonReleased(Tga::GamepadButton::Dpad_Right) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::D)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::D)) ||
+		IsKeyPressed(static_cast<int>(EngineCU::Keys::RIGHT)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::RIGHT))
+		);
+}
+
+Tga::Vector2f InputManager::ApplyDeadzone(const Tga::Vector2f& aStickValue, float aDeadzoneValue)
+{
+	float magnitude = sqrt(aStickValue.x * aStickValue.x + aStickValue.y * aStickValue.y);
+
+	if (magnitude < aDeadzoneValue)
+	{
+		return { 0.0f, 0.0f };
+	}
+
+	return aStickValue;
+}
+
+Tga::Vector2f InputManager::NormalizeStick(const Tga::Vector2f& aStickValue)
+{
+	Tga::Vector2f returnValue;
+	returnValue.x = aStickValue.x / 32767.0f;
+	returnValue.y = aStickValue.y / 32767.0f;
+
+	returnValue.x = std::clamp(returnValue.x, -1.0f, 1.0f);
+	returnValue.y = std::clamp(returnValue.y, -1.0f, 1.0f);
+
+	return returnValue;
+}
+
+bool InputManager::AnyInputPressed() const
+{
+	for (int i = 0; i < 256; i++)
+	{
+		if (IsKeyPressed(i))
+		{
+			return true;
+		}
+	}
+
+	for (int i = 0; i < static_cast<int>(GamepadButton::Count); i++)
+	{
+		if (IsButtonPressed(static_cast<GamepadButton>(i)))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

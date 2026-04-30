@@ -18,6 +18,8 @@
 
 #include <EditorConfiguration.h>
 
+#include "tge/UI/CanvasObjectDefinitionManager.h"
+
 namespace Tga
 { 
 class SpriteShader;
@@ -60,6 +62,7 @@ public:
 	const ImVec2& GetDocumentDockSpaceSize() const { return myDocumentDockSize; }
 
 	Tga::SceneObjectDefinitionManager& GetSceneObjectDefinitionManager() { return mySceneObjectDefinitionManager; }
+	Tga::CanvasObjectDefinitionManager& GetCanvasObjectDefinitionManager() { return myCanvasObjectDefinitionManager; }
 	Tga::EditorSceneManager& GetEditorSceneManager() { return myEditorSceneManager; }
 
 	Tga::AssetBrowser& GetAssetBrowser() { return myAssetBrowser; }
@@ -67,6 +70,7 @@ public:
 
 	void CreateNewScene();
 	void CreateNewObjectDefinition();
+	void CreateNewCanvasDefinition();
 	void CreateNewAnimationClip();
 
 	bool IsViewportGridVisible() { return myIsViewportGridVisible; }
@@ -85,6 +89,7 @@ private:
 	AssetBrowser myAssetBrowser;
 
 	Tga::SceneObjectDefinitionManager mySceneObjectDefinitionManager;
+	Tga::CanvasObjectDefinitionManager myCanvasObjectDefinitionManager;
 	Tga::EditorSceneManager myEditorSceneManager;
 
 	std::vector<std::unique_ptr<Document>> myOpenDocuments;

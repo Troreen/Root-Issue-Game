@@ -257,7 +257,7 @@ void CapsuleColliderComponent::UpdateCapsule()
     const float cylinderHeight = (std::max)(0.0f, myHeight - radius * 2.0f);
     const Vector3f anchorToBottomCenter = myPivotBottomMiddle
         ? Vector3f(0.0f, radius, 0.0f)
-        : Vector3f(-radius, radius, radius);
+        : Vector3f(radius, radius, radius);
 
     myBottomCenter = owner->GetTransform().GetPosition() + anchorToBottomCenter + myOffset;
     myTopCenter = myBottomCenter + Vector3f(0.0f, cylinderHeight, 0.0f);
@@ -278,5 +278,4 @@ void CapsuleColliderComponent::UpdateCapsule()
         maxZ + radius);
 
     myAABB = CommonUtilities::AABB3D<float>(minBounds, maxBounds);
-    owner->SetHitbox(myAABB);
 }

@@ -27,6 +27,7 @@ public:
     void OnActiveChanged(bool isActive) override;
 
 private:
+
     void EmitOnce();
 
     Settings mySettings;

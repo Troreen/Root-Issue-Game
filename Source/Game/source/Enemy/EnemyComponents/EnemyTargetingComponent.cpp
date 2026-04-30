@@ -18,10 +18,7 @@ void EnemyTargetingComponent::OnUpdate(float /*aDeltaTime*/)
 
 	Vector3f diff = playerPos - ownerPos;
 
-	if (diff.Length() < myDetectionRange)
-	{
-		myTargetIsInRange = true;
-	}
+	myTargetIsInRange = diff.Length() < myDetectionRange;
 }
 
 bool EnemyTargetingComponent::IsTargetInRange() const

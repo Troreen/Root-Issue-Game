@@ -76,6 +76,31 @@ namespace
             anObject.GetComponent<ObbColliderComponent>() != nullptr;
     }
 
+    bool HasTriggerCollider(const GameObject& anObject)
+    {
+        if (const auto* box = anObject.GetComponent<BoxColliderComponent>())
+        {
+            return box->IsTrigger();
+        }
+
+        if (const auto* sphere = anObject.GetComponent<SphereColliderComponent>())
+        {
+            return sphere->IsTrigger();
+        }
+
+        if (const auto* capsule = anObject.GetComponent<CapsuleColliderComponent>())
+        {
+            return capsule->IsTrigger();
+        }
+
+        if (const auto* obb = anObject.GetComponent<ObbColliderComponent>())
+        {
+            return obb->IsTrigger();
+        }
+
+        return false;
+    }
+
     void RefreshRuntimeCollider(GameObject& anObject)
     {
         if (auto* box = anObject.GetComponent<BoxColliderComponent>())
@@ -632,8 +657,7 @@ namespace
             shape.type = CollisionShapeType::Sphere;
             shape.center = sphere->GetSphere().GetCenter();
             shape.radius = sphere->GetSphere().GetRadius();
-            const Vector3f half(shape.radius, shape.radius, shape.radius);
-            shape.bounds = CommonUtilities::AABB3D<float>(shape.center - half, shape.center + half);
+            shape.bounds = sphere->GetAABB();
             shape.isValid = true;
             return shape;
         }
@@ -1107,7 +1131,7 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
 
             if (logCollisionDebug && (logResolutionDetails || isNewPair))
             {
-                const CommonUtilities::AABB3D<float> resolvedAabb = aDynamicObject.GetHitbox();
+                const CommonUtilities::AABB3D<float> resolvedAabb = GetCollisionShape(aDynamicObject).bounds;
                 std::ostringstream stream;
                 stream << "block hit"
                     << " dynamic=" << DescribeObject(aDynamicObject)
@@ -1181,6 +1205,12 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
             bool didResolve = false;
             for (GameObject* worldStatic : worldStaticObjects)
             {
+                if (HasTriggerCollider(*player) || HasTriggerCollider(*worldStatic))
+                {
+                    registerTrigger(*player, *worldStatic);
+                    continue;
+                }
+
                 if (rules.Get(player->GetLayer(), worldStatic->GetLayer()) != CollisionRule::Block)
                 {
                     continue;
@@ -1206,6 +1236,12 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
             bool didResolve = false;
             for (GameObject* worldStatic : worldStaticObjects)
             {
+                if (HasTriggerCollider(*enemy) || HasTriggerCollider(*worldStatic))
+                {
+                    registerTrigger(*enemy, *worldStatic);
+                    continue;
+                }
+
                 if (rules.Get(enemy->GetLayer(), worldStatic->GetLayer()) != CollisionRule::Block)
                 {
                     continue;
@@ -1228,6 +1264,12 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
     {
         for (GameObject* enemy : enemyObjects)
         {
+            if (HasTriggerCollider(*player) || HasTriggerCollider(*enemy))
+            {
+                registerTrigger(*player, *enemy);
+                continue;
+            }
+
             if (rules.Get(player->GetLayer(), enemy->GetLayer()) != CollisionRule::Block)
             {
                 continue;

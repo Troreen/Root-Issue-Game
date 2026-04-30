@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <algorithm>
 
 #include "Matrix3x3.hpp"
 #include "Matrix4x4.hpp"
@@ -28,6 +29,7 @@ namespace CommonUtilities
 		T LengthSqr() const;
 		T Length() const;
 		T Dot(const Quaternion& aOther) const;
+		static Quaternion Slerp(const Quaternion& a, const Quaternion& b, const float t);
 
 		void Normalize();
 		Quaternion GetNormalized() const;
@@ -120,11 +122,60 @@ namespace CommonUtilities
 		return w * aOther.w + x * aOther.x + y * aOther.y + z * aOther.z;
 	}
 
+	template<typename T>
+	inline Quaternion<T> Quaternion<T>::Slerp(const Quaternion& a, const Quaternion& b, const float t)
+	{
+		Quaternion result;
+
+		float t_ = 1 - t;
+
+		float Wa;
+		float Wb;
+
+		T dot = a.Dot(b);
+
+		Quaternion bCopy = b;
+
+		if (dot < 0.0f)
+		{
+			bCopy.x = -b.x;
+			bCopy.y = -b.y;
+			bCopy.z = -b.z;
+			bCopy.w = -b.w;
+			dot = -dot;
+		}
+
+		dot = std::clamp(dot, static_cast<T>(-1), static_cast<T>(1));
+
+		// Lerp
+		if (dot > 0.9995f)
+		{
+			result.x = a.x * (1 - t) + b.x * t;
+			result.y = a.y * (1 - t) + b.y * t;
+			result.z = a.z * (1 - t) + b.z * t;
+			result.w = a.w * (1 - t) + b.w * t;
+			result.Normalize();
+			return result;
+		}
+
+		float theta = std::acos(dot);
+		float sin = std::sin(theta);
+		Wa = std::sin(t_ * theta) / sin;
+		Wb = std::sin(t * theta) / sin;
+		result.x = Wa * a.x + Wb * b.x;
+		result.y = Wa * a.y + Wb * b.y;
+		result.z = Wa * a.z + Wb * b.z;
+		result.w = Wa * a.w + Wb * b.w;
+		result.Normalize();
+
+		return result;
+	}
+
 	template <typename T>
 	inline void Quaternion<T>::Normalize()
 	{
 		const T len = Length();
-		if (len == static_cast<T>(0))
+		if (!std::isfinite(len) || len < static_cast<T>(1e-6))
 		{
 			w = static_cast<T>(1);
 			x = static_cast<T>(0);

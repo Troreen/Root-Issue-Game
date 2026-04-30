@@ -27,13 +27,23 @@ Text::Text(const char* aPathAndName, FontSize aFontSize, unsigned char aBorderSi
 
 Text::~Text() {}
 
-void Tga::Text::Render()
+void Text::SetFont(const char* aPathAndName, FontSize aFontSize, unsigned char aBorderSize)
+{
+	if (myTextService == nullptr)
+	{
+		myTextService = (&Tga::Engine::GetInstance()->GetTextService());
+	}
+
+	myFont = myTextService->GetOrLoad(aPathAndName, aFontSize, aBorderSize);
+}
+
+void Tga::Text::Render(bool forceInstant)
 {
 	if (!myTextService)
 	{
 		return;
 	}
-	if (!myTextService->Draw(*this))
+	if (!myTextService->Draw(*this, nullptr, forceInstant))
 	{
 		ERROR_PRINT("%s", "Text rendering error! Trying to render a text where the resource has been deleted! Did you clear the memory for this font? OR: Did you set the correct working directory?");
 	}
@@ -109,4 +119,131 @@ void Tga::Text::SetScale(float aScale)
 float Tga::Text::GetScale() const
 {
 	return myScale;
+}
+
+std::string Text::TruncateTextToBox(
+    Tga::Text& text,
+    const std::string& input,
+    float maxWidth,
+    float maxHeight,
+    bool addEllipsis)
+{
+    if (!myTextService)
+        return "";
+
+    const float lineHeight = myTextService->GetLineHeight(text);
+
+    if (lineHeight <= 0.0f || maxHeight <= 0.0f)
+        return "";
+
+    std::vector<std::string> lines;
+    std::string currentLine;
+
+    float accumulatedHeight = 0.0f;
+
+    auto fitsWidth = [&](const std::string& str)
+        {
+            return myTextService->MeasureWidth(text, str) <= maxWidth;
+        };
+
+    size_t i = 0;
+
+    while (i < input.size())
+    {
+        char c = input[i];
+
+        if (c == '\n')
+        {
+            if (accumulatedHeight + lineHeight > maxHeight)
+                break;
+
+            lines.push_back(currentLine);
+            accumulatedHeight += lineHeight;
+            currentLine.clear();
+            ++i;
+            continue;
+        }
+
+        std::string candidate = currentLine + c;
+
+        if (fitsWidth(candidate))
+        {
+            currentLine = candidate;
+            ++i;
+        }
+        else
+        {
+            if (!currentLine.empty())
+            {
+                if (accumulatedHeight + lineHeight > maxHeight)
+                    break;
+
+                lines.push_back(currentLine);
+                accumulatedHeight += lineHeight;
+                currentLine.clear();
+            }
+            else
+            {
+                ++i;
+            }
+        }
+    }
+
+    if (!currentLine.empty() &&
+        accumulatedHeight + lineHeight <= maxHeight)
+    {
+        lines.push_back(currentLine);
+        accumulatedHeight += lineHeight;
+    }
+
+    if (addEllipsis && accumulatedHeight > maxHeight)
+    {
+        if (!lines.empty())
+        {
+            std::string& lastLine = lines.back();
+            const std::string ellipsis = "...";
+
+            std::string truncated = lastLine;
+
+            while (!truncated.empty() &&
+                !fitsWidth(truncated + ellipsis))
+            {
+                truncated.pop_back();
+            }
+
+            if (fitsWidth(ellipsis))
+                lastLine = truncated + ellipsis;
+            else
+                lastLine = truncated;
+        }
+    }
+
+    std::string result;
+    for (size_t j = 0; j < lines.size(); ++j)
+    {
+        result += lines[j];
+        if (j + 1 < lines.size())
+            result += '\n';
+    }
+
+    return result;
+}
+
+std::vector<std::string> Text::SplitLines(const std::string& text)
+{
+    std::vector<std::string> lines;
+    std::stringstream ss(text);
+    std::string line;
+
+    while (std::getline(ss, line, '\n'))
+        lines.push_back(line);
+
+    return lines;
+}
+
+float Text::GetLineHeight() const
+{
+    return myTextService
+        ? myTextService->GetLineHeight(*this)
+        : 0.0f;
 }

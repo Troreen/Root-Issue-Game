@@ -3,9 +3,7 @@
 void Particle::Init(const ParticleSettings& someParticleSettings)
 {
 	mySettings = someParticleSettings;
-	myTransform(4, 1) = someParticleSettings.initalPosition.x;
-	myTransform(4, 2) = someParticleSettings.initalPosition.y;
-	myTransform(4, 3) = someParticleSettings.initalPosition.z;
+	myTransform.SetPosition(someParticleSettings.initalPosition);
 	myTimeLeft = mySettings.timeToLive;
 }
 
@@ -27,11 +25,12 @@ bool Particle::Animate(float aTimeDelta)
 		return false;
 	}
 
-	myTransform(4, 1) += mySettings.linearVelocity.x;
-	myTransform(4, 2) += mySettings.linearVelocity.y;
-	myTransform(4, 3) += mySettings.linearVelocity.z;
-	myInstance.myTransform = myTransform;
-	
+	myTransform.Translate(mySettings.linearVelocity * aTimeDelta);
+
+	Tga::Vector3f pos = myTransform.GetPosition().ToTga();
+
+	myInstance.myTransform.SetPosition(pos);
+
 	myTimeLeft -= aTimeDelta;
 	return myTimeLeft <= 0;
 }

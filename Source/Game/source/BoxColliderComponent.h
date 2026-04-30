@@ -7,7 +7,7 @@
 using Vector3f = CommonUtilities::Vector3<float>;
 
 /// Axis-aligned box collider component.
-/// Updates the owner's hitbox every frame and debug-draws the AABB edges.
+/// Owns its authored AABB every frame and debug-draws the AABB edges.
 class BoxColliderComponent final : public Component
 {
 public:
