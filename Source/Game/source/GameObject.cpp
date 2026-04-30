@@ -13,7 +13,7 @@ GameObject::GameObject(std::string aName)
     : myTransform()
     , myName(std::move(aName))
     , myCollisionId(gNextCollisionId.fetch_add(1, std::memory_order_relaxed))
-    , myAABB({-1,-1,-1}, { 1, 1, 1})
+    , myAABB({ 0, 0, 0 }, { 0, 0, 0 })
 {
 }
 
@@ -180,6 +180,12 @@ const CommonUtilities::AABB3D<float>& GameObject::GetHitbox() const
 void GameObject::SetHitbox(const CommonUtilities::AABB3D<float> aAABB)
 {
     myAABB = aAABB;
+    myHasAABB = true;
+}
+
+bool GameObject::HasHitbox() const
+{
+    return myHasAABB;
 }
 
 void GameObject::RemoveAllComponents()

@@ -67,6 +67,7 @@ public:
 
     const CommonUtilities::AABB3D<float>& GetHitbox() const;
     void SetHitbox(const CommonUtilities::AABB3D<float> aAABB);
+    bool HasHitbox() const;
 
     template <typename T, typename... Args>
     T* AddComponent(Args&&... someArgs)
@@ -143,6 +144,7 @@ private:
     std::uint64_t myCollisionId = 0;
 
     CommonUtilities::AABB3D<float> myAABB;
+    bool myHasAABB = false;
 
     std::vector<std::unique_ptr<Component>> myComponents;
 };

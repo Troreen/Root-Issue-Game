@@ -6,6 +6,8 @@
 #include "MeshComponent.h"
 #include "GameObject.h"
 #include "BoxColliderComponent.h"
+#include "CapsuleColliderComponent.h"
+#include "ObbColliderComponent.h"
 #include "PickUpComponent.h"
 #include "SphereColliderComponent.h"
 
@@ -129,6 +131,16 @@ namespace
 			return sphere->IsTrigger();
 		}
 
+		if (const auto* capsule = anObject.GetComponent<CapsuleColliderComponent>())
+		{
+			return capsule->IsTrigger();
+		}
+
+		if (const auto* obb = anObject.GetComponent<ObbColliderComponent>())
+		{
+			return obb->IsTrigger();
+		}
+
 		return false;
 	}
 
@@ -160,6 +172,30 @@ namespace
 			else if (aPhase == CollisionPhase::Exit)
 			{
 				sphere->OnTriggerExit();
+			}
+		}
+
+		if (auto* capsule = anObject.GetComponent<CapsuleColliderComponent>())
+		{
+			if (aPhase == CollisionPhase::Enter)
+			{
+				capsule->OnTriggerEnter();
+			}
+			else if (aPhase == CollisionPhase::Exit)
+			{
+				capsule->OnTriggerExit();
+			}
+		}
+
+		if (auto* obb = anObject.GetComponent<ObbColliderComponent>())
+		{
+			if (aPhase == CollisionPhase::Enter)
+			{
+				obb->OnTriggerEnter();
+			}
+			else if (aPhase == CollisionPhase::Exit)
+			{
+				obb->OnTriggerExit();
 			}
 		}
 	}
@@ -216,11 +252,9 @@ void InGame::Init(CameraSystem& aCamera, const char* argv[])
 	/*SceneManager& sceneManager = *Essentials::globalSceneManager;
 	sceneManager.RefreshSceneList();*/
 
-	StartSceneLoadAsync("Levels/PipelineTest.tgs", true);
-
 	if (argv[1] == nullptr)
 	{
-		StartSceneLoadAsync("Levels/PipelineTest.tgs", true);
+		StartSceneLoadAsync("Levels/TestScenes/PabloTestingScene.tgs", true);
 	}
 	else
 	{
@@ -250,7 +284,7 @@ eState InGame::Update()
 			}
 			else
 			{
-				StartSceneLoadAsync(requested);
+				//StartSceneLoadAsync(requested);
 			}
 		}
 	}

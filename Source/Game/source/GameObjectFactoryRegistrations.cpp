@@ -4,12 +4,15 @@
 #include "AnimationDemoToggleComponent.h"
 #include "AnimationGraphComponent.h"
 #include "BoxColliderComponent.h"
+#include "CapsuleColliderComponent.h"
+#include "CollisionShapeType.h"
 #include "DamageableComponent.h"
 #include "GameObject.h"
 #include "GameObjectFactory.h"
 #include "MeshComponent.h"
 #include "AnimatedMeshComponent.h"
 #include "ModelTextureOverrides.h"
+#include "ObbColliderComponent.h"
 #include "ObjectLayer.h"
 #include "SceneObjectData.h"
 #include "PlayerControllerComponent.h"
@@ -108,21 +111,64 @@ namespace
         }
     }
 
+    bool TryGetColliderType(const SceneObjectData& aData, CollisionShapeType& outType)
+    {
+        int colliderTypeValue = 0;
+        if (aData.TryGetProperty<int>("colliderType", colliderTypeValue))
+        {
+            outType = static_cast<CollisionShapeType>(colliderTypeValue);
+            return true;
+        }
+
+        std::string colliderTypeText;
+        if (aData.TryGetProperty<std::string>("colliderType", colliderTypeText))
+        {
+            const std::string normalized = NormalizeText(colliderTypeText);
+            if (normalized.empty())
+            {
+                return false;
+            }
+
+            if (normalized == "box")
+            {
+                outType = CollisionShapeType::Box;
+                return true;
+            }
+            if (normalized == "sphere")
+            {
+                outType = CollisionShapeType::Sphere;
+                return true;
+            }
+            if (normalized == "capsule")
+            {
+                outType = CollisionShapeType::Capsule;
+                return true;
+            }
+            if (normalized == "obb")
+            {
+                outType = CollisionShapeType::Obb;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     void ApplyAuthoredCollider(GameObject& anObject, const SceneObjectData& aData)
     {
-        const std::string colliderType = NormalizeText(aData.GetPropertyOr<std::string>("colliderType", ""));
-        if (colliderType.empty())
+        CollisionShapeType colliderType = CollisionShapeType::Box;
+        if (!TryGetColliderType(aData, colliderType))
         {
             return;
         }
 
         const Vector3f offset = aData.GetPropertyOr<Vector3f>("colliderOffset", Vector3f(0.0f, 0.0f, 0.0f));
         const bool isTrigger = aData.GetPropertyOr<bool>("colliderIsTrigger", false);
+        const Vector3f colliderSize =
+            aData.GetPropertyOr<Vector3f>("colliderSize", Vector3f(0.0f, 0.0f, 0.0f));
 
-        if (colliderType == "box")
+        if (colliderType == CollisionShapeType::Box)
         {
-            const Vector3f colliderSize =
-                aData.GetPropertyOr<Vector3f>("colliderSize", Vector3f(0.0f, 0.0f, 0.0f));
             const bool constantUpdate = aData.GetPropertyOr<bool>("colliderConstantUpdate", false);
             const bool pivotBottomMiddle = aData.GetPropertyOr<bool>("colliderPivotBottomMiddle", false);
             if (colliderSize.x <= 0.0f || colliderSize.y <= 0.0f || colliderSize.z <= 0.0f)
@@ -136,22 +182,74 @@ namespace
             return;
         }
 
-        if (colliderType == "sphere")
+        if (colliderType == CollisionShapeType::Sphere)
         {
-            const float radius = aData.GetPropertyOr<float>("colliderRadius", 0.0f);
+            float radius = aData.GetPropertyOr<float>("colliderRadius", 0.0f);
+            if (radius <= 0.0f && colliderSize.x > 0.0f && colliderSize.y > 0.0f && colliderSize.z > 0.0f)
+            {
+                radius = (std::max)(colliderSize.x, (std::max)(colliderSize.y, colliderSize.z)) * 0.5f;
+            }
+
             if (radius <= 0.0f)
             {
                 std::cout << "[Factory] Invalid colliderRadius for object '" << aData.name
-                    << "'. Sphere collider skipped.\n";
+                    << "'. Sphere collider skipped. Author colliderRadius or colliderSize.\n";
                 return;
             }
 
-            anObject.AddComponent<SphereColliderComponent>(radius, offset, isTrigger);
+            const bool pivotBottomMiddle = aData.GetPropertyOr<bool>("colliderPivotBottomMiddle", true);
+            const Vector3f anchorToCenter = pivotBottomMiddle
+                ? Vector3f(0.0f, radius, 0.0f)
+                : Vector3f(-radius, radius, radius);
+            anObject.AddComponent<SphereColliderComponent>(radius, offset + anchorToCenter, isTrigger);
             return;
         }
 
-        std::cout << "[Factory] Unsupported colliderType '" << colliderType
-            << "' for object '" << aData.name << "'.\n";
+        if (colliderType == CollisionShapeType::Capsule)
+        {
+            float radius = aData.GetPropertyOr<float>("colliderRadius", 0.0f);
+            float height = aData.GetPropertyOr<float>("colliderHeight", 0.0f);
+            if ((radius <= 0.0f || height <= 0.0f) &&
+                colliderSize.x > 0.0f && colliderSize.y > 0.0f && colliderSize.z > 0.0f)
+            {
+                if (radius <= 0.0f)
+                {
+                    radius = (std::min)(colliderSize.x, colliderSize.z) * 0.5f;
+                }
+                if (height <= 0.0f)
+                {
+                    height = colliderSize.y;
+                }
+            }
+
+            const bool pivotBottomMiddle = aData.GetPropertyOr<bool>("colliderPivotBottomMiddle", true);
+            if (radius <= 0.0f || height <= 0.0f || height < radius * 2.0f)
+            {
+                std::cout << "[Factory] Invalid capsule colliderRadius/colliderHeight for object '" << aData.name
+                    << "'. Capsule collider skipped. Author colliderRadius/colliderHeight or colliderSize where height >= diameter.\n";
+                return;
+            }
+
+            anObject.AddComponent<CapsuleColliderComponent>(radius, height, offset, isTrigger, pivotBottomMiddle);
+            return;
+        }
+
+        if (colliderType == CollisionShapeType::Obb)
+        {
+            const bool pivotBottomMiddle = aData.GetPropertyOr<bool>("colliderPivotBottomMiddle", false);
+            if (colliderSize.x <= 0.0f || colliderSize.y <= 0.0f || colliderSize.z <= 0.0f)
+            {
+                std::cout << "[Factory] Invalid colliderSize for object '" << aData.name
+                    << "'. OBB collider skipped.\n";
+                return;
+            }
+
+            anObject.AddComponent<ObbColliderComponent>(colliderSize, offset, isTrigger, pivotBottomMiddle);
+            return;
+        }
+
+        std::cout << "[Factory] Unsupported colliderType value " << static_cast<int>(colliderType)
+            << " for object '" << aData.name << "'. Supported values: 0=Box, 1=Sphere, 2=Capsule, 3=OBB.\n";
     }
 
     void ApplyCommonModel(GameObject& anObject, const SceneObjectData& aData)
@@ -259,6 +357,14 @@ namespace
         ApplyAuthoredCollider(*object, aData);
         object->AddComponent<PlayerControllerComponent>();
 
+        auto bullet = std::make_shared<GameObject>();
+        bullet->SetLayer(ObjectLayer::Projectile);
+
+        ApplyCommonModel(*bullet, aData);
+        bullet->AddComponent<BulletComponent>();
+        bullet->SetActive(false);
+
+        //player->SetBullet(bullet);
         return object;
     }
 
