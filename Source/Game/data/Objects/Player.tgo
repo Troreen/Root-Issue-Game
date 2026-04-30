@@ -11,86 +11,6 @@
       "value": "Player"
     },
     {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "layer",
-      "type": "StringId",
-      "value": "Player"
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderType",
-      "type": "StringId",
-      "value": "box"
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderSize",
-      "type": "Float3",
-      "value": [
-        100.0,
-        180.0,
-        100.0
-      ]
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderOffset",
-      "type": "Float3",
-      "value": [
-        0.0,
-        0.0,
-        0.0
-      ]
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderIsTrigger",
-      "type": "Bool",
-      "value": false
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderPivotBottomMiddle",
-      "type": "Bool",
-      "value": true
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "typeId",
-      "type": "StringId",
-      "value": "Player"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "name",
-      "type": "StringId",
-      "value": "Wrapper Demo Player"
-    },
-    {
       "description": "Player model for TGAC demo",
       "group": "",
       "is-dynamic": false,
@@ -128,13 +48,31 @@
       }
     },
     {
-      "description": "Expanded player graph with locomotion, combo, charge, ranged, hurt and death branches",
-      "group": "Animation",
+      "description": "",
+      "group": "",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "animation_graph",
+      "name": "name",
       "type": "StringId",
-      "value": "Objects\\\\Player\\\\animation_graph.tgscript"
+      "value": "Wrapper Demo Player"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "typeId",
+      "type": "StringId",
+      "value": "Player"
+    },
+    {
+      "description": "Global speed scale for demo graph",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "anim_speed",
+      "type": "Float",
+      "value": 1.0
     },
     {
       "description": "Use authored clip assets",
@@ -146,15 +84,6 @@
       "value": false
     },
     {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_model_property",
-      "type": "StringId",
-      "value": "model"
-    },
-    {
       "description": "Enable in-game LEFT/RIGHT/HOME toggles",
       "group": "Animation",
       "is-dynamic": false,
@@ -164,37 +93,22 @@
       "value": true
     },
     {
-      "description": "",
+      "description": "Expanded player graph with locomotion, combo, charge, ranged, hurt and death branches",
       "group": "Animation",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "clip_idle",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Idle.tgac"
-      }
+      "name": "animation_graph",
+      "type": "StringId",
+      "value": "Objects\\\\Player\\\\animation_graph.tgscript"
     },
     {
       "description": "",
       "group": "Animation",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "clip_walk",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Walk.tgac"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_run",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Run.tgac"
-      }
+      "name": "animation_model_property",
+      "type": "StringId",
+      "value": "model"
     },
     {
       "description": "",
@@ -300,6 +214,17 @@
       "group": "Animation",
       "is-dynamic": false,
       "is-per-instance": false,
+      "name": "clip_idle",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Idle.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
       "name": "clip_ranged_attack",
       "type": "Animation Clip",
       "value": {
@@ -340,22 +265,26 @@
       }
     },
     {
-      "description": "1.0 selects this clip in demo mode",
+      "description": "",
       "group": "Animation",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "w_walk",
-      "type": "Float",
-      "value": 0.0
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_run",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Run.tgac"
+      }
     },
     {
-      "description": "1.0 selects this clip in demo mode",
+      "description": "",
       "group": "Animation",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "w_run",
-      "type": "Float",
-      "value": 0.0
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_walk",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\\\TGAC\\\\Player\\\\A_Player_Walk.tgac"
+      }
     },
     {
       "description": "1.0 selects this clip in demo mode",
@@ -363,15 +292,6 @@
       "is-dynamic": true,
       "is-per-instance": true,
       "name": "w_attack_basic01",
-      "type": "Float",
-      "value": 0.0
-    },
-    {
-      "description": "1.0 selects this clip in demo mode",
-      "group": "Animation",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "w_roll",
       "type": "Float",
       "value": 0.0
     },
@@ -475,13 +395,111 @@
       "value": 0.0
     },
     {
-      "description": "Global speed scale for demo graph",
+      "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
       "is-per-instance": true,
-      "name": "anim_speed",
+      "name": "w_roll",
       "type": "Float",
-      "value": 1.0
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip in demo mode",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_run",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "1.0 selects this clip in demo mode",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_walk",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderHeight",
+      "type": "Float",
+      "value": 180.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderIsTrigger",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderOffset",
+      "type": "Float3",
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderRadius",
+      "type": "Float",
+      "value": 50.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderSize",
+      "type": "Float3",
+      "value": [
+        100.0,
+        180.0,
+        100.0
+      ]
+    },
+    {
+      "description": "Collision shape: 0=Box, 1=Sphere, 2=Capsule, 3=OBB (reserved)",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "Int",
+      "value": 2
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "layer",
+      "type": "StringId",
+      "value": "Player"
     }
   ]
 }

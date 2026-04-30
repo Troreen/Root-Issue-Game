@@ -43,15 +43,6 @@
       "group": "",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "typeId",
-      "type": "StringId",
-      "value": "test_static"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
       "name": "factoryType",
       "type": "StringId",
       "value": "StaticWorld"
@@ -67,25 +58,21 @@
     },
     {
       "description": "",
-      "group": "Collision",
+      "group": "",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "colliderType",
+      "name": "typeId",
       "type": "StringId",
-      "value": "box"
+      "value": "test_static"
     },
     {
       "description": "",
       "group": "Collision",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "colliderSize",
-      "type": "Float3",
-      "value": [
-        200.0,
-        200.0,
-        200.0
-      ]
+      "name": "colliderIsTrigger",
+      "type": "Bool",
+      "value": true
     },
     {
       "description": "",
@@ -105,7 +92,7 @@
       "group": "Collision",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "colliderIsTrigger",
+      "name": "colliderPivotBottomMiddle",
       "type": "Bool",
       "value": false
     },
@@ -114,9 +101,22 @@
       "group": "Collision",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "colliderPivotBottomMiddle",
-      "type": "Bool",
-      "value": false
+      "name": "colliderSize",
+      "type": "Float3",
+      "value": [
+        200.0,
+        200.0,
+        200.0
+      ]
+    },
+    {
+      "description": "Collision shape: 0=Box, 1=Sphere, 2=Capsule, 3=OBB (reserved)",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "Int",
+      "value": 0
     }
   ]
 }

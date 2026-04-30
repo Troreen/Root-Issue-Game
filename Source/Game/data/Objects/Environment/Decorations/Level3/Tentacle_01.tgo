@@ -39,7 +39,7 @@
         "path": "Assets\\\\Art\\\\3D\\\\Environment\\\\SK_EN_Tentacle_01.fbx",
         "textures": [
           [
-            "",
+            "Assets\\Art\\Textures\\T_ColorAtlas_Lvl3.dds",
             "",
             "",
             ""
@@ -109,7 +109,7 @@
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "AnimationClips\\\\Grafik\\\\SK_EN_Tentacle_01_idle.tgac"
+        "clip_path": "animations\\TGAC\\Environment\\A_Tentacle_01.tgac"
       }
     }
   ]

@@ -21,7 +21,7 @@
         "path": "animations\\SK\\SK_CH_Enemy_Basic.fbx",
         "textures": [
           [
-            "",
+            "Assets\\Art\\Textures\\T_Enemy_01.dds",
             "",
             "",
             ""
@@ -59,11 +59,11 @@
     {
       "description": "",
       "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_auto_bootstrap",
-      "type": "Bool",
-      "value": true
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "anim_speed",
+      "type": "Float",
+      "value": 1.0
     },
     {
       "description": "",
@@ -72,80 +72,7 @@
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "AnimationGraphs\\\\Grafik\\\\SK_CH_MeeleEnemy.tgscript"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_graph_template",
-      "type": "StringId",
-      "value": "idle_only"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_model_property",
-      "type": "StringId",
-      "value": "model"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_aggro",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Aggro.tgac"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_aggro_walk",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Aggro_Walk.tgac"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_attack",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Attack.tgac"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_death",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Death.tgac"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_hurt",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Hurt.tgac"
-      }
+      "value": "animations\\\\Animation Graph\\\\Objects_Character_MeeleEnemy_test_animation_graph.tgscript"
     },
     {
       "description": "",
@@ -156,28 +83,6 @@
       "type": "Animation Clip",
       "value": {
         "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Idle.tgac"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_idle_aggro",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Aggro_Idle.tgac"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_spawn",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": ""
       }
     },
     {

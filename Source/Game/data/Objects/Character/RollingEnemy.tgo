@@ -18,7 +18,7 @@
       "name": "model",
       "type": "Model",
       "value": {
-        "path": "Assets\\\\Art\\\\3D\\\\Characters\\\\SK_CH_RollingEnemy.fbx",
+        "path": "animations\\SK\\SK_CH_Enemy_Heavy.fbx",
         "textures": [
           [
             "",

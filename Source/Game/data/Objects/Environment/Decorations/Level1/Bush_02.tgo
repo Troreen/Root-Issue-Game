@@ -109,7 +109,7 @@
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "AnimationClips\\\\Grafik\\\\SK_EN_Bush_02_idle.tgac"
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Bush_02.tgac"
       }
     }
   ]

@@ -1,0 +1,12 @@
+{
+  "animation_source_path": "animations\\FBX\\Environment\\A_ENV_Bush_02.fbx",
+  "cycle_count": 1.0,
+  "cycle_offset": 0.0,
+  "end_time": 1.6666666269302368,
+  "events": [],
+  "is_looping": true,
+  "is_sync": false,
+  "playback_rate": 1.0,
+  "preview_model_path": "Assets\\Art\\3D\\Environment\\SK_EN_Bush_02.fbx",
+  "start_time": 0.0
+}

@@ -1,0 +1,20 @@
+{
+  "name": "YellowGrass_3x3(40)",
+  "object-definition": "YellowGrass_3x3",
+  "path": "Platforms",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    2700.0,
+    600.0,
+    3899.999755859375
+  ]
+}

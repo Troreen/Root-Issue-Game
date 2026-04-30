@@ -1,0 +1,20 @@
+{
+  "name": "Dirt_9x9(2)",
+  "object-definition": "Dirt_9x9",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -1600.0,
+    300.0,
+    2800.0
+  ]
+}

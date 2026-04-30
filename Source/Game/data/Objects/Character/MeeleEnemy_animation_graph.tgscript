@@ -167,8 +167,18 @@
     },
     {
       "id": 33,
-      "sourcePin": 84,
+      "sourcePin": 89,
       "targetPin": 86
+    },
+    {
+      "id": 34,
+      "sourcePin": 91,
+      "targetPin": 88
+    },
+    {
+      "id": 35,
+      "sourcePin": 84,
+      "targetPin": 87
     }
   ],
   "nodes": [
@@ -447,8 +457,8 @@
       "id": 27,
       "name": "",
       "position": [
-        520.05029296875,
-        479.33160400390625
+        471.05029296875,
+        489.33160400390625
       ],
       "type": "Read Float Property"
     },
@@ -517,10 +527,30 @@
       "id": 34,
       "name": "",
       "position": [
-        3673.0,
-        210.0
+        3780.0,
+        193.0
       ],
       "type": "Animate Model"
+    },
+    {
+      "customData": null,
+      "id": 35,
+      "name": "",
+      "position": [
+        3558.0,
+        277.0
+      ],
+      "type": "Adjust Speed"
+    },
+    {
+      "customData": null,
+      "id": 36,
+      "name": "",
+      "position": [
+        3343.0,
+        490.0
+      ],
+      "type": "Read Float Property"
     }
   ],
   "pins": [
@@ -1295,6 +1325,51 @@
       "name": "Value",
       "node": 34,
       "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 87,
+      "name": "Pose",
+      "node": 35,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Float",
+      "id": 88,
+      "name": "Rate Scale",
+      "node": 35,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 89,
+      "name": "Pose",
+      "node": 35,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 90,
+      "name": "Name",
+      "node": 36,
+      "role": "Input",
+      "type": "Property",
+      "value": "anim_speed"
+    },
+    {
+      "datatype": "Float",
+      "id": 91,
+      "name": "Value",
+      "node": 36,
+      "role": "Output",
       "type": "Property",
       "value": null
     }

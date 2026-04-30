@@ -39,7 +39,7 @@
         "path": "Assets\\\\Art\\\\3D\\\\Environment\\\\SM_EN_Spire_01.fbx",
         "textures": [
           [
-            "",
+            "Assets\\Art\\Textures\\T_ColorAtlas_Lvl3.dds",
             "",
             "",
             ""

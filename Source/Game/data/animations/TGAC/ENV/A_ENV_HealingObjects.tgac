@@ -1,0 +1,12 @@
+{
+  "animation_source_path": "animations\\FBX\\Environment\\A_ENV_HealingObjects.fbx",
+  "cycle_count": 1.0,
+  "cycle_offset": 0.0,
+  "end_time": 0.800000011920929,
+  "events": [],
+  "is_looping": false,
+  "is_sync": false,
+  "playback_rate": 1.0,
+  "preview_model_path": "animations\\SK\\SK_ENV_HealingObjects.fbx",
+  "start_time": 0.0
+}

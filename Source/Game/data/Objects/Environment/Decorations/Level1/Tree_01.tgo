@@ -109,7 +109,7 @@
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "AnimationClips\\\\Grafik\\\\SK_EN_Tree_01_idle.tgac"
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Tree_01.tgac"
       }
     }
   ]

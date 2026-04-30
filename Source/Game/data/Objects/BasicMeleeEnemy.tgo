@@ -9,7 +9,7 @@
       "name": "Model",
       "type": "Model",
       "value": {
-        "path": "models\\Particle_Chest.fbx",
+        "path": "animations\\SK\\SK_CH_Enemy_Basic.fbx",
         "textures": [
           [
             "",
@@ -46,6 +46,46 @@
       "name": "factoryType",
       "type": "StringId",
       "value": "BasicMeleeEnemy"
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "animation_graph",
+      "type": "StringId",
+      "value": "animations\\\\Animation Graph\\\\Objects_BasicMeleeEnemy_animation_graph.tgscript"
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "clip_idle",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Idle.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "clip_walk",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Enemy_Basic\\A_Enemy_Basic_Walk.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_walk",
+      "type": "Float",
+      "value": 1.0
     }
   ]
 }
