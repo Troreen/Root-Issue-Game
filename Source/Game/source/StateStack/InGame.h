@@ -1,5 +1,6 @@
 #pragma once
 #include "State.hpp"
+#include "CombatSystem.h"
 #include "RuntimeCollisionSystem.h"
 
 class InGame : public State
@@ -14,5 +15,6 @@ public:
 private:
 	void ConsumeCollisionContacts(const std::vector<CollisionContact>& someContacts);
 
+	CombatSystem myCombatSystem;
 	RuntimeCollisionSystem myRuntimeCollisionSystem;
 };

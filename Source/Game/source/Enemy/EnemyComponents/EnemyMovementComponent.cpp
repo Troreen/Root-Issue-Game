@@ -12,9 +12,9 @@ void EnemyMovementComponent::OnStart()
 
 void EnemyMovementComponent::OnUpdate(float /*aDeltaTime*/)
 {
-	auto& pos = GetOwner()->GetTransform().GetPosition();
+	//auto& pos = GetOwner()->GetTransform().GetPosition();
 
-	std::cout << "Position: " << pos.x << ", " << pos.y << ", " << pos.z << std::endl;
+	//std::cout << "Position: " << pos.x << ", " << pos.y << ", " << pos.z << std::endl;
 }
 
 void EnemyMovementComponent::MoveTowardsTarget(GameObject* aTarget, float aDeltaTime)

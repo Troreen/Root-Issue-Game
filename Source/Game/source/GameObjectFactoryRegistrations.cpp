@@ -9,6 +9,7 @@
 #include "DamageableComponent.h"
 #include "GameObject.h"
 #include "GameObjectFactory.h"
+#include "KnockbackComponent.h"
 #include "MeshComponent.h"
 #include "AnimatedMeshComponent.h"
 #include "ParticleEmitterComponent.h"
@@ -326,6 +327,13 @@ namespace
         ApplyLayer(*object, aData, ObjectLayer::BasicMeleeEnemy);
         ApplyCommonModel(*object, aData);
         ApplyAuthoredCollider(*object, aData);
+        if (!object->GetComponent<BoxColliderComponent>() &&
+            !object->GetComponent<SphereColliderComponent>() &&
+            !object->GetComponent<CapsuleColliderComponent>() &&
+            !object->GetComponent<ObbColliderComponent>())
+        {
+            object->AddComponent<CapsuleColliderComponent>(50.0f, 180.0f, Vector3f::Zero, false, true);
+        }
 
         int health = aData.GetPropertyOr<int>("health", 100);
         if (health < 1)
@@ -342,6 +350,7 @@ namespace
         object->AddComponent<EnemyAIComponent>(EnemyType::BasicEnemy);
         object->AddComponent<EnemyMovementComponent>();
         object->AddComponent<EnemyTargetingComponent>();
+        object->AddComponent<KnockbackComponent>();
         DamageableComponent* damageable = object->AddComponent<DamageableComponent>(health);
         damageable->SetCurrentHealth(health);
         damageable->SetDamagePerHit(damage);

@@ -3,8 +3,13 @@
 #include <tge/script/Nodes/CommonMathNodes.h>
 #include <tge/script/Nodes/CommonNodes.h>
 
+#include "BoxColliderComponent.h"
+#include "CapsuleColliderComponent.h"
+#include "CombatSystem.h"
 #include "MeshComponent.h"
 #include "GameObject.h"
+#include "ObbColliderComponent.h"
+#include "SphereColliderComponent.h"
 
 namespace
 {
@@ -129,6 +134,7 @@ void InGame::Init(CameraSystem& aCamera, const char* argv[])
 
 	RegisterAnimationGraphNodesOnce();
 	myCameraSystem->Init();
+	CombatService::Set(&myCombatSystem);
 
 	RegisterGameObjectFactories();
 
@@ -148,16 +154,20 @@ void InGame::Init(CameraSystem& aCamera, const char* argv[])
 
 	if (argv[1] == nullptr)
 	{
-		StartSceneLoadAsync("Levels/TestScenes/PabloTestingScene.tgs", true);
+		StartSceneLoadAsync("Levels/PipelineTest.tgs", true);
 	}
 	else
 	{
 		StartSceneLoadAsync(argv[1], true);
 	}
+
+	myRuntimeCollisionSystem.AuditRequiredColliders(myGameObjects);
 }
 
 eState InGame::Update()
 {
+	CombatService::Set(&myCombatSystem);
+
 	myTimer.Update();
 	myInputHandler.UpdateInput();
 	TryRecoverWindowFocus();
@@ -216,6 +226,10 @@ eState InGame::Update()
 		}
 	}
 
+	myRuntimeCollisionSystem.Run(myGameObjects);
+	ConsumeCollisionContacts(myRuntimeCollisionSystem.GetContacts());
+	myCombatSystem.Update(deltaTime, myGameObjects);
+
 	myVfxSystem.Update(deltaTime);
 
 	if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eMusicLoop))
@@ -236,4 +250,60 @@ void InGame::Render()
 	}
 
 	RenderDefault();
+}
+
+namespace
+{
+	void DispatchTriggerPhase(GameObject& anObject, CollisionPhase aPhase)
+	{
+		const bool isEnter = aPhase == CollisionPhase::Enter || aPhase == CollisionPhase::Stay;
+
+		if (auto* box = anObject.GetComponent<BoxColliderComponent>())
+		{
+			if (box->IsTrigger())
+			{
+				isEnter ? box->OnTriggerEnter() : box->OnTriggerExit();
+			}
+		}
+
+		if (auto* sphere = anObject.GetComponent<SphereColliderComponent>())
+		{
+			if (sphere->IsTrigger())
+			{
+				isEnter ? sphere->OnTriggerEnter() : sphere->OnTriggerExit();
+			}
+		}
+
+		if (auto* capsule = anObject.GetComponent<CapsuleColliderComponent>())
+		{
+			if (capsule->IsTrigger())
+			{
+				isEnter ? capsule->OnTriggerEnter() : capsule->OnTriggerExit();
+			}
+		}
+
+		if (auto* obb = anObject.GetComponent<ObbColliderComponent>())
+		{
+			if (obb->IsTrigger())
+			{
+				isEnter ? obb->OnTriggerEnter() : obb->OnTriggerExit();
+			}
+		}
+	}
+}
+
+void InGame::ConsumeCollisionContacts(const std::vector<CollisionContact>& someContacts)
+{
+	for (const CollisionContact& contact : someContacts)
+	{
+		if (contact.first != nullptr)
+		{
+			DispatchTriggerPhase(*contact.first, contact.phase);
+		}
+
+		if (contact.second != nullptr)
+		{
+			DispatchTriggerPhase(*contact.second, contact.phase);
+		}
+	}
 }
