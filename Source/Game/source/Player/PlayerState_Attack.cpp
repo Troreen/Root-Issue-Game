@@ -2,13 +2,34 @@
 #include "PlayerControllerComponent.h"
 #include "PlayerState_Master.h"
 #include "AnimationGraphComponent.h"
+#include "CombatSystem.h"
 #include "GameObject.h"
 #include "Essentials/Essentials.h"
 #include "CommonUtilities/Transform.hpp"
 
+namespace
+{
+	void StartPlayerMeleeAttack(GameObject& aPlayer)
+	{
+		AttackData attack;
+		attack.owner = &aPlayer;
+		attack.team = CombatTeam::Player;
+		attack.type = AttackType::MeleeLight;
+		attack.damage = 25;
+		attack.localCenterOffset = CommonUtilities::Vector3<float>(0.0f, 90.0f, 115.0f);
+		attack.size = CommonUtilities::Vector3<float>(170.0f, 150.0f, 190.0f);
+		attack.activeDurationSeconds = 0.16f;
+		attack.knockbackStrength = 450.0f;
+		attack.targetLayers.AddLayer(ObjectLayer::BasicMeleeEnemy);
+
+		CombatService::StartAttack(attack);
+	}
+}
+
 PlayerState_Attack::PlayerState_Attack()
 {
 	myAttackFromRight = false;
+	myHasSpawnedHitbox = false;
 
 	myAttackLungeImpulse = 10.f;
 	myAttackTime = 0.4f;
@@ -18,6 +39,11 @@ PlayerState_Attack::PlayerState_Attack()
 
 void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aPlayerController)
 {
+	if (!myHasSpawnedHitbox)
+	{
+		StartPlayerMeleeAttack(*aPlayerController.GetOwner());
+		myHasSpawnedHitbox = true;
+	}
 
 	if (myAttackTimer < 0.2f && Essentials::GetEssentials().globalInputManager->IsKeyPressed(static_cast<int>(Keys::RETURN)))
 	{
@@ -48,6 +74,7 @@ void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aPl
 			myAttackTimer = myAttackTime;
 			myAttackFromRight = !myAttackFromRight;
 			myAttackLungeSpeed = myAttackLungeImpulse;
+			myHasSpawnedHitbox = false;
 		}
 	}
 
@@ -62,6 +89,7 @@ void PlayerState_Attack::ResetValues()
 {
 	myInputAttack = false;
 	myAttackFromRight = !myAttackFromRight;
+	myHasSpawnedHitbox = false;
 	myAttackTimer = myAttackTime;
 	myAttackLungeSpeed = myAttackLungeImpulse;
 }

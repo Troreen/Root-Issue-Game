@@ -13,6 +13,7 @@ private:
 
 	bool myInputAttack;
 	bool myAttackFromRight;
+	bool myHasSpawnedHitbox;
 	float myAttackTime;
 	float myAttackTimer;
 	float myAttackLungeImpulse;
