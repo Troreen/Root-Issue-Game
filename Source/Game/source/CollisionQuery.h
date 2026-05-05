@@ -28,6 +28,7 @@ namespace CollisionQuery
     void RefreshRuntimeCollider(GameObject& anObject);
 
     Shape MakeBoxShape(const Vector3f& aCenter, const Vector3f& aSize);
+    Shape MakeSphereShape(const Vector3f& aCenter, float aRadius);
     Shape GetShape(const GameObject& anObject);
     bool TryComputeSeparation(
         const Shape& aFirst,
