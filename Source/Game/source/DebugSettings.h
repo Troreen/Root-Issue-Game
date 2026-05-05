@@ -114,6 +114,12 @@ namespace GameDebugSettings
         return value;
     }
 
+    inline bool& ShowCombatHitboxes()
+    {
+        static bool value = false;
+        return value;
+    }
+
     inline bool& EnableCollisionDebugLog()
     {
         static bool value = false;

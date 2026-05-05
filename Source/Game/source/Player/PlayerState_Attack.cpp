@@ -15,11 +15,13 @@ namespace
 		attack.owner = &aPlayer;
 		attack.team = CombatTeam::Player;
 		attack.type = AttackType::MeleeLight;
+		attack.collisionShape = CollisionShapeType::Sphere;
 		attack.damage = 25;
-		attack.localCenterOffset = CommonUtilities::Vector3<float>(0.0f, 90.0f, 115.0f);
-		attack.size = CommonUtilities::Vector3<float>(170.0f, 150.0f, 190.0f);
+		attack.localCenterOffset = CommonUtilities::Vector3<float>(0.0f, 90.0f, 0.0f);
+		attack.radius = 190.0f;
 		attack.activeDurationSeconds = 0.16f;
 		attack.knockbackStrength = 450.0f;
+		attack.onlyHitForwardHemisphere = true;
 		attack.targetLayers.AddLayer(ObjectLayer::BasicMeleeEnemy);
 
 		CombatService::StartAttack(attack);

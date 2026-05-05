@@ -55,12 +55,15 @@ Fields:
 - `owner`: `GameObject*` that owns the attack. Required.
 - `team`: combat team metadata for the attack.
 - `type`: attack type metadata.
+- `collisionShape`: transient attack shape. Defaults to `CollisionShapeType::Sphere`.
 - `targetLayers`: object layers this attack can hit.
 - `localCenterOffset`: hitbox center offset relative to the owner transform.
-- `size`: transient box hitbox size.
+- `size`: transient box hitbox size, and fallback sphere diameter when `radius` is not set.
+- `radius`: transient sphere radius. If this is `<= 0`, sphere attacks use half of the largest `size` component.
 - `activeDurationSeconds`: how long the attack remains active.
 - `knockbackStrength`: magnitude of horizontal knockback.
 - `damage`: damage sent to `DamageableComponent`.
+- `onlyHitForwardHemisphere`: when true on sphere attacks, only the owner's forward-facing half of the sphere can record hits.
 
 `CombatSystem::StartAttack` rejects invalid attacks by returning `0` when:
 
@@ -100,9 +103,9 @@ The hit target set prevents repeated damage from the same swing while the target
 
 When an attack's owner is missing or inactive, the attack is expired and removed.
 
-## Hitbox Placement
+## Hitbox Placement And Shape
 
-Attack hitboxes are currently axis-aligned boxes created by `CollisionQuery::MakeBoxShape`.
+Attack hitboxes are transient shapes created from `AttackData`. The default shape is a sphere.
 
 The center is calculated from the owner transform:
 
@@ -120,7 +123,11 @@ This means:
 - Y offset is always world up.
 - Z offset follows the owner's forward vector.
 
-The hitbox size is the `AttackData::size` vector.
+For box attacks, `AttackData::size` is used directly with `CollisionQuery::MakeBoxShape`.
+
+For sphere attacks, `AttackData::radius` is preferred. If `radius <= 0`, combat falls back to half of the largest `size` component so older attack data still produces a valid sphere.
+
+Sphere attacks use `onlyHitForwardHemisphere = true` by default. The full sphere is used for the coarse overlap check, then combat rejects targets that are fully behind the plane through the sphere center and perpendicular to the owner's forward vector. Targets crossing that plane can still be hit, which lets larger colliders register when part of them is in the front half.
 
 ## Combat Update Flow
 
@@ -139,7 +146,7 @@ This keeps movement collision and combat collision separate. Combat hits do not 
 For each active attack, `CombatSystem::Update`:
 
 1. Verifies the owner still exists and is active.
-2. Builds a transient attack box from `AttackData`.
+2. Builds a transient attack shape from `AttackData`.
 3. Iterates active game objects.
 4. Skips the owner.
 5. Skips objects outside `targetLayers`.
@@ -147,10 +154,11 @@ For each active attack, `CombatSystem::Update`:
 7. Skips targets without a runtime collider.
 8. Refreshes the target collider shape.
 9. Runs `CollisionQuery::TryComputeSeparation`.
-10. On overlap, records the target collision ID as hit.
-11. Applies damage if the target has `DamageableComponent`.
-12. Applies knockback if the target has `KnockbackComponent`.
-13. Emits a `HitEvent`.
+10. Applies the forward-hemisphere filter for sphere attacks.
+11. On overlap, records the target collision ID as hit.
+12. Applies damage if the target has `DamageableComponent`.
+13. Applies knockback if the target has `KnockbackComponent`.
+14. Emits a `HitEvent`.
 
 The combat system logs attack starts and successful hits with `[Combat]` messages.
 
@@ -158,10 +166,16 @@ The combat system logs attack starts and successful hits with `[Combat]` message
 
 `CollisionQuery` is a shared narrow-phase query helper. Combat uses it to compare transient attack shapes against real runtime collider shapes.
 
-Combat currently creates attack boxes directly with:
+Combat creates attack boxes with:
 
 ```cpp
 CollisionQuery::MakeBoxShape(center, size);
+```
+
+Combat creates attack spheres with:
+
+```cpp
+CollisionQuery::MakeSphereShape(center, radius);
 ```
 
 Targets are read from their actual runtime collider components through:
@@ -215,11 +229,13 @@ Current v1 values:
 attack.owner = &player;
 attack.team = CombatTeam::Player;
 attack.type = AttackType::MeleeLight;
+attack.collisionShape = CollisionShapeType::Sphere;
 attack.damage = 25;
-attack.localCenterOffset = CommonUtilities::Vector3<float>(0.0f, 90.0f, 115.0f);
-attack.size = CommonUtilities::Vector3<float>(170.0f, 150.0f, 190.0f);
+attack.localCenterOffset = CommonUtilities::Vector3<float>(0.0f, 90.0f, 0.0f);
+attack.radius = 190.0f;
 attack.activeDurationSeconds = 0.16f;
 attack.knockbackStrength = 450.0f;
+attack.onlyHitForwardHemisphere = true;
 attack.targetLayers.AddLayer(ObjectLayer::BasicMeleeEnemy);
 ```
 
@@ -262,10 +278,11 @@ To add a new attack:
 1. Choose or add an `AttackType`.
 2. Build an `AttackData`.
 3. Set a valid owner.
-4. Set damage and active duration.
-5. Set local hitbox offset and size.
-6. Add target layers to `targetLayers`.
-7. Call `CombatService::StartAttack` or `CombatSystem::StartAttack`.
+4. Choose a `collisionShape`, or leave it as the default sphere.
+5. Set damage and active duration.
+6. Set local hitbox offset and either `radius` for spheres or `size` for boxes.
+7. Add target layers to `targetLayers`.
+8. Call `CombatService::StartAttack` or `CombatSystem::StartAttack`.
 
 The target must have a runtime collider to be detected. It only receives damage or knockback if it has the matching components.
 
@@ -280,9 +297,16 @@ To make another object type hittable:
 
 Breakables can use the same path later once a real breakable component/factory exists.
 
+## Debug Visualization
+
+Active combat hitboxes can be visualized from the debug UI with `Show Combat Hitboxes`.
+
+Sphere attacks are drawn as the front hemisphere that can actually record hits, including a forward axis line from the center to the sphere pole. Box attacks are drawn as wireframe boxes. Player-owned attacks use an orange debug color; enemy-owned attacks use red.
+
 ## Current Limitations
 
-- Combat attack volumes are transient boxes only.
+- Combat attack volumes currently support sphere and box construction.
+- Sphere attacks use a front-hemisphere filter; exact clipping is plane-based after the full sphere overlap query.
 - `CombatTeam` is metadata only; filtering is currently layer-based.
 - Combat does not create trigger or runtime collision contacts.
 - Hit events are stored for one frame only.

@@ -481,6 +481,9 @@ void CameraSystem::RenderDebugUi()
     bool& showCollisionShapes = GameDebugSettings::ShowColliderDebugLines();
     ImGui::Checkbox("Show Collision Shapes", &showCollisionShapes);
 
+    bool& showCombatHitboxes = GameDebugSettings::ShowCombatHitboxes();
+    ImGui::Checkbox("Show Combat Hitboxes", &showCombatHitboxes);
+
     bool& enableCollisionDebugLog = GameDebugSettings::EnableCollisionDebugLog();
     ImGui::Checkbox("Log Collision Checks", &enableCollisionDebugLog);
 

@@ -249,7 +249,19 @@ void InGame::Render()
 		return;
 	}
 
-	RenderDefault();
+	mySceneRenderer.Render(
+		myGameObjects,
+		*myCameraSystem,
+		myVfxSystem,
+		myEnablePointLights,
+		myEnableDirectionalLight,
+		myEnableAmbientLight,
+		true);
+	myCombatSystem.RenderDebug();
+
+#ifdef _DEBUG
+	myCameraSystem->RenderDebugUi();
+#endif
 }
 
 namespace

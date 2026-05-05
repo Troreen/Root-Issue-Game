@@ -133,6 +133,58 @@ namespace CollisionQuery
                 outPenetration);
         }
 
+        bool TrySphereSphereSeparation(
+            const Vector3f& aFirstCenter,
+            float aFirstRadius,
+            const Vector3f& aSecondCenter,
+            float aSecondRadius,
+            Vector3f& outSeparation,
+            Vector3f& outNormal,
+            float& outPenetration)
+        {
+            Vector3f delta = aFirstCenter - aSecondCenter;
+            const float distance = delta.Length();
+            const float combinedRadius = aFirstRadius + aSecondRadius;
+            if (distance >= combinedRadius)
+            {
+                return false;
+            }
+
+            if (distance <= kEpsilon)
+            {
+                outNormal = Vector3f::UnitX;
+            }
+            else
+            {
+                outNormal = delta / distance;
+            }
+
+            outPenetration = combinedRadius - distance;
+            outSeparation = outNormal * outPenetration;
+            return true;
+        }
+
+        bool TryCapsuleSphereSeparation(
+            const Vector3f& aCapsuleStart,
+            const Vector3f& aCapsuleEnd,
+            float aCapsuleRadius,
+            const Vector3f& aSphereCenter,
+            float aSphereRadius,
+            Vector3f& outSeparation,
+            Vector3f& outNormal,
+            float& outPenetration)
+        {
+            const Vector3f capsulePoint = ClosestPointOnSegment(aSphereCenter, aCapsuleStart, aCapsuleEnd);
+            return TrySphereSphereSeparation(
+                capsulePoint,
+                aCapsuleRadius,
+                aSphereCenter,
+                aSphereRadius,
+                outSeparation,
+                outNormal,
+                outPenetration);
+        }
+
         bool TryCapsuleAabbSeparation(
             const Vector3f& aCapsuleStart,
             const Vector3f& aCapsuleEnd,
@@ -212,6 +264,18 @@ namespace CollisionQuery
         return shape;
     }
 
+    Shape MakeSphereShape(const Vector3f& aCenter, float aRadius)
+    {
+        Shape shape;
+        shape.type = CollisionShapeType::Sphere;
+        shape.center = aCenter;
+        shape.radius = aRadius;
+        const Vector3f half(aRadius, aRadius, aRadius);
+        shape.bounds = CommonUtilities::AABB3D<float>(aCenter - half, aCenter + half);
+        shape.isValid = aRadius > 0.0f;
+        return shape;
+    }
+
     Shape GetShape(const GameObject& anObject)
     {
         Shape shape;
@@ -287,6 +351,32 @@ namespace CollisionQuery
                 outNormal = -outNormal;
             }
             return hit;
+        }
+
+        if (aFirst.type == CollisionShapeType::Sphere && aSecond.type == CollisionShapeType::Box)
+        {
+            return TrySphereAabbSeparation(aFirst.center, aFirst.radius, aSecond.bounds, outSeparation, outNormal, outPenetration);
+        }
+
+        if (aFirst.type == CollisionShapeType::Sphere && aSecond.type == CollisionShapeType::Sphere)
+        {
+            return TrySphereSphereSeparation(aFirst.center, aFirst.radius, aSecond.center, aSecond.radius, outSeparation, outNormal, outPenetration);
+        }
+
+        if (aFirst.type == CollisionShapeType::Sphere && aSecond.type == CollisionShapeType::Capsule)
+        {
+            const bool hit = TryCapsuleSphereSeparation(aSecond.segmentA, aSecond.segmentB, aSecond.radius, aFirst.center, aFirst.radius, outSeparation, outNormal, outPenetration);
+            if (hit)
+            {
+                outSeparation = -outSeparation;
+                outNormal = -outNormal;
+            }
+            return hit;
+        }
+
+        if (aFirst.type == CollisionShapeType::Sphere && aSecond.type == CollisionShapeType::Obb)
+        {
+            return TrySphereAabbSeparation(aFirst.center, aFirst.radius, aSecond.bounds, outSeparation, outNormal, outPenetration);
         }
 
         if (aFirst.type == CollisionShapeType::Box && aSecond.type == CollisionShapeType::Capsule)

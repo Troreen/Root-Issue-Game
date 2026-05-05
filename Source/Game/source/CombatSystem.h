@@ -13,6 +13,7 @@ class CombatSystem final
 public:
     std::uint64_t StartAttack(const AttackData& anAttack);
     void Update(float aDeltaTime, std::vector<std::unique_ptr<GameObject>>& someObjects);
+    void RenderDebug() const;
 
     const std::vector<HitEvent>& GetHitEventsThisFrame() const;
 
