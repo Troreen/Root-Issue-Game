@@ -85,6 +85,7 @@ private:
     bool myEnableDirectionalLight;
     
     bool myEnableAmbientLight;
+    bool myIsFirstFrame;
 
     Tga::Text myLoadingText;
 

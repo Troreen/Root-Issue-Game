@@ -1,0 +1,67 @@
+{
+  "pools": [
+    {
+      "title": "blood",
+      "size": 10000,
+      "spriteName": "test",
+      "blendState":  "additive"
+    },
+    {
+      "title": "test",
+      "size": 10000,
+      "spriteName": "test",
+      "blendState":  "alpha"
+    }
+  ],
+  "gameObjects": [
+    {
+      "editorname": "BasicMeleeEnemy",
+      "emitters": [
+        {
+          "particleType": "blood",
+          "shouldBillboard": false,
+          "emissionShape": "box",
+          "emissionRate": 1000,
+
+          "lifeTimeMin": 0,
+          "lifeTimeMax": 2,
+
+          "startSpeedMin": 0,
+          "startSpeedMax": 200,
+
+          "coneAngle": 45,
+
+          "startSizeMin": 0.1,
+          "startSizeMax": 10,
+          "endSizeMin": 0.1,
+          "endSizeMax": 10,
+
+          "burstCount": 500,
+          "shouldStartActive": false
+        },
+        {
+          "particleType": "test",
+          "shouldBillboard":  true ,
+          "emissionShape": "sphere",
+          "emissionRate": 1000,
+
+          "lifeTimeMin": 0,
+          "lifeTimeMax": 2,
+
+          "startSpeedMin": 0,
+          "startSpeedMax": 100,
+
+          "coneAngle": 45,
+
+          "startSizeMin": 0.1,
+          "startSizeMax": 10,
+          "endSizeMin": 0.1,
+          "endSizeMax": 10,
+
+          "burstCount": 500,
+          "shouldStartActive": false
+        }
+      ]
+    }
+  ]
+}

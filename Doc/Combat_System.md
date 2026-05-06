@@ -6,7 +6,25 @@ This document explains the current combat-system slice from a gameplay/code poin
 
 The combat system owns temporary attack hitboxes and resolves combat overlaps separately from normal movement collision. Movement collision still handles blocking and trigger contacts. Combat overlap checks produce hit events and apply gameplay effects such as damage and knockback.
 
-The current implemented slice supports player melee attacks against `BasicMeleeEnemy` objects.
+The current implemented slice supports player melee attacks against objects on the `Enemy` layer.
+
+## Relevant Files
+
+- `Source/Game/source/CombatInterfaces.h`: Defines combat enums and data contracts such as `AttackData`, `HitEvent`, target masks, teams, and attack types.
+- `Source/Game/source/CombatSystem.h/.cpp`: Owns active transient attacks, resolves combat overlaps, applies damage and knockback, stores hit events, and draws combat debug hitboxes.
+- `Source/Game/source/CollisionQuery.h/.cpp`: Provides shared runtime shape query helpers used by combat to test attack shapes against object colliders.
+- `Source/Game/source/KnockbackComponent.h/.cpp`: Receives combat impulses and applies damped movement during normal object update.
+- `Source/Game/source/DamageableComponent.h/.cpp`: Receives combat damage and manages health, invulnerability, and damage/death callbacks.
+- `Source/Game/source/Player/PlayerState_Attack.cpp`: Creates the current player melee `AttackData` and starts attacks through `CombatService`.
+- `Source/Game/source/StateStack/InGame.h/.cpp`: Owns `CombatSystem`, registers `CombatService`, runs combat update after runtime collision, and renders combat debug shapes.
+- `Source/Game/source/GameObjectFactoryRegistrations.cpp`: Gives combat-relevant enemy objects their collider, damage, and knockback components.
+- `Source/Game/source/DebugSettings.h` and `Source/Game/source/CameraSystem.cpp`: Expose the combat hitbox debug toggle in the debug UI.
+
+## Damage And Health Scale
+
+Combat damage and health are integer-based. The current target scale is small numbers: the player defaults to `4` HP, normal enemies should generally sit in the `1-5` HP range, and basic player melee currently deals `1` damage per hit.
+
+The code should avoid old large placeholder values such as `25` damage or `100` health unless a specific boss or special object deliberately needs a larger integer pool.
 
 ## Main Types
 
@@ -41,7 +59,7 @@ For v1, the player attack state starts `MeleeLight` attacks.
 Example:
 
 ```cpp
-attack.targetLayers.AddLayer(ObjectLayer::BasicMeleeEnemy);
+attack.targetLayers.AddLayer(ObjectLayer::Enemy);
 ```
 
 The combat system checks this mask before doing narrow-phase overlap work. If a target's layer is not in the mask, it is ignored.
@@ -62,7 +80,7 @@ Fields:
 - `radius`: transient sphere radius. If this is `<= 0`, sphere attacks use half of the largest `size` component.
 - `activeDurationSeconds`: how long the attack remains active.
 - `knockbackStrength`: magnitude of horizontal knockback.
-- `damage`: damage sent to `DamageableComponent`.
+- `damage`: integer damage sent to `DamageableComponent`.
 - `onlyHitForwardHemisphere`: when true on sphere attacks, only the owner's forward-facing half of the sphere can record hits.
 
 `CombatSystem::StartAttack` rejects invalid attacks by returning `0` when:
@@ -188,7 +206,7 @@ The system can query box, sphere, capsule, and OBB-backed shapes through this sh
 
 ## Damage
 
-Damage application is component-based.
+Damage application is component-based and integer-only.
 
 If a target has `DamageableComponent`, combat calls:
 
@@ -197,6 +215,8 @@ damageable->TakeDamage(attack.data.damage, attack.data.owner);
 ```
 
 Targets without `DamageableComponent` can still produce hit events if they are valid combat targets, but they will not lose health.
+
+`DamageableComponent` stores integer max health and current health. Player objects default to `4` HP through the player factory, and current enemy object defaults/data use small integer health values in the `1-5` range.
 
 ## Knockback
 
@@ -230,13 +250,13 @@ attack.owner = &player;
 attack.team = CombatTeam::Player;
 attack.type = AttackType::MeleeLight;
 attack.collisionShape = CollisionShapeType::Sphere;
-attack.damage = 25;
+attack.damage = 1;
 attack.localCenterOffset = CommonUtilities::Vector3<float>(0.0f, 90.0f, 0.0f);
 attack.radius = 190.0f;
 attack.activeDurationSeconds = 0.16f;
 attack.knockbackStrength = 450.0f;
 attack.onlyHitForwardHemisphere = true;
-attack.targetLayers.AddLayer(ObjectLayer::BasicMeleeEnemy);
+attack.targetLayers.AddLayer(ObjectLayer::Enemy);
 ```
 
 `PlayerState_Attack` uses `myHasSpawnedHitbox` to avoid repeatedly spawning attacks every frame while the same swing is active. When the player chains into another swing, `myHasSpawnedHitbox` is reset so the next swing can spawn a fresh attack and hit the same target again.
@@ -245,13 +265,13 @@ attack.targetLayers.AddLayer(ObjectLayer::BasicMeleeEnemy);
 
 `BuildBasicMeleeEnemy` configures enemies as combat targets:
 
-- Uses `ObjectLayer::BasicMeleeEnemy`.
+- Uses `ObjectLayer::Enemy`.
 - Applies any authored collider.
 - Adds a fallback capsule collider if no runtime collider exists.
 - Adds `DamageableComponent`.
 - Adds `KnockbackComponent`.
 
-The fallback collider matters because combat queries require a runtime collider on the target.
+The fallback collider matters because combat queries require a runtime collider on the target. If object data does not provide health or damage, `BasicMeleeEnemy` defaults to `3` HP and `1` contact damage.
 
 ## Services
 

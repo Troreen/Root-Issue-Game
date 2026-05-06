@@ -19,6 +19,8 @@
 #include "SceneObjectData.h"
 #include "PlayerControllerComponent.h"
 #include "BulletComponent.h"
+#include "CameraComponent.h"
+#include "MouseDirectionComponent.h"
 #include "PickUpComponent.h"
 #include <tge/animation/AnimationPlayer.h>
 #include "SphereColliderComponent.h"
@@ -62,9 +64,9 @@ namespace
             outLayer = ObjectLayer::Player;
             return true;
         }
-        if (normalized == "basicmeleeenemy")
+        if (normalized == "enemy" || normalized == "basicmeleeenemy")
         {
-            outLayer = ObjectLayer::BasicMeleeEnemy;
+            outLayer = ObjectLayer::Enemy;
             return true;
         }
         if (normalized == "projectile")
@@ -324,7 +326,7 @@ namespace
     std::unique_ptr<GameObject> BuildBasicMeleeEnemy(const SceneObjectData& aData)
     {
         auto object = std::make_unique<GameObject>(aData.name);
-        ApplyLayer(*object, aData, ObjectLayer::BasicMeleeEnemy);
+        ApplyLayer(*object, aData, ObjectLayer::Enemy);
         ApplyCommonModel(*object, aData);
         ApplyAuthoredCollider(*object, aData);
         if (!object->GetComponent<BoxColliderComponent>() &&
@@ -335,13 +337,13 @@ namespace
             object->AddComponent<CapsuleColliderComponent>(50.0f, 180.0f, Vector3f::Zero, false, true);
         }
 
-        int health = aData.GetPropertyOr<int>("health", 100);
+        int health = aData.GetPropertyOr<int>("health", 3);
         if (health < 1)
         {
             health = 1;
         }
 
-        int damage = aData.GetPropertyOr<int>("damage", 10);
+        int damage = aData.GetPropertyOr<int>("damage", 1);
         if (damage < 1)
         {
             damage = 1;
@@ -355,8 +357,7 @@ namespace
         damageable->SetCurrentHealth(health);
         damageable->SetDamagePerHit(damage);
         ParticleEmitterComponent* emitter = object->AddComponent<ParticleEmitterComponent>();
-        emitter->AddParticleWithShape(ParticleType::Test, EmissionShape::Sphere);
-        emitter->AddParticleWithShape(ParticleType::Blood, EmissionShape::Cone);
+        emitter->AttachSettings();
         return object;
     }
 
@@ -369,6 +370,16 @@ namespace
         ApplyAuthoredCollider(*object, aData);
         object->AddComponent<PlayerControllerComponent>();
         object->AddComponent<BulletComponent>();
+        object->AddComponent<CameraComponent>();
+        object->AddComponent<MouseDirectionComponent>();
+        int health = aData.GetPropertyOr<int>("health", 4);
+        if (health < 1)
+        {
+            health = 1;
+        }
+
+        DamageableComponent* damageable = object->AddComponent<DamageableComponent>(health);
+        damageable->SetCurrentHealth(health);
         return object;
     }
 

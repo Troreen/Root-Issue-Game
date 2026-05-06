@@ -1,11 +1,5 @@
 #include "PostMaster.h"
 
-PostMaster& PostMaster::GetInstance()
-{
-	static PostMaster instance;
-	return instance;
-}
-
 PostMaster::PostMaster()
 {
 	mySubscribers.resize(static_cast<int>(MessageType::COUNT));

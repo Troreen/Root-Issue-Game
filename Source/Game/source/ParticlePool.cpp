@@ -4,6 +4,8 @@
 #include <tge/engine.h>
 #include <tge/texture/TextureManager.h>
 #include <tge/graphics/GraphicsEngine.h>
+#include "tge/graphics/GraphicsStateStack.h"
+
 
 ParticlePool::ParticlePool()
 {
@@ -12,11 +14,11 @@ ParticlePool::ParticlePool()
 	myFirstAvailable = nullptr;
 }
 
-void ParticlePool::Init(size_t aPoolSize)
+void ParticlePool::Init(size_t aPoolSize, const Tga::TextureResource& aTexture, const Tga::BlendState& aBlendState)
 {
-	//TODO: Temporary Code
-	mySpriteData.myTexture = Tga::Engine::GetInstance()->GetTextureManager().GetWhiteSquareTexture();
-	// end
+	myBlendState = aBlendState;
+
+	mySpriteData.myTexture = &aTexture;
 
 	myPoolSize = aPoolSize;
 	myParticles.resize(myPoolSize);
@@ -24,12 +26,16 @@ void ParticlePool::Init(size_t aPoolSize)
 
 	myFirstAvailable = &myParticles[0];
 
+	Tga::Vector2ui size = mySpriteData.myTexture->CalculateTextureSize();
+
 	for (int i = 0; i < myPoolSize - 1; ++i) 
 	{
 		myParticles[i].SetNext(&myParticles[i + 1]);
+		myParticles[i].SetSize(size);
 	}
 
 	myParticles[myPoolSize - 1].SetNext(nullptr);
+
 }
 
 void ParticlePool::Update(float aTimeDelta)
@@ -56,11 +62,17 @@ void ParticlePool::Update(float aTimeDelta)
 
 void ParticlePool::Render() const
 {
+	Tga::Engine& engine = *Tga::Engine::GetInstance();
+	engine.GetGraphicsEngine().GetGraphicsStateStack().Push();
+
+	engine.GetGraphicsEngine().GetGraphicsStateStack().SetBlendState(myBlendState);
 	Tga::SpriteBatchScope batch = Tga::Engine::GetInstance()->GetGraphicsEngine().GetSpriteDrawer().BeginBatch(mySpriteData);
+	batch.Draw(myInstances.data(), myNbrOfActiveParticles);
+
+	engine.GetGraphicsEngine().GetGraphicsStateStack().Pop();
 
 	//std::cout << "nbr of active particles to render: " << myNbrOfActiveParticles << std::endl;
 
-	batch.Draw(myInstances.data(), myNbrOfActiveParticles);
 }
 
 void ParticlePool::Create(const ParticleSettings& someParticleSettings)
@@ -72,8 +84,6 @@ void ParticlePool::Create(const ParticleSettings& someParticleSettings)
 	{
 		Particle* newParticle = myFirstAvailable;
 		myFirstAvailable = newParticle->GetNext();
-
-
 
 		newParticle->Init(someParticleSettings);
 	}

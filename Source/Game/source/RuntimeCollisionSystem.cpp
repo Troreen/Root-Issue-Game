@@ -52,8 +52,8 @@ namespace
             return "WorldStatic";
         case ObjectLayer::Player:
             return "Player";
-        case ObjectLayer::BasicMeleeEnemy:
-            return "BasicMeleeEnemy";
+        case ObjectLayer::Enemy:
+            return "Enemy";
         case ObjectLayer::Projectile:
             return "Projectile";
         case ObjectLayer::Trigger:
@@ -846,8 +846,8 @@ namespace
     {
         CollisionLayerRuleTable rules;
         rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::WorldStatic, CollisionRule::Block);
-        rules.SetSymmetric(ObjectLayer::BasicMeleeEnemy, ObjectLayer::WorldStatic, CollisionRule::Block);
-        rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::BasicMeleeEnemy, CollisionRule::Block);
+        rules.SetSymmetric(ObjectLayer::Enemy, ObjectLayer::WorldStatic, CollisionRule::Block);
+        rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::Enemy, CollisionRule::Block);
         rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::Trigger, CollisionRule::Trigger);
         rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::Pickup, CollisionRule::Trigger);
         return rules;
@@ -857,7 +857,7 @@ namespace
     {
         return aLayer == ObjectLayer::WorldStatic ||
             aLayer == ObjectLayer::Player ||
-            aLayer == ObjectLayer::BasicMeleeEnemy;
+            aLayer == ObjectLayer::Enemy;
     }
 
     const char* ToRuleName(CollisionRule aRule)
@@ -1025,7 +1025,7 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
         case ObjectLayer::Player:
             playerObjects.push_back(object.get());
             break;
-        case ObjectLayer::BasicMeleeEnemy:
+        case ObjectLayer::Enemy:
             enemyObjects.push_back(object.get());
             break;
         case ObjectLayer::WorldStatic:

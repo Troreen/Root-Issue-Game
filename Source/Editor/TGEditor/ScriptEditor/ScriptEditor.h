@@ -45,6 +45,7 @@ namespace Tga
 		void MarkScriptAsRemoved(const std::string_view aName);
 		void MarkScriptAsAdded(const std::string_view aName);
 		void DisplayEditor(const std::string_view& aActiveScript, ScriptPinId &aPinToTrigger, bool aIsRunning);
+		void DisplayEditor(const std::string_view& aActiveScript);
 
 		void GetAllScriptsThatStartsWithPath(const std::string_view path, std::vector<std::string_view>& scripts);
 

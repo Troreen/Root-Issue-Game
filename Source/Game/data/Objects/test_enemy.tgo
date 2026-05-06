@@ -54,7 +54,7 @@
       "is-per-instance": true,
       "name": "damage",
       "type": "Int",
-      "value": 10
+      "value": 1
     },
     {
       "description": "",
@@ -63,7 +63,7 @@
       "is-per-instance": false,
       "name": "health",
       "type": "Int",
-      "value": 100
+      "value": 3
     }
   ]
 }

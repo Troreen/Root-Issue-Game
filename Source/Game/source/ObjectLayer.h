@@ -4,7 +4,7 @@ enum class ObjectLayer
 {
     WorldStatic,
     Player,
-    BasicMeleeEnemy,
+    Enemy,
     Projectile,
     Trigger,
     Pickup,
