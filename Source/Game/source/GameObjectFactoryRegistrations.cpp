@@ -19,6 +19,8 @@
 #include "SceneObjectData.h"
 #include "PlayerControllerComponent.h"
 #include "BulletComponent.h"
+#include "CameraComponent.h"
+#include "MouseDirectionComponent.h"
 #include "PickUpComponent.h"
 #include <tge/animation/AnimationPlayer.h>
 #include "SphereColliderComponent.h"
@@ -355,8 +357,7 @@ namespace
         damageable->SetCurrentHealth(health);
         damageable->SetDamagePerHit(damage);
         ParticleEmitterComponent* emitter = object->AddComponent<ParticleEmitterComponent>();
-        emitter->AddParticleWithShape(ParticleType::Test, EmissionShape::Sphere);
-        emitter->AddParticleWithShape(ParticleType::Blood, EmissionShape::Cone);
+        emitter->AttachSettings();
         return object;
     }
 
@@ -369,6 +370,8 @@ namespace
         ApplyAuthoredCollider(*object, aData);
         object->AddComponent<PlayerControllerComponent>();
         object->AddComponent<BulletComponent>();
+        object->AddComponent<CameraComponent>();
+        object->AddComponent<MouseDirectionComponent>();
         int health = aData.GetPropertyOr<int>("health", 4);
         if (health < 1)
         {

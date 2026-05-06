@@ -5,15 +5,15 @@
 #include "AnimationGraphComponent.h"
 #include "GameObject.h"
 
-void PlayerState_Shoot::Update(float aDeltaTime, PlayerControllerComponent& aPlayerController)
+void PlayerState_Shoot::Update(float aDeltaTime, PlayerControllerComponent& aController)
 {
 	myFireTimer -= aDeltaTime;
-	aPlayerController.GetOwner()->GetComponent<AnimationGraphComponent>()->SetFloatParameter("w_ranged_attack", 1);
+	myAnimationGraph->SetFloatParameter("w_ranged_attack", 1);
 
 	if (myFireTimer < 0)
 	{
-		aPlayerController.GetOwner()->GetComponent<AnimationGraphComponent>()->SetFloatParameter("w_ranged_attack", 0);
-		aPlayerController.SetState(PlayerState_Master::Instance().myWalkState.get());
+		myAnimationGraph->SetFloatParameter("w_ranged_attack", 0);
+		aController.SetState(PlayerState_Master::Instance().myWalkState.get());
 	}
 }
 

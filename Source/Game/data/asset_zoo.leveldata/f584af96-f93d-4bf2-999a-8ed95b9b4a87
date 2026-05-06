@@ -1,6 +1,6 @@
 {
-  "name": "Character_MeeleEnemy",
-  "object-definition": "MeeleEnemy",
+  "name": "Character_MeleeEnemy",
+  "object-definition": "MeleeEnemy",
   "path": "Objects/Character",
   "rotation": [
     0.0,

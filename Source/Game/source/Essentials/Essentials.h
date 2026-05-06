@@ -12,6 +12,7 @@
 #include <tge/graphics/DX11.h>
 #include "tge/UI/CanvasObjectDefinitionManager.h"
 #include "Cursor.h"
+#include "PostMaster.h"
 
 class GameObject;
 
@@ -49,6 +50,7 @@ public:
 	static inline std::unique_ptr<Tga::CanvasObjectDefinitionManager> globalCanvasManager;
 	static inline std::unique_ptr<Cursor> myCursor;
 
+	static inline PostMaster* globalPostMaster;
 
 	static inline std::unique_ptr<Console> globalConsoleManager;
 

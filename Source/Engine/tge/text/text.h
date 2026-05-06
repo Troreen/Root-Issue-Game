@@ -95,6 +95,7 @@ namespace Tga
 		return fontSizes[index];
 	}
 
+
 	class InternalTextAndFontData;
 	struct Font
 	{
@@ -139,16 +140,16 @@ namespace Tga
 		static std::vector<std::string> SplitLines(const std::string& text);
 
 		float GetLineHeight() const;
-	
+
+		TextService* GetTextService();
+
 		Font myFont;
 		TextService* myTextService;
 		int myRenderOrder = 0;
 
 		Tga::SpriteSharedData mySharedData;
 		Tga::Sprite2DInstanceData myInstanceData[128];
-
 	protected:
-
 		std::string myText;
 		Vector2f myPosition;
 		float myScale;

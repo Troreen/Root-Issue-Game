@@ -11,7 +11,7 @@ public:
 	ParticlePool();
 	~ParticlePool() = default;
 
-	void Init(size_t aPoolSize);
+	void Init(size_t aPoolSize, const Tga::TextureResource& aTexture, const Tga::BlendState& aBlendState);
 	void Update(float aTimeDelta);
 	void Render() const;
 
@@ -19,6 +19,8 @@ public:
 
 private:
 	
+	Tga::BlendState myBlendState;
+
 	size_t myPoolSize;
 	size_t myNbrOfActiveParticles;
 	std::vector<Particle> myParticles;

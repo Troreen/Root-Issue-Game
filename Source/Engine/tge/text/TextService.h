@@ -24,6 +24,7 @@ namespace Tga
 		void Init();
 
 		Font GetOrLoad(std::string aFontPathAndName, FontSize aFontSize, unsigned char aBorderSize = 0);
+		float MeasureStringWidth(const Text& templateText, const std::string& str);
 		bool Draw(Tga::Text& aText, Tga::SpriteShader* aCustomShaderToRenderWith = nullptr, bool forceInstant = true);
 		float GetTextBlockHeight(const Text& text) const;
 		float MeasureWidth(const Tga::Text& textTemplate, const std::string& str) const;
@@ -32,6 +33,7 @@ namespace Tga
 		float GetLineHeight(const Tga::Text& text) const;
 		float GetAscender(const Tga::Text& text) const;
 		float GetDescender(const Tga::Text& text) const;
+		static uint32_t MakeRGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 	private:
 		struct FT_LibraryRec_* myLibrary;

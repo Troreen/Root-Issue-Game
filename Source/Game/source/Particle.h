@@ -14,12 +14,15 @@ enum class ParticleType
 
 struct ParticleSettings 
 {
-	float timeToLive;
+	float timeToLive = 0;
+	float swayAmplitude = 0;
+	float myOffset = 0;
+	CommonUtilities::Vector2<float> size;
 	CommonUtilities::Vector3<float> initalPosition;
 	CommonUtilities::Vector3<float> linearVelocity;
-	CommonUtilities::Vector2<float> size;
 	CommonUtilities::Vector4<float> startColor;
 	CommonUtilities::Vector4<float> endColor;
+	CommonUtilities::Quaternion<float> rotation;
 };
 
 class Particle
@@ -37,6 +40,8 @@ public:
 
 	const Tga::Sprite3DInstanceData& GetInstance() const;
 
+	void SetSize(const Tga::Vector2ui& aSize);
+
 	bool InUse() const;
 
 private:
@@ -46,6 +51,8 @@ private:
 	CommonUtilities::Transform<float> myTransform;
 	
 	Tga::Sprite3DInstanceData myInstance;
+
+	CommonUtilities::Vector2<float> mySize;
 
 	Particle* myNext;
 };

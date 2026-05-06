@@ -1,325 +1,334 @@
 {
-  "parent-object-definition": "",
-  "properties": [
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "factoryType",
-      "type": "StringId",
-      "value": "BasicMeleeEnemy"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "model",
-      "type": "Model",
-      "value": {
-        "path": "animations\\SK\\SK_CH_Enemy_Heavy.fbx",
-        "textures": [
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ]
-        ]
-      }
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "name",
-      "type": "StringId",
-      "value": "RollingEnemy"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_auto_bootstrap",
-      "type": "Bool",
-      "value": true
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_graph",
-      "type": "StringId",
-      "value": "AnimationGraphs\\\\Grafik\\\\SK_CH_RollingEnemy.tgscript"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_graph_template",
-      "type": "StringId",
-      "value": "idle_only"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_model_property",
-      "type": "StringId",
-      "value": "model"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_aggro",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Aggro.fbx"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_block",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Block.fbx"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_charge",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Charge.fbx"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_death_laying",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Death_Laying.fbx"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_death_standing",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Death_Standing.fbx"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_hurt",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Hurt.fbx"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_idle",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Idle.fbx"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_knockback",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Knockback.fbx"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_roll_idle",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Roll_Idle.fbx"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_spawn",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Spawn.fbx"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_walk",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Walk.fbx"
-      }
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "w_aggro",
-      "type": "Float",
-      "value": 0.0
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "w_block",
-      "type": "Float",
-      "value": 0.0
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "w_charge",
-      "type": "Float",
-      "value": 0.0
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "w_death_laying",
-      "type": "Float",
-      "value": 0.0
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "w_death_standing",
-      "type": "Float",
-      "value": 0.0
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "w_hurt",
-      "type": "Float",
-      "value": 0.0
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "w_knockback",
-      "type": "Float",
-      "value": 0.0
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "w_roll_idle",
-      "type": "Float",
-      "value": 0.0
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "w_spawn",
-      "type": "Float",
-      "value": 0.0
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "w_walk",
-      "type": "Float",
-      "value": 0.0
-    },
-    {
-      "description": "",
-      "group": "Combat",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "damage",
-      "type": "Int",
-      "value": 1
-    },
-    {
-      "description": "",
-      "group": "Combat",
-      "is-dynamic": true,
-      "is-per-instance": true,
-      "name": "health",
-      "type": "Int",
-      "value": 5
-    }
-  ]
+    "parent-object-definition":  "",
+    "properties":  [
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "factoryType",
+                           "type":  "StringId",
+                           "value":  "BasicMeleeEnemy"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "model",
+                           "type":  "Model",
+                           "value":  {
+                                         "path":  "animations\\SK\\SK_CH_Enemy_Heavy.fbx",
+                                         "textures":  [
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ]
+                                                      ]
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "name",
+                           "type":  "StringId",
+                           "value":  "RollingEnemy"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "animation_auto_bootstrap",
+                           "type":  "Bool",
+                           "value":  true
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "animation_graph",
+                           "type":  "StringId",
+                           "value":  "animations\\Animation Graphs\\RollingEnemy_animation_graph.tgscript"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "animation_graph_template",
+                           "type":  "StringId",
+                           "value":  "idle_only"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "animation_model_property",
+                           "type":  "StringId",
+                           "value":  "model"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_aggro",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Aggro.fbx"
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_block",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Block.fbx"
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_charge",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Charge.fbx"
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_death_laying",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Death_Laying.fbx"
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_death_standing",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Death_Standing.fbx"
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_hurt",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Hurt.fbx"
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_idle",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Idle.fbx"
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_knockback",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Knockback.fbx"
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_roll_idle",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Roll_Idle.fbx"
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_spawn",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Spawn.fbx"
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_walk",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Walk.fbx"
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "w_aggro",
+                           "type":  "Float",
+                           "value":  0.0
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "w_block",
+                           "type":  "Float",
+                           "value":  0.0
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "w_charge",
+                           "type":  "Float",
+                           "value":  0.0
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "w_death_laying",
+                           "type":  "Float",
+                           "value":  0.0
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "w_death_standing",
+                           "type":  "Float",
+                           "value":  0.0
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "w_hurt",
+                           "type":  "Float",
+                           "value":  0.0
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "w_knockback",
+                           "type":  "Float",
+                           "value":  0.0
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "w_roll_idle",
+                           "type":  "Float",
+                           "value":  0.0
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "w_spawn",
+                           "type":  "Float",
+                           "value":  0.0
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "w_walk",
+                           "type":  "Float",
+                           "value":  0.0
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Combat",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "damage",
+                           "type":  "Int",
+                           "value":  1
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Combat",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "health",
+                           "type":  "Int",
+                           "value":  5
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "anim_speed",
+                           "type":  "Float",
+                           "value":  1
+                       }
+                   ]
 }

@@ -184,7 +184,7 @@ void GlyphLoader::CalculateOutlineOffsets(const int index, FT_FaceRec_* aFace, i
 	{
 		ERROR_PRINT("%s", "Failed to get glyph!");
 	}
-	
+
 	FT_Stroker_Set(stroker, aBorderOffset * 64, FT_STROKER_LINECAP_ROUND, FT_STROKER_LINEJOIN_ROUND, 0);
 	err = FT_Glyph_StrokeBorder(&glyph, stroker, 0, 1);
 	if (err != 0)
@@ -197,7 +197,7 @@ void GlyphLoader::CalculateOutlineOffsets(const int index, FT_FaceRec_* aFace, i
 	{
 		ERROR_PRINT("%s", "Failed to add glyph to bitmap");
 	}
-	
+
 	FT_BitmapGlyph bitmapGlyph = reinterpret_cast<FT_BitmapGlyph>(glyph);
 
 	unsigned int width = bitmapGlyph->bitmap.width;
@@ -285,13 +285,13 @@ void GlyphLoader::LoadGlyph(int index, int& atlasX, int& atlasY, int& maxY, floa
 	int width = bitmap.width;
 
 	CharData glyphData;
-	glyphData.myChar = static_cast<char>(index); 
+	glyphData.myChar = static_cast<char>(index);
 	glyphData.myHeight = static_cast<short>(height + (aBorderOffset * 2));
 	glyphData.myWidth = static_cast<short>(width + (aBorderOffset * 2));
 
 	glyphData.myTopLeftUV = { (float(atlasX) / atlasWidth), (float(atlasY) / atlasHeight) };
 	glyphData.myBottomRightUV = { (float(atlasX + glyphData.myWidth) / atlasWidth), (float(atlasY + glyphData.myHeight) / atlasHeight) };
-	 
+
 	glyphData.myAdvanceX = static_cast<short>(slot->advance.x) >> 6;
 	glyphData.myAdvanceY = static_cast<short>(slot->advance.y) >> 6;
 
@@ -301,7 +301,7 @@ void GlyphLoader::LoadGlyph(int index, int& atlasX, int& atlasY, int& maxY, floa
 	{
 		ERROR_PRINT("%s", "Tried to set a glyph UV to above 1");
 		return;
-	} 
+	}
 
 	CalculateGlyphOffsets(index, slot);
 	for (int x = 0; x < width; x++)
@@ -413,7 +413,7 @@ TextToRender processNextCharacter(const InternalTextAndFontData& fontData, char 
 	if (aCharacter == '\n')
 	{
 		x = 0;
-		y -= (maxY + 6);
+		y -= fontData.myLineHeight;
 	}
 	else
 	{
@@ -428,7 +428,8 @@ TextToRender processNextCharacter(const InternalTextAndFontData& fontData, char 
 }
 
 InternalTextAndFontData::~InternalTextAndFontData()
-{}
+{
+}
 
 TextService::TextService()
 {
@@ -444,10 +445,10 @@ TextService::~TextService()
 	FT_Done_FreeType(myLibrary);
 }
 
-inline bool FileExists(const std::string& name) 
+inline bool FileExists(const std::string& name)
 {
 	std::ifstream f(name.c_str());
-	if (f.good()) 
+	if (f.good())
 	{
 		f.close();
 		return true;
@@ -509,6 +510,15 @@ Font TextService::GetOrLoad(std::string aFontPathAndName, FontSize aFontSize, un
 		ERROR_PRINT("%s", "FT_Set_Char_Size error");
 		return { nullptr };
 	}
+
+	const float ascender = face->ascender / 64.0f;
+	const float descender = -face->descender / 64.0f;
+	const float height = face->height / 64.0f;
+
+	fontData->myAscender = ascender;
+	fontData->myDescender = descender;
+	fontData->myLineGap = height - (ascender + descender);
+	fontData->myLineHeight = height;
 
 	error = FT_Load_Char(face, 'x', FT_LOAD_DEFAULT);
 	if (error != 0)
@@ -585,70 +595,72 @@ Font TextService::GetOrLoad(std::string aFontPathAndName, FontSize aFontSize, un
 	fontData->myAtlasWidth = atlasSize;
 	fontData->myLineSpacing = static_cast<float>((face->ascender - face->descender) >> 6);
 	FT_Done_Face(face);
-	
+
 	fontData->myTexture = std::make_unique<TextureResource>(fontData->myAtlasView.Get());
-	
+
 	return { fontData };
 }
 
 float Tga::TextService::GetSentenceWidth(Tga::Text& aText)
 {
-	if (aText.myText.size() <= 0)
-	{
+	if (aText.myText.empty())
 		return 0.0f;
-	}
 
 	const InternalTextAndFontData* fontData = aText.myFont.myData.get();
 	if (!fontData)
-	{
 		return 0.0f;
-	}
 
-	int count = static_cast<int>(aText.myText.length());
+	float maxWidth = 0.0f;
+	float currentWidth = 0.0f;
 
-	float maxX = FLT_MIN;
-
-	float drawX = 0.f;
-	float drawY = 0.f;
-	float maxDrawY = 0.f;
-
-	for (int i = 0; i < count; i++)
+	for (char c : aText.myText)
 	{
-		TextToRender charInfo = processNextCharacter(*fontData, aText.myText[i], aText.myScale, drawX, drawY, maxDrawY);
-		maxX = std::max(maxX, charInfo.myPosition.myX + charInfo.mySize.myX);
+		if (c == '\n')
+		{
+			maxWidth = std::max(maxWidth, currentWidth);
+			currentWidth = 0.0f;
+			continue;
+		}
+
+		const CharData& cd = fontData->myCharData[(unsigned char)c];
+
+		if (c == ' ')
+			currentWidth += fontData->myWordSpacing;
+		else
+			currentWidth += cd.myAdvanceX;
 	}
 
-	return maxX;
+	maxWidth = std::max(maxWidth, currentWidth);
+
+	return maxWidth * aText.myScale;
 }
 
 float Tga::TextService::GetSentenceHeight(Tga::Text& aText)
 {
-	if (aText.myText.size() <= 0)
-	{
+	if (aText.myText.empty())
 		return 0.0f;
-	}
 
 	const InternalTextAndFontData* fontData = aText.myFont.myData.get();
 	if (!fontData)
-	{
 		return 0.0f;
-	}
 
-	int count = static_cast<int>(aText.myText.length());
+	int lineCount = 1;
 
-	float maxY = FLT_MIN;
-
-	float drawX = 0.f;
-	float drawY = 0.f;
-	float maxDrawY = 0.f;
-
-	for (int i = 0; i < count; i++)
+	for (char c : aText.myText)
 	{
-		TextToRender charInfo = processNextCharacter(*fontData, aText.myText[i], aText.myScale, drawX, drawY, maxDrawY);
-		maxY = std::max(maxY, charInfo.myPosition.myY + charInfo.mySize.myY);
+		if (c == '\n')
+			++lineCount;
 	}
 
-	return maxY;
+	return lineCount * fontData->myLineHeight * aText.myScale;
+}
+
+float TextService::MeasureStringWidth(const Text& templateText,
+	const std::string& str)
+{
+	Text copy = templateText;
+	copy.SetText(str);
+	return GetSentenceWidth(copy);
 }
 
 bool TextService::Draw(Tga::Text& aText, Tga::SpriteShader* aCustomShader, bool forceInstant)

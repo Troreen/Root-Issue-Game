@@ -1,0 +1,177 @@
+{
+  "links": [
+    {
+      "id": 0,
+      "sourcePin": 3,
+      "targetPin": 4
+    },
+    {
+      "id": 1,
+      "sourcePin": 5,
+      "targetPin": 8
+    },
+    {
+      "id": 2,
+      "sourcePin": 7,
+      "targetPin": 9
+    },
+    {
+      "id": 3,
+      "sourcePin": 10,
+      "targetPin": 1
+    }
+  ],
+  "nodes": [
+    {
+      "customData": null,
+      "id": 0,
+      "name": "",
+      "position": [
+        1360.0,
+        320.0
+      ],
+      "type": "Animate Model"
+    },
+    {
+      "customData": null,
+      "id": 1,
+      "name": "",
+      "position": [
+        80.0,
+        120.0
+      ],
+      "type": "Read Animation Clip Property"
+    },
+    {
+      "customData": null,
+      "id": 2,
+      "name": "",
+      "position": [
+        310.0,
+        260.0
+      ],
+      "type": "Play Clip"
+    },
+    {
+      "customData": null,
+      "id": 3,
+      "name": "",
+      "position": [
+        720.0,
+        520.0
+      ],
+      "type": "Read Float Property"
+    },
+    {
+      "customData": null,
+      "id": 4,
+      "name": "",
+      "position": [
+        1020.0,
+        430.0
+      ],
+      "type": "Adjust Speed"
+    }
+  ],
+  "pins": [
+    {
+      "datatype": "StringId",
+      "id": 0,
+      "name": "Model Property Name",
+      "node": 0,
+      "role": "Input",
+      "type": "Property",
+      "value": "model"
+    },
+    {
+      "datatype": "Pose",
+      "id": 1,
+      "name": "Value",
+      "node": 0,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 2,
+      "name": "Name",
+      "node": 1,
+      "role": "Input",
+      "type": "Property",
+      "value": "clip_idle"
+    },
+    {
+      "datatype": "Animation Clip",
+      "id": 3,
+      "name": "Value",
+      "node": 1,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Animation Clip",
+      "id": 4,
+      "name": "Clip",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 5,
+      "name": "Pose",
+      "node": 2,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 6,
+      "name": "Name",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": "anim_speed"
+    },
+    {
+      "datatype": "Float",
+      "id": 7,
+      "name": "Value",
+      "node": 3,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 8,
+      "name": "Pose",
+      "node": 4,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Float",
+      "id": 9,
+      "name": "Rate Scale",
+      "node": 4,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 10,
+      "name": "Pose",
+      "node": 4,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    }
+  ]
+}

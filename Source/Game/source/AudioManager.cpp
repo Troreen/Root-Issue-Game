@@ -215,5 +215,5 @@ AudioManager::~AudioManager()
 {
 	myMusicList.clear();
 	myBusses.clear();
-	SoundEngine::Release();
+	//SoundEngine::Release();
 }

@@ -23,7 +23,9 @@ struct ParticleEmitterSettings
 
     EmissionShape shape;
 
-    CommonUtilities::Vector3<float> emissionDir = { 0.f,0.f,1.f };
+    bool shouldBillboard = true;
+
+    CommonUtilities::Vector3<float> emissionDir = { 0.f,1.f,0.f };
     bool directionModified = false;
 
     float emissionRate = 3000.f; // per second
@@ -44,6 +46,7 @@ struct ParticleEmitterSettings
 
     float burstCount = 3000;
     bool shouldBurst = false;
+    bool shouldStartBurstign = false;
 
     bool shouldEmitContinuously = false;
     bool startActive = false;
@@ -55,10 +58,12 @@ public:
 
     ParticleEmitterComponent();
 
+    void AttachSettings();
+
     void Init(Tga::Engine& anEngine) override;
     void Update(float aDeltaTime) override;
 
-    void AddParticleWithShape(const ParticleType& aParticleType, const EmissionShape& aShape);
+    //void AddParticleWithShape(const ParticleType& aParticleType, const EmissionShape& aShape);
     
     void Burst(const ParticleType& aParticleType);
 

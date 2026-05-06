@@ -81,7 +81,7 @@
                            "is-per-instance":  false,
                            "name":  "animation_graph",
                            "type":  "StringId",
-                           "value":  "AnimationGraphs\\\\Grafik\\\\SK_CH_RangedEnemy.tgscript"
+                           "value":  "animations\\Animation Graphs\\RangedEnemy_animation_graph.tgscript"
                        },
                        {
                            "description":  "",
@@ -120,6 +120,15 @@
                            "value":  {
                                          "clip_path":  "AnimationClips\\\\Grafik\\\\SK_CH_RangedEnemy_idle.tgac"
                                      }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  true,
+                           "is-per-instance":  true,
+                           "name":  "anim_speed",
+                           "type":  "Float",
+                           "value":  1
                        }
                    ]
 }

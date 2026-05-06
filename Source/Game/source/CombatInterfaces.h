@@ -68,23 +68,6 @@ struct HitEvent
     std::int32_t damage = 0;
 };
 
-inline AttackData CreateEnemyMeleeAttackData(GameObject& anEnemy, std::int32_t aDamage)
-{
-    AttackData attack;
-    attack.owner = &anEnemy;
-    attack.team = CombatTeam::Enemy;
-    attack.type = AttackType::EnemyMelee;
-    attack.collisionShape = CollisionShapeType::Sphere;
-    attack.damage = aDamage > 0 ? aDamage : 1;
-    attack.localCenterOffset = CommonUtilities::Vector3<float>(0.0f, 90.0f, 0.0f);
-    attack.radius = 160.0f;
-    attack.activeDurationSeconds = 0.16f;
-    attack.knockbackStrength = 250.0f;
-    attack.onlyHitForwardHemisphere = true;
-    attack.targetLayers.AddLayer(ObjectLayer::Player);
-    return attack;
-}
-
 struct HitboxSpawnRequest
 {
     CombatTeam team = CombatTeam::Neutral;

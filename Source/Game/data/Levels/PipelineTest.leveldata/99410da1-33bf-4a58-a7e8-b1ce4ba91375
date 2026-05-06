@@ -1,6 +1,6 @@
 {
-  "name": "MeeleEnemy",
-  "object-definition": "MeeleEnemy",
+  "name": "MeleeEnemy",
+  "object-definition": "MeleeEnemy",
   "path": "",
   "rotation": [
     0.0,
@@ -15,6 +15,6 @@
   "translation": [
     224.62570190429688,
     0.0,
-    202.76129150390625
+    -307.17242431640625
   ]
 }

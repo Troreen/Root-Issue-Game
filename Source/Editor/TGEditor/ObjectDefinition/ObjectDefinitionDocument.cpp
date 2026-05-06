@@ -74,9 +74,9 @@ namespace
 		return std::filesystem::path(ANIMATION_GRAPH_DIRECTORY) / (BuildAnimationGraphScriptPrefix(aObjectPath) + "_" + std::string(aScriptName));
 	}
 
-	std::string GetAnimationGraphDirectoryString()
+	std::string GetAnimationGraphDirectoryString(const std::string_view& aDirectory)
 	{
-		return std::filesystem::path(ANIMATION_GRAPH_DIRECTORY).string();
+		return std::filesystem::path(aDirectory).string();
 	}
 
 	bool HasPrefix(const std::string_view& aValue, const std::string_view& aPrefix)
@@ -101,6 +101,55 @@ namespace
 		}
 
 		return std::string(aScriptPath);
+	}
+
+	std::string ScriptPathFromAnimationGraphProperty(const SceneObjectDefinition& aDefinition)
+	{
+		for (const ScenePropertyDefinition& property : aDefinition.GetProperties())
+		{
+			const std::string propertyName = property.name.GetString();
+			if (propertyName != "animation_graph" && propertyName != "animationGraph")
+			{
+				continue;
+			}
+
+			const StringId* value = property.value.Get<StringId>();
+			if (value == nullptr || value->IsEmpty())
+			{
+				return {};
+			}
+
+			std::filesystem::path scriptPath = value->GetString();
+			if (scriptPath.extension() == ".tgscript")
+			{
+				scriptPath.replace_extension("");
+			}
+
+			return scriptPath.string();
+		}
+
+		return {};
+	}
+
+	void AddAnimationGraphScriptsFromDirectory(
+		EditorScriptManager& aEditorScriptManager,
+		const std::string& aDirectory,
+		const std::string& aAnimationGraphPrefix,
+		std::vector<std::string_view>& outScripts)
+	{
+		std::vector<std::string_view> animationGraphScripts;
+		aEditorScriptManager.GetAllScriptsThatStartsWithPath(aDirectory, animationGraphScripts);
+
+		for (const std::string_view& script : animationGraphScripts)
+		{
+			const std::filesystem::path scriptPath(script);
+			const std::string filename = scriptPath.filename().string();
+
+			if (HasPrefix(filename, aAnimationGraphPrefix))
+			{
+				outScripts.push_back(script);
+			}
+		}
 	}
 }
 
@@ -507,23 +556,18 @@ void ObjectDefinitionDocument::DrawObjectDefinitionPanel()
 			EditorScriptManager& editorScriptManager = EditorScriptManager::GetInstance();
 
 			std::string objectPathString = objectPath.string();
-			const std::string animationGraphDirectory = GetAnimationGraphDirectoryString();
+			const std::string animationGraphDirectory = GetAnimationGraphDirectoryString(ANIMATION_GRAPH_DIRECTORY);
 			const std::string animationGraphPrefix = BuildAnimationGraphScriptPrefix(myObjectDefinition->GetPath()) + "_";
 			editorScriptManager.GetAllScriptsThatStartsWithPath(objectPathString, scripts);
 
-			std::vector<std::string_view> animationGraphScripts;
-			editorScriptManager.GetAllScriptsThatStartsWithPath(animationGraphDirectory, animationGraphScripts);
-
-			for (const std::string_view& script : animationGraphScripts)
+			static std::string animationGraphPropertyScript;
+			animationGraphPropertyScript = ScriptPathFromAnimationGraphProperty(*myObjectDefinition);
+			if (!animationGraphPropertyScript.empty())
 			{
-				const std::filesystem::path scriptPath(script);
-				const std::string filename = scriptPath.filename().string();
-
-				if (HasPrefix(filename, animationGraphPrefix))
-				{
-					scripts.push_back(script);
-				}
+				scripts.push_back(animationGraphPropertyScript);
 			}
+
+			AddAnimationGraphScriptsFromDirectory(editorScriptManager, animationGraphDirectory, animationGraphPrefix, scripts);
 
 			for (auto s : scripts)
 			{

@@ -3,6 +3,8 @@
 #include "GameObject.h"
 #include "VfxSystem.h"
 
+#include "Essentials/Essentials.h"
+
 #include <random>
 
 constexpr auto DEGREETORADIAN = 0.017453292f;
@@ -10,9 +12,18 @@ constexpr float PI = 3.14159f;
 
 ParticleEmitterComponent::ParticleEmitterComponent()
 {
-	// TODO: Make more performant by centralizing data outside of each component instance
+}
 
-	//end
+void ParticleEmitterComponent::AttachSettings()
+{
+ 	std::string ownerName = GetOwner()->GetName();
+	std::cout << "Looking for emitter settings for: " << ownerName << std::endl;
+	mySettingsCollection = *VfxService::Get()->GetEmissionSettingsForObject(ownerName);
+	for (auto it = mySettingsCollection.begin(); it != mySettingsCollection.end(); ++it)
+	{
+		it->second.shouldEmitContinuously = it->second.startActive;
+		it->second.shouldBurst = false;
+	}
 }
 
 void ParticleEmitterComponent::Init(Tga::Engine& anEngine)
@@ -26,7 +37,11 @@ void ParticleEmitterComponent::Update(float aDeltaTime)
 	{
 		if (it->second.shouldBurst || it->second.shouldEmitContinuously)
 		{
-			CommonUtilities::Transform<float> transform = GetOwner()->GetTransform();
+			// TODO: Temporary code
+			CommonUtilities::Transform<float> transform = Essentials::globalCamera.get()->GetCamera().GetTransform();
+			transform.SetPosition(GetOwner()->GetTransform().GetPosition());
+			//CommonUtilities::Transform<float> transform = GetOwner()->GetTransform();
+			// End
 
 			if (it->second.shouldBurst)
 			{
@@ -50,29 +65,8 @@ void ParticleEmitterComponent::Update(float aDeltaTime)
 					Emit(it->first, transform);
 				}
 			}
-		}
+ 		}
 	}
-}
-
-void ParticleEmitterComponent::AddParticleWithShape(const ParticleType& aParticleType, const EmissionShape& aShape)
-{
-	// TODO: Temp code
-	if (mySettingsCollection.contains(aParticleType))
-	{
-		std::cout << "Tried adding duplicate particletype to entity" << std::endl;
-	}
-	// end
-
-	// TODO: Make these setting be read from a file 
-	mySettingsCollection[aParticleType]; // funky insertion?
-	mySettingsCollection[aParticleType].shape = aShape;
-	mySettingsCollection[aParticleType].shouldEmitContinuously = false;
-
-	if (aParticleType == ParticleType::Blood)
-	{
-		mySettingsCollection[aParticleType].startSpeedMax = 1000.f;
-	}
-	
 }
 
 void ParticleEmitterComponent::Burst(const ParticleType& aParticleType)
@@ -123,7 +117,8 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 		settings = {
 			.timeToLive = mySettingsCollection[aParticleType].lifeTimeMax,
 			.initalPosition = aTransform.GetPosition() + randomOffset,
-			.linearVelocity = forward * mySettingsCollection[aParticleType].startSpeedMax
+			.linearVelocity = forward * mySettingsCollection[aParticleType].startSpeedMax,
+			.rotation = aTransform.GetRotation()
 		};
 		break;
 	}
@@ -144,7 +139,8 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 		settings = {
 			.timeToLive = mySettingsCollection[aParticleType].lifeTimeMax,
 			.initalPosition = aTransform.GetPosition(),
-			.linearVelocity = dir * mySettingsCollection[aParticleType].startSpeedMax
+			.linearVelocity = dir * mySettingsCollection[aParticleType].startSpeedMax,
+			.rotation = aTransform.GetRotation()
 		};
 
 		break;
@@ -183,6 +179,7 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 		break;
 	}
 
+	//settings.size = mySettingsCollection[aParticleType].startSizeMax;
 	VfxService::SpawnParticle(aParticleType, settings);
 }
 

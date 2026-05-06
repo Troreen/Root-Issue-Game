@@ -17,6 +17,7 @@ UICanvas::UICanvas()
         auto& textService = Tga::Engine::GetInstance()->GetTextService();
         textService.Init();
     }
+
     ourUICanvases.push_back(this);
 
     myKeyboardSliderSpeed = 1.f;
@@ -269,7 +270,7 @@ void UICanvas::NavigationControl()
 			if (selectableProperties == nullptr)
 				continue;
 
-			if (Tga::CanvasObjectDefinition::PosInside(mousePos, myElements[i].definition->generalProperties, *myCanvas, Tga::Vector2i(Essentials::globalEngine->GetRenderSize().x, Essentials::globalEngine->GetRenderSize().y), selectableProperties))
+			if (CanvasObjectDefinition::PosInside(mousePos, myElements[i].definition->generalProperties, *myCanvas, Tga::Vector2i(Essentials::globalEngine->GetRenderSize().x, Essentials::globalEngine->GetRenderSize().y), selectableProperties))
 			{
 				if (myElements[i].definition->generalProperties.hide || (myElements[i].definition->generalProperties.groupIndex != -1 && myElements[myElements[i].definition->generalProperties.groupIndex].definition->generalProperties.hide))
 					continue;
@@ -317,7 +318,7 @@ void UICanvas::InteractionControl()
 
 	if ((Essentials::globalInputManager->PressingConfirm() ||
 		(Essentials::globalInputManager->IsKeyPressed(static_cast<int>(Keys::MOUSELBUTTON)
-		&& Tga::CanvasObjectDefinition::PosInside(myLastMousePosition, mySelectedElement->definition->generalProperties, *myCanvas, 
+		&& CanvasObjectDefinition::PosInside(myLastMousePosition, mySelectedElement->definition->generalProperties, *myCanvas, 
 			Tga::Vector2i(Essentials::globalEngine->GetRenderSize().x, Essentials::globalEngine->GetRenderSize().y), selectableProperties)))))
 	{
 		std::visit([&](auto& e) {
@@ -350,12 +351,22 @@ void UICanvas::InteractionControl()
 
 void UICanvas::RenderAll()
 {
+	if (UICanvas::ourUICamera == nullptr)
+	{
+		return;
+	}
+
 	auto& engine = *Tga::Engine::GetInstance();
 	auto& stack = engine.GetGraphicsEngine().GetGraphicsStateStack();
 
-	stack.Push();
+	Tga::Vector2ui res = Tga::Engine::GetInstance()->GetRenderSize();
+	UICanvas::ourUICamera->SetPerspectiveProjection(90.f, Tga::Vector2f((float)res.x, (float)res.y), 0.1f, 1000.f);
+	stack.SetCamera(*UICanvas::ourUICamera);
 
+	stack.Push();
 	stack.SetAllStatesToDefault();
+	stack.SetBlendState(Tga::BlendState::AlphaBlend);
+	stack.SetDepthStencilState(Tga::DepthStencilState::ReadOnlyLess);
 
 	for (int i = 0; i < ourUICanvases.size(); i++)
 	{
@@ -488,7 +499,7 @@ bool UICanvas::GetElementPressed(std::string aID)
 
 	if ((Essentials::globalInputManager->PressingConfirm()
 		|| (Essentials::globalInputManager->IsKeyPressed(static_cast<int>(Keys::MOUSELBUTTON)
-		&& Tga::CanvasObjectDefinition::PosInside(myLastMousePosition, mySelectedElement->definition->generalProperties, *myCanvas, 
+		&& CanvasObjectDefinition::PosInside(myLastMousePosition, mySelectedElement->definition->generalProperties, *myCanvas, 
 			Tga::Vector2i(Essentials::globalEngine->GetRenderSize().x, Essentials::globalEngine->GetRenderSize().y), selectableProperties))))
 		&& mySelectedElement == element)
 	{
@@ -535,7 +546,7 @@ void UICanvas::ResetIsFocused()
 	isFocused = false;
 }
 
-Tga::CanvasObjectDefinition* UICanvas::GetCanvas()
+CanvasObjectDefinition* UICanvas::GetCanvas()
 {
 	return myCanvas;
 }
@@ -545,7 +556,7 @@ void UICanvas::Render()
 	if (!myCanvas || myIsHidden)
 		return;
 
-	Tga::CanvasDrawParameters params = {
+	CanvasDrawParameters params = {
 		.useIdShader = false,
 		.showBounds = false,
 		.resolution = Tga::Vector2i(Essentials::globalEngine->GetRenderSize().x, Essentials::globalEngine->GetRenderSize().y)
@@ -553,7 +564,7 @@ void UICanvas::Render()
 
 	for (int i = 0; i < myRenderOrder.size(); i++)
 	{
-		Tga::CanvasObjectDefinition::DrawCanvasElement(
+		CanvasObjectDefinition::DrawCanvasElement(
 			*myCanvas,
 			*myElements[myRenderOrder[i]].definition,
 			params

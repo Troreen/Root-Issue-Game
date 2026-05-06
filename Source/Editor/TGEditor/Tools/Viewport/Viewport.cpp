@@ -315,21 +315,41 @@ void EditorViewport::Resize(const Vector2i& aSize)
 		resolution = Tga::Engine::GetInstance()->GetRenderSize();
 	}
 
+	myViewportSize = resolution;
+
 	Tga::Vector2f center = { (float)resolution.x * 0.5f, (float)resolution.y * 0.5f };
 
 	myRenderTarget = RenderTarget::Create(resolution, DXGI_FORMAT_R8G8B8A8_TYPELESS, DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, DXGI_FORMAT_R8G8B8A8_UNORM);
 	myIdTarget = RenderTarget::Create(resolution, DXGI_FORMAT_R32G32B32A32_UINT);
 	myDepth = DepthBuffer::Create(resolution);
 
-	myCamera.SetPerspectiveProjection(
-		90,
-		{
-			(float)resolution.x,
-			(float)resolution.y
-		},
-		0.1f,
-		50000.0f
-	);
+	if (myCameraInUIEditor)
+	{
+		myCamera.SetOrtographicProjection(
+			0.0f,
+			static_cast<float>(aSize.x),
+			0.0f,
+			static_cast<float>(aSize.y),
+			-1.0f,
+			1.0f
+		);
+
+		Matrix4x4f transform = Matrix4x4f::CreateIdentityMatrix();
+		transform.SetPosition({ 0.0f, 0.0f, 0.0f });
+		myCamera.SetTransform(transform);
+	}
+	else
+	{
+		myCamera.SetPerspectiveProjection(
+			90,
+			{
+				(float)resolution.x,
+				(float)resolution.y
+			},
+			0.1f,
+			50000.0f
+		);
+	}
 	//camera.GetTransform().SetPosition(Vector3f(0.0f, 0.0f, -550.0f));
 }
 
@@ -354,6 +374,11 @@ void EditorViewport::DrawAndUpdateViewportWindow(float aDeltaTime, ViewportInter
 		aViewportInterface.HandleDrop();
 
 		myGizmos.DrawGizmos(myCamera, aViewportInterface, GetViewportPos(), GetViewportSize());
+
+		if (myCameraInUIEditor)
+		{
+			return;
+		}
 
 		/////////////////////////
 		// Only check viewport input if mouse is over
