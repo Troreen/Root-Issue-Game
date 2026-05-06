@@ -6,7 +6,7 @@ This document explains the current combat-system slice from a gameplay/code poin
 
 The combat system owns temporary attack hitboxes and resolves combat overlaps separately from normal movement collision. Movement collision still handles blocking and trigger contacts. Combat overlap checks produce hit events and apply gameplay effects such as damage and knockback.
 
-The current implemented slice supports player melee attacks against objects on the `Enemy` layer.
+The current implemented slice supports player melee attacks against objects on the `Enemy` layer and enemy melee attacks against the player.
 
 ## Relevant Files
 
@@ -16,6 +16,7 @@ The current implemented slice supports player melee attacks against objects on t
 - `Source/Game/source/KnockbackComponent.h/.cpp`: Receives combat impulses and applies damped movement during normal object update.
 - `Source/Game/source/DamageableComponent.h/.cpp`: Receives combat damage and manages health, invulnerability, and damage/death callbacks.
 - `Source/Game/source/Player/PlayerState_Attack.cpp`: Creates the current player melee `AttackData` and starts attacks through `CombatService`.
+- `Source/Game/source/Enemy/EnemyComponents/EnemyAIComponent.h/.cpp`: Starts enemy melee `AttackData` while an enemy is in attack range of the player.
 - `Source/Game/source/StateStack/InGame.h/.cpp`: Owns `CombatSystem`, registers `CombatService`, runs combat update after runtime collision, and renders combat debug shapes.
 - `Source/Game/source/GameObjectFactoryRegistrations.cpp`: Gives combat-relevant enemy objects their collider, damage, and knockback components.
 - `Source/Game/source/DebugSettings.h` and `Source/Game/source/CameraSystem.cpp`: Expose the combat hitbox debug toggle in the debug UI.
@@ -260,6 +261,28 @@ attack.targetLayers.AddLayer(ObjectLayer::Enemy);
 ```
 
 `PlayerState_Attack` uses `myHasSpawnedHitbox` to avoid repeatedly spawning attacks every frame while the same swing is active. When the player chains into another swing, `myHasSpawnedHitbox` is reset so the next swing can spawn a fresh attack and hit the same target again.
+
+## Enemy Melee Attack
+
+`EnemyAIComponent` starts enemy melee attacks through `CombatService` while the enemy is in its attacking state and close enough to the player.
+
+Current v1 values:
+
+```cpp
+attack.owner = &enemy;
+attack.team = CombatTeam::Enemy;
+attack.type = AttackType::EnemyMelee;
+attack.collisionShape = CollisionShapeType::Sphere;
+attack.damage = enemyDamageable.GetDamagePerHit();
+attack.localCenterOffset = CommonUtilities::Vector3<float>(0.0f, 90.0f, 0.0f);
+attack.radius = 160.0f;
+attack.activeDurationSeconds = 0.16f;
+attack.knockbackStrength = 250.0f;
+attack.onlyHitForwardHemisphere = true;
+attack.targetLayers.AddLayer(ObjectLayer::Player);
+```
+
+The enemy attack cooldown is currently `1.0` second. Enemy damage is integer-based and comes from the enemy object's `damage` data property via `DamageableComponent::GetDamagePerHit()`.
 
 ## Enemy Setup
 

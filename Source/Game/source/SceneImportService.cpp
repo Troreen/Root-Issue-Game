@@ -808,7 +808,6 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
         }
         catch (const std::exception& exception)
         {
-            UNREFERENCED_PARAMETER(exception);
             ERROR_PRINT(
                 "Failed to build '%s' (typeId: %s): %s",
                 sceneObject.name.c_str(),

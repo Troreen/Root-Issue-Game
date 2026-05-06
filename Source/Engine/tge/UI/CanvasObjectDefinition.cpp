@@ -17,9 +17,9 @@
 using namespace nlohmann;
 using namespace Tga;
 
-std::unordered_map<Tga::StringId, Tga::Texture*> CanvasObjectDefinition::myTextureCache;
-std::vector<QueuedSprite> CanvasObjectDefinition::ourSpriteQueue;
-std::vector<Tga::Text> CanvasObjectDefinition::ourTextQueue;
+std::unordered_map<Tga::StringId, Tga::Texture*> Tga::CanvasObjectDefinition::myTextureCache;
+std::vector<QueuedSprite> Tga::CanvasObjectDefinition::ourSpriteQueue;
+std::vector<Tga::Text> Tga::CanvasObjectDefinition::ourTextQueue;
 
 void CanvasObjectDefinition::Save()
 {
@@ -115,7 +115,7 @@ void CanvasObjectDefinition::Load(const char* aPath)
         }
     }
 
-    CanvasDrawParameters params = {
+    Tga::CanvasDrawParameters params = {
         .useIdShader = false,
         .showBounds = false,
         .resolution = Tga::Vector2i(1920, 1080)
@@ -127,9 +127,11 @@ void CanvasObjectDefinition::Load(const char* aPath)
     }
 }
 
-void CanvasObjectDefinition::DrawQueued()
+void Tga::CanvasObjectDefinition::DrawQueued(RenderTarget* aRenderTarget)
 {
     Tga::Engine* engine = Tga::Engine::GetInstance();
+
+    aRenderTarget->SetAsActiveTarget(nullptr);
 
     for (const QueuedSprite& sprite : ourSpriteQueue)
     {
@@ -141,11 +143,13 @@ void CanvasObjectDefinition::DrawQueued()
         text.Render();
     }
 
+    aRenderTarget->SetAsActiveTarget(DX11::DepthBuffer);
+
     ourSpriteQueue.clear();
     ourTextQueue.clear();
 }
 
-void CanvasObjectDefinition::AddUIElement(UIElement& aUIElement)
+void Tga::CanvasObjectDefinition::AddUIElement(UIElement& aUIElement)
 {
     ApplyDefaults(aUIElement);
     myUIElements.push_back(aUIElement);
@@ -155,7 +159,7 @@ void CanvasObjectDefinition::AddUIElement(UIElement& aUIElement)
     myUIElements[lastIndex].generalProperties.hiercharyDisplayOrder = static_cast<int>(myUIElements.size()) - 1;
 }
 
-void CanvasObjectDefinition::RemoveUIElement(int& aIndex)
+void Tga::CanvasObjectDefinition::RemoveUIElement(int& aIndex)
 {
     if (myUIElements[aIndex].elementType == UIElementType::ElementGroup)
     {
@@ -169,17 +173,17 @@ void CanvasObjectDefinition::RemoveUIElement(int& aIndex)
     myUIElements.erase(myUIElements.begin() + aIndex);
 }
 
-std::vector<UIElement>& CanvasObjectDefinition::GetUIElements()
+std::vector<UIElement>& Tga::CanvasObjectDefinition::GetUIElements()
 {
     return myUIElements;
 }
 
-const std::vector<UIElement>& CanvasObjectDefinition::GetUIElements() const
+const std::vector<UIElement>& Tga::CanvasObjectDefinition::GetUIElements() const
 {
     return myUIElements;
 }
 
-void CanvasObjectDefinition::RenameUIElement(const int aUIElementOfIndex)
+void Tga::CanvasObjectDefinition::RenameUIElement(const int aUIElementOfIndex)
 {
     UIElement* uiElement = &myUIElements[aUIElementOfIndex];
 
@@ -244,22 +248,22 @@ void CanvasObjectDefinition::RenameUIElement(const int aUIElementOfIndex)
     }
 }
 
-std::vector<int>& CanvasObjectDefinition::GetRenderOrder()
+std::vector<int>& Tga::CanvasObjectDefinition::GetRenderOrder()
 {
     return myRenderOrder;
 }
 
-const std::vector<int>& CanvasObjectDefinition::GetRenderOrder() const
+const std::vector<int>& Tga::CanvasObjectDefinition::GetRenderOrder() const
 {
     return myRenderOrder;
 }
 
-void CanvasObjectDefinition::SetRenderOrder(std::vector<int>& renderOrder)
+void Tga::CanvasObjectDefinition::SetRenderOrder(std::vector<int>& renderOrder)
 {
     myRenderOrder = renderOrder;
 }
 
-void CanvasObjectDefinition::ApplyDefaults(UIElement& element)
+void Tga::CanvasObjectDefinition::ApplyDefaults(UIElement& element)
 {
     std::visit([&](auto& e)
         {
@@ -307,32 +311,32 @@ void CanvasObjectDefinition::ApplyDefaults(UIElement& element)
         }, element.uiElementProperties);
 }
 
-const Tga::Vector2i& CanvasObjectDefinition::GetReferenceWindowResolution() const
+const Tga::Vector2i& Tga::CanvasObjectDefinition::GetReferenceWindowResolution() const
 {
     return myReferenceWindowResolution;
 }
 
-Tga::Vector2i& CanvasObjectDefinition::GetReferenceWindowResolution()
+Tga::Vector2i& Tga::CanvasObjectDefinition::GetReferenceWindowResolution()
 {
     return myReferenceWindowResolution;
 }
 
-void CanvasObjectDefinition::SetReferenceWindowResolution(const Tga::Vector2i& aReferenceWindowResolution)
+void Tga::CanvasObjectDefinition::SetReferenceWindowResolution(const Tga::Vector2i& aReferenceWindowResolution)
 {
     myReferenceWindowResolution = aReferenceWindowResolution;
 }
 
-const bool& CanvasObjectDefinition::GetShowBounds() const
+const bool& Tga::CanvasObjectDefinition::GetShowBounds() const
 {
     return myShowBounds;
 }
 
-bool& CanvasObjectDefinition::GetShowBounds()
+bool& Tga::CanvasObjectDefinition::GetShowBounds()
 {
     return myShowBounds;
 }
 
-void CanvasObjectDefinition::SetShowBounds(const bool someShowBounds)
+void Tga::CanvasObjectDefinition::SetShowBounds(const bool someShowBounds)
 {
     myShowBounds = someShowBounds;
 }
@@ -358,20 +362,16 @@ bool CanvasObjectDefinition::DrawCanvasElement(const CanvasObjectDefinition& can
             else if constexpr (std::is_same_v<T, UIButton>)
             {
                 DrawElementBounds(uiElement.generalProperties, canvas, drawParameters, &element.selectable);
-                DrawCanvasImage(element.buttonImage, uiElement.generalProperties, canvas, drawParameters);
-                uiElement.generalProperties.renderOrder -= 1;
                 DrawCanvasText(element.buttonText, uiElement.generalProperties, canvas, drawParameters);
-                uiElement.generalProperties.renderOrder += 1;
+                DrawCanvasImage(element.buttonImage, uiElement.generalProperties, canvas, drawParameters);
                 return true;
             }
             else if constexpr (std::is_same_v<T, UIToggle>)
             {
                 DrawElementBounds(uiElement.generalProperties, canvas, drawParameters, &element.selectable);
-                DrawCanvasImage(element.backgroundImage, uiElement.generalProperties, canvas, drawParameters);
-                uiElement.generalProperties.renderOrder -= 1;
                 if (element.isOn)
                     DrawCanvasImage(element.checkmarkImage, uiElement.generalProperties, canvas, drawParameters, 1);
-                uiElement.generalProperties.renderOrder += 1;
+                DrawCanvasImage(element.backgroundImage, uiElement.generalProperties, canvas, drawParameters);
                 return true;
             }
             else if constexpr (std::is_same_v<T, UISlider>)
@@ -487,7 +487,6 @@ bool CanvasObjectDefinition::DrawCanvasImage(
     image.instance.mySize = properties.size * uiScale;
     image.instance.myPosition = (properties.pos * uiScale) + anchorOffset;
     image.instance.myColor = image.tint;
-    image.instance.myRenderOrder = -properties.renderOrder;
 
     QueueSprite(image.shared, image.instance);
 
@@ -587,7 +586,7 @@ bool CanvasObjectDefinition::DrawCanvasText(
 
 bool CanvasObjectDefinition::DrawCanvasSlider(
     UISlider& slider,
-    GeneralUIProperties& props,
+    const GeneralUIProperties& props,
     const CanvasObjectDefinition& canvas,
     CanvasDrawParameters& drawParameters)
 {
@@ -600,12 +599,9 @@ bool CanvasObjectDefinition::DrawCanvasSlider(
     float normalized = (slider.currentValue - slider.minValue) / (slider.maxValue - slider.minValue);
     normalized = std::clamp(normalized, 0.0f, 1.0f);
 
-    DrawCanvasImage(slider.backgroundImage, props, canvas, drawParameters);
-    props.renderOrder -= 1;
-    DrawCanvasImageCropped(slider.fillImage, props, canvas, drawParameters, normalized);
-    props.renderOrder -= 1;
     DrawSliderHandle(slider, props, canvas, drawParameters, normalized);
-    props.renderOrder += 2;
+    DrawCanvasImageCropped(slider.fillImage, props, canvas, drawParameters, normalized);
+    DrawCanvasImage(slider.backgroundImage, props, canvas, drawParameters);
 
     return true;
 }
@@ -651,9 +647,9 @@ bool CanvasObjectDefinition::DrawCanvasImageCropped(
     image.instance.myPosition = { newCenterX, basePosition.y };
     image.instance.myTextureRect = { 0.0f, 0.0f, normalizedWidth, 1.0f };
     image.instance.myColor = image.tint;
-    image.instance.myRenderOrder = -props.renderOrder;
 
-    QueueSprite(image.shared, image.instance);
+    const auto& engine = Engine::GetInstance();
+    engine->GetGraphicsEngine().GetSpriteDrawer().Draw(image.shared, image.instance);
 
     return true;
 }
@@ -709,12 +705,12 @@ void CanvasObjectDefinition::DrawSliderHandle(
 
     slider.handleBarImage.instance.myPosition = { handleX, basePosition.y };
     slider.handleBarImage.instance.myColor = slider.handleBarImage.tint;
-    slider.handleBarImage.instance.myRenderOrder = -props.renderOrder;
 
-    QueueSprite(slider.handleBarImage.shared, slider.handleBarImage.instance);
+    const auto& engine = Engine::GetInstance();
+    engine->GetGraphicsEngine().GetSpriteDrawer().Draw(slider.handleBarImage.shared, slider.handleBarImage.instance);
 }
 
-bool CanvasObjectDefinition::PosInside(const Tga::Vector2f& point, const GeneralUIProperties& props, const CanvasObjectDefinition& canvas, const Tga::Vector2i& resolution, const SelectableUIProperties* selectableProps)
+bool Tga::CanvasObjectDefinition::PosInside(const Tga::Vector2f& point, const GeneralUIProperties& props, const CanvasObjectDefinition& canvas, const Tga::Vector2i& resolution, const SelectableUIProperties* selectableProps)
 {
     const auto reference = canvas.GetReferenceWindowResolution();
 

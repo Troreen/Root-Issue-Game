@@ -9,7 +9,6 @@
 #include <vector>
 
 #include <ParticlePool.h>
-#include "ParticleEmitterComponent.h"
 
 namespace Tga
 {
@@ -57,7 +56,6 @@ public:
     void ClearActiveEffects();
 
     bool SpawnPoolParticle(const ParticleType& aParticleType, const ParticleSettings& someSettings);
-    std::unordered_map<ParticleType, ParticleEmitterSettings>* GetEmissionSettingsForObject(std::string anObjectName);
 
     int GetActiveCount() const;
     int GetCapacity() const;
@@ -105,12 +103,10 @@ private:
 
     bool LoadEffectDefinitions();
     bool LoadDefinitionFromFile(const std::string& aPath);
-    bool LoadParticleDefinitions(const std::string& aPath);
     float CalculateDurationSeconds(const EffectDefinition& aDefinition) const;
 
     std::unordered_map<std::string, EffectDefinition> myDefinitions;
     std::unordered_map<ParticleType, ParticlePool> myParticlePools;
-    std::unordered_map<std::string, std::unordered_map<ParticleType, ParticleEmitterSettings>> myEmitterSettings;
     std::vector<ActiveEffect> myActiveEffects;
 
     static constexpr int kMaxActiveEffects = 512;

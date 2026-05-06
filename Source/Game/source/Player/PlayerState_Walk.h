@@ -8,7 +8,7 @@ public:
 	PlayerState_Walk();
 	~PlayerState_Walk() = default;
 
-	void Update(float aDeltaTime, PlayerControllerComponent& aController) override;
+	void Update(float aDeltaTime, PlayerControllerComponent& aPlayerController) override;
 private:
 
 	float myWalkSpeed;

@@ -5,7 +5,7 @@ class PlayerState_Shoot : public PlayerState
 {
 public:
 
-	void Update(float aDeltaTime, PlayerControllerComponent& aController) override;
+	void Update(float aDeltaTime, PlayerControllerComponent& aPlayerController) override;
 	void ResetValues() override;
 
 private:

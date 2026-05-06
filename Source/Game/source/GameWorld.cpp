@@ -32,7 +32,6 @@
 #include "MainMenu.h"
 #include "Options.h"
 #include "SplashScreen.h"
-#include <tge/settings/settings.h>
 
 
 namespace
@@ -212,7 +211,6 @@ GameWorld::GameWorld()
 	myEnablePointLights = true;
 	myEnableDirectionalLight = true;
 	myEnableAmbientLight = true;
-	myIsFirstFrame = true;
 }
 
 GameWorld::~GameWorld()
@@ -229,12 +227,9 @@ void GameWorld::Init(const char* argv[])
 {
 	myWorldStateStack;
 	myWorldStateStack.PushStack(std::vector<State*>());
-	myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
+	myWorldStateStack.GetCurrentStateStack()->push_back(new SplashScreen());
 
 	myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
-
-	std::string rootPath = Tga::Settings::GameAssetRoot().string();
-	Essentials::globalCanvasManager->Init(rootPath);
 
 	Essentials::globalAudioManager->Init();
 #ifdef _DEBUG
@@ -259,10 +254,6 @@ void GameWorld::Update(float deltaTime, const char* argv[])
 		myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
 		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 		break;
-	case eState::eSplashScreen:
-		myWorldStateStack.GetCurrentStateStack()->push_back(new SplashScreen());
-		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
-		break;
 	case eState::ePopState:
 		myWorldStateStack.PopState();
 		myWorldStateStack.GetCurrentStateStack()->back()->SetCamera(myCameraSystem);
@@ -272,13 +263,14 @@ void GameWorld::Update(float deltaTime, const char* argv[])
 		break;
 	default:
 		return;
+
+
 	}
 
 	if (myInputHandler.IsKeyPressed(Keys::F3))
 	{
 		DumpSceneVisibilitySnapshot(myGameObjects, myCameraSystem);
 	}
-	UICanvas::UpdateAll();
 
 	myCameraSystem.UpdateDebugCamera(deltaTime, myInputHandler);
 	myCameraSystem.Update(deltaTime);
@@ -429,9 +421,6 @@ void GameWorld::RegisterCommands(const char* argv[])
 				myWorldStateStack.GetCurrentStateStack()->push_back(new MainMenu());
 				myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 				break;
-			case 52:
-				myWorldStateStack.GetCurrentStateStack()->push_back(new SplashScreen());
-				myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 				// END TEMP STATES
 			default:
 				break;
@@ -474,8 +463,8 @@ void GameWorld::RegisterCommands(const char* argv[])
 
 			std::string fullname = "Levels/" + name + ".tgs";
 			myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
-			argv[1] = fullname.c_str();
 			myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
+			StartSceneLoadAsync(fullname, true);
 
 			return;
 		}
@@ -532,20 +521,7 @@ void GameWorld::Render()
 	auto Console = Essentials::GetEssentials().globalConsoleManager.get();
 	Console->Draw();
 #endif
-
-
 	myWorldStateStack.GetCurrentState()->Render();
-
-	if (!myIsFirstFrame)
-	{
-		UICanvas::RenderAll();
-	}
-
-	if (myIsFirstFrame)
-	{
-		myIsFirstFrame = false;
-	}
-
 }
 
 void GameWorld::RenderLoadingScreen()

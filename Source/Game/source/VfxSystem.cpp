@@ -52,10 +52,8 @@ namespace
 
 	VfxSystem::ParticleMotionMode ParseParticleMotionMode(const std::string& aMode)
 	{
-
 		std::string lowered = aMode;
 		std::transform(lowered.begin(), lowered.end(), lowered.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-
 		if (lowered == "falling")
 		{
 			return VfxSystem::ParticleMotionMode::Falling;
@@ -67,43 +65,6 @@ namespace
 		}
 
 		return VfxSystem::ParticleMotionMode::Static;
-	}
-
-	EmissionShape ParseEmissionShape(const std::string& aString)
-	{
-		std::string lowered = aString;
-		std::transform(lowered.begin(), lowered.end(), lowered.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-
-		if (lowered == "cone") return EmissionShape::Cone;
-		if (lowered == "sphere") return EmissionShape::Sphere;
-		if (lowered == "box") return EmissionShape::Box;
-
-		std::cout << "Parse emissionShape failed parse shape, returned COUNT as default" << std::endl;
-		return EmissionShape::COUNT;
-	}
-
-	Tga::BlendState ParseBlendState(const std::string& aString)
-	{
-		std::string lowered = aString;
-		std::transform(lowered.begin(), lowered.end(), lowered.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-
-		if (lowered == "alpha") return Tga::BlendState::AlphaBlend;
-		if (lowered == "additive") return Tga::BlendState::AdditiveBlend;
-
-		std::cout << "Failed to parse blendstate for particle pool" << std::endl;
-		return Tga::BlendState::AlphaBlend;
-	}
-
-	ParticleType ParseParticleType(const std::string& aString)
-	{
-		std::string lowered = aString;
-		std::transform(lowered.begin(), lowered.end(), lowered.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-
-		if (lowered == "blood") return ParticleType::Blood;
-		if (lowered == "test") return ParticleType::Test;
-
-		assert(false && "Unknown particle type");
-		return ParticleType::Test;
 	}
 
 	CommonUtilities::Vector2<float> ParseVector2(const Json& aJsonValue, const CommonUtilities::Vector2<float>& aFallback)
@@ -237,26 +198,26 @@ VfxSystem::VfxSystem()
 
 bool VfxSystem::Init()
 {
-	//// TODO: Temporary code
-	//{
-	//	auto& pool = myParticlePools[ParticleType::Test];
-	//	pool.Init(10000);
-	//	auto it = myParticlePools.find(ParticleType::Test);
-	//	if (it != myParticlePools.end())
-	//	{
-	//		std::cout << "Added particlepool of type TEST to VfxSystem" << std::endl;
-	//	}
-	//}
+	// TODO: Temporary code
+	{
+		auto& pool = myParticlePools[ParticleType::Test];
+		pool.Init(10000);
+		auto it = myParticlePools.find(ParticleType::Test);
+		if (it != myParticlePools.end())
+		{
+			std::cout << "Added particlepool of type TEST to VfxSystem" << std::endl;
+		}
+	}
 
-	//{
-	//	auto& pool = myParticlePools[ParticleType::Blood];
-	//	pool.Init(300);
-	//	auto it = myParticlePools.find(ParticleType::Blood);
-	//	if (it != myParticlePools.end())
-	//	{
-	//		std::cout << "Added particlepool of type blood to VfxSystem" << std::endl;
-	//	}
-	//}
+	{
+		auto& pool = myParticlePools[ParticleType::Blood];
+		pool.Init(300);
+		auto it = myParticlePools.find(ParticleType::Blood);
+		if (it != myParticlePools.end())
+		{
+			std::cout << "Added particlepool of type blood to VfxSystem" << std::endl;
+		}
+	}
 
 	// End of temp code
 
@@ -289,20 +250,10 @@ bool VfxSystem::SpawnPoolParticle(const ParticleType& aParticleType, const Parti
 
 }
 
-std::unordered_map<ParticleType, ParticleEmitterSettings>* VfxSystem::GetEmissionSettingsForObject(std::string anObjectName)
-{
-	anObjectName.erase(remove_if(anObjectName.begin(), anObjectName.end(), [](char c)
-		{
-			return !isalpha(c);
-		}), anObjectName.end());
-
-	assert(myEmitterSettings.contains(anObjectName));
-	return &myEmitterSettings[anObjectName];
-}
-
 void VfxSystem::Update(const float aDeltaTime)
 {
 
+	//TODO: Temporary code
 	for (auto& [type, pool] : myParticlePools)
 	{
 		pool.Update(aDeltaTime);
@@ -720,8 +671,6 @@ bool VfxSystem::LoadEffectDefinitions()
 {
 	namespace fs = std::filesystem;
 
-	myEmitterSettings.clear();
-	myParticlePools.clear();
 	myDefinitions.clear();
 
 	const fs::path effectsRoot = Tga::Settings::GameAssetRoot() / "Vfx";
@@ -745,16 +694,7 @@ bool VfxSystem::LoadEffectDefinitions()
 			continue;
 		}
 
-		const std::string filename = entry.path().stem().string();
-
-		if (filename == "VFX_emitter_settings")
-		{
-			if (LoadParticleDefinitions(entry.path().string()))
-			{
-				loadedCount++;
-			}
-		}
-		else if (LoadDefinitionFromFile(entry.path().string()))
+		if (LoadDefinitionFromFile(entry.path().string()))
 		{
 			++loadedCount;
 		}
@@ -818,119 +758,6 @@ bool VfxSystem::LoadDefinitionFromFile(const std::string& aPath)
 	}
 
 	myDefinitions[definition.id] = std::move(definition);
-	return true;
-}
-
-bool VfxSystem::LoadParticleDefinitions(const std::string& aPath)
-{
-	std::ifstream input(aPath);
-	if (!input.is_open())
-	{
-		return false;
-	}
-
-	Json json;
-	try
-	{
-		input >> json;
-	}
-	catch (const std::exception&)
-	{
-		std::cout << "[VFX] Failed to parse " << aPath << "\n";
-		return false;
-	}
-
-	if (json.contains("pools"))
-	{
-		for (const auto& poolJson : json["pools"])
-		{
-			std::string title = poolJson.value("title", "");
-			size_t size = poolJson.value("size", 0);
-			std::string spriteName = poolJson.value("spriteName", "");
-			std::string blendStateString = poolJson.value("blendState", "");
-
-			if (title.empty() || size == 0)
-				continue;
-
-			ParticleType type = ParseParticleType(title);
-
-			auto& pool = myParticlePools[type];
-
-			Tga::BlendState blendState = ParseBlendState(blendStateString);
-
-			// Load texture
-			std::string path = "Assets/Art/VFX/2D/" + spriteName + ".dds";
-			auto* texture = Tga::Engine::GetInstance()
-				->GetTextureManager()
-				.GetTexture(path.c_str());
-
-			if (!texture)
-			{
-				std::cout << "Failed to load texture: " << path << "\n";
-				continue;
-			}
-
-			pool.Init(size, *texture, blendState);
-		}
-	}
-	else
-	{
-		std::cout << "[VFX] Particle effects definiton at: " << aPath << " contains no pools" << std::endl;
-	}
-
-	if (json.contains("gameObjects"))
-	{
-		for (const auto& objJson : json["gameObjects"])
-		{
-			std::string objectName = objJson.value("editorname", "");
-			if (objectName.empty())
-				continue;
-
-			auto& emitterMap = myEmitterSettings[objectName];
-
-			for (const auto& emitterJson : objJson["emitters"])
-			{
-				std::string typeStr = emitterJson.value("particleType", "");
-				ParticleType type = ParseParticleType(typeStr);
-
-				ParticleEmitterSettings settings;
-
-				settings.shape = ParseEmissionShape(
-					emitterJson.value("emissionShape", ""));
-
-				settings.shouldBillboard = emitterJson.value("shouldBillboard", true);
-
-				settings.emissionRate = emitterJson.value("emissionRate", 0.f);
-
-				settings.lifeTimeMin = emitterJson.value("lifeTimeMin", 0.f);
-				settings.lifeTimeMax = emitterJson.value("lifeTimeMax", 1.f);
-
-				settings.startSpeedMin = emitterJson.value("startSpeedMin", 0.f);
-				settings.startSpeedMax = emitterJson.value("startSpeedMax", 0.f);
-
-				settings.coneAngle = emitterJson.value("coneAngle", 45.f);
-
-				settings.startSizeMin = emitterJson.value("startSizeMin", 1.f);
-				settings.startSizeMax = emitterJson.value("startSizeMax", 1.f);
-				settings.endSizeMin = emitterJson.value("endSizeMin", 1.f);
-				settings.endSizeMax = emitterJson.value("endSizeMax", 1.f);
-
-				settings.burstCount = emitterJson.value("burstCount", 0.f);
-
-				settings.startActive = emitterJson.value("shouldStartActive", false);
-
-				settings.shouldBurst = settings.burstCount > 0;
-				settings.shouldEmitContinuously = settings.emissionRate > 0;
-
-				emitterMap[type] = settings;
-
-				std::cout << "[VFX] Loaded emitter for object: " << objectName 
-					<< " with shape: " << emitterJson.value("emissionShape", "") << std::endl;
-			}
-		}
-	}
-
-
 	return true;
 }
 

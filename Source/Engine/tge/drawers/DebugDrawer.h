@@ -38,9 +38,9 @@ namespace Tga
 		void DrawLine(Vector2f aFrom, Vector2f aTo, Color aColor = Color(1, 1, 1, 1));
 		void DrawArrow(Vector2f aFrom, Vector2f aTo, Color aColor = Color(1, 1, 1, 1), float aArrowHeadSize = 1.0f);
 		void DrawCircle(Vector2f aPos, float aRadius, Color aColor = Color(1, 1, 1, 1));
-		void DrawPendingDebugLines();
 
 	private:
+		void DrawPendingDebugLines();
 		void ShowErrorImage();
 		double CalcAverageTick(int newtick);
 

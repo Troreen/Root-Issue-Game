@@ -131,11 +131,6 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 	// clearing out caches every frame to support updates to assets while the editor is running
 	myCache.ClearCache();
 
-	auto& engine = *Tga::Engine::GetInstance();
-	DX11::BackBuffer->SetAsActiveTarget(DX11::DepthBuffer);
-	auto& graphicsStateStack = engine.GetGraphicsEngine().GetGraphicsStateStack();
-	graphicsStateStack.Push();
-
 	const Camera& renderCamera = myViewport.GetCamera();
 	Frustum frustum = CalculateFrustum(renderCamera);
 
@@ -178,7 +173,7 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 				.resolution = myViewport.GetViewportSize(),
 			};
 
-			for (int idx : renderList)
+			for (int idx : renderList) 
 			{
 				UIElement& prop = elements[idx];
 
@@ -210,15 +205,7 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 			}
 		}
 
-		graphicsStateStack.SetSamplerState(SamplerFilter::Bilinear, SamplerAddressMode::Wrap);
-		graphicsStateStack.SetBlendState(BlendState::AlphaBlend);
-		graphicsStateStack.SetDepthStencilState(DepthStencilState::ReadOnlyLess);
-
-		CanvasObjectDefinition::DrawQueued();
-		Tga::Engine::GetInstance()->GetDebugDrawer().DrawPendingDebugLines();
 		myViewport.EndDraw();
-
-		graphicsStateStack.Pop();
 	}
 
 	char buffer[512];
@@ -310,7 +297,7 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 		ImGui::SetNextWindowSize(ImVec2(static_cast<float>(newViewportSize.x), static_cast<float>(newViewportSize.y + window->TitleBarHeight)), ImGuiCond_Always);
 		newViewportSize = { 0,0 };
 	}
-
+	
 	ImGui::Begin(myPanelWindowNames[(size_t)Panels::Viewport].c_str());
 	ImGui::PopStyleVar(1);
 
@@ -348,29 +335,29 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 
 		switch (static_cast<UIElementType>(selectedUIType))
 		{
-		case UIElementType::Image:
-			newElement.uiElementProperties = UIImage{};
-			break;
+			case UIElementType::Image:
+				newElement.uiElementProperties = UIImage{};
+				break;
 
-		case UIElementType::Text:
-			newElement.uiElementProperties = UIText{};
-			break;
+			case UIElementType::Text:
+				newElement.uiElementProperties = UIText{};
+				break;
 
-		case UIElementType::Button:
-			newElement.uiElementProperties = UIButton{};
-			break;
+			case UIElementType::Button:
+				newElement.uiElementProperties = UIButton{};
+				break;
 
-		case UIElementType::Toggle:
-			newElement.uiElementProperties = UIToggle{};
-			break;
+			case UIElementType::Toggle:
+				newElement.uiElementProperties = UIToggle{};
+				break;
 
-		case UIElementType::Slider:
-			newElement.uiElementProperties = UISlider{};
-			break;
+			case UIElementType::Slider:
+				newElement.uiElementProperties = UISlider{};
+				break;
 
-		case UIElementType::ElementGroup:
-			newElement.uiElementProperties = UIElementGroup{};
-			break;
+			case UIElementType::ElementGroup:
+				newElement.uiElementProperties = UIElementGroup{};
+				break;
 		}
 
 		myObjectDefinition->AddUIElement(newElement);
@@ -416,7 +403,7 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 		[&](int a, int b)
 		{
 			return uiElements[a].generalProperties.hiercharyDisplayOrder <
-				uiElements[b].generalProperties.hiercharyDisplayOrder;
+				   uiElements[b].generalProperties.hiercharyDisplayOrder;
 		});
 
 	std::unordered_map<int, std::vector<int>> groupChildren;
@@ -456,7 +443,7 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 			[&](int a, int b)
 			{
 				return uiElements[a].generalProperties.hiercharyDisplayOrder <
-					uiElements[b].generalProperties.hiercharyDisplayOrder;
+					   uiElements[b].generalProperties.hiercharyDisplayOrder;
 			});
 
 		auto it = std::find(siblings.begin(), siblings.end(), selected);
@@ -496,7 +483,7 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 			[&](int a, int b)
 			{
 				return uiElements[a].generalProperties.hiercharyDisplayOrder <
-					uiElements[b].generalProperties.hiercharyDisplayOrder;
+					   uiElements[b].generalProperties.hiercharyDisplayOrder;
 			});
 
 		auto it = std::find(siblings.begin(), siblings.end(), selected);
@@ -565,13 +552,13 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 				}
 
 				ImGui::TreePop();
-			}
+			}	
 		}
 		else
 		{
 			if (ImGui::Selectable(
-				element.generalProperties.name,
-				mySelectedUIElement == index))
+					element.generalProperties.name,
+					mySelectedUIElement == index))
 			{
 				mySelectedUIElement = index;
 			}
@@ -580,7 +567,7 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 
 	ImGui::End();
 
-	if (Editor::GetEditor()->GetEditorConfiguration().enableVisualScripts)
+	/*if (Editor::GetEditor()->GetEditorConfiguration().enableVisualScripts)
 	{
 		ImGui::SetNextWindowClass(&myDocumentWindowClass);
 
@@ -598,7 +585,7 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 		}
 
 		ImGui::End();
-	}
+	}*/
 
 	ImGui::SetNextWindowClass(&myDocumentWindowClass);
 
@@ -609,10 +596,10 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 	{
 		UIElement& element = uiElements[mySelectedUIElement];
 
-		DrawUIElementGeneralProperties(element);
+		DrawUIElementGeneralProperties(element);  
 		if (element.elementType != UIElementType::ElementGroup)
 		{
-			DrawUIElementProperties(element);
+			DrawUIElementProperties(element);        
 		}
 	}
 
@@ -629,8 +616,7 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 	myObjectDefinition->SetReferenceWindowResolution({ referenceWindowSize[0], referenceWindowSize[1] });
 
 	Tga::Vector2i referenceWindowSizeVectorCopy = referenceWindowSizeVector;
-	while (referenceWindowSizeVectorCopy.y != 0)
-	{
+	while (referenceWindowSizeVectorCopy.y != 0) {
 		int r = referenceWindowSizeVectorCopy.x % referenceWindowSizeVectorCopy.y;
 		referenceWindowSizeVectorCopy.x = referenceWindowSizeVectorCopy.y;
 		referenceWindowSizeVectorCopy.y = r;
@@ -699,30 +685,30 @@ void CanvasDefinitionDocument::OnAction(CommandManager::Action action)
 
 void Tga::CanvasDefinitionDocument::DrawUIElementGeneralProperties(UIElement& element)
 {
-	DrawGeneralProperties(element.generalProperties, "General");
+    DrawGeneralProperties(element.generalProperties, "General");
 }
 
 void Tga::CanvasDefinitionDocument::DrawGeneralProperties(GeneralUIProperties& props, const char* label)
 {
-	if (!ImGui::CollapsingHeader(label, ImGuiTreeNodeFlags_DefaultOpen))
-		return;
+    if (!ImGui::CollapsingHeader(label, ImGuiTreeNodeFlags_DefaultOpen))
+        return;
 
 	bool hide = props.hide;
-	if (ImGui::Checkbox("Hide", &hide))
-	{
+    if (ImGui::Checkbox("Hide", &hide))
+    {
 		props.hide = hide;
-	}
+    }
 
-	char nameBuffer[128];
-	std::snprintf(nameBuffer, sizeof(nameBuffer), "%s", props.name);
-	if (ImGui::InputText("Name", nameBuffer, sizeof(nameBuffer)))
-	{
+    char nameBuffer[128];
+    std::snprintf(nameBuffer, sizeof(nameBuffer), "%s", props.name);
+    if (ImGui::InputText("Name", nameBuffer, sizeof(nameBuffer)))
+    {
 		if (strcmp(nameBuffer, props.name) != 0)
 		{
 			snprintf(props.name, 128, nameBuffer);
 			myObjectDefinition->RenameUIElement(mySelectedUIElement);
 		}
-	}
+    }
 
 	std::vector<UIElement>& uiElements = myObjectDefinition->GetUIElements();
 	if (uiElements[mySelectedUIElement].elementType != UIElementType::ElementGroup)
@@ -786,7 +772,7 @@ void Tga::CanvasDefinitionDocument::DrawGeneralProperties(GeneralUIProperties& p
 			props.size = { size[0], size[1] };
 		}
 
-
+		
 		bool scaleUniformly = props.scaleUniformly;
 		if (ImGui::Checkbox("Scale Uniformly", &scaleUniformly))
 		{
@@ -800,64 +786,64 @@ void Tga::CanvasDefinitionDocument::DrawGeneralProperties(GeneralUIProperties& p
 		}
 	}
 
-	int renderOrder = -props.renderOrder;
-	if (ImGui::InputInt("Render Order", &renderOrder))
-	{
-		props.renderOrder = -renderOrder;
-	}
+    int renderOrder = props.renderOrder;
+    if (ImGui::InputInt("Render Order", &renderOrder))
+    {
+        props.renderOrder = renderOrder;
+    }
 }
 
 void Tga::CanvasDefinitionDocument::DrawSelectableProperties(SelectableUIProperties& selectableProps, GeneralUIProperties& props)
 {
-	if (!ImGui::CollapsingHeader("Navigation", ImGuiTreeNodeFlags_DefaultOpen))
-		return;
+    if (!ImGui::CollapsingHeader("Navigation", ImGuiTreeNodeFlags_DefaultOpen))
+        return;
 
 	std::vector<UIElement>& elements = myObjectDefinition->GetUIElements();
 
 	auto DrawNavigationCombo = [&](const char* comboLabel, int directionIndex)
+	{
+		int& selectedIndex = selectableProps.navigation[directionIndex];
+
+		const char* previewName = "None";
+
+		if (selectedIndex >= 0 &&
+			selectedIndex < static_cast<int>(elements.size()))
 		{
-			int& selectedIndex = selectableProps.navigation[directionIndex];
+			previewName = elements[selectedIndex].generalProperties.name;
+		}
 
-			const char* previewName = "None";
-
-			if (selectedIndex >= 0 &&
-				selectedIndex < static_cast<int>(elements.size()))
+		if (ImGui::BeginCombo(comboLabel, previewName))
+		{
+			bool noneSelected = (selectedIndex == -1);
+			if (ImGui::Selectable("None", noneSelected))
 			{
-				previewName = elements[selectedIndex].generalProperties.name;
+				selectedIndex = -1;
 			}
+			if (noneSelected)
+				ImGui::SetItemDefaultFocus();
 
-			if (ImGui::BeginCombo(comboLabel, previewName))
+			ImGui::Separator();
+
+			for (int i = 0; i < elements.size(); ++i)
 			{
-				bool noneSelected = (selectedIndex == -1);
-				if (ImGui::Selectable("None", noneSelected))
+				if (strcmp(elements[i].generalProperties.name, props.name) == 0 || elements[i].elementType == UIElementType::Text
+					|| elements[i].elementType == UIElementType::Image || elements[i].elementType == UIElementType::ElementGroup)
+					continue;
+
+				bool isSelected = (selectedIndex == i);
+
+				if (ImGui::Selectable(elements[i].generalProperties.name, isSelected))
 				{
-					selectedIndex = -1;
+					selectedIndex = i;
 				}
-				if (noneSelected)
+
+				if (isSelected)
 					ImGui::SetItemDefaultFocus();
-
-				ImGui::Separator();
-
-				for (int i = 0; i < elements.size(); ++i)
-				{
-					if (strcmp(elements[i].generalProperties.name, props.name) == 0 || elements[i].elementType == UIElementType::Text
-						|| elements[i].elementType == UIElementType::Image || elements[i].elementType == UIElementType::ElementGroup)
-						continue;
-
-					bool isSelected = (selectedIndex == i);
-
-					if (ImGui::Selectable(elements[i].generalProperties.name, isSelected))
-					{
-						selectedIndex = i;
-					}
-
-					if (isSelected)
-						ImGui::SetItemDefaultFocus();
-				}
-
-				ImGui::EndCombo();
 			}
-		};
+
+			ImGui::EndCombo();
+		}
+	};
 
 	// 0 = Up, 1 = Down, 2 = Left, 3 = Right
 	DrawNavigationCombo("Up", 0);
@@ -866,10 +852,10 @@ void Tga::CanvasDefinitionDocument::DrawSelectableProperties(SelectableUIPropert
 	DrawNavigationCombo("Right", 3);
 
 	bool customMouseSelectionBounds = selectableProps.customMouseSelectionBounds;
-	if (ImGui::Checkbox("Custom Mouse Selection Bounds", &customMouseSelectionBounds))
-	{
+    if (ImGui::Checkbox("Custom Mouse Selection Bounds", &customMouseSelectionBounds))
+    {
 		selectableProps.customMouseSelectionBounds = customMouseSelectionBounds;
-	}
+    }
 
 	if (selectableProps.customMouseSelectionBounds)
 	{
@@ -883,103 +869,103 @@ void Tga::CanvasDefinitionDocument::DrawSelectableProperties(SelectableUIPropert
 
 void Tga::CanvasDefinitionDocument::DrawUIElementProperties(UIElement& element)
 {
-	std::visit([&](auto& e)
-		{
-			using T = std::decay_t<decltype(e)>;
+    std::visit([&](auto& e)
+    {
+        using T = std::decay_t<decltype(e)>;
 
-			if constexpr (std::is_same_v<T, UIImage>)
-			{
-				DrawImageProperties(e, "Image");
-			}
-			else if constexpr (std::is_same_v<T, UIText>)
-			{
-				DrawTextProperties(e, "Text");
-			}
-			else if constexpr (std::is_same_v<T, UIButton>)
-			{
-				DrawSelectableProperties(e.selectable, element.generalProperties);
-				DrawImageProperties(e.buttonImage, "Button Background");
-				DrawTextProperties(e.buttonText, "Button Text");
-			}
-			else if constexpr (std::is_same_v<T, UIToggle>)
-			{
-				DrawSelectableProperties(e.selectable, element.generalProperties);
-				DrawImageProperties(e.backgroundImage, "Toggle Background");
-				DrawImageProperties(e.checkmarkImage, "Toggle Checkmark");
+        if constexpr (std::is_same_v<T, UIImage>)
+        {
+            DrawImageProperties(e, "Image");
+        }
+        else if constexpr (std::is_same_v<T, UIText>)
+        {
+            DrawTextProperties(e, "Text");
+        }
+        else if constexpr (std::is_same_v<T, UIButton>)
+        {
+			DrawSelectableProperties(e.selectable, element.generalProperties);
+            DrawImageProperties(e.buttonImage, "Button Background");
+            DrawTextProperties(e.buttonText, "Button Text");
+        }
+        else if constexpr (std::is_same_v<T, UIToggle>)
+        {
+			DrawSelectableProperties(e.selectable, element.generalProperties);
+            DrawImageProperties(e.backgroundImage, "Toggle Background");
+            DrawImageProperties(e.checkmarkImage, "Toggle Checkmark");
 
-				if (ImGui::CollapsingHeader("Toggle Values", ImGuiTreeNodeFlags_DefaultOpen))
-				{
-					ImGui::Checkbox("Default On", &e.defaultOn);
-					e.isOn = e.defaultOn;
-				}
-			}
-			else if constexpr (std::is_same_v<T, UISlider>)
+			if (ImGui::CollapsingHeader("Toggle Values", ImGuiTreeNodeFlags_DefaultOpen))
 			{
-				DrawSelectableProperties(e.selectable, element.generalProperties);
-				DrawImageProperties(e.backgroundImage, "Slider Background");
-				DrawImageProperties(e.fillImage, "Slider Fill");
-				DrawImageProperties(e.handleBarImage, "Slider Handle");
-
-				if (ImGui::CollapsingHeader("Slider Values", ImGuiTreeNodeFlags_DefaultOpen))
-				{
-					ImGui::DragFloat("Default Value", &e.defaultValue, 0.01f, e.minValue, e.maxValue);
-					e.currentValue = e.defaultValue;
-					ImGui::DragFloat("Min Value", &e.minValue, 0.01f, 0.f, e.maxValue);
-					ImGui::DragFloat("Max Value", &e.maxValue, 0.01f, e.minValue, 100.f);
-				}
+				ImGui::Checkbox("Default On", &e.defaultOn);
+				e.isOn = e.defaultOn;
 			}
-		}, element.uiElementProperties);
+        }
+        else if constexpr (std::is_same_v<T, UISlider>)
+        {
+			DrawSelectableProperties(e.selectable, element.generalProperties);
+            DrawImageProperties(e.backgroundImage, "Slider Background");
+            DrawImageProperties(e.fillImage, "Slider Fill");
+            DrawImageProperties(e.handleBarImage, "Slider Handle");
+
+			if (ImGui::CollapsingHeader("Slider Values", ImGuiTreeNodeFlags_DefaultOpen))
+			{
+				ImGui::DragFloat("Default Value", &e.defaultValue, 0.01f, e.minValue, e.maxValue);
+				e.currentValue = e.defaultValue;
+				ImGui::DragFloat("Min Value", &e.minValue, 0.01f, 0.f, e.maxValue);
+				ImGui::DragFloat("Max Value", &e.maxValue, 0.01f, e.minValue, 100.f);
+			}
+        }
+    }, element.uiElementProperties);
 }
 
 void Tga::CanvasDefinitionDocument::DrawImageProperties(UIImage& img, const char* label)
 {
-	if (!ImGui::CollapsingHeader(label))
-		return;
+    if (!ImGui::CollapsingHeader(label))
+        return;
 
-	ImGui::PushID(label);
+    ImGui::PushID(label);
 
-	const SceneReference& ref = img.sceneReference.Get();
+    const SceneReference& ref = img.sceneReference.Get();
 
-	ImGui::Text("Sprite:");
-	ImGui::Text(ref.path.IsEmpty() ? "None" : ref.path.GetString());
+    ImGui::Text("Sprite:");
+    ImGui::Text(ref.path.IsEmpty() ? "None" : ref.path.GetString());
 
-	StringId newValue = Tga::GetAssetBrowserSelection();
-	if (!newValue.IsEmpty())
-	{
-		if (ImGui::Button("Set From Asset Browser"))
-		{
-			img.sceneReference.Edit().path = newValue;
-		}
-	}
+    StringId newValue = Tga::GetAssetBrowserSelection();
+    if (!newValue.IsEmpty())
+    {
+        if (ImGui::Button("Set From Asset Browser"))
+        {
+            img.sceneReference.Edit().path = newValue;
+        }
+    }
 
-	if (ImGui::Button("Clear"))
-	{
-		img.sceneReference.Edit().path = {};
-	}
+    if (ImGui::Button("Clear"))
+    {
+        img.sceneReference.Edit().path = {};
+    }
 
-	ImGui::Separator();
+    ImGui::Separator();
 
-	float tint[4] = { img.tint.r, img.tint.g, img.tint.b, img.tint.a };
-	if (ImGui::ColorEdit4("Tint", tint))
-	{
-		img.tint = { tint[0], tint[1], tint[2], tint[3] };
-	}
+    float tint[4] = { img.tint.r, img.tint.g, img.tint.b, img.tint.a };
+    if (ImGui::ColorEdit4("Tint", tint))
+    {
+        img.tint = { tint[0], tint[1], tint[2], tint[3] };
+    }
 
-	ImGui::PopID();
+    ImGui::PopID();
 }
 
 void Tga::CanvasDefinitionDocument::DrawTextProperties(UIText& text, const char* label)
 {
-	if (!ImGui::CollapsingHeader(label))
-		return;
+    if (!ImGui::CollapsingHeader(label))
+        return;
 
-	ImGui::PushID(label);
+    ImGui::PushID(label);
 
-	ImGui::InputTextMultiline("Text", text.text, sizeof(text.text));
+    ImGui::InputTextMultiline("Text", text.text, sizeof(text.text));
 
-	ImGui::Separator();
+    ImGui::Separator();
 
-	ImGui::DragFloat("Font Scale", &text.fontScale, 0.1f, 0.f, 100.f);
+    ImGui::DragFloat("Font Scale", &text.fontScale, 0.1f, 0.f, 100.f);
 
 	const char* fontSizeNames[] =
 	{
@@ -989,93 +975,93 @@ void Tga::CanvasDefinitionDocument::DrawTextProperties(UIText& text, const char*
 	};
 
 	int fontSize = FontSizeToEnumIndex(static_cast<FontSize>(text.fontSize));
-	if (ImGui::BeginCombo("Font Size", fontSizeNames[fontSize]))
-	{
-		for (int i = 0; i < 14; ++i)
-		{
-			bool selected = (fontSize == i);
-			if (ImGui::Selectable(fontSizeNames[i], selected))
-				fontSize = i;
+    if (ImGui::BeginCombo("Font Size", fontSizeNames[fontSize]))
+    {
+        for (int i = 0; i < 14; ++i)
+        {
+            bool selected = (fontSize == i);
+            if (ImGui::Selectable(fontSizeNames[i], selected))
+                fontSize = i;
 
-			if (selected)
-				ImGui::SetItemDefaultFocus();
-		}
+            if (selected)
+                ImGui::SetItemDefaultFocus();
+        }
 
-		ImGui::EndCombo();
-	}
+        ImGui::EndCombo();
+    }
 
 	text.fontSize = static_cast<int>(EnumIndexToFontSize(fontSize));
 
-	const char* hAlignNames[] = { "Left", "Center", "Right" };
-	int h = static_cast<int>(text.horizontalAlign);
+    const char* hAlignNames[] = { "Left", "Center", "Right" };
+    int h = static_cast<int>(text.horizontalAlign);
 
-	if (ImGui::BeginCombo("Horizontal Align", hAlignNames[h]))
-	{
-		for (int i = 0; i < 3; ++i)
-		{
-			bool selected = (h == i);
-			if (ImGui::Selectable(hAlignNames[i], selected))
-				h = i;
+    if (ImGui::BeginCombo("Horizontal Align", hAlignNames[h]))
+    {
+        for (int i = 0; i < 3; ++i)
+        {
+            bool selected = (h == i);
+            if (ImGui::Selectable(hAlignNames[i], selected))
+                h = i;
 
-			if (selected)
-				ImGui::SetItemDefaultFocus();
-		}
+            if (selected)
+                ImGui::SetItemDefaultFocus();
+        }
 
-		ImGui::EndCombo();
-	}
+        ImGui::EndCombo();
+    }
 
-	text.horizontalAlign = static_cast<HorizontalAlign>(h);
+    text.horizontalAlign = static_cast<HorizontalAlign>(h);
 
-	const char* vAlignNames[] = { "Top", "Middle", "Bottom" };
-	int v = static_cast<int>(text.verticalAlign);
+    const char* vAlignNames[] = { "Top", "Middle", "Bottom" };
+    int v = static_cast<int>(text.verticalAlign);
 
-	if (ImGui::BeginCombo("Vertical Align", vAlignNames[v]))
-	{
-		for (int i = 0; i < 3; ++i)
-		{
-			bool selected = (v == i);
-			if (ImGui::Selectable(vAlignNames[i], selected))
-				v = i;
+    if (ImGui::BeginCombo("Vertical Align", vAlignNames[v]))
+    {
+        for (int i = 0; i < 3; ++i)
+        {
+            bool selected = (v == i);
+            if (ImGui::Selectable(vAlignNames[i], selected))
+                v = i;
 
-			if (selected)
-				ImGui::SetItemDefaultFocus();
-		}
+            if (selected)
+                ImGui::SetItemDefaultFocus();
+        }
 
-		ImGui::EndCombo();
-	}
+        ImGui::EndCombo();
+    }
 
-	text.verticalAlign = static_cast<VerticalAlign>(v);
+    text.verticalAlign = static_cast<VerticalAlign>(v);
 
-	ImGui::Separator();
+    ImGui::Separator();
 
-	float tint[4] = { text.tint.r, text.tint.g, text.tint.b, text.tint.a };
-	if (ImGui::ColorEdit4("Tint", tint))
-	{
-		text.tint = { tint[0], tint[1], tint[2], tint[3] };
-	}
+    float tint[4] = { text.tint.r, text.tint.g, text.tint.b, text.tint.a };
+    if (ImGui::ColorEdit4("Tint", tint))
+    {
+        text.tint = { tint[0], tint[1], tint[2], tint[3] };
+    }
 
-	ImGui::Separator();
+    ImGui::Separator();
 
-	const SceneReference& ref = text.sceneReference.Get();
+    const SceneReference& ref = text.sceneReference.Get();
 
-	ImGui::Text("Font:");
-	ImGui::Text(ref.path.IsEmpty() ? "None" : ref.path.GetString());
+    ImGui::Text("Font:");
+    ImGui::Text(ref.path.IsEmpty() ? "None" : ref.path.GetString());
 
-	StringId newValue = Tga::GetAssetBrowserSelection();
-	if (!newValue.IsEmpty())
-	{
-		if (ImGui::Button("Set Font From Asset Browser"))
-		{
-			text.sceneReference.Edit().path = newValue;
-		}
-	}
+    StringId newValue = Tga::GetAssetBrowserSelection();
+    if (!newValue.IsEmpty())
+    {
+        if (ImGui::Button("Set Font From Asset Browser"))
+        {
+            text.sceneReference.Edit().path = newValue;
+        }
+    }
 
-	if (ImGui::Button("Clear Font"))
-	{
-		text.sceneReference.Edit().path = {};
-	}
+    if (ImGui::Button("Clear Font"))
+    {
+        text.sceneReference.Edit().path = {};
+    }
 
-	ImGui::PopID();
+    ImGui::PopID();
 }
 
 struct CreateScriptData

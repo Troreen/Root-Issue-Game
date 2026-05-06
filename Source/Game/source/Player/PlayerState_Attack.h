@@ -7,7 +7,7 @@ public:
 
 	PlayerState_Attack();
 
-	void Update(float aDeltaTime, PlayerControllerComponent& aController) override;
+	void Update(float aDeltaTime, PlayerControllerComponent& aPlayerController) override;
 	void ResetValues() override;
 private:
 

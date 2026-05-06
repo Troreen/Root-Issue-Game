@@ -31,7 +31,7 @@ void Cursor::UpdatePosition()
 	Tga::Vector2f screenPos;
 	screenPos.x = mousePos.x + res.x * 0.5f;
 	screenPos.y = res.y * 0.5f - mousePos.y;
-	myCursorElement->generalProperties.pos = CanvasObjectDefinition::ScreenPosToUIPos(screenPos, myCursorElement->generalProperties, *myUICanvas.GetCanvas(), Essentials::GetResolutionInt());
+	myCursorElement->generalProperties.pos = Tga::CanvasObjectDefinition::ScreenPosToUIPos(screenPos, myCursorElement->generalProperties, *myUICanvas.GetCanvas(), Essentials::GetResolutionInt());
 }
 
 bool Cursor::GetCursorVisible()

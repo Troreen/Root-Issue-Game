@@ -47,7 +47,7 @@ public:
 
     void ResetIsFocused();
 
-    CanvasObjectDefinition* GetCanvas();
+    Tga::CanvasObjectDefinition* GetCanvas();
 protected:
     void Render();
     void Update();
@@ -57,7 +57,7 @@ protected:
 
     std::vector<RuntimeUIElement> myElements;
     std::vector<int> myRenderOrder;
-    CanvasObjectDefinition* myCanvas = nullptr;
+    Tga::CanvasObjectDefinition* myCanvas = nullptr;
     static std::vector<UICanvas*> ourUICanvases;
     bool myIsHidden;
 

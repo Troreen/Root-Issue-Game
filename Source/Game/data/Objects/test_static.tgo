@@ -72,7 +72,7 @@
       "is-per-instance": false,
       "name": "colliderIsTrigger",
       "type": "Bool",
-      "value": true
+      "value": false
     },
     {
       "description": "",

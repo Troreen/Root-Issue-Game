@@ -17,8 +17,9 @@ PlayerState_Walk::PlayerState_Walk()
 	myWalkSpeed = 600.f;
 }
 
-void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aController)
+void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aPlayerController)
 {
+	aPlayerController;
 	CommonUtilities::Vector3<float> direction;
 	CommonUtilities::Vector3<float> forwardAxis = Essentials::globalCamera.get()->GetCamera().GetTransform().GetForward();
 	forwardAxis.y = 0;
@@ -48,29 +49,24 @@ void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aCont
 	direction = direction.GetNormalized() * myWalkSpeed * aDeltaTime;
 
 	if (direction.LengthSqr() > 0)
-	{	
+	{
 		myWalkAnimation = 1.f;
 		player->GetTransform().Translate(direction);
 		player->GetTransform().SetYawPitchRollRadians({ std::atan2f(direction.x, direction.z), 0, 0 });
 	}
 
-	if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::RETURN)))
-	{
-		aController.SetState(PlayerState_Master::Instance().myDeathState.get());
-		myWalkAnimation = 0.f;
-	}
 
-	if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::MOUSELBUTTON)))
+	if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::SPACE)))
 	{
 		myWalkAnimation = 0;
-		aController.SetState(PlayerState_Master::Instance().myChargeAttackState.get());
+		aPlayerController.SetState(PlayerState_Master::Instance().myChargeAttackState.get());
 	}
-	else if (Essentials::globalInputManager.get()->IsKeyPressed(static_cast<int>(Keys::SPACE)))
+	else if (Essentials::globalInputManager.get()->IsKeyPressed(static_cast<int>(Keys::RETURN)))
 	{
 		myWalkAnimation = 0;
-		aController.SetState(PlayerState_Master::Instance().myAttackState.get());
+		aPlayerController.SetState(PlayerState_Master::Instance().myAttackState.get());
 	}
-	myAnimationGraph->SetFloatParameter("w_walk", myWalkAnimation);
+	aPlayerController.GetOwner()->GetComponent<AnimationGraphComponent>()->SetFloatParameter("w_walk", myWalkAnimation);
 
 }
 

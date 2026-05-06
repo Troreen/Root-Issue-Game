@@ -39,7 +39,7 @@ PlayerState_Attack::PlayerState_Attack()
 	myAttackLungeDamp = myAttackLungeImpulse / myAttackTime;
 }
 
-void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aController)
+void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aPlayerController)
 {
 	if (!myHasSpawnedHitbox)
 	{
@@ -54,7 +54,7 @@ void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aCo
 
 	myAttackLungeSpeed -= aDeltaTime * myAttackLungeDamp;
 
-	CommonUtilities::Transform<float>& transform = myOwner->GetTransform();
+	CommonUtilities::Transform<float>& transform = aPlayerController.GetOwner()->GetTransform();
 
 	transform.Translate(transform.GetForward() * std::max(myAttackLungeSpeed, 0.f));
 
@@ -62,10 +62,10 @@ void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aCo
 	{
 		if (myAttackTimer < 0)
 		{
-			aController.SetState(PlayerState_Master::Instance().myWalkState.get());
+			aPlayerController.SetState(PlayerState_Master::Instance().myWalkState.get());
 
-			myAnimationGraph->SetFloatParameter("w_attack_basic01", 0);
-			myAnimationGraph->SetFloatParameter("w_attack_basic02", 0);
+			aPlayerController.GetOwner()->GetComponent<AnimationGraphComponent>()->SetFloatParameter("w_attack_basic01", 0);
+			aPlayerController.GetOwner()->GetComponent<AnimationGraphComponent>()->SetFloatParameter("w_attack_basic02", 0);
 
 			return;
 		}
@@ -83,8 +83,8 @@ void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aCo
 
 
 	myAttackTimer -= aDeltaTime;
-	myAnimationGraph->SetFloatParameter("w_attack_basic01", myAttackFromRight ? 1.f : 0.f);
-	myAnimationGraph->SetFloatParameter("w_attack_basic02", myAttackFromRight ? 0.f : 1.f);
+	aPlayerController.GetOwner()->GetComponent<AnimationGraphComponent>()->SetFloatParameter("w_attack_basic01", myAttackFromRight ? 1.f : 0.f);
+	aPlayerController.GetOwner()->GetComponent<AnimationGraphComponent>()->SetFloatParameter("w_attack_basic02", myAttackFromRight ? 0.f : 1.f);
 }
 
 void PlayerState_Attack::ResetValues()

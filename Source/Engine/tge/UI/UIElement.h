@@ -16,88 +16,88 @@ using json = nlohmann::json;
 
 namespace UIDefaults
 {
-    static const char* Image = "DefaultUIAssets/KnightRotAd.dds";
+    static const char* Image              = "DefaultUIAssets/DefaultUIImage.dds";
 
-    static const char* ButtonBackground = "DefaultUIAssets/DefaultUIButtonBackground.dds";
+    static const char* ButtonBackground   = "DefaultUIAssets/DefaultUIButtonBackground.dds";
 
-    static const char* ToggleBackground = "DefaultUIAssets/DefaultUIToggleBackground.dds";
-    static const char* ToggleCheckmark = "DefaultUIAssets/DefaultUIToggleCheckmark.dds";
+    static const char* ToggleBackground   = "DefaultUIAssets/DefaultUIToggleBackground.dds";
+    static const char* ToggleCheckmark    = "DefaultUIAssets/DefaultUIToggleCheckmark.dds";
 
-    static const char* SliderBackground = "DefaultUIAssets/DefaultUISliderBackground.ddS";
-    static const char* SliderFill = "DefaultUIAssets/DefaultUISliderFill.dds";
-    static const char* SliderHandle = "DefaultUIAssets/DefaultUISliderHandle.dds";
+    static const char* SliderBackground   = "DefaultUIAssets/DefaultUISliderBackground.png";
+    static const char* SliderFill         = "DefaultUIAssets/DefaultUISliderFill.dds";
+    static const char* SliderHandle       = "DefaultUIAssets/DefaultUISliderHandle.dds";
 
-    static const char* TextFont = "DefaultUIAssets/arial.ttf";
+    static const char* TextFont           = "DefaultUIAssets/arial.ttf";
 }
 
 struct GeneralUIProperties
 {
     bool hide = false;
-    char name[128] = "New UI";
-    Tga::Vector2f pos;
-    Tga::Vector2f anchorPoint;
-    Tga::Vector2f size = { 100.0f, 100.0f };
+	char name[128] = "New UI";
+	Tga::Vector2f pos;
+	Tga::Vector2f anchorPoint;
+	Tga::Vector2f size = { 100.0f, 100.0f };
     bool scaleUniformly = true;
-    int renderOrder = 0;
-    Tga::Vector2f pivot;
-    int hiercharyDisplayOrder = 0;
+	int renderOrder = 0;
+	Tga::Vector2f pivot;
+	int hiercharyDisplayOrder = 0;
     int groupIndex = -1;
 };
 
 struct SelectableUIProperties
 {
-    int navigation[4] = { -1, -1, -1, -1 };
+	int navigation[4] = {-1, -1, -1, -1};
     bool customMouseSelectionBounds = false;
-    Tga::Vector2f mouseSelectionBounds = { 100.0f, 100.0f };
+	Tga::Vector2f mouseSelectionBounds = { 100.0f, 100.0f };
 };
 
 struct UIImage
 {
-    Tga::CopyOnWriteWrapper<Tga::SceneReference> sceneReference;
-    Tga::Color tint = Tga::Color(1, 1, 1, 1);
+	Tga::CopyOnWriteWrapper<Tga::SceneReference> sceneReference;
+	Tga::Color tint = Tga::Color(1,1,1,1);
     Tga::SpriteSharedData shared;
     Tga::Sprite2DInstanceData instance;
 };
 
 enum class HorizontalAlign
 {
-    Left,
-    Center,
-    Right
+	Left,
+	Center,
+	Right
 };
 
 enum class VerticalAlign
 {
-    Top,
-    Middle,
-    Bottom
+	Top,
+	Middle,
+	Bottom
 };
 
 struct UIText
 {
-    char text[128] = "Hello World!";
-    int fontSize = 30;
+	char text[128] = "Hello World!";
+	int fontSize = 30;
     float fontScale = 1.0f;
-    HorizontalAlign horizontalAlign = HorizontalAlign::Left;
-    VerticalAlign verticalAlign = VerticalAlign::Top;
-    Tga::CopyOnWriteWrapper<Tga::SceneReference> sceneReference;
-    Tga::Color tint = Tga::Color(1, 1, 1, 1);
+	HorizontalAlign horizontalAlign = HorizontalAlign::Left;
+	VerticalAlign verticalAlign = VerticalAlign::Top;
+	Tga::CopyOnWriteWrapper<Tga::SceneReference> sceneReference;
+	Tga::Color tint = Tga::Color(1,1,1,1);
     Tga::Text textObject;
 };
 
 struct UIButton
 {
-    UIText buttonText;
-    UIImage buttonImage;
+	UIText buttonText;
+	UIImage buttonImage;
     SelectableUIProperties selectable;
 };
 
 struct UIToggle
 {
-    bool defaultOn = true;
+	bool defaultOn = true;
     bool isOn;
     UIImage backgroundImage;
-    UIImage checkmarkImage;
+	UIImage checkmarkImage;
     SelectableUIProperties selectable;
 };
 
@@ -105,11 +105,11 @@ struct UISlider
 {
     float defaultValue = .5f;
     float currentValue;
-    float minValue = 0.f;
-    float maxValue = 1.f;
-    UIImage backgroundImage;
-    UIImage fillImage;
-    UIImage handleBarImage;
+	float minValue = 0.f;
+	float maxValue = 1.f;
+	UIImage backgroundImage;
+	UIImage fillImage;
+	UIImage handleBarImage;
     SelectableUIProperties selectable;
 };
 
@@ -135,13 +135,13 @@ inline const char* ToString(UIElementType type)
 {
     switch (type)
     {
-    case UIElementType::Image: return "Image";
-    case UIElementType::Text: return "Text";
-    case UIElementType::Button: return "Button";
-    case UIElementType::Toggle: return "Toggle";
-    case UIElementType::Slider: return "Slider";
-    case UIElementType::ElementGroup: return "ElementGroup";
-    default: return "Unknown";
+        case UIElementType::Image: return "Image";
+        case UIElementType::Text: return "Text";
+        case UIElementType::Button: return "Button";
+        case UIElementType::Toggle: return "Toggle";
+        case UIElementType::Slider: return "Slider";
+        case UIElementType::ElementGroup: return "ElementGroup";
+        default: return "Unknown";
     }
 }
 
@@ -162,7 +162,7 @@ struct UIElement
 {
     UIElementType elementType;
     GeneralUIProperties generalProperties;
-    UIElementProperties uiElementProperties;
+	UIElementProperties uiElementProperties;
 };
 
 static void SerializeGeneral(json& j, const GeneralUIProperties& p)
@@ -207,7 +207,7 @@ static void SerializeSelectable(json& j, const SelectableUIProperties& p)
 {
     j["navigation"] = { p.navigation[0], p.navigation[1], p.navigation[2], p.navigation[3] };
     j["customMouseSelectionBounds"] = p.customMouseSelectionBounds;
-    j["mouseSelectionBounds"] = { p.mouseSelectionBounds.x, p.mouseSelectionBounds.y };
+    j["mouseSelectionBounds"] = {p.mouseSelectionBounds.x, p.mouseSelectionBounds.y};
 }
 
 static void DeserializeSelectable(const json& j, SelectableUIProperties& p)
@@ -235,7 +235,7 @@ static void DeserializeUIImage(const json& j, UIImage& img)
         img.tint = { j["tint"][0], j["tint"][1], j["tint"][2], j["tint"][3] };
     if (j.contains("sceneReference"))
         img.sceneReference.Edit().path =
-        Tga::StringRegistry::RegisterOrGetString(j["sceneReference"].get<std::string>().c_str());
+            Tga::StringRegistry::RegisterOrGetString(j["sceneReference"].get<std::string>().c_str());
 }
 
 static void SerializeUIText(json& j, UIText& txt)
@@ -255,9 +255,9 @@ static void InitializeUITextTextObject(UIText& txt)
     {
         txt.textObject = Tga::Text();
         txt.textObject.SetFont(
-            txt.sceneReference.Get().path.GetString(),
-            static_cast<Tga::FontSize>(txt.fontSize),
-            0
+                txt.sceneReference.Get().path.GetString(),
+                static_cast<Tga::FontSize>(txt.fontSize),
+                0 
         );
 
         txt.textObject.SetText(txt.text);
@@ -282,7 +282,7 @@ static void DeserializeUIText(const json& j, UIText& txt)
         txt.tint = { j["tint"][0], j["tint"][1], j["tint"][2], j["tint"][3] };
     if (j.contains("sceneReference"))
         txt.sceneReference.Edit().path =
-        Tga::StringRegistry::RegisterOrGetString(j["sceneReference"].get<std::string>().c_str());
+            Tga::StringRegistry::RegisterOrGetString(j["sceneReference"].get<std::string>().c_str());
 
     InitializeUITextTextObject(txt);
 }
@@ -365,8 +365,8 @@ static json SerializeUIElement(UIElement& e)
             {
                 SerializeUISlider(j["data"], arg);
                 SerializeSelectable(j["data"], arg.selectable);
-            }
-        }, e.uiElementProperties);
+			}
+    }, e.uiElementProperties);
 
     return j;
 }
@@ -394,44 +394,44 @@ static UIElement DeserializeUIElement(const json& j)
 
     switch (e.elementType)
     {
-    case UIElementType::Image:
-    {
-        UIImage img;
-        DeserializeUIImage(data, img);
-        e.uiElementProperties = img;
-        break;
-    }
-    case UIElementType::Text:
-    {
-        UIText txt;
-        DeserializeUIText(data, txt);
-        e.uiElementProperties = txt;
-        break;
-    }
-    case UIElementType::Button:
-    {
-        UIButton btn;
-        DeserializeUIButton(data, btn);
-        DeserializeSelectable(data, btn.selectable);
-        e.uiElementProperties = btn;
-        break;
-    }
-    case UIElementType::Toggle:
-    {
-        UIToggle t;
-        DeserializeUIToggle(data, t);
-        DeserializeSelectable(data, t.selectable);
-        e.uiElementProperties = t;
-        break;
-    }
-    case UIElementType::Slider:
-    {
-        UISlider s;
-        DeserializeUISlider(data, s);
-        DeserializeSelectable(data, s.selectable);
-        e.uiElementProperties = s;
-        break;
-    }
+        case UIElementType::Image:
+        {
+            UIImage img;
+            DeserializeUIImage(data, img);
+            e.uiElementProperties = img;
+            break;
+        }
+        case UIElementType::Text:
+        {
+            UIText txt;
+            DeserializeUIText(data, txt);
+            e.uiElementProperties = txt;
+            break;
+        }
+        case UIElementType::Button:
+        {
+            UIButton btn;
+            DeserializeUIButton(data, btn);
+            DeserializeSelectable(data, btn.selectable);
+            e.uiElementProperties = btn;
+            break;
+        }
+        case UIElementType::Toggle:
+        {
+            UIToggle t;
+            DeserializeUIToggle(data, t);
+            DeserializeSelectable(data, t.selectable);
+            e.uiElementProperties = t;
+            break;
+        }
+        case UIElementType::Slider:
+        {
+            UISlider s;
+            DeserializeUISlider(data, s);
+            DeserializeSelectable(data, s.selectable);
+            e.uiElementProperties = s;
+            break;
+        }
     }
 
     return e;

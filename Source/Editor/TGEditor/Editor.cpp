@@ -135,7 +135,6 @@ void Tga::Editor::Init(const EditorConfiguration& aEditorConfiguration)
 
 	myAssetBrowser.SetPath(rootPath);
 	mySceneObjectDefinitionManager.Init(rootPath);
-	myCanvasObjectDefinitionManager.Init(rootPath);
 	EditorScriptManager::GetInstance().Init();
 	if (_perforce_enabled)
 	{
