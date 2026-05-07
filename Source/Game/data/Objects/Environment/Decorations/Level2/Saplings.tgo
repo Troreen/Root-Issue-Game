@@ -15,24 +15,6 @@
       "group": "",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "typeId",
-      "type": "StringId",
-      "value": "SM_EN_Saplings"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "name",
-      "type": "StringId",
-      "value": "SM_EN_Saplings"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
       "name": "model",
       "type": "Model",
       "value": {
@@ -64,6 +46,91 @@
           ]
         ]
       }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "name",
+      "type": "StringId",
+      "value": "SM_EN_Saplings"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "typeId",
+      "type": "StringId",
+      "value": "SM_EN_Saplings"
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderHeight",
+      "type": "Float",
+      "value": 300.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderIsTrigger",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderOffset",
+      "type": "Float3",
+      "value": [
+        0.0,
+        -100.0,
+        0.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderRadius",
+      "type": "Float",
+      "value": 30.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "Int",
+      "value": 2
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "layer",
+      "type": "StringId",
+      "value": "Static"
     }
   ]
 }

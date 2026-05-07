@@ -1,0 +1,42 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "Assets\\Art\\3D\\Environment\\Rock Walls\\SM_EN_RockWall_3x3_03_Lvl1.fbx",
+        "textures": [
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    }
+  ]
+}

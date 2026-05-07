@@ -1,0 +1,113 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "Assets\\Art\\3D\\Environment\\HUB\\SM_A_HubDoor_01.fbx",
+        "textures": [
+          [
+            "Assets\\Art\\Textures\\T_ColorAtlas_Hub.dds",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderHeight",
+      "type": "Float",
+      "value": 300.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderIsTrigger",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderOffset",
+      "type": "Float3",
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderSize",
+      "type": "Float3",
+      "value": [
+        100.0,
+        300.0,
+        200.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "Int",
+      "value": 0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "layer",
+      "type": "Int",
+      "value": 0
+    }
+  ]
+}

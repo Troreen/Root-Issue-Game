@@ -39,7 +39,7 @@
         "path": "Assets\\Art\\3D\\Environment\\Platform Tiles\\SM_EN_Grass_6x6.fbx",
         "textures": [
           [
-            "Assets\\Art\\Textures\\T_ColorAtlas_Lvl1.dds",
+            "Assets\\Art\\Textures\\T_Grass_Lvl1.dds",
             "",
             "",
             ""
@@ -64,59 +64,6 @@
           ]
         ]
       }
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "layer",
-      "type": "StringId",
-      "value": "WorldStatic"
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderType",
-      "type": "StringId",
-      "value": "box"
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderSize",
-      "type": "Float3",
-      "value": [
-        600.0,
-        200.0,
-        600.0
-      ]
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderOffset",
-      "type": "Float3",
-      "value": [
-        0.0,
-        0.0,
-        0.0
-      ]
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderIsTrigger",
-      "type": "Bool",
-      "value": false
     }
   ]
 }

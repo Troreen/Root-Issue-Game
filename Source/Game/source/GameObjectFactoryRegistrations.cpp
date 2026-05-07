@@ -18,6 +18,7 @@
 #include "ObjectLayer.h"
 #include "SceneObjectData.h"
 #include "PlayerControllerComponent.h"
+#include "ResetComponent.h"
 #include "BulletComponent.h"
 #include "CameraComponent.h"
 #include "MouseDirectionComponent.h"
@@ -368,10 +369,12 @@ namespace
         ApplyLayer(*object, aData, ObjectLayer::Player);
         ApplyCommonModel(*object, aData);
         ApplyAuthoredCollider(*object, aData);
+        object->AddComponent<ResetComponent>();
         object->AddComponent<PlayerControllerComponent>();
         object->AddComponent<BulletComponent>();
         object->AddComponent<CameraComponent>();
         object->AddComponent<MouseDirectionComponent>();
+
         int health = aData.GetPropertyOr<int>("health", 4);
         if (health < 1)
         {

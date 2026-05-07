@@ -154,6 +154,12 @@ bool AnimationGraphComponent::ConsumeRootMotion(Tga::Vector3f& outTranslation, T
     return true;
 }
 
+void AnimationGraphComponent::Reset()
+{
+    myRuntime.Reset();
+    myEventQueue.Clear();
+}
+
 void AnimationGraphComponent::OnStart()
 {
     InitializeRuntimeIfPossible();

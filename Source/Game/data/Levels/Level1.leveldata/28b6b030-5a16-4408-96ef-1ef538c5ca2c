@@ -1,0 +1,20 @@
+{
+  "name": "Root_02",
+  "object-definition": "Root_02",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -250.0,
+    350.0,
+    -150.0
+  ]
+}

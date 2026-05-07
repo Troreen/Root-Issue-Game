@@ -9,6 +9,7 @@ enum class EnemyType
 
 struct EnemyData
 {
+	EnemyType EnemyType = EnemyType::Unknown;
 	int Health;
 	int Damage;
 	float AttackRange;

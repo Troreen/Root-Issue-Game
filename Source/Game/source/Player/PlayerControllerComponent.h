@@ -11,6 +11,7 @@ public:
 	PlayerControllerComponent() = default;
 	~PlayerControllerComponent() = default;
 
+	void Reset() override;
 	void OnStart() override;
 	void OnUpdate(float aDeltaTime) override;
 

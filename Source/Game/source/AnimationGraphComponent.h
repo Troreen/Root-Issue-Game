@@ -43,6 +43,8 @@ public:
 
     bool ConsumeRootMotion(Tga::Vector3f& outTranslation, Tga::Quatf& outRotation);
 
+    void Reset() override;
+
 protected:
     void OnStart() override;
     void OnUpdate(float aDeltaTime) override;

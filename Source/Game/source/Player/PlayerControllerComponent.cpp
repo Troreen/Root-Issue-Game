@@ -6,6 +6,14 @@
 #include "PlayerState_Walk.h"
 #include "PlayerState_Master.h"
 
+void PlayerControllerComponent::Reset()
+{
+	SetState(PlayerState_Master::Instance().myWalkState.get());
+
+	GetOwner()->GetComponent<AnimationGraphComponent>()->SetFloatParameter("w_death", 0.f);
+
+}
+
 void PlayerControllerComponent::OnStart()
 {
 	SetState(PlayerState_Master::Instance().myWalkState.get());
@@ -21,4 +29,3 @@ void PlayerControllerComponent::SetState(PlayerState* aState)
 	myState = aState;
 	myState->ResetValues();
 }
-

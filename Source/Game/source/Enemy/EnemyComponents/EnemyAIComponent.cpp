@@ -4,6 +4,7 @@
 #include "AnimatedMeshComponent.h"
 #include "AnimationGraphComponent.h"
 #include "ParticleEmitterComponent.h"
+#include "EnemyAttackComponent.h"
 #include "GameObject.h"
 #include "Essentials.h"
 //EnemyAIComponent::EnemyAIComponent()
@@ -124,8 +125,7 @@ void EnemyAIComponent::OnStart()
 
 	//PickNewDirection();
 
-	myAnimationWeight = 1.0f;
-	myAnimationGraph->SetFloatParameter("w_walk", myAnimationWeight);
+	myAnimationWeight = 0.0f;
 }
 
 void EnemyAIComponent::OnUpdate(float aDeltaTime)
@@ -199,6 +199,8 @@ std::string EnemyAIComponent::StringifyState(const BasicEnemyState& aState) cons
 
 void EnemyAIComponent::UpdateIdle(float aDeltaTime)
 {
+	myAnimationGraph->SetFloatParameter("w_idle", 0);
+
 	myMovement->StopMoving();
 
 	PickNewDirection();
@@ -215,6 +217,7 @@ void EnemyAIComponent::UpdateIdle(float aDeltaTime)
 
 void EnemyAIComponent::UpdateWander(float aDeltaTime)
 {
+	myAnimationGraph->SetFloatParameter("w_walk", 1.0f);
 	myMovement->RotateTowards(myWanderDirection, aDeltaTime);
 	myMovement->MoveForward(aDeltaTime);
 
@@ -222,6 +225,7 @@ void EnemyAIComponent::UpdateWander(float aDeltaTime)
 
 	if (myTargeting->IsTargetInRange())
 	{
+		myAnimationGraph->SetFloatParameter("w_walk", 0);
 		ChangeState(BasicEnemyState::Chasing);
 		myIsAggro = true;
 	}
@@ -230,6 +234,7 @@ void EnemyAIComponent::UpdateWander(float aDeltaTime)
 	{
 		if (GetRandomFloat(0.0f, 1.0f) < 0.3f)
 		{
+			myAnimationGraph->SetFloatParameter("w_walk", 0);
 			ChangeState(BasicEnemyState::Idle);
 			myIdleTimer = GetRandomFloat(1.0f, 2.0f);
 		}
@@ -244,6 +249,8 @@ void EnemyAIComponent::UpdateWander(float aDeltaTime)
 
 void EnemyAIComponent::UpdateChasing(float aDeltaTime)
 {
+	myAnimationGraph->SetFloatParameter("w_aggro_walk", 1.0f);
+
 	GameObject* target = Essentials::GetPlayer();
 
 	if (!target)
@@ -252,7 +259,6 @@ void EnemyAIComponent::UpdateChasing(float aDeltaTime)
 	}
 	
 	myMovement->MoveTowardsTarget(target, aDeltaTime);
-
 }
 
 void EnemyAIComponent::UpdateAttacking(float aDeltaTime)
@@ -290,10 +296,6 @@ void EnemyAIComponent::BasicEnemyLogicUpdate(float aDeltaTime)
 	float normalized = speed / myMaxSpeed;
 
 	normalized = std::clamp(normalized, 0.0f, 1.0f);*/
-
-	myAnimationWeight = 1.0f;
-
-	myAnimationGraph->SetFloatParameter("w_walk", myAnimationWeight);
 }
 
 void EnemyAIComponent::RollingEnemyLogicUpdate(float /*aDeltaTime*/)

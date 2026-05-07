@@ -1,0 +1,20 @@
+{
+  "name": "Water_6x6(47)",
+  "object-definition": "Water_6x6",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -100.0,
+    -300.0,
+    5800.0
+  ]
+}

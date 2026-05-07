@@ -1,0 +1,20 @@
+{
+  "name": "Tree_02",
+  "object-definition": "Tree_02",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    297.388427734375,
+    0.0,
+    0.0
+  ]
+}

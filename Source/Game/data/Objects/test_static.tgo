@@ -72,7 +72,7 @@
       "is-per-instance": false,
       "name": "colliderIsTrigger",
       "type": "Bool",
-      "value": true
+      "value": false
     },
     {
       "description": "",
@@ -110,7 +110,7 @@
       ]
     },
     {
-      "description": "Collision shape: 0=Box, 1=Sphere, 2=Capsule, 3=OBB (reserved)",
+      "description": "Collision shape: 0=Box, 1=Sphere, 2=Capsule, 3=OBB",
       "group": "Collision",
       "is-dynamic": false,
       "is-per-instance": false,

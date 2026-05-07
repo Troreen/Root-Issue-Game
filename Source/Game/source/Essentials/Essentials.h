@@ -49,8 +49,7 @@ public:
 	static inline std::unique_ptr<AudioManager> globalAudioManager;
 	static inline std::unique_ptr<Tga::CanvasObjectDefinitionManager> globalCanvasManager;
 	static inline std::unique_ptr<Cursor> myCursor;
-
-	static inline PostMaster* globalPostMaster;
+	static inline std::unique_ptr<PostMaster> globalPostMaster;
 
 	static inline std::unique_ptr<Console> globalConsoleManager;
 

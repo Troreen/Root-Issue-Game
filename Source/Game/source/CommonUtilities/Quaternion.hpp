@@ -150,10 +150,10 @@ namespace CommonUtilities
 		// Lerp
 		if (dot > 0.9995f)
 		{
-			result.x = a.x * (1 - t) + b.x * t;
-			result.y = a.y * (1 - t) + b.y * t;
-			result.z = a.z * (1 - t) + b.z * t;
-			result.w = a.w * (1 - t) + b.w * t;
+			result.x = a.x * (1 - t) + bCopy.x * t;
+			result.y = a.y * (1 - t) + bCopy.y * t;
+			result.z = a.z * (1 - t) + bCopy.z * t;
+			result.w = a.w * (1 - t) + bCopy.w * t;
 			result.Normalize();
 			return result;
 		}
@@ -162,10 +162,10 @@ namespace CommonUtilities
 		float sin = std::sin(theta);
 		Wa = std::sin(t_ * theta) / sin;
 		Wb = std::sin(t * theta) / sin;
-		result.x = Wa * a.x + Wb * b.x;
-		result.y = Wa * a.y + Wb * b.y;
-		result.z = Wa * a.z + Wb * b.z;
-		result.w = Wa * a.w + Wb * b.w;
+		result.x = Wa * a.x + Wb * bCopy.x;
+		result.y = Wa * a.y + Wb * bCopy.y;
+		result.z = Wa * a.z + Wb * bCopy.z;
+		result.w = Wa * a.w + Wb * bCopy.w;
 		result.Normalize();
 
 		return result;

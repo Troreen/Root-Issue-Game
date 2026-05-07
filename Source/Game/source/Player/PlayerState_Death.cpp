@@ -4,7 +4,6 @@
 
 PlayerState_Death::PlayerState_Death()
 {
-	myDeathTimer = 3.f;
 }
 
 void PlayerState_Death::Update(float aTimeDelta, PlayerControllerComponent& aController)
@@ -14,10 +13,13 @@ void PlayerState_Death::Update(float aTimeDelta, PlayerControllerComponent& aCon
 	if (myDeathTimer < 0)
 	{
 		aController;
+
+		Essentials::globalPostMaster->SendMsg({ MessageType::ReloadScene });
 	}
 }
 
 void PlayerState_Death::ResetValues()
 {
+	myDeathTimer = 3.f;
 	myAnimationGraph->SetFloatParameter("w_death", 1.f);
 }

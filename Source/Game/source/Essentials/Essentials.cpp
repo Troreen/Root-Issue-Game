@@ -19,6 +19,8 @@ Essentials::Essentials()
 	myCursor = std::make_unique<Cursor>();
 
 	globalCanvasManager = std::make_unique<Tga::CanvasObjectDefinitionManager>();
+
+	globalPostMaster = std::make_unique <PostMaster>();
 }
 
 Essentials::~Essentials()

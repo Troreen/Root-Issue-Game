@@ -14,6 +14,7 @@ public:
     virtual ~Component() = default;
 
     virtual void Init(Tga::Engine& /*anEngine*/) {}
+    virtual void Reset() {}
     virtual void FixedUpdate(float /*aFixedDeltaTime*/) {}
     virtual void Update(float /*aDeltaTime*/) {}
     virtual void LateUpdate(float /*aDeltaTime*/) {}

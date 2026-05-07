@@ -1,0 +1,20 @@
+{
+  "name": "TreeSapling_01",
+  "object-definition": "TreeSapling_01",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -63.1871337890625,
+    0.0,
+    315.1116943359375
+  ]
+}

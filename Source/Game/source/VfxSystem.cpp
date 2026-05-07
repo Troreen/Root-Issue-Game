@@ -878,6 +878,18 @@ bool VfxSystem::LoadParticleDefinitions(const std::string& aPath)
 		std::cout << "[VFX] Particle effects definiton at: " << aPath << " contains no pools" << std::endl;
 	}
 
+	std::unordered_map<std::string, Json> sharedEmitters;
+
+	if (json.contains("sharedEmitters"))
+	{
+		for (auto& [key, value] : json["sharedEmitters"].items())
+		{
+			sharedEmitters[key] = value;
+		}
+	}
+
+	
+
 	if (json.contains("gameObjects"))
 	{
 		for (const auto& objJson : json["gameObjects"])
@@ -888,8 +900,26 @@ bool VfxSystem::LoadParticleDefinitions(const std::string& aPath)
 
 			auto& emitterMap = myEmitterSettings[objectName];
 
-			for (const auto& emitterJson : objJson["emitters"])
+			for (const auto& emitterEntry : objJson["emitters"])
 			{
+
+				Json emitterJson;
+
+				if (emitterEntry.is_string())
+				{
+					std::string ref = emitterEntry.get<std::string>();
+					if (!sharedEmitters.contains(ref))
+					{
+						std::cout << "Missing shared emitter: " << ref << std::endl;
+						continue;
+					}
+					emitterJson = sharedEmitters[ref];
+				}
+				else
+				{
+					emitterJson = emitterEntry;
+				}
+
 				std::string typeStr = emitterJson.value("particleType", "");
 				ParticleType type = ParseParticleType(typeStr);
 

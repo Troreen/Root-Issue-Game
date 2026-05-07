@@ -1,0 +1,20 @@
+{
+  "name": "LargeBush_01",
+  "object-definition": "LargeBush_01",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    1369.8572998046875,
+    0.0,
+    8.713485717773438
+  ]
+}

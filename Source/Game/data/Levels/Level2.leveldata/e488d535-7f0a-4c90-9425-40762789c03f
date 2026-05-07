@@ -1,0 +1,20 @@
+{
+  "name": "Saplings(4)",
+  "object-definition": "Saplings",
+  "path": "",
+  "rotation": [
+    180.0,
+    44.97201919555664,
+    180.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    1200.0,
+    300.0,
+    400.0
+  ]
+}

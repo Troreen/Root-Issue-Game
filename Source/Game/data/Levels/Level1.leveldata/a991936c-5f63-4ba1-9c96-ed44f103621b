@@ -1,0 +1,20 @@
+{
+  "name": "Dirt_6x6(16)",
+  "object-definition": "Dirt_6x6",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -3400.0,
+    600.0,
+    5200.0
+  ]
+}

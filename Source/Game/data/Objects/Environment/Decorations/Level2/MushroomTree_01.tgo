@@ -15,24 +15,6 @@
       "group": "",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "typeId",
-      "type": "StringId",
-      "value": "SK_EN_MushroomTree"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "name",
-      "type": "StringId",
-      "value": "SK_EN_MushroomTree"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
       "name": "model",
       "type": "Model",
       "value": {
@@ -67,6 +49,33 @@
     },
     {
       "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "name",
+      "type": "StringId",
+      "value": "SK_EN_MushroomTree"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "typeId",
+      "type": "StringId",
+      "value": "SK_EN_MushroomTree"
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_auto_bootstrap",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
       "group": "Animation",
       "is-dynamic": false,
       "is-per-instance": false,
@@ -97,20 +106,78 @@
       "group": "Animation",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "animation_auto_bootstrap",
-      "type": "Bool",
-      "value": true
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
         "clip_path": "AnimationClips\\\\Grafik\\\\SK_EN_MushroomTree_idle.tgac"
       }
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderHeight",
+      "type": "Float",
+      "value": 500.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderIsTrigger",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderOffset",
+      "type": "Float3",
+      "value": [
+        0.0,
+        -200.0,
+        0.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderRadius",
+      "type": "Float",
+      "value": 50.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "Int",
+      "value": 2
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "layer",
+      "type": "StringId",
+      "value": "Static"
     }
   ]
 }

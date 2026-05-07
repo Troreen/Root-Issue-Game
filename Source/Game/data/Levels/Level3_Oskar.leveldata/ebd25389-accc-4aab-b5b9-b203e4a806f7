@@ -1,0 +1,20 @@
+{
+  "name": "Tentacle_02",
+  "object-definition": "Tentacle_02",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -226.63223266601563,
+    0.0,
+    105.39118194580078
+  ]
+}

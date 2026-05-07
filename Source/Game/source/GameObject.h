@@ -31,6 +31,9 @@ public:
     /// Override this to load textures, set up sprites, etc.
     virtual void Init(Tga::Engine& anEngine);
 
+    //Reloads data in componets. Called when ReloadComponent recieves a message
+    virtual void Reset();
+
     /// Update the game object. Called every frame.
     /// <param name="aDeltaTime">Time in seconds since last frame</param>
     virtual void Update(float aDeltaTime);

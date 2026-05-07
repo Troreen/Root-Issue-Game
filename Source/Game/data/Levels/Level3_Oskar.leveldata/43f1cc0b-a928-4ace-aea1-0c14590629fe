@@ -1,0 +1,20 @@
+{
+  "name": "RuinDoor",
+  "object-definition": "RuinDoor",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    293.33099365234375,
+    0.0,
+    -262.364501953125
+  ]
+}

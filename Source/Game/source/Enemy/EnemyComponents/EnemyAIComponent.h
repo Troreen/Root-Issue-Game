@@ -10,6 +10,7 @@ class EnemyTargetingComponent;
 class AnimatedMeshComponent;
 class AnimationGraphComponent;
 class ParticleEmitterComponent;
+class EnemyAttackComponent;
 
 enum class BasicEnemyState
 {
@@ -63,9 +64,6 @@ private:
 
 	float GetRandomAngleDegreeToRad(float aMin, float aMax);
 	float GetRandomFloat(float aMin, float aMax);
-
-
-
 
 	void HandleStatesRollingEnemy();
 

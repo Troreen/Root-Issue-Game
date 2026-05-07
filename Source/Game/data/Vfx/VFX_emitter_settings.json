@@ -13,56 +13,78 @@
       "blendState": "alpha"
     }
   ],
+
+  "sharedEmitters": {
+    "bloodBurst": {
+      "particleType": "blood",
+      "shouldBillboard": false,
+      "emissionShape": "box",
+      "emissionRate": 1000,
+
+      "lifeTimeMin": 0,
+      "lifeTimeMax": 2,
+
+      "startSpeedMin": 0,
+      "startSpeedMax": 200,
+
+      "coneAngle": 45,
+
+      "startSizeMin": 0.1,
+      "startSizeMax": 10,
+      "endSizeMin": 0.1,
+      "endSizeMax": 10,
+
+      "burstCount": 500,
+
+      "shouldStartActive": false
+    },
+    "testSphere": {
+      "particleType": "test",
+      "shouldBillboard": true,
+      "emissionShape": "sphere",
+      "emissionRate": 1000,
+
+      "lifeTimeMin": 0,
+      "lifeTimeMax": 2,
+
+      "startSpeedMin": 0,
+      "startSpeedMax": 100,
+
+      "coneAngle": 45,
+
+      "startSizeMin": 0.1,
+      "startSizeMax": 10,
+      "endSizeMin": 0.1,
+      "endSizeMax": 10,
+
+      "burstCount": 500,
+      "shouldStartActive": false
+    }
+  },
+
   "gameObjects": [
     {
       "editorname": "MeleeEnemy",
-      "emitters": [
-        {
-          "particleType": "blood",
-          "shouldBillboard": false,
-          "emissionShape": "box",
-          "emissionRate": 1000,
-
-          "lifeTimeMin": 0,
-          "lifeTimeMax": 2,
-
-          "startSpeedMin": 0,
-          "startSpeedMax": 200,
-
-          "coneAngle": 45,
-
-          "startSizeMin": 0.1,
-          "startSizeMax": 10,
-          "endSizeMin": 0.1,
-          "endSizeMax": 10,
-
-          "burstCount": 500,
-          "shouldStartActive": false
-        },
-        {
-          "particleType": "test",
-          "shouldBillboard": true,
-          "emissionShape": "sphere",
-          "emissionRate": 1000,
-
-          "lifeTimeMin": 0,
-          "lifeTimeMax": 2,
-
-          "startSpeedMin": 0,
-          "startSpeedMax": 100,
-
-          "coneAngle": 45,
-
-          "startSizeMin": 0.1,
-          "startSizeMax": 10,
-          "endSizeMin": 0.1,
-          "endSizeMax": 10,
-
-          "burstCount": 500,
-          "shouldStartActive": false
-        }
-      ]
+      "emitters": [ "bloodBurst", "testSphere" ]
+    },
+    {
+      "editorname": "Player ",
+      "emitters": [ "bloodBurst" ]
     }
   ]
 }
+
+// Emitter Parameters Explained:
+
+// particleType: Which of the pools should the emitter draw from?
+// shouldBillboard: Should the sprites face the camera?
+// emissionShape: What directions should the particles go? Current shapes: box, cone, sphere. If new shape is needed, contact Johannes
+// emissionRate: Number of particles emitted per second when emitter is set to continuously emit
+// lifeTimeMin/Max: Smallest/largest amount of seconds a particle stays active once spawned
+// startSpeedMin/Max: Lowest/highest speed a particle starts with
+// coneAngle: size of cone emission shape (if used), as measured from the cone's line of symmetry along its middle
+// startSizeMin/Max: Min/Max size a particle starts its life as (as a multiple of its normal sprite size)
+// endSizeMin/Max: Min/Max size a particle ends its life as (as a multiple of its normal sprite size)
+// burstCount: Number of particles emitted in a single burst when called for
+// shouldStartAsActive: Should emitter start as actively emitting?
 

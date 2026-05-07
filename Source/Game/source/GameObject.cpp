@@ -32,6 +32,14 @@ void GameObject::Init(Tga::Engine& anEngine)
     }
 }
 
+void GameObject::Reset()
+{
+    for (auto& component : myComponents)
+    {
+        component->Reset();
+    }
+}
+
 void GameObject::Update(float aDeltaTime)
 {
     if (!myIsActive)
