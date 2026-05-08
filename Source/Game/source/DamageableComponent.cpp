@@ -124,6 +124,11 @@ bool DamageableComponent::IsDead() const
     return myCurrentHealth <= 0;
 }
 
+void DamageableComponent::Reset()
+{
+    myCurrentHealth = myMaxHealth;
+}
+
 void DamageableComponent::SetOnDamageCallback(std::function<void(int, GameObject*)> aCallback)
 {
     myOnDamage = std::move(aCallback);

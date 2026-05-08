@@ -21,6 +21,8 @@ Essentials::Essentials()
 	globalCanvasManager = std::make_unique<Tga::CanvasObjectDefinitionManager>();
 
 	globalPostMaster = std::make_unique <PostMaster>();
+
+	myDynamicGameObjects = std::make_unique<std::vector<std::unique_ptr<GameObject>>>();
 }
 
 Essentials::~Essentials()
@@ -62,6 +64,17 @@ Tga::Vector2i Essentials::GetResolutionInt()
 {
 	Tga::Vector2ui res = globalEngine->GetRenderSize();
 	return { static_cast<int>(res.x), static_cast<int>(res.y) };
+}
+
+void Essentials::AddGameObject(std::unique_ptr<GameObject>& aGameObject)
+{
+	myDynamicGameObjects->push_back(std::move(aGameObject));
+}
+
+void Essentials::PushGameObjectsInto(std::vector<std::unique_ptr<GameObject>>& outGameobjects)
+{
+	outGameobjects.insert(outGameobjects.end(), std::make_move_iterator(myDynamicGameObjects->begin()), std::make_move_iterator(myDynamicGameObjects->end()));
+	myDynamicGameObjects->clear();
 }
 
 GameObject* Essentials::GetPlayer()

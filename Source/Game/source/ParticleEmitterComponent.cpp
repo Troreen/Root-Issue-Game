@@ -16,8 +16,8 @@ ParticleEmitterComponent::ParticleEmitterComponent()
 
 void ParticleEmitterComponent::AttachSettings()
 {
- 	std::string ownerName = GetOwner()->GetName();
-	std::cout << "Looking for emitter settings for: " << ownerName << std::endl;
+	std::string ownerName = GetOwner()->GetName();
+	//std::cout << "Looking for emitter settings for: " << ownerName << std::endl;
 	mySettingsCollection = *VfxService::Get()->GetEmissionSettingsForObject(ownerName);
 	for (auto it = mySettingsCollection.begin(); it != mySettingsCollection.end(); ++it)
 	{
@@ -65,7 +65,7 @@ void ParticleEmitterComponent::Update(float aDeltaTime)
 					Emit(it->first, transform);
 				}
 			}
- 		}
+		}
 	}
 }
 
@@ -99,8 +99,9 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 	Vector3f up = forward.Cross(right);
 
 	ParticleSettings settings;
+	ParticleEmitterSettings* emitterSettings = &mySettingsCollection[aParticleType];
 
-	switch (mySettingsCollection[aParticleType].shape)
+	switch (emitterSettings->shape)
 	{
 	case EmissionShape::Box:
 	{
@@ -115,9 +116,9 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 		randomOffset *= spread;
 
 		settings = {
-			.timeToLive = mySettingsCollection[aParticleType].lifeTimeMax,
+			.timeToLive = emitterSettings->lifeTimeMax,
 			.initalPosition = aTransform.GetPosition() + randomOffset,
-			.linearVelocity = forward * mySettingsCollection[aParticleType].startSpeedMax,
+			.linearVelocity = forward * emitterSettings->startSpeedMax,
 			.rotation = aTransform.GetRotation()
 		};
 		break;
@@ -137,9 +138,9 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 		Vector3f dir = { x,y,z };
 
 		settings = {
-			.timeToLive = mySettingsCollection[aParticleType].lifeTimeMax,
+			.timeToLive = emitterSettings->lifeTimeMax,
 			.initalPosition = aTransform.GetPosition(),
-			.linearVelocity = dir * mySettingsCollection[aParticleType].startSpeedMax,
+			.linearVelocity = dir * emitterSettings->startSpeedMax,
 			.rotation = aTransform.GetRotation()
 		};
 
@@ -147,8 +148,8 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 	}
 	case EmissionShape::Cone:
 	{
-		
-		float angleRad = mySettingsCollection[aParticleType].coneAngle * DEGREETORADIAN;
+
+		float angleRad = emitterSettings->coneAngle * DEGREETORADIAN;
 
 		float u = dist01(rng);   // [0,1]
 		float v = dist01(rng);   // [0,1]
@@ -165,10 +166,10 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 
 		finalDir.Normalize();
 
-		float speed = mySettingsCollection[aParticleType].startSpeedMax;
+		float speed = emitterSettings->startSpeedMax;
 
 		settings = {
-			.timeToLive = mySettingsCollection[aParticleType].lifeTimeMax,
+			.timeToLive = emitterSettings->lifeTimeMax,
 			.initalPosition = aTransform.GetPosition(),
 			.linearVelocity = finalDir * speed
 		};
@@ -178,6 +179,26 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 		return;
 		break;
 	}
+
+	if (emitterSettings->lifeTimeMax != emitterSettings->lifeTimeMin)
+	{
+		std::uniform_real_distribution<float> lifeDist(emitterSettings->lifeTimeMin, emitterSettings->lifeTimeMax);
+		settings.timeToLive = lifeDist(rng);
+	}
+	else
+	{
+		settings.timeToLive = emitterSettings->lifeTimeMin;
+	}
+
+	/*if (emitterSettings->startSpeedMin != emitterSettings->startSpeedMax)
+	{
+		std::uniform_real_distribution<float> speedDist(emitterSettings->startSpeedMin, emitterSettings->startSpeedMax);
+		settings.linearVelocity = speedDist(rng);
+	}
+	else
+	{
+		settings.linearVelocity = emitterSettings->startSpeedMin;
+	}*/
 
 	//settings.size = mySettingsCollection[aParticleType].startSizeMax;
 	VfxService::SpawnParticle(aParticleType, settings);

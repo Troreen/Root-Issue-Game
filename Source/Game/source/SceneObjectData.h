@@ -14,6 +14,9 @@ struct SceneObjectData
     /// Name of the object as set in the editor.
     std::string name;
 
+    /// Name of object definition in the editor.
+    std::string ObjDefinition;
+
     /// Stable type identifier that maps to a prefab at Objects/{typeId}.tgo.
     std::string typeId;
 

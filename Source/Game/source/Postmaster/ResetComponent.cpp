@@ -2,9 +2,11 @@
 #include "Essentials/Essentials.h"
 #include "GameObject.h"
 
-ResetComponent::ResetComponent()
+ResetComponent::ResetComponent(const SceneObjectData& aResetData)
 {
 	Essentials::globalPostMaster->Subscribe(MessageType::ReloadScene, this);
+
+	myResetData = aResetData;
 }
 
 ResetComponent::~ResetComponent()
@@ -14,5 +16,9 @@ ResetComponent::~ResetComponent()
 
 void ResetComponent::Receive(const Message&)
 {
-	GetOwner()->Reset();
+	GameObject& object = *GetOwner();
+	object.Reset();
+	object.GetTransform().SetPosition(myResetData.position);
+	object.GetTransform().SetRotation(myResetData.rotation);
+	object.GetTransform().SetScale(myResetData.scale);
 }

@@ -6,54 +6,43 @@
 #include <tge/model/ModelFactory.h>
 #include <tge/engine.h>
 #include "GameObject.h"
+#include "Essentials/Essentials.h"
 
-BulletComponent::BulletComponent()
+
+namespace
 {
-	Tga::ModelFactory& modelFactory = Tga::ModelFactory::GetInstance();
+	Tga::Matrix4x4f ToTgaMatrix(const CommonUtilities::Matrix4x4<float>& aMatrix)
+	{
+		Tga::Matrix4x4f result;
+		for (int r = 1; r < 5; ++r)
+		{
+			for (int c = 1; c < 5; ++c)
+			{
+				result(r, c) = aMatrix(r, c);
+			}
+		}
+		return result;
+	}
 
-	Tga::ModelInstance instance = modelFactory.GetModelInstance("animations/SK/SK_CH_Player.fbx");
+}
 
-	myBullet = Bullet(instance);
+void BulletComponent::SetTransform(CommonUtilities::Transform<float> aTransform)
+{
+	mySpeed = 1000.f;
+	myTimer = 2.f;
+	myTransform = aTransform;
+	GetOwner()->GetTransform() = aTransform;
 }
 
 void BulletComponent::OnUpdate(float aDeltaTime)
 {
-	for (int bulletIndex = 0; bulletIndex < myBullets.size(); bulletIndex++)
+	std::cout << "Cock\n";
+	myTimer -= aDeltaTime;
+	if (myTimer < 0)
 	{
-		myBullets[bulletIndex].Update(aDeltaTime);
-
-		if (myBullets[bulletIndex].IsDelete())
-		{
-			myBullets[bulletIndex] = myBullets.back();
-			myBullets.pop_back();
-			if (bulletIndex < myBullets.size() && !myBullets.empty())
-			{
-				bulletIndex--;
-			}
-		}
+		GetOwner()->SetActive(false);
 	}
-}
 
-void BulletComponent::Render()
-{
-	auto& graphicsEngine = Tga::Engine::GetInstance()->GetGraphicsEngine();
-	auto& modelDrawer = graphicsEngine.GetModelDrawer();
-
-	for (auto& bullet : myBullets)
-	{
-		bullet.Render(modelDrawer);
-	}
-}
-
-void BulletComponent::SetSpeedDirectionPosition(float aSpeed, CommonUtilities::Vector3<float> aDirection)
-{
-	aSpeed;
-	aDirection;
-}
-
-void BulletComponent::SpawnBullet()
-{
-	myBullet.Init(GetOwner()->GetTransform());
-	myBullets.push_back(myBullet);
+	GetOwner()->GetTransform().Translate(myTransform.GetForward() * mySpeed * aDeltaTime);
 }
 

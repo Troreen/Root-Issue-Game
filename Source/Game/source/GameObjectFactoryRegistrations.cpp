@@ -10,8 +10,8 @@
 #include "GameObject.h"
 #include "GameObjectFactory.h"
 #include "KnockbackComponent.h"
+#include "LevelTransitionDoorComponent.h"
 #include "MeshComponent.h"
-#include "AnimatedMeshComponent.h"
 #include "ParticleEmitterComponent.h"
 #include "ModelTextureOverrides.h"
 #include "ObbColliderComponent.h"
@@ -25,11 +25,17 @@
 #include "PickUpComponent.h"
 #include <tge/animation/AnimationPlayer.h>
 #include "SphereColliderComponent.h"
+#include "TeleporterTunnelComponent.h"
+#include "WorldTriggerHelpers.h"
+
+#include "SwitchComponent.h"
+#include "ToggleComponent.h"
 
 // Enemy Components
 #include "EnemyMovementComponent.h"
 #include "EnemyAIComponent.h"
 #include "EnemyTargetingComponent.h"
+#include "EnemyAttackComponent.h"
 
 #include <algorithm>
 #include <cctype>
@@ -40,22 +46,19 @@ namespace
 {
     std::string NormalizeText(const std::string& aValue)
     {
-        std::string normalized = aValue;
-        std::transform(
-            normalized.begin(),
-            normalized.end(),
-            normalized.begin(),
-            [](unsigned char c)
-            {
-                return static_cast<char>(std::tolower(c));
-            });
-        return normalized;
+            std::string normalized = aValue;
+            std::transform(
+                normalized.begin(),
+                normalized.end(),
+                normalized.begin(),
+                [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+            return normalized;
     }
 
     bool TryParseLayer(const std::string& aLayerText, ObjectLayer& outLayer)
     {
         const std::string normalized = NormalizeText(aLayerText);
-        if (normalized == "worldstatic")
+        if (normalized == "worldstatic" || normalized == "static")
         {
             outLayer = ObjectLayer::WorldStatic;
             return true;
@@ -305,13 +308,31 @@ namespace
         if (!modelPath.empty())
         {
             AnimatedMeshComponent* animatedMeshComponent = anObject.AddComponent<AnimatedMeshComponent>(modelPath);
-            animatedMeshComponent;
-            //MeshTextureOverrides textureOverrides;
-            //if (aData.TryGetProperty<MeshTextureOverrides>("modelTextures", textureOverrides))
-            //{
-            //    animatedMeshComponent->SetTextureOverrides(textureOverrides);
-            //}
+            // Optionally apply texture overrides if authored
+            MeshTextureOverrides textureOverrides;
+            if (aData.TryGetProperty<MeshTextureOverrides>("modelTextures", textureOverrides))
+            {
+                std::cout << "[GameObjectFactoryRegistrations] Applying texture overrides to animated mesh: " << anObject.GetName() << "\n";
+                animatedMeshComponent->SetTextureOverrides(textureOverrides);
+            }
+            else
+            {
+                std::cout << "[GameObjectFactoryRegistrations] No texture overrides found in TGO for: " << anObject.GetName() << "\n";
+            }
         }
+    }
+    void EnsureTriggerCollider(GameObject& anObject)
+    {
+        if (!anObject.GetComponent<BoxColliderComponent>() &&
+            !anObject.GetComponent<SphereColliderComponent>() &&
+            !anObject.GetComponent<CapsuleColliderComponent>() &&
+            !anObject.GetComponent<ObbColliderComponent>())
+        {
+            WorldTriggerHelpers::AddDefaultBoxTrigger(anObject, Vector3f(160.0f, 220.0f, 160.0f));
+            return;
+        }
+
+        WorldTriggerHelpers::ForceColliderToTrigger(anObject);
     }
 
     std::unique_ptr<GameObject> BuildStaticWorld(const SceneObjectData& aData)
@@ -322,6 +343,41 @@ namespace
         ApplyAuthoredCollider(*object, aData);
 
         return object;
+    }
+
+    EnemyData CreateBasicEnemyData(const SceneObjectData& /*aData*/)
+    {
+        EnemyData MeleeEnemyData;
+
+        MeleeEnemyData.EnemyType = EnemyType::BasicEnemy;
+
+        MeleeEnemyData.WalkSpeed = 300.0f;
+        MeleeEnemyData.ChaseSpeed = 450.0f;
+        MeleeEnemyData.RotationSpeed = 5.0f;
+
+        MeleeEnemyData.DetectionRange = 600.0f;
+
+        //MeleeEnemyData.IdleTimeMin = 1.0f;
+        //MeleeEnemyData.IdleTimeMax = 2.0f;
+
+        //MeleeEnemyData.WanderTimeMin = 1.5f;
+        //MeleeEnemyData.WanderTimeMax = 3.0f;
+
+        //MeleeEnemyData.WanderTurnAngleMin = -30.0f;
+        //MeleeEnemyData.WanderTurnAngleMax = 30.0f;
+
+        MeleeEnemyData.AttackRange = 180.0f;
+        MeleeEnemyData.AttackCooldown = 2.0f;
+        MeleeEnemyData.AttackWindup = 0.3f;
+        MeleeEnemyData.AttackRecovery = 1.0f;
+
+        return MeleeEnemyData;
+    }
+
+    EnemyData CreateRollingEnemyData(const SceneObjectData& /*aData*/)
+    {
+        EnemyData RollingEnemyData;
+        return RollingEnemyData;
     }
 
     std::unique_ptr<GameObject> BuildBasicMeleeEnemy(const SceneObjectData& aData)
@@ -338,6 +394,8 @@ namespace
             object->AddComponent<CapsuleColliderComponent>(50.0f, 180.0f, Vector3f::Zero, false, true);
         }
 
+        EnemyData data = CreateBasicEnemyData(aData);
+
         int health = aData.GetPropertyOr<int>("health", 3);
         if (health < 1)
         {
@@ -350,10 +408,12 @@ namespace
             damage = 1;
         }
 
-        object->AddComponent<EnemyAIComponent>(EnemyType::BasicEnemy);
+        object->AddComponent<EnemyAIComponent>(data);
         object->AddComponent<EnemyMovementComponent>();
         object->AddComponent<EnemyTargetingComponent>();
         object->AddComponent<KnockbackComponent>();
+        object->AddComponent<EnemyAttackComponent>(data);
+        object->AddComponent<ResetComponent>(aData);
         DamageableComponent* damageable = object->AddComponent<DamageableComponent>(health);
         damageable->SetCurrentHealth(health);
         damageable->SetDamagePerHit(damage);
@@ -362,16 +422,15 @@ namespace
         return object;
     }
 
-    std::unique_ptr<GameObject> BuilPlayer(const SceneObjectData& aData)
+    std::unique_ptr<GameObject> BuildPlayer(const SceneObjectData& aData)
     {
         auto object = std::make_unique<GameObject>(aData.name);
         Essentials::SetPlayer(*object);
         ApplyLayer(*object, aData, ObjectLayer::Player);
         ApplyCommonModel(*object, aData);
         ApplyAuthoredCollider(*object, aData);
-        object->AddComponent<ResetComponent>();
+        object->AddComponent<ResetComponent>(aData);
         object->AddComponent<PlayerControllerComponent>();
-        object->AddComponent<BulletComponent>();
         object->AddComponent<CameraComponent>();
         object->AddComponent<MouseDirectionComponent>();
 
@@ -394,7 +453,71 @@ namespace
         ApplyAuthoredCollider(*object, aData);
         object->AddComponent<PickUpComponent>();
         return object;
-	}
+    }
+
+    std::unique_ptr<GameObject> SwitchBuild(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::Switch);
+        ApplyCommonModel(*object, aData);
+        ApplyAuthoredCollider(*object, aData);
+
+        if (!object->GetComponent<BoxColliderComponent>() &&
+            !object->GetComponent<SphereColliderComponent>() &&
+            !object->GetComponent<CapsuleColliderComponent>() &&
+            !object->GetComponent<ObbColliderComponent>())
+        {
+            object->AddComponent<CapsuleColliderComponent>(50.0f, 180.0f, Vector3f::Zero, false, true);
+        }
+
+        object->AddComponent<SwitchComponent>(aData.GetPropertyOr("UniqueID", 0));
+        return object;
+    }
+
+    std::unique_ptr<GameObject> BuildToggle(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::WorldStatic);
+        ApplyCommonModel(*object, aData);
+        ApplyAuthoredCollider(*object, aData);
+
+        object->AddComponent<ToggleComponent>(aData.GetPropertyOr("UniqueID", 0));
+        return object;
+    }
+
+    std::unique_ptr<GameObject> BuildLevelTransitionDoor(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::Trigger);
+        ApplyCommonModel(*object, aData);
+        ApplyAuthoredCollider(*object, aData);
+        EnsureTriggerCollider(*object);
+
+        object->AddComponent<LevelTransitionDoorComponent>(
+            aData.GetPropertyOr<std::string>("targetScene", ""),
+            aData.GetPropertyOr<std::string>("targetSpawnId", ""),
+            aData.GetPropertyOr<float>("autoWalkSpeed", 600.0f),
+            aData.GetPropertyOr<float>("fadeOutSeconds", 0.5f));
+
+        return object;
+    }
+
+    std::unique_ptr<GameObject> BuildTeleporterTunnel(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::Trigger);
+        ApplyCommonModel(*object, aData);
+        ApplyAuthoredCollider(*object, aData);
+        EnsureTriggerCollider(*object);
+
+        object->AddComponent<TeleporterTunnelComponent>(
+            aData.GetPropertyOr<int>("pairId", 0),
+            aData.GetPropertyOr<int>("exitDirection", 0),
+            aData.GetPropertyOr<float>("autoWalkSpeed", 600.0f),
+            aData.GetPropertyOr<float>("exitPadding", 90.0f));
+
+        return object;
+    }
 }
 
 void RegisterGameObjectFactories()
@@ -402,6 +525,10 @@ void RegisterGameObjectFactories()
     GameObjectFactory& factory = GameObjectFactory::GetInstance();
     factory.Register("StaticWorld", BuildStaticWorld);
     factory.Register("BasicMeleeEnemy", BuildBasicMeleeEnemy);
-    factory.Register("Player", BuilPlayer);
-	factory.Register("Pickup", BuildPickUp);
+    factory.Register("Player", BuildPlayer);
+    factory.Register("Pickup", BuildPickUp);
+    factory.Register("Switch", SwitchBuild);
+    factory.Register("Toggle", BuildToggle);
+    factory.Register("LevelTransitionDoor", BuildLevelTransitionDoor);
+    factory.Register("TeleporterTunnel", BuildTeleporterTunnel);
 }

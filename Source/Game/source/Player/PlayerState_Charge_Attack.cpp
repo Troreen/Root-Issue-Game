@@ -4,13 +4,27 @@
 
 PlayerState_Charge_Attack::PlayerState_Charge_Attack()
 {
-	myBullet = myOwner->GetComponent<BulletComponent>();
-	myMouse = myOwner->GetComponent<MouseDirectionComponent>();
+	myBullet = nullptr;
+	myMouse = nullptr;
 }
 
 void PlayerState_Charge_Attack::Update(float aDeltaTime, PlayerControllerComponent& aController)
 {
-	myOwner->GetTransform().SetYawPitchRollRadians(std::atan2f(myMouse->GetWorldDirection().y, myMouse->GetWorldDirection().x), 0, 0);
+	GameObject* owner = aController.GetOwner();
+	if (!owner || !myAnimationGraph)
+	{
+		return;
+	}
+
+	myBullet = owner->GetComponent<BulletComponent>();
+	myMouse = owner->GetComponent<MouseDirectionComponent>();
+	if (!myBullet || !myMouse)
+	{
+		aController.SetState(PlayerState_Master::Instance().myWalkState.get());
+		return;
+	}
+
+	owner->GetTransform().SetYawPitchRollRadians(std::atan2f(myMouse->GetWorldDirection().y, myMouse->GetWorldDirection().x), 0, 0);
 
 	myChargeTimer -= aDeltaTime;
 
@@ -37,7 +51,7 @@ void PlayerState_Charge_Attack::Update(float aDeltaTime, PlayerControllerCompone
 			return;
 		}
 
-		myBullet->SpawnBullet();
+		aController.FireBullet();
 		aController.SetState(PlayerState_Master::Instance().myShootState.get());
 	}
 }

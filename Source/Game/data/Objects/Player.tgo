@@ -21,21 +21,21 @@
         "path": "animations\\\\SK\\\\SK_CH_Player.fbx",
         "textures": [
           [
-            "",
-            "",
-            "",
+            "Assets\\Art\\Textures\\T_Player_01_C.dds",
+            "Assets\\Art\\Textures\\T_Player_01_N.dds",
+            "Assets\\Art\\Textures\\T_Player_01_M.dds",
             ""
           ],
           [
-            "",
-            "",
-            "",
+            "Assets\\Art\\Textures\\T_Player_01_C.dds",
+            "Assets\\Art\\Textures\\T_Player_01_N.dds",
+            "Assets\\Art\\Textures\\T_Player_01_M.dds",
             ""
           ],
           [
-            "",
-            "",
-            "",
+            "Assets\\Art\\Textures\\T_Player_01_C.dds",
+            "Assets\\Art\\Textures\\T_Player_01_N.dds",
+            "Assets\\Art\\Textures\\T_Player_01_M.dds",
             ""
           ],
           [

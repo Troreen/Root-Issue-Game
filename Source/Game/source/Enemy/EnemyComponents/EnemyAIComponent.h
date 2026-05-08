@@ -11,6 +11,7 @@ class AnimatedMeshComponent;
 class AnimationGraphComponent;
 class ParticleEmitterComponent;
 class EnemyAttackComponent;
+class DamageableComponent;
 
 enum class BasicEnemyState
 {
@@ -18,6 +19,7 @@ enum class BasicEnemyState
 	Wander,
 	Chasing,
 	Attacking,
+	Hurt,
 	Death,
 	COUNT
 };
@@ -28,6 +30,7 @@ enum class BasicEnemyState
 //	Wander,
 //	Chasing,
 //	Attacking,
+//  Stunned,
 //	Death
 //};
 
@@ -36,7 +39,7 @@ class EnemyAIComponent : public ScriptComponent
 public:
 
 	EnemyAIComponent() = delete;
-	EnemyAIComponent(EnemyType aEnemyType);
+	EnemyAIComponent(const EnemyData& someEnemyData);
 	~EnemyAIComponent();
 
 	void Init(Tga::Engine& aEngine) override;
@@ -44,6 +47,8 @@ public:
 	void OnUpdate(float aDeltaTime) override;
 
 	void SetAggro(bool aState);
+
+	void Reset() override;
 
 private:
 
@@ -58,9 +63,11 @@ private:
 	void UpdateWander(float aDeltaTime);
 	void UpdateChasing(float aDeltaTime);
 	void UpdateAttacking(float aDeltaTime);
+	void UpdateHurt(float aDeltaTime);
 	void UpdateDeath(float aDeltaTime);
 
 	void PickNewDirection();
+	void ResetAnimations();
 
 	float GetRandomAngleDegreeToRad(float aMin, float aMax);
 	float GetRandomFloat(float aMin, float aMax);
@@ -75,6 +82,8 @@ private:
 
 	EnemyType myType;
 
+	EnemyData myEnemyData;
+
 	BasicEnemyState myCurrentState;
 	BasicEnemyState myPreviousState;
 
@@ -83,20 +92,25 @@ private:
 
 	EnemyMovementComponent* myMovement = nullptr;
 	EnemyTargetingComponent* myTargeting = nullptr;
+	EnemyAttackComponent* myAttack = nullptr;
+
 	AnimatedMeshComponent* myAnimation = nullptr;
 	AnimationGraphComponent* myAnimationGraph = nullptr;
 	ParticleEmitterComponent* myEmitterComponent = nullptr;
+	DamageableComponent* myDamageableComponent = nullptr;
 
-	
+
 	std::mt19937 myRandomEngine;
 
 	bool myIsAggro = false;
 	bool myHasBeenInitialized = false;
-	
+
 	float myAnimationWeight;
-	float myChangeFromIdleTime = 5.0f;
+	//float myChangeFromIdleTime = 5.0f;
 	float myIdleTimer = 0.0f;
 	float myWanderTimer = 0.0f;
+	float myDeathTimer = 3.0f;
+	float myHurtTimer = 0.5f;
 	float myMaxSpeed = 400.0f;
 
 	CommonUtilities::Vector3<float> myWanderDirection;

@@ -13,6 +13,22 @@
 
 #include <algorithm>
 
+// Helper: detect any override entries
+static bool HasAnyTextureOverridesInternal(const MeshTextureOverrides& someTextureOverrides)
+{
+    for (int meshIndex = 0; meshIndex < MeshTextureOverrides::kMaxMeshCount; ++meshIndex)
+    {
+        for (int textureIndex = 0; textureIndex < MeshTextureOverrides::kTextureChannelCount; ++textureIndex)
+        {
+            if (!someTextureOverrides.textures[meshIndex][textureIndex].empty())
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 using Matrix4x4f = CommonUtilities::Matrix4x4<float>;
 
 namespace
@@ -44,6 +60,185 @@ namespace
     }
 }
 
+    std::string CombinePath(const std::string& aPrefix, const std::string& aName, const std::string& aSuffix)
+    {
+        return aPrefix + aName + aSuffix;
+    }
+
+    void AppendModelNameChannelCandidates(std::vector<std::string>& someCandidates,
+        const std::string& aModelName,
+        const std::string& aLowerSuffix,
+        const std::string& aUpperSuffix)
+    {
+        if (aModelName.empty())
+        {
+            return;
+        }
+
+        someCandidates.emplace_back(CombinePath("textures/", aModelName, aLowerSuffix));
+        someCandidates.emplace_back(CombinePath("textures/", aModelName, aUpperSuffix));
+    }
+
+    const Tga::TextureResource* FindFirstTextureCandidate(Tga::TextureManager& aTextureManager,
+        const std::vector<std::string>& someCandidates,
+        const Tga::TextureSrgbMode aSrgbMode,
+        std::string* outAppliedTexturePath = nullptr)
+    {
+        for (const std::string& candidate : someCandidates)
+        {
+            if (candidate.empty())
+            {
+                continue;
+            }
+
+            const Tga::TextureResource* texture = aTextureManager.TryGetTexture(candidate.c_str(), aSrgbMode);
+            if (texture != nullptr)
+            {
+                if (outAppliedTexturePath)
+                {
+                    *outAppliedTexturePath = candidate;
+                }
+                return texture;
+            }
+        }
+
+        if (outAppliedTexturePath)
+        {
+            outAppliedTexturePath->clear();
+        }
+
+        return nullptr;
+    }
+
+    void AnimatedMeshComponent::RefreshMaterialBindings()
+    {
+        if (!IsValid())
+        {
+            return;
+        }
+
+        auto model = GetModel();
+        if (!model)
+        {
+            return;
+        }
+
+        Tga::TextureManager& textureManager = Tga::Engine::GetInstance()->GetTextureManager();
+        const std::string baseName = GetBaseFileName(GetModelPath());
+
+        GameObject* owner = GetOwner();
+        const std::string ownerName = owner ? owner->GetName() : "unknown";
+
+        std::cout << "[AnimatedMeshComponent::RefreshMaterialBindings] object='" << ownerName 
+                  << "' model='" << myModelPath << "' baseName='" << baseName 
+                  << "' meshCount=" << model->GetMeshCount() << "\n";
+
+        for (int i = 0; i < static_cast<int>(model->GetMeshCount()); ++i)
+        {
+            const auto getTextureOverride = [&](int aTextureIndex) -> const std::string&
+            {
+                static const std::string emptyTexture;
+                if (!myHasTextureOverrides || i >= MeshTextureOverrides::kMaxMeshCount)
+                {
+                    return emptyTexture;
+                }
+
+                return myTextureOverrides.textures[i][aTextureIndex];
+            };
+
+            const std::string& overrideAlbedo = getTextureOverride(0);
+            const std::string& overrideNormal = getTextureOverride(1);
+            const std::string& overrideMaterial = getTextureOverride(2);
+            const std::string& overrideFx = getTextureOverride(3);
+
+            std::cout << "  [Mesh " << i << "] Searching for textures...\n";
+
+            std::vector<std::string> albedoCandidates;
+            if (!overrideAlbedo.empty()) albedoCandidates.push_back(overrideAlbedo);
+            AppendModelNameChannelCandidates(albedoCandidates, baseName, "_c.dds", "_C.dds");
+            std::string appliedAlbedoPath;
+            if (const Tga::TextureResource* albedo = FindFirstTextureCandidate(
+                textureManager,
+                albedoCandidates,
+                Tga::TextureSrgbMode::ForceSrgbFormat,
+                &appliedAlbedoPath))
+            {
+                myInstance.SetTexture(i, 0, albedo);
+                std::cout << "    Albedo (ch0): " << appliedAlbedoPath << " [OK]\n";
+            }
+            else
+            {
+                std::cout << "    Albedo (ch0): NOT FOUND (tried " << albedoCandidates.size() << " candidates)\n";
+                for (const auto& cand : albedoCandidates) {
+                    std::cout << "      - " << cand << "\n";
+                }
+            }
+
+            std::vector<std::string> normalCandidates;
+            if (!overrideNormal.empty()) normalCandidates.push_back(overrideNormal);
+            AppendModelNameChannelCandidates(normalCandidates, baseName, "_n.dds", "_N.dds");
+            std::string appliedNormalPath;
+            if (const Tga::TextureResource* normal = FindFirstTextureCandidate(
+                textureManager,
+                normalCandidates,
+                Tga::TextureSrgbMode::ForceNoSrgbFormat,
+                &appliedNormalPath))
+            {
+                myInstance.SetTexture(i, 1, normal);
+                std::cout << "    Normal (ch1): " << appliedNormalPath << " [OK]\n";
+            }
+            else
+            {
+                std::cout << "    Normal (ch1): NOT FOUND (tried " << normalCandidates.size() << " candidates)\n";
+                for (const auto& cand : normalCandidates) {
+                    std::cout << "      - " << cand << "\n";
+                }
+            }
+
+            std::vector<std::string> materialCandidates;
+            if (!overrideMaterial.empty()) materialCandidates.push_back(overrideMaterial);
+            AppendModelNameChannelCandidates(materialCandidates, baseName, "_m.dds", "_M.dds");
+            std::string appliedMaterialPath;
+            if (const Tga::TextureResource* material = FindFirstTextureCandidate(
+                textureManager,
+                materialCandidates,
+                Tga::TextureSrgbMode::ForceNoSrgbFormat,
+                &appliedMaterialPath))
+            {
+                myInstance.SetTexture(i, 2, material);
+                std::cout << "    Material (ch2): " << appliedMaterialPath << " [OK]\n";
+            }
+            else
+            {
+                std::cout << "    Material (ch2): NOT FOUND (tried " << materialCandidates.size() << " candidates)\n";
+                for (const auto& cand : materialCandidates) {
+                    std::cout << "      - " << cand << "\n";
+                }
+            }
+
+            std::vector<std::string> fxCandidates;
+            if (!overrideFx.empty()) fxCandidates.push_back(overrideFx);
+            AppendModelNameChannelCandidates(fxCandidates, baseName, "_fx.dds", "_FX.dds");
+            std::string appliedFxPath;
+            if (const Tga::TextureResource* fx = FindFirstTextureCandidate(
+                textureManager,
+                fxCandidates,
+                Tga::TextureSrgbMode::ForceNoSrgbFormat,
+                &appliedFxPath))
+            {
+                myInstance.SetTexture(i, 3, fx);
+                std::cout << "    FX (ch3): " << appliedFxPath << " [OK]\n";
+            }
+            else
+            {
+                std::cout << "    FX (ch3): NOT FOUND (tried " << fxCandidates.size() << " candidates)\n";
+                for (const auto& cand : fxCandidates) {
+                    std::cout << "      - " << cand << "\n";
+                }
+            }
+        }
+    }
+
 AnimatedMeshComponent::AnimatedMeshComponent(std::string aModelPath)
     : myModelPath(std::move(aModelPath))
 {
@@ -72,21 +267,7 @@ void AnimatedMeshComponent::Init(Tga::Engine& /*anEngine*/)
     {
         return;
     }
-
-    Tga::TextureManager& textureManager = Tga::Engine::GetInstance()->GetTextureManager();
-    const std::string baseName = GetBaseFileName(myModelPath);
-    const std::string texturePath = "textures/Common/" + baseName + "_T.dds";
-
-    const Tga::TextureResource* albedo = textureManager.TryGetTexture(texturePath.c_str());
-    if (!albedo)
-    {
-        return;
-    }
-
-    for (int i = 0; i < static_cast<int>(model->GetMeshCount()); ++i)
-    {
-        myInstance.SetTexture(i, 0, albedo);
-    }
+    RefreshMaterialBindings();
 }
 
 void AnimatedMeshComponent::Render()
@@ -306,4 +487,11 @@ AnimatedMeshComponent::RenderMode AnimatedMeshComponent::GetRenderMode() const
 void AnimatedMeshComponent::FlipY(bool aFacingRight)
 {
     myFacingRight = aFacingRight;
+}
+
+void AnimatedMeshComponent::SetTextureOverrides(const MeshTextureOverrides& someTextureOverrides)
+{
+    myTextureOverrides = someTextureOverrides;
+    myHasTextureOverrides = HasAnyTextureOverridesInternal(someTextureOverrides);
+    RefreshMaterialBindings();
 }

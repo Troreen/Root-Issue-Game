@@ -1,0 +1,20 @@
+{
+  "name": "Bush_02(54)",
+  "object-definition": "Bush_02",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    800.0,
+    300.0,
+    -2000.0
+  ]
+}

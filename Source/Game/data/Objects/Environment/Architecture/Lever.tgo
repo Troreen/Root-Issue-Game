@@ -5,10 +5,19 @@
       "description": "",
       "group": "",
       "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "UniqueID",
+      "type": "Int",
+      "value": 0
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
       "is-per-instance": false,
       "name": "factoryType",
       "type": "StringId",
-      "value": "StaticWorld"
+      "value": "Switch"
     },
     {
       "description": "",

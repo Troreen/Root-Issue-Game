@@ -31,6 +31,8 @@ public:
 
     bool IsDead() const;
 
+    void Reset() override;
+
     void SetOnDamageCallback(std::function<void(int, GameObject*)> aCallback);
     void SetOnDeathCallback(std::function<void(GameObject*)> aCallback);
 

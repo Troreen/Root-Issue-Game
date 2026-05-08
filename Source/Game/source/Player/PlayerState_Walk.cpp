@@ -10,6 +10,7 @@
 #include "AnimationGraphComponent.h"
 #include "GameObjectFactory.h"
 #include "SceneObjectData.h"
+#include "DamageableComponent.h"
 
 
 PlayerState_Walk::PlayerState_Walk()
@@ -19,6 +20,11 @@ PlayerState_Walk::PlayerState_Walk()
 
 void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aController)
 {
+	if (myOwner->GetComponent<DamageableComponent>()->IsDead())
+	{
+		aController.SetState(PlayerState_Master::Instance().myDeathState.get());
+	}
+
 	CommonUtilities::Vector3<float> direction;
 	CommonUtilities::Vector3<float> forwardAxis = Essentials::globalCamera.get()->GetCamera().GetTransform().GetForward();
 	forwardAxis.y = 0;
@@ -44,7 +50,12 @@ void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aCont
 		direction += rightAxis;
 	}
 
-	GameObject* player = Essentials::GetEssentials().GetPlayer();
+	GameObject* player = aController.GetOwner();
+	if (!player)
+	{
+		return;
+	}
+
 	direction = direction.GetNormalized() * myWalkSpeed * aDeltaTime;
 
 	if (direction.LengthSqr() > 0)
@@ -70,7 +81,10 @@ void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aCont
 		myWalkAnimation = 0;
 		aController.SetState(PlayerState_Master::Instance().myAttackState.get());
 	}
-	myAnimationGraph->SetFloatParameter("w_walk", myWalkAnimation);
+	if (myAnimationGraph)
+	{
+		myAnimationGraph->SetFloatParameter("w_walk", myWalkAnimation);
+	}
 
 }
 

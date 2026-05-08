@@ -124,6 +124,16 @@ const std::string& GameObject::GetName() const
     return myName;
 }
 
+void GameObject::SetObjDefinition(const std::string& aObjDef)
+{
+    myObjDefinition = aObjDef;
+}
+
+const std::string& GameObject::GetObjDefinition() const
+{
+    return myObjDefinition;
+}
+
 void GameObject::SetTag(const std::string& aTag)
 {
     myTag = aTag;

@@ -318,15 +318,17 @@ void MeshComponent::RefreshMaterialBindings()
         const std::string materialText = appliedMaterialPath.empty() ? "<default>" : appliedMaterialPath;
         const std::string fxText = appliedFxPath.empty() ? "<default>" : appliedFxPath;
 
-        std::cout
-            << "[MeshComponent] object='" << ownerName
-            << "' model='" << myModelPath
-            << "' mesh='" << materialName << "'"
-            << " C=" << albedoText
-            << " N=" << normalText
-            << " M=" << materialText
-            << " FX=" << fxText
-            << "\n";
+        // DEBUG LOGGING
+        // ==============================================
+        // std::cout
+        //     << "[MeshComponent] object='" << ownerName
+        //     << "' model='" << myModelPath
+        //     << "' mesh='" << materialName << "'"
+        //     << " C=" << albedoText
+        //     << " N=" << normalText
+        //     << " M=" << materialText
+        //     << " FX=" << fxText
+        //     << "\n";
     }
 }
 

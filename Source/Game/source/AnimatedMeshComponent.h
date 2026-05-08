@@ -7,6 +7,7 @@
 #include <tge/math/Vector3.h>
 #include <tge/model/AnimatedModelInstance.h>
 #include <tge/shaders/ModelShader.h>
+#include "ModelTextureOverrides.h"
 
 namespace Tga
 {
@@ -87,7 +88,10 @@ public:
 
     void FlipY(bool aFacingRight);
 
+    void SetTextureOverrides(const MeshTextureOverrides& someTextureOverrides);
+
 private:
+    void RefreshMaterialBindings();
     AnimationGraphComponent* ResolveAnimationGraph();
     static std::string BuildWeightPropertyNameFromClipProperty(const std::string& aClipPropertyName);
 
@@ -98,4 +102,6 @@ private:
     AnimationGraphComponent* myAnimationGraph = nullptr;
 
     Tga::ModelShader myModelShader;
+    bool myHasTextureOverrides = false;
+    MeshTextureOverrides myTextureOverrides;
 };

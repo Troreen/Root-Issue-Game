@@ -9,6 +9,7 @@
 #include <tge/primitives/LinePrimitive.h>
 #include <tge/math/color.h>
 #include <tge/math/Matrix4x4.h>
+#include "SwitchComponent.h"
 
 #include <algorithm>
 #include <cmath>
@@ -40,6 +41,14 @@ bool SphereColliderComponent::OnTriggerEnter()
         if (GameDebugSettings::ShowColliderDebugLines())
         {
             std::cout << "[" + GetOwner()->GetName() + "] Execute Trigger: Enter \n";
+            if (GameDebugSettings::ShowColliderDebugLines())
+            {
+                std::cout << "[" + GetOwner()->GetName() + "] Execute Trigger: Enter \n";
+                if (GetOwner()->HasComponent<SwitchComponent>())
+                {
+                    GetOwner()->GetComponent<SwitchComponent>()->Toggle();
+                }
+            }
         }
         return true;
     }

@@ -242,7 +242,7 @@ void GameWorld::Init(const char* argv[])
 #endif
 }
 
-void GameWorld::Update(float deltaTime, const char* argv[])
+void GameWorld::Update(float /* aDeltaTime */, const char* argv[])
 {
 	switch (myWorldStateStack.GetCurrentState()->Update())
 	{
@@ -274,26 +274,25 @@ void GameWorld::Update(float deltaTime, const char* argv[])
 		return;
 	}
 
-	if (myInputHandler.IsKeyPressed(Keys::F3))
-	{
-		DumpSceneVisibilitySnapshot(myGameObjects, myCameraSystem);
-	}
-	UICanvas::UpdateAll();
+	//if (myInputHandler.IsKeyPressed(Keys::F3))
+	//{
+	//	DumpSceneVisibilitySnapshot(myGameObjects, myCameraSystem);
+	//}
 
-	myCameraSystem.UpdateDebugCamera(deltaTime, myInputHandler);
-	myCameraSystem.Update(deltaTime);
-	
+	//myCameraSystem.UpdateDebugCamera(deltaTime, myInputHandler);
+	//myCameraSystem.Update(deltaTime);
+	//
 
-	for (auto& object : myGameObjects)
-	{
-		if (!object || !object->IsActive())
-		{
-			continue;
-		}
-		object->Update(deltaTime);
-	}
+	//for (auto& object : myGameObjects)
+	//{
+	//	if (!object || !object->IsActive())
+	//	{
+	//		continue;
+	//	}
+	//	object->Update(deltaTime);
+	//}
 
-	myVfxSystem.Update(deltaTime);
+	//myVfxSystem.Update(deltaTime);
 }
 
 void GameWorld::ClearSceneObjects()

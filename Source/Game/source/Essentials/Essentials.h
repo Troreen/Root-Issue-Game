@@ -13,6 +13,7 @@
 #include "tge/UI/CanvasObjectDefinitionManager.h"
 #include "Cursor.h"
 #include "PostMaster.h"
+#include "GameObject.h"
 
 class GameObject;
 
@@ -38,6 +39,8 @@ public:
 	static void Shutdown();
 	static Tga::Vector2f GetResolution();
 	static Tga::Vector2i GetResolutionInt();
+	static void AddGameObject(std::unique_ptr<GameObject>& aGameObject);
+	static void PushGameObjectsInto(std::vector<std::unique_ptr<GameObject>>& outGameobjects);
 
 	static GameObject* GetPlayer();
 	static void SetPlayer(GameObject& aPlayer);
@@ -58,6 +61,7 @@ public:
 
 private:
 	
+	static inline std::unique_ptr<std::vector<std::unique_ptr<GameObject>>> myDynamicGameObjects;
 	static inline GameObject* myPlayer;
 
 	Essentials();

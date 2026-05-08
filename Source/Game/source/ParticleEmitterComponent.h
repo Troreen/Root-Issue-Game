@@ -13,7 +13,6 @@ enum class EmissionShape
     Box,
     Sphere,
     Cone,
-    Line,
     COUNT
 };
 
@@ -63,8 +62,6 @@ public:
     void Init(Tga::Engine& anEngine) override;
     void Update(float aDeltaTime) override;
 
-    //void AddParticleWithShape(const ParticleType& aParticleType, const EmissionShape& aShape);
-    
     void Burst(const ParticleType& aParticleType);
 
     void SetEmissionDirection(const ParticleType& aParticleType, const CommonUtilities::Vector3<float>& aDirection);

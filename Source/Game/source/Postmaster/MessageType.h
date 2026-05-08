@@ -31,5 +31,6 @@ enum class MessageType
 	ChangeSFXVolume,
 	PlayIntroTGE,
 	PlayIntroPG33,
+	ActivateSwitch,
 	COUNT
 };

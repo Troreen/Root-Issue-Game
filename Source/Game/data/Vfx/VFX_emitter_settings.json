@@ -2,7 +2,7 @@
   "pools": [
     {
       "title": "blood",
-      "size": 10000,
+      "size": 1000,
       "spriteName": "test",
       "blendState": "additive"
     },
@@ -15,17 +15,17 @@
   ],
 
   "sharedEmitters": {
-    "bloodBurst": {
+    "bloodCone": {
       "particleType": "blood",
-      "shouldBillboard": false,
-      "emissionShape": "box",
+      "shouldBillboard": true,
+      "emissionShape": "cone",
       "emissionRate": 1000,
 
-      "lifeTimeMin": 0,
-      "lifeTimeMax": 2,
+      "lifeTimeMin": 0.1,
+      "lifeTimeMax": 0.5,
 
       "startSpeedMin": 0,
-      "startSpeedMax": 200,
+      "startSpeedMax": 300,
 
       "coneAngle": 45,
 
@@ -34,7 +34,7 @@
       "endSizeMin": 0.1,
       "endSizeMax": 10,
 
-      "burstCount": 500,
+      "burstCount": 50,
 
       "shouldStartActive": false
     },
@@ -59,17 +59,44 @@
 
       "burstCount": 500,
       "shouldStartActive": false
+    },
+    "bulletTrail": {
+      "particleType": "test",
+      "shouldBillboard": true,
+      "emissionShape": "cone",
+      "emissionRate": 200,
+
+      "lifeTimeMin": 0.1,
+      "lifeTimeMax": 0.2,
+
+      "startSpeedMin": 0,
+      "startSpeedMax": 1,
+
+      "coneAngle": 15,
+
+      "startSizeMin": 1,
+      "startSizeMax": 1,
+      "endSizeMin": 1,
+      "endSizeMax": 1,
+
+      "burstCount": 500,
+      "shouldStartActive": false
     }
+
   },
 
   "gameObjects": [
     {
       "editorname": "MeleeEnemy",
-      "emitters": [ "bloodBurst", "testSphere" ]
+      "emitters": [ "bloodCone", "testSphere" ]
     },
     {
       "editorname": "Player ",
-      "emitters": [ "bloodBurst" ]
+      "emitters": [ "bloodCone" ]
+    },
+    {
+      "editorname": "Bullet",
+      "emitters":  ["bulletTrail"]
     }
   ]
 }

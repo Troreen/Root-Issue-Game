@@ -10,15 +10,18 @@ class PlayerState
 public:
 	PlayerState()
 	{
-		myOwner = Essentials::GetPlayer();
-		myAnimationGraph = myOwner->GetComponent<AnimationGraphComponent>();
 	}
 	virtual void Update(float aTimeDelta, PlayerControllerComponent& aController) = 0;
 	virtual void ResetValues() {};
+	void BindToOwner(GameObject* anOwner)
+	{
+		myOwner = anOwner;
+		myAnimationGraph = myOwner ? myOwner->GetComponent<AnimationGraphComponent>() : nullptr;
+	}
 protected:
 
-	GameObject* myOwner;
-	AnimationGraphComponent* myAnimationGraph;
+	GameObject* myOwner = nullptr;
+	AnimationGraphComponent* myAnimationGraph = nullptr;
 
 private:
 };

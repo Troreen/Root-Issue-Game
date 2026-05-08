@@ -53,6 +53,9 @@ public:
     void SetName(const std::string& aName);
     const std::string& GetName() const;
 
+    void SetObjDefinition(const std::string& aObjDef);
+    const std::string& GetObjDefinition() const;
+
     void SetTag(const std::string& aTag);
     const std::string& GetTag() const;
 
@@ -133,6 +136,7 @@ protected:
 
 private:
     std::string myName;
+    std::string myObjDefinition;
     std::string myTag;
     bool myIsActive = true;
     bool myIsPersistent = false;

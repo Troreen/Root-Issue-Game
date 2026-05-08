@@ -9,5 +9,6 @@ enum class ObjectLayer
     Trigger,
     Pickup,
     NPC,
+    Switch,
     Count
 };

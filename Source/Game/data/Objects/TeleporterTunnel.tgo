@@ -1,0 +1,90 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "TeleporterTunnel"
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "StringId",
+      "value": "box"
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderIsTrigger",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderSize",
+      "type": "Float3",
+      "value": [
+        160.0,
+        220.0,
+        160.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Teleporter",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "pairId",
+      "type": "Int",
+      "value": 0
+    },
+    {
+      "description": "0=+Z, 1=+X, 2=-Z, 3=-X",
+      "group": "Teleporter",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "exitDirection",
+      "type": "Int",
+      "value": 0
+    },
+    {
+      "description": "",
+      "group": "Teleporter",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "autoWalkSpeed",
+      "type": "Float",
+      "value": 600.0
+    },
+    {
+      "description": "",
+      "group": "Teleporter",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "exitPadding",
+      "type": "Float",
+      "value": 90.0
+    }
+  ]
+}

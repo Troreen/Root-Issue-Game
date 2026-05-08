@@ -565,7 +565,6 @@ namespace
         {
             if (prop.name == aPropertyName)
             {
-                // StringId is the TGE string type
                 if (auto* strIdPtr = prop.value.Get<Tga::StringId>())
                 {
                     outValue = strIdPtr->GetString();
@@ -583,7 +582,11 @@ std::vector<SceneObjectData> SceneImportService::LoadSceneObjects(const std::str
     std::vector<SceneObjectData> sceneObjects;
 
     Tga::Scene scene;
-    Tga::LoadScene(scenePath.c_str(), scene);
+    if (!Tga::LoadScene(scenePath.c_str(), scene))
+    {
+        std::cout << "[SceneImport] Failed to load scene file: " << scenePath << "\n";
+        return sceneObjects;
+    }
 
     Tga::SceneObjectDefinitionManager sceneDefinitionManager;
     const std::string gameAssetRootPath = Tga::Settings::GameAssetRoot().string();
@@ -623,30 +626,29 @@ std::vector<SceneObjectData> SceneImportService::LoadSceneObjects(const std::str
                     continue;
                 }
 
-                if (Tga::ModelFactory::GetInstance().GetModel(path.GetString()))
-                {
-                    data.properties["modelPath"] = std::string(path.GetString());
-                    data.properties["model"] = std::string(path.GetString());
+                // Store model path for both static and animated models
+                data.properties["modelPath"] = std::string(path.GetString());
+                data.properties["model"] = std::string(path.GetString());
 
-                    MeshTextureOverrides textureOverrides;
-                    bool hasAnyTextureOverrides = false;
-                    for (int meshIndex = 0; meshIndex < MeshTextureOverrides::kMaxMeshCount; ++meshIndex)
+                // Extract texture overrides regardless of model type (static or animated)
+                MeshTextureOverrides textureOverrides;
+                bool hasAnyTextureOverrides = false;
+                for (int meshIndex = 0; meshIndex < MeshTextureOverrides::kMaxMeshCount; ++meshIndex)
+                {
+                    for (int textureIndex = 0; textureIndex < MeshTextureOverrides::kTextureChannelCount; ++textureIndex)
                     {
-                        for (int textureIndex = 0; textureIndex < MeshTextureOverrides::kTextureChannelCount; ++textureIndex)
+                        const Tga::StringId textureId = value.textures[meshIndex][textureIndex];
+                        if (!textureId.IsEmpty())
                         {
-                            const Tga::StringId textureId = value.textures[meshIndex][textureIndex];
-                            if (!textureId.IsEmpty())
-                            {
-                                textureOverrides.textures[meshIndex][textureIndex] = textureId.GetString();
-                                hasAnyTextureOverrides = true;
-                            }
+                            textureOverrides.textures[meshIndex][textureIndex] = textureId.GetString();
+                            hasAnyTextureOverrides = true;
                         }
                     }
+                }
 
-                    if (hasAnyTextureOverrides)
-                    {
-                        data.properties["modelTextures"] = textureOverrides;
-                    }
+                if (hasAnyTextureOverrides)
+                {
+                    data.properties["modelTextures"] = textureOverrides;
                 }
             }
         }
@@ -662,18 +664,17 @@ std::vector<SceneObjectData> SceneImportService::LoadSceneObjects(const std::str
         data.rotation = CommonUtilities::Quaternion<float>(rotation.W, rotation.X, rotation.Y, rotation.Z);
         data.scale = CommonUtilities::Vector3<float>(scale.X, scale.Y, scale.Z);
 
+        //Extract Object Definition Name
+        const std::string ObjectDef = p.second->GetSceneObjectDefinitionName().GetString();
+        data.ObjDefinition = ObjectDef;
+
+
         // Extract all custom properties into the properties map
         for (const Tga::ScenePropertyDefinition& property : sceneObjectProperties)
         {
             std::string propName = property.name.GetString();
-            
-            // Skip built-in properties we've already handled
-            if (propName == "typeId" || propName == "Tag" || propName == "model" || propName == "renderMode")
-            {
-                continue;
-            }
 
-            // Store typed properties (TGE uses StringId for strings)
+            // Store typed properties
             if (auto* floatPtr = property.value.Get<float>())
             {
                 data.properties[propName] = *floatPtr;
@@ -688,7 +689,7 @@ std::vector<SceneObjectData> SceneImportService::LoadSceneObjects(const std::str
             }
             else if (auto* strIdPtr = property.value.Get<Tga::StringId>())
             {
-                // Convert StringId to std::string for easier use
+                // Convert StringId to std::string
                 data.properties[propName] = std::string(strIdPtr->GetString());
             }
             else if (auto* clipRefPtr =
@@ -802,6 +803,8 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
                 transform.SetPosition(merged.position);
                 transform.SetRotation(merged.rotation);
                 transform.SetScale(merged.scale);
+
+                gameObject.get()->SetObjDefinition(sceneObject.ObjDefinition.c_str());
 
                 objects.push_back(std::move(gameObject));
             }

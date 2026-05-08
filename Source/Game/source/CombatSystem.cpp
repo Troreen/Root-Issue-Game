@@ -13,6 +13,7 @@
 #include <tge/math/Matrix4x4.h>
 #include <tge/math/color.h>
 #include <tge/primitives/LinePrimitive.h>
+#include "SwitchComponent.h"
 
 #include <algorithm>
 #include <cmath>
@@ -354,6 +355,17 @@ void CombatSystem::Update(float aDeltaTime, std::vector<std::unique_ptr<GameObje
                 << " attacker='" << attack.data.owner->GetName() << "'"
                 << " target='" << target->GetName() << "'"
                 << " damage=" << attack.data.damage << "\n";
+            switch (target->GetLayer())
+            {
+            case ObjectLayer::Switch:
+                if (target->HasComponent<SwitchComponent>())
+                {
+                    target->GetComponent<SwitchComponent>()->Toggle();
+                }
+                break;
+            default:
+                break;
+            }
         }
 
         attack.remainingSeconds -= aDeltaTime;

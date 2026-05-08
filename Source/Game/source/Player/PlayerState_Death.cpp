@@ -21,5 +21,8 @@ void PlayerState_Death::Update(float aTimeDelta, PlayerControllerComponent& aCon
 void PlayerState_Death::ResetValues()
 {
 	myDeathTimer = 3.f;
-	myAnimationGraph->SetFloatParameter("w_death", 1.f);
+	if (myAnimationGraph)
+	{
+		myAnimationGraph->SetFloatParameter("w_death", 1.f);
+	}
 }

@@ -1,0 +1,27 @@
+{
+  "name": "LevelTransitionDoor",
+  "object-definition": "LevelTransitionDoor",
+  "path": "",
+  "properties": [
+    {
+      "name": "targetScene",
+      "type": "StringId",
+      "value": "Level1.tgs"
+    }
+  ],
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    1163.2645263671875,
+    0.0,
+    -918.735595703125
+  ]
+}

@@ -850,6 +850,7 @@ namespace
         rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::Enemy, CollisionRule::Block);
         rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::Trigger, CollisionRule::Trigger);
         rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::Pickup, CollisionRule::Trigger);
+        rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::Switch, CollisionRule::Trigger);
         return rules;
     }
 
@@ -1004,12 +1005,14 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
     std::vector<GameObject*> worldStaticObjects;
     std::vector<GameObject*> triggerObjects;
     std::vector<GameObject*> pickupObjects;
+    std::vector<GameObject*> switchObjects;
 
     playerObjects.reserve(someGameObjects.size());
     enemyObjects.reserve(someGameObjects.size());
     worldStaticObjects.reserve(someGameObjects.size());
     triggerObjects.reserve(someGameObjects.size());
     pickupObjects.reserve(someGameObjects.size());
+    switchObjects.reserve(someGameObjects.size());
 
     for (auto& object : someGameObjects)
     {
@@ -1036,6 +1039,9 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
             break;
         case ObjectLayer::Pickup:
             pickupObjects.push_back(object.get());
+            break;
+        case ObjectLayer::Switch:
+            switchObjects.push_back(object.get());
             break;
         default:
             break;

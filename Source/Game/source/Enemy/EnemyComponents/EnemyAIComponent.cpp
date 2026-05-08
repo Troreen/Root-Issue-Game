@@ -5,6 +5,7 @@
 #include "AnimationGraphComponent.h"
 #include "ParticleEmitterComponent.h"
 #include "EnemyAttackComponent.h"
+#include "DamageableComponent.h"
 #include "GameObject.h"
 #include "Essentials.h"
 //EnemyAIComponent::EnemyAIComponent()
@@ -29,9 +30,10 @@ float EnemyAIComponent::GetRandomFloat(float aMin, float aMax)
 	return rndDist(myRandomEngine);
 }
 
-EnemyAIComponent::EnemyAIComponent(EnemyType aEnemyType)
+EnemyAIComponent::EnemyAIComponent(const EnemyData& someEnemyData)
 {
-	myType = aEnemyType;
+	myEnemyData = someEnemyData;
+	myType = someEnemyData.EnemyType;
 	myCurrentState = BasicEnemyState::Idle;
 	myPreviousState = myCurrentState;
 	myAnimationWeight = 0.0f;
@@ -53,28 +55,38 @@ void EnemyAIComponent::Init(Tga::Engine& /*aEngine*/)
 	myAnimation = GetOwner()->GetComponent<AnimatedMeshComponent>();
 	myAnimationGraph = GetOwner()->GetComponent<AnimationGraphComponent>();
 	myEmitterComponent = GetOwner()->GetComponent<ParticleEmitterComponent>();
+	myAttack = GetOwner()->GetComponent<EnemyAttackComponent>();
+	myDamageableComponent = GetOwner()->GetComponent<DamageableComponent>();
 
 
 	//Debug
 	if (!myMovement)
 	{
-		std::cout << "Error: Movement is nullptr" << std::endl;
+		std::cout << "Error: Movement is nullptr in AI" << std::endl;
 	}
 	if (!myTargeting)
 	{
-		std::cout << "Error: Targeting is nullptr" << std::endl;
+		std::cout << "Error: Targeting is nullptr in AI" << std::endl;
 	}
 	if (!myAnimation)
 	{
-		std::cout << "Error: AnimationMesh is nullptr" << std::endl;
+		std::cout << "Error: AnimationMesh is nullptr in AI" << std::endl;
 	}
 	if (!myAnimationGraph)
 	{
-		std::cout << "Error: AnimationGraph is nullptr" << std::endl;
+		std::cout << "Error: AnimationGraph is nullptr in AI" << std::endl;
 	}
 	if (!myEmitterComponent)
 	{
-		std::cout << "Error: EmitterComponent is nullptr" << std::endl;
+		std::cout << "Error: EmitterComponent is nullptr in AI" << std::endl;
+	}
+	if (!myAttack)
+	{
+		std::cout << "Error: myAttack is nullptr in AI" << std::endl;
+	}
+	if (!myDamageableComponent)
+	{
+		std::cout << "Error: myDamageableComponent is nullptr in AI" << std::endl;
 	}
 
 	//// TODO: testing of particles
@@ -97,40 +109,12 @@ void EnemyAIComponent::Init(Tga::Engine& /*aEngine*/)
 
 void EnemyAIComponent::OnStart()
 {
-	//myMovement = GetOwner()->GetComponent<EnemyMovementComponent>();
-	//myTargeting = GetOwner()->GetComponent<EnemyTargetingComponent>();
-	//myAnimation = GetOwner()->GetComponent<AnimatedMeshComponent>();
-	//myAnimationGraph = GetOwner()->GetComponent<AnimationGraphComponent>();
-
-	////Debug
-	//if (!myMovement)
-	//{
-	//	std::cout << "Error: Movement is nullptr" << std::endl;
-	//}
-	//if (!myTargeting)
-	//{
-	//	std::cout << "Error: Targeting is nullptr" << std::endl;
-	//}
-	//if (!myAnimation)
-	//{
-	//	std::cout << "Error: AnimationMesh is nullptr" << std::endl;
-	//}
-	//if (!myAnimationGraph)
-	//{
-	//	std::cout << "Error: AnimationGraph is nullptr" << std::endl;
-	//}
-
-	//myIdleTimer = Random(1.0f, 2.0f);
-	//myWanderTimer = Random(1.5f, 3.0f);
-
-	//PickNewDirection();
-
 	myAnimationWeight = 0.0f;
 }
 
 void EnemyAIComponent::OnUpdate(float aDeltaTime)
 {
-	if (!myMovement || !myTargeting || !myAnimation || !myAnimationGraph)
+	if (!myMovement || !myTargeting || !myAnimation || !myAnimationGraph || !myAttack)
 	{
 		return;
 	}
@@ -141,6 +125,21 @@ void EnemyAIComponent::OnUpdate(float aDeltaTime)
 void EnemyAIComponent::SetAggro(bool aState)
 {
 	myIsAggro = aState;
+}
+
+void EnemyAIComponent::Reset()
+{
+	GetOwner()->SetActive(true);
+	
+	ResetAnimations();
+
+	myCurrentState = BasicEnemyState::Idle;
+	myIsAggro = false;
+	myAnimationWeight = 0.0f;
+	myIdleTimer = GetRandomFloat(1.0f, 2.0f);
+	myWanderTimer = GetRandomFloat(1.5f, 3.0f);
+	myDeathTimer = 3.0f;
+	myMaxSpeed = 450.0f;
 }
 
 void EnemyAIComponent::HandleStatesBasicEnemy(float aDeltaTime)
@@ -158,6 +157,9 @@ void EnemyAIComponent::HandleStatesBasicEnemy(float aDeltaTime)
 		break;
 	case BasicEnemyState::Attacking:
 		UpdateAttacking(aDeltaTime);
+		break;
+	case BasicEnemyState::Hurt:
+		UpdateHurt(aDeltaTime);
 		break;
 	case BasicEnemyState::Death:
 		UpdateDeath(aDeltaTime);
@@ -190,6 +192,8 @@ std::string EnemyAIComponent::StringifyState(const BasicEnemyState& aState) cons
 		return "Chasing";
 	case BasicEnemyState::Attacking:
 		return "Attacking";
+	case BasicEnemyState::Hurt:
+		return "Hurt";
 	case BasicEnemyState::Death:
 		return "Death";
 	default:
@@ -209,6 +213,7 @@ void EnemyAIComponent::UpdateIdle(float aDeltaTime)
 
 	if (myIdleTimer <= 0.0f)
 	{
+		myAnimationGraph->SetFloatParameter("w_walk", 1.0f);
 		ChangeState(BasicEnemyState::Wander);
 		myWanderTimer = GetRandomFloat(1.5f, 3.0f);
 	}
@@ -217,7 +222,6 @@ void EnemyAIComponent::UpdateIdle(float aDeltaTime)
 
 void EnemyAIComponent::UpdateWander(float aDeltaTime)
 {
-	myAnimationGraph->SetFloatParameter("w_walk", 1.0f);
 	myMovement->RotateTowards(myWanderDirection, aDeltaTime);
 	myMovement->MoveForward(aDeltaTime);
 
@@ -226,6 +230,7 @@ void EnemyAIComponent::UpdateWander(float aDeltaTime)
 	if (myTargeting->IsTargetInRange())
 	{
 		myAnimationGraph->SetFloatParameter("w_walk", 0);
+		myAnimationGraph->SetFloatParameter("w_aggro_walk", 1.0f);
 		ChangeState(BasicEnemyState::Chasing);
 		myIsAggro = true;
 	}
@@ -249,26 +254,115 @@ void EnemyAIComponent::UpdateWander(float aDeltaTime)
 
 void EnemyAIComponent::UpdateChasing(float aDeltaTime)
 {
-	myAnimationGraph->SetFloatParameter("w_aggro_walk", 1.0f);
-
 	GameObject* target = Essentials::GetPlayer();
 
 	if (!target)
 	{
 		return;
 	}
-	
+
+	float distance = (target->GetTransform().GetPosition() -
+		GetOwner()->GetTransform().GetPosition()).Length();
+
+	if (myDamageableComponent->IsDead())
+	{
+		myAnimationGraph->SetFloatParameter("w_death", 1.0f);
+		myAnimationGraph->SetFloatParameter("w_aggro_walk", 0.f);
+		ChangeState(BasicEnemyState::Death);
+		return;
+	}
+
+	if (myDamageableComponent->TookDamageThisFrame())
+	{
+		myAnimationGraph->SetFloatParameter("w_aggro_walk", 0.f);
+		myAnimationGraph->SetFloatParameter("w_hurt", 1.0f);
+		ChangeState(BasicEnemyState::Hurt);
+		return;
+	}
+
+	if (distance <= myEnemyData.AttackRange)
+	{
+		if (myAttack->CanAttack())
+		{
+			myAnimationGraph->SetFloatParameter("w_aggro_walk", 0);
+			myAnimationGraph->SetFloatParameter("w_attack", 1.0f);
+			myAttack->StartAttack(target);
+			ChangeState(BasicEnemyState::Attacking);
+			return;
+		}
+	}
+
 	myMovement->MoveTowardsTarget(target, aDeltaTime);
 }
 
 void EnemyAIComponent::UpdateAttacking(float aDeltaTime)
 {
 	aDeltaTime;
+
+	if (myDamageableComponent->IsDead())
+	{
+		myAnimationGraph->SetFloatParameter("w_death", 1.0f);
+		ChangeState(BasicEnemyState::Death);
+		return;
+	}
+
+	if (myDamageableComponent->TookDamageThisFrame())
+	{
+		myAnimationGraph->SetFloatParameter("w_hurt", 1.0f);
+		myAnimationGraph->SetFloatParameter("w_attack", 0.0f);
+		ChangeState(BasicEnemyState::Hurt);
+		return;
+	}
+
+	if (!myAttack->IsAttacking())
+	{
+		myAnimationGraph->SetFloatParameter("w_attack", 0.0f);
+		myAnimationGraph->SetFloatParameter("w_aggro_walk", 1.0f);
+		ChangeState(BasicEnemyState::Chasing);
+	}
+}
+
+void EnemyAIComponent::UpdateHurt(float aDeltaTime)
+{
+	// Play hurt animation and spawn particle
+	// If hurt animation is over, state can change to different state
+
+	myHurtTimer -= aDeltaTime;
+
+	Vector3f emissionDir = GetOwner()->GetTransform().GetPosition() - Essentials::GetPlayer()->GetTransform().GetPosition();
+	myEmitterComponent->SetEmissionDirection(ParticleType::Blood, emissionDir);
+	myEmitterComponent->Burst(ParticleType::Blood);
+
+	if (myHurtTimer < 0.0f)
+	{
+		if (myIsAggro)
+		{
+			myAnimationGraph->SetFloatParameter("w_aggro_walk", 1.0f);
+			myAnimationGraph->SetFloatParameter("w_hurt", 0.0f);
+			myHurtTimer = 0.5f;
+			ChangeState(BasicEnemyState::Chasing);
+		}
+		else
+		{
+			myIsAggro = true;
+			myAnimationGraph->SetFloatParameter("w_aggro_walk", 1.0f);
+			myAnimationGraph->SetFloatParameter("w_hurt", 0.0f);
+			myHurtTimer = 0.5f;
+			ChangeState(BasicEnemyState::Chasing);
+		}
+
+	}
 }
 
 void EnemyAIComponent::UpdateDeath(float aDeltaTime)
 {
-	aDeltaTime;
+	myDeathTimer -= aDeltaTime;
+
+	if (myDeathTimer < 0)
+	{
+		GetOwner()->SetActive(false);
+		ResetAnimations();
+	}
 }
 
 void EnemyAIComponent::PickNewDirection()
@@ -279,6 +373,16 @@ void EnemyAIComponent::PickNewDirection()
 	myWanderDirection.x = angleX;
 	myWanderDirection.z = angleZ;
 	myWanderDirection.y = 0.0f;
+}
+
+void EnemyAIComponent::ResetAnimations()
+{
+	myAnimationGraph->SetFloatParameter("w_walk", 0.0f);
+	myAnimationGraph->SetFloatParameter("w_death", 0.0f);
+	myAnimationGraph->SetFloatParameter("w_aggro_walk", 0.0f);
+	myAnimationGraph->SetFloatParameter("w_idle", 0.0f);
+	myAnimationGraph->SetFloatParameter("w_attack", 0.0f);
+	myAnimationGraph->SetFloatParameter("w_hurt", 0.0f);
 }
 
 void EnemyAIComponent::HandleStatesRollingEnemy()

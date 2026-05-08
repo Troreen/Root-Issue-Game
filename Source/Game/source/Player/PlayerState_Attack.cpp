@@ -41,9 +41,15 @@ PlayerState_Attack::PlayerState_Attack()
 
 void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aController)
 {
+	if (!myOwner || !myAnimationGraph)
+	{
+		aController.SetState(PlayerState_Master::Instance().myWalkState.get());
+		return;
+	}
+
 	if (!myHasSpawnedHitbox)
 	{
-		StartPlayerMeleeAttack(*aController.GetOwner());
+		StartPlayerMeleeAttack(*myOwner);
 		myHasSpawnedHitbox = true;
 	}
 

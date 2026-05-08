@@ -11,6 +11,15 @@
 #include "ObbColliderComponent.h"
 #include "SphereColliderComponent.h"
 
+#include <tge/drawers/SpriteDrawer.h>
+#include <tge/graphics/DX11.h>
+#include <tge/settings/Settings.h>
+#include <tge/sprite/sprite.h>
+#include <tge/texture/TextureManager.h>
+
+#include <algorithm>
+#include <filesystem>
+
 namespace
 {
 	void RegisterAnimationGraphNodesOnce()
@@ -29,6 +38,58 @@ namespace
 	}
 
 	bool gEnableFrustumCulling = true;
+
+	std::string ResolveScenePathForLoad(const std::string& aScenePath)
+	{
+		if (aScenePath.empty())
+		{
+			return {};
+		}
+
+		namespace fs = std::filesystem;
+		const fs::path authoredPath(aScenePath);
+		std::vector<fs::path> candidates;
+		candidates.reserve(4);
+
+		candidates.push_back(authoredPath);
+		if (authoredPath.extension() != ".tgs")
+		{
+			candidates.push_back(authoredPath.string() + ".tgs");
+		}
+
+		if (!authoredPath.has_parent_path())
+		{
+			candidates.push_back(fs::path("Levels") / authoredPath);
+			if (authoredPath.extension() != ".tgs")
+			{
+				candidates.push_back(fs::path("Levels") / (authoredPath.string() + ".tgs"));
+			}
+		}
+
+		for (const fs::path& candidate : candidates)
+		{
+			const std::string candidateString = candidate.generic_string();
+			if (!Tga::Settings::ResolveAssetPath(candidateString).empty())
+			{
+				return candidateString;
+			}
+
+			if (fs::exists(candidate))
+			{
+				return candidateString;
+			}
+
+			const fs::path rootedPath = Tga::Settings::GameAssetRoot() / candidate;
+			if (fs::exists(rootedPath))
+			{
+				return candidateString;
+			}
+		}
+
+		std::cout << "[SceneTransition] Could not resolve scene path '" << aScenePath
+			<< "'. Passing authored value through.\n";
+		return aScenePath;
+	}
 
 	void DumpSceneVisibilitySnapshot(
 		const std::vector<std::unique_ptr<GameObject>>& someObjects,
@@ -116,6 +177,12 @@ namespace
 }
 
 
+InGame::~InGame()
+{
+	WorldTransitionService::SetListener(nullptr);
+	WorldTransitionService::EndSequence();
+}
+
 void InGame::Init(CameraSystem& aCamera, const char* argv[])
 {
 	Tga::Engine& engine = *Tga::Engine::GetInstance();
@@ -148,13 +215,15 @@ void InGame::Init(CameraSystem& aCamera, const char* argv[])
 
 	myVfxSystem.Init();
 	VfxService::Set(&myVfxSystem);
+	WorldTransitionService::SetListener(this);
+	WorldTransitionService::EndSequence();
 
 	/*SceneManager& sceneManager = *Essentials::globalSceneManager;
 	sceneManager.RefreshSceneList();*/
 
 	if (argv[1] == nullptr)
 	{
-		StartSceneLoadAsync("Levels/PipelineTest.tgs", true);
+		StartSceneLoadAsync("Levels/HUB_00.tgs", true);
 	}
 	else
 	{
@@ -238,6 +307,9 @@ eState InGame::Update()
 	}
 
 	Essentials::globalAudioManager->Update(deltaTime);
+	Essentials::PushGameObjectsInto(myGameObjects);
+	UICanvas::UpdateAll();
+	UpdateSceneFade(deltaTime);
 	return eState::COUNT;
 }
 
@@ -258,10 +330,115 @@ void InGame::Render()
 		myEnableAmbientLight,
 		true);
 	myCombatSystem.RenderDebug();
+	RenderSceneFadeOverlay();
 
 #ifdef _DEBUG
 	myCameraSystem->RenderDebugUi();
 #endif
+}
+
+bool InGame::RequestSceneTransition(
+	const std::string& aTargetScene,
+	const std::string& aTargetSpawnId,
+	const float aFadeOutSeconds)
+{
+	if (aTargetScene.empty() || mySceneFadeState != SceneFadeState::None)
+	{
+		return false;
+	}
+
+	myPendingSceneTransitionTarget = aTargetScene;
+	myPendingSceneTransitionSpawnId = aTargetSpawnId;
+	mySceneFadeDuration = (std::max)(0.01f, aFadeOutSeconds);
+	mySceneFadeAlpha = 0.0f;
+	mySceneFadeState = SceneFadeState::FadingOutForSceneLoad;
+	return true;
+}
+
+void InGame::UpdateSceneFade(const float aDeltaTime)
+{
+	if (mySceneFadeState == SceneFadeState::None)
+	{
+		return;
+	}
+
+	const float fadeStep = aDeltaTime / (std::max)(0.01f, mySceneFadeDuration);
+	if (mySceneFadeState == SceneFadeState::FadingOutForSceneLoad)
+	{
+		mySceneFadeAlpha = (std::min)(1.0f, mySceneFadeAlpha + fadeStep);
+		if (mySceneFadeAlpha < 1.0f)
+		{
+			return;
+		}
+
+		const std::string targetScene = myPendingSceneTransitionTarget;
+		if (!targetScene.empty())
+		{
+			StartSceneLoadAsync(ResolveScenePathForLoad(targetScene));
+		}
+
+		WorldTransitionService::EndSequence();
+		mySceneFadeAlpha = 0.0f;
+		mySceneFadeState = SceneFadeState::None;
+		myPendingSceneTransitionTarget.clear();
+		myPendingSceneTransitionSpawnId.clear();
+		return;
+	}
+
+	if (mySceneFadeState == SceneFadeState::FadingInAfterSceneLoad)
+	{
+		mySceneFadeAlpha = (std::max)(0.0f, mySceneFadeAlpha - fadeStep);
+		if (mySceneFadeAlpha <= 0.0f)
+		{
+			mySceneFadeState = SceneFadeState::None;
+			myPendingSceneTransitionTarget.clear();
+			myPendingSceneTransitionSpawnId.clear();
+		}
+	}
+}
+
+void InGame::RenderSceneFadeOverlay()
+{
+	if (mySceneFadeAlpha <= 0.0f)
+	{
+		return;
+	}
+
+	Tga::Engine* engine = Tga::Engine::GetInstance();
+	if (!engine)
+	{
+		return;
+	}
+
+	const char* texturePath = "textures/T_Black_c.dds";
+	if (!engine->GetTextureManager().TryGetTexture(texturePath))
+	{
+		return;
+	}
+
+	Tga::SpriteSharedData sharedData;
+	sharedData.myTexture = engine->GetTextureManager().GetTexture(texturePath);
+
+	const Tga::Vector2ui renderSize = engine->GetRenderSize();
+	Tga::Sprite2DInstanceData instance;
+	instance.myPosition = {
+		static_cast<float>(renderSize.x) * 0.5f,
+		static_cast<float>(renderSize.y) * 0.5f
+	};
+	instance.mySize = {
+		static_cast<float>(renderSize.x),
+		static_cast<float>(renderSize.y)
+	};
+	instance.myColor = { 1.0f, 1.0f, 1.0f, mySceneFadeAlpha };
+	instance.myRenderOrder = 10000;
+
+	Tga::DX11::BackBuffer->SetAsActiveTarget();
+	auto& graphicsStateStack = engine->GetGraphicsEngine().GetGraphicsStateStack();
+	graphicsStateStack.Push();
+	graphicsStateStack.SetDefaultCamera();
+	engine->GetGraphicsEngine().GetSpriteDrawer().Draw(sharedData, instance);
+	graphicsStateStack.Pop();
+	Tga::DX11::BackBuffer->SetAsActiveTarget(Tga::DX11::DepthBuffer);
 }
 
 namespace

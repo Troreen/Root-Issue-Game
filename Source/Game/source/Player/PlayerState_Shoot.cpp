@@ -7,6 +7,12 @@
 
 void PlayerState_Shoot::Update(float aDeltaTime, PlayerControllerComponent& aController)
 {
+	if (!myAnimationGraph)
+	{
+		aController.SetState(PlayerState_Master::Instance().myWalkState.get());
+		return;
+	}
+
 	myFireTimer -= aDeltaTime;
 	myAnimationGraph->SetFloatParameter("w_ranged_attack", 1);
 
