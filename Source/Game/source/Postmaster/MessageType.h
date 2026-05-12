@@ -32,5 +32,6 @@ enum class MessageType
 	PlayIntroTGE,
 	PlayIntroPG33,
 	ActivateSwitch,
+	AnimationEvent,
 	COUNT
 };

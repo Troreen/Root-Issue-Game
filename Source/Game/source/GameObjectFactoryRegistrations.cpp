@@ -2,6 +2,7 @@
 
 #include "AnimatedMeshComponent.h"
 #include "AnimationDemoToggleComponent.h"
+#include "AnimationEventDispatcherComponent.h"
 #include "AnimationGraphComponent.h"
 #include "BoxColliderComponent.h"
 #include "CapsuleColliderComponent.h"
@@ -290,6 +291,8 @@ namespace
             {
                 anObject.AddComponent<AnimationDemoToggleComponent>();
             }
+
+            anObject.AddComponent<AnimationEventDispatcherComponent>();
             return;
         }
 

@@ -36,6 +36,8 @@ At a high level, this system:
 | [Source/Game/source/AnimationGraphRuntime.cpp](../Source/Game/source/AnimationGraphRuntime.cpp) | Converts object properties to runtime properties, ensures defaults, runs script graph, collects root motion/events, outputs pose.  
 | [Source/Game/source/AnimationEventQueue.h](../Source/Game/source/AnimationEventQueue.h) | Event queue interface for animation events (for example hit windows).  
 | [Source/Game/source/AnimationEventQueue.cpp](../Source/Game/source/AnimationEventQueue.cpp) | Event queue implementation (push, pop, drain).  
+| [Source/Game/source/AnimationEventDispatcherComponent.h](../Source/Game/source/AnimationEventDispatcherComponent.h) | Drains animation events once per frame and dispatches them to listeners/PostMaster.  
+| [Source/Game/source/AnimationEventListener.h](../Source/Game/source/AnimationEventListener.h) | Declares the local listener interface and event context payloads.  
 | [Source/Game/source/AnimationDemoToggleComponent.h](../Source/Game/source/AnimationDemoToggleComponent.h) | Declares demo controls for changing/blending clips at runtime.  
 | [Source/Game/source/AnimationDemoToggleComponent.cpp](../Source/Game/source/AnimationDemoToggleComponent.cpp) | Demo input behavior: Left/Right switch active clip, Home returns to idle, Up/Down blends to neighbor clips.  
 | [Source/Game/source/GameWorld.cpp](../Source/Game/source/GameWorld.cpp) | Registers script node sets once at startup, including animation nodes.  
@@ -138,7 +140,11 @@ Important note:
 1. Open the target clip .tgac file.
 2. Add event entries with time and id.
 3. Runtime collects crossed events each frame.
-4. Read events from AnimationEventQueue in gameplay code to trigger effects (hit, sound, VFX).
+4. Gameplay observes events through AnimationEventDispatcherComponent listeners or MessageType::AnimationEvent.
+
+Audience-specific event guides:
+- Engineers: [Animation Event System - Engineering Guide](Animation_Event_System_Engineering.md)
+- Animators: [Animation Event System - Animator Guide](Animation_Event_System_Animators.md)
 
 ## Player State Tree (Target Design)
 
@@ -327,14 +333,17 @@ Current runtime behavior:
 Use events for timing-sensitive gameplay (damage windows, VFX, sound sync).
 
 ```cpp
-#include "AnimationEventQueue.h"
+#include "AnimationEventListener.h"
+#include "ScriptComponent.h"
 
-void HandleAnimationEvents(AnimationGraphComponent& aGraph)
+class AttackEventComponent final
+  : public ScriptComponent
+  , public AnimationEventListener
 {
-  const std::vector<AnimationEventRecord> events = aGraph.GetEventQueue().Drain();
-  for (const AnimationEventRecord& eventRecord : events)
+public:
+  void OnAnimationEvent(const AnimationEventContext& anEvent) override
   {
-    const std::string eventName = eventRecord.id.GetString();
+    const std::string eventName = anEvent.record.id.GetString();
 
     if (eventName == "attack_hit")
     {
@@ -345,8 +354,10 @@ void HandleAnimationEvents(AnimationGraphComponent& aGraph)
       // Spawn sound and decal.
     }
   }
-}
+};
 ```
+
+Important: normal gameplay code should not drain AnimationEventQueue directly. AnimationEventDispatcherComponent drains once in LateUpdate so multiple observers can receive the same event.
 
 ### Consuming root motion in gameplay code
 

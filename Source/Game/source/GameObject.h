@@ -106,6 +106,18 @@ public:
     }
 
     template <typename T>
+    void GetComponentsOfType(std::vector<T*>& outComponents) const
+    {
+        for (const auto& component : myComponents)
+        {
+            if (auto* casted = dynamic_cast<T*>(component.get()))
+            {
+                outComponents.push_back(casted);
+            }
+        }
+    }
+
+    template <typename T>
     bool HasComponent() const
     {
         return GetComponent<T>() != nullptr;
