@@ -90,7 +90,7 @@
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "AnimationGraphs\\\\Grafik\\\\SK_A_Lever.tgscript"
+      "value": "animation\\Animation Graphs\\Lever.tgscript"
     },
     {
       "description": "",
@@ -118,7 +118,7 @@
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "AnimationClips\\\\Grafik\\\\SK_A_Lever_idle.tgac"
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Lever.tgac"
       }
     },
     {

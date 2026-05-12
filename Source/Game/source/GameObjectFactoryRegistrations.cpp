@@ -40,7 +40,10 @@
 
 #include <algorithm>
 #include <cctype>
+#include <filesystem>
 #include <iostream>
+#include <utility>
+#include <tge/settings/settings.h>
 #include "Essentials.h"
 
 namespace
@@ -54,6 +57,73 @@ namespace
                 normalized.begin(),
                 [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
             return normalized;
+    }
+
+    std::string NormalizeAssetPath(std::string aPath)
+    {
+        std::replace(aPath.begin(), aPath.end(), '\\', '/');
+
+        while (aPath.size() >= 2 && aPath[0] == '.' && aPath[1] == '/')
+        {
+            aPath.erase(aPath.begin(), aPath.begin() + 2);
+        }
+
+        while (!aPath.empty() && aPath.front() == '/')
+        {
+            aPath.erase(aPath.begin());
+        }
+
+        return aPath;
+    }
+
+    bool GameAssetExists(std::string aPath, const char* anExpectedExtension)
+    {
+        aPath = NormalizeAssetPath(std::move(aPath));
+        if (aPath.empty())
+        {
+            return false;
+        }
+
+        if (anExpectedExtension && *anExpectedExtension)
+        {
+            std::filesystem::path path(aPath);
+            if (!path.has_extension())
+            {
+                path.replace_extension(anExpectedExtension);
+                aPath = NormalizeAssetPath(path.string());
+            }
+        }
+
+        return !Tga::Settings::ResolveGameAssetPath(aPath).empty();
+    }
+
+    bool ShouldUseIdleOnlyAnimation(const SceneObjectData& aData, const std::string& anAnimationGraphPath)
+    {
+        const std::string animationGraphTemplate = NormalizeText(
+            aData.GetPropertyOr<std::string>("animation_graph_template", ""));
+        if (animationGraphTemplate != "idle_only")
+        {
+            return true;
+        }
+
+        const std::string idleClipPath = aData.GetPropertyOr<std::string>("clip_idle", "");
+        if (!GameAssetExists(anAnimationGraphPath, ".tgscript"))
+        {
+            std::cout << "[Factory] Idle animation graph '" << anAnimationGraphPath
+                << "' was not found for object '" << aData.name
+                << "'. Falling back to static mesh.\n";
+            return false;
+        }
+
+        if (!GameAssetExists(idleClipPath, nullptr))
+        {
+            std::cout << "[Factory] Idle animation clip '" << idleClipPath
+                << "' was not found for object '" << aData.name
+                << "'. Falling back to static mesh.\n";
+            return false;
+        }
+
+        return true;
     }
 
     bool TryParseLayer(const std::string& aLayerText, ObjectLayer& outLayer)
@@ -275,7 +345,7 @@ namespace
             animationGraphPath = aData.GetPropertyOr<std::string>("animationGraph", "");
         }
 
-        if (!animationGraphPath.empty())
+        if (!animationGraphPath.empty() && ShouldUseIdleOnlyAnimation(aData, animationGraphPath))
         {
             anObject.AddComponent<AnimatedMeshComponent>(modelPath);
 

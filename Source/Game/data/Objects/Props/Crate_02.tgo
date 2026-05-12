@@ -81,7 +81,7 @@
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "AnimationGraphs\\\\Grafik\\\\SK_P_Crate_02.tgscript"
+      "value": "animation\\Animation Graphs\\Crate_02.tgscript"
     },
     {
       "description": "",

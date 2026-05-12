@@ -81,7 +81,7 @@
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "animations\\Animation Graphs\\\\Grafik\\\\SK_EN_MushroomTree.tgscript"
+      "value": "animation\\Animation Graphs\\MushroomTree.tgscript"
     },
     {
       "description": "",

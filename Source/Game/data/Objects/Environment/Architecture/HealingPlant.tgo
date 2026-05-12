@@ -81,7 +81,7 @@
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "AnimationGraphs\\\\Grafik\\\\SK_A_HealingPlant.tgscript"
+      "value": "animation\\Animation Graphs\\HealingPlant.tgscript"
     },
     {
       "description": "",
@@ -109,7 +109,7 @@
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "AnimationClips\\\\Grafik\\\\SK_A_HealingPlant_idle.tgac"
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_HealingObjects.tgac"
       }
     },
     {

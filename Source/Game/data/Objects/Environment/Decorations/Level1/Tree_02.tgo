@@ -72,7 +72,7 @@
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "AnimationGraphs\\\\Grafik\\\\SK_EN_Tree_01.tgscript"
+      "value": "animation\\Animation Graphs\\Tree_01.tgscript"
     },
     {
       "description": "",

@@ -81,7 +81,7 @@
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "AnimationGraphs\\\\Grafik\\\\SK_EN_Bush_02.tgscript"
+      "value": "animation\\Animation Graphs\\Bush_02.tgscript"
     },
     {
       "description": "",

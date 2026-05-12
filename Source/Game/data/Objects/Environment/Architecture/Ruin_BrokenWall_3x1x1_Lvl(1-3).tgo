@@ -72,7 +72,7 @@
                            "is-per-instance":  false,
                            "name":  "animation_graph",
                            "type":  "StringId",
-                           "value":  "animations\\Animation Graphs\\\\Grafik\\\\SK_A_Ruin_BrokenWall_3x1x1_Lvl(1-3).tgscript"
+                           "value": "animation\\Animation Graphs\\Ruin_BrokenWall_3x1x1_Lvl(1-3).tgscript"
                        },
                        {
                            "description":  "",

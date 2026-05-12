@@ -81,7 +81,7 @@
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "AnimationGraphs\\\\Grafik\\\\SK_EN_Bush_01.tgscript"
+      "value": "animation\\Animation Graphs\\Bush_01.tgscript"
     },
     {
       "description": "",
@@ -109,7 +109,7 @@
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "AnimationClips\\\\Grafik\\\\SK_EN_Bush_01_idle.tgac"
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Bush_01.tgac"
       }
     },
     {
