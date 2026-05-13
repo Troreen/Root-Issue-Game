@@ -128,6 +128,7 @@ namespace
 		const bool didWrap,
 		const AnimationClip& aClip)
 	{
+		// Wrapped loops cover two ranges: previous->end and start->current.
 		if (!didWrap)
 		{
 			return anEventTime > aPreviousTime && anEventTime <= aCurrentTime;
@@ -161,6 +162,8 @@ namespace
 		const bool isForward,
 		PoseGenerationContext& context)
 	{
+		// Pose generation owns detection; game-level dispatch happens later
+		// through AnimationGraphRuntime and AnimationEventDispatcherComponent.
 		if (!context.emittedEvents)
 		{
 			return;
@@ -325,6 +328,8 @@ bool PlayClipGenerator::EnsureLoadedAndUpdated(PoseGenerationContext& context)
 
 	if (hasContinuousPreviousFrame)
 	{
+		// Skip the first sampled frame so clip startup does not replay markers
+		// before time has actually advanced.
 		EmitCrossedEvents(*clip, previousTime, animationPlayer.GetTime(), didWrap, playingForward, context);
 	}
 

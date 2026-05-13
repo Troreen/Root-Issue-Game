@@ -2,6 +2,7 @@
 
 #include "ScriptComponent.h"
 
+struct AnimationEventContext;
 class AnimationGraphComponent;
 
 class AnimationEventDispatcherComponent final : public ScriptComponent
@@ -16,6 +17,8 @@ protected:
 private:
     AnimationGraphComponent* ResolveGraph();
     void ClearQueuedEvents();
+    void DispatchToLocalListeners(const AnimationEventContext& anEvent) const;
+    void DispatchToPostMaster(const AnimationEventContext& anEvent) const;
 
     AnimationGraphComponent* myGraph = nullptr;
 };

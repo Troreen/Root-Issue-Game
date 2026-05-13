@@ -93,6 +93,15 @@
       "value": true
     },
     {
+      "description": "Attach a console logger for animation event smoke tests.",
+      "group": "Animation Test",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "animation_event_debug_log",
+      "type": "Bool",
+      "value": false
+    },
+    {
       "description": "Expanded player graph with locomotion, combo, charge, ranged, hurt and death branches",
       "group": "Animation",
       "is-dynamic": false,

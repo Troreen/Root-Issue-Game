@@ -255,6 +255,8 @@ bool AnimationGraphRuntime::Update(float aDeltaTime, const std::shared_ptr<Tga::
     std::vector<Tga::EmittedAnimationEvent> emittedEvents;
     generationContext.emittedEvents = &emittedEvents;
 
+    // Both root motion and final pose generation can traverse the same graph.
+    // Generators guard per frame so event markers are only emitted once.
     poseAndMotion->poseGenerator->GenerateRootMotionDelta(
         generationContext,
         myPendingRootMotionTranslation,

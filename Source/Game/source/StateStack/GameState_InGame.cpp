@@ -244,6 +244,8 @@ eState InGame::Update()
 		}
 	}
 
+	// Run after all object Updates so systems can react to frame-complete data,
+	// such as animation events queued while animation graphs evaluated above.
 	for (auto& object : myGameObjects)
 	{
 		if (!object || !object->IsActive())

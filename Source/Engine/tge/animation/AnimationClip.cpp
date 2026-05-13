@@ -50,6 +50,8 @@ AnimationClip* Tga::GetAnimationClip(StringId path)
 	const nlohmann::json eventsJson = json.value("events", nlohmann::json::array());
 	if (eventsJson.is_array())
 	{
+		// Event markers are authored in clip-local seconds and kept sorted so
+		// playback can check crossings without caring about JSON order.
 		for (const nlohmann::json& eventJson : eventsJson)
 		{
 			if (!eventJson.is_object())

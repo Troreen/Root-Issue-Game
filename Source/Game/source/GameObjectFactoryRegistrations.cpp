@@ -2,6 +2,7 @@
 
 #include "AnimatedMeshComponent.h"
 #include "AnimationDemoToggleComponent.h"
+#include "AnimationEventDebugLogComponent.h"
 #include "AnimationEventDispatcherComponent.h"
 #include "AnimationGraphComponent.h"
 #include "BoxColliderComponent.h"
@@ -367,7 +368,14 @@ namespace
                 anObject.AddComponent<AnimationDemoToggleComponent>();
             }
 
+            // Keep dispatch on every graph-backed object so gameplay code can
+            // opt in by adding an AnimationEventListener component.
             anObject.AddComponent<AnimationEventDispatcherComponent>();
+
+            if (aData.GetPropertyOr<bool>("animation_event_debug_log", false))
+            {
+                anObject.AddComponent<AnimationEventDebugLogComponent>();
+            }
             return;
         }
 

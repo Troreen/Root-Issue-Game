@@ -22,6 +22,8 @@ void AnimationEventDispatcherComponent::OnLateUpdate(float aDeltaTime)
 {
     aDeltaTime;
 
+    // AnimationGraphComponent updates before this component on the same object,
+    // so LateUpdate is the point where the graph event queue is complete.
     AnimationGraphComponent* graph = ResolveGraph();
     if (!graph)
     {
@@ -34,53 +36,15 @@ void AnimationEventDispatcherComponent::OnLateUpdate(float aDeltaTime)
         return;
     }
 
-    GameObject* owner = GetOwner();
-    if (!owner)
-    {
-        return;
-    }
-
-    std::vector<AnimationEventListener*> listeners;
-    owner->GetComponentsOfType(listeners);
-
     for (const AnimationEventRecord& eventRecord : events)
     {
         AnimationEventContext context;
         context.record = eventRecord;
-        context.owner = owner;
+        context.owner = GetOwner();
         context.graph = graph;
 
-        for (AnimationEventListener* listener : listeners)
-        {
-            if (!listener)
-            {
-                continue;
-            }
-
-            if (const Component* listenerComponent = dynamic_cast<const Component*>(listener))
-            {
-                if (!listenerComponent->IsEnabled())
-                {
-                    continue;
-                }
-            }
-
-            listener->OnAnimationEvent(context);
-        }
-
-        if (Essentials::globalPostMaster)
-        {
-            AnimationEventMessage eventMessage;
-            eventMessage.record = eventRecord;
-            eventMessage.senderObject = owner;
-            eventMessage.sourceGraph = graph;
-
-            Message message = {};
-            message.myMessageType = MessageType::AnimationEvent;
-            message.myData = eventMessage;
-            message.mySender = owner;
-            Essentials::globalPostMaster->SendMsg(message);
-        }
+        DispatchToLocalListeners(context);
+        DispatchToPostMaster(context);
     }
 }
 
@@ -116,4 +80,54 @@ void AnimationEventDispatcherComponent::ClearQueuedEvents()
     {
         graph->GetEventQueue().Clear();
     }
+}
+
+void AnimationEventDispatcherComponent::DispatchToLocalListeners(const AnimationEventContext& anEvent) const
+{
+    if (!anEvent.owner)
+    {
+        return;
+    }
+
+    std::vector<AnimationEventListener*> listeners;
+    anEvent.owner->GetComponentsOfType(listeners);
+
+    for (AnimationEventListener* listener : listeners)
+    {
+        if (!listener)
+        {
+            continue;
+        }
+
+        // Listener interfaces are not necessarily Components, but the current
+        // game-side listeners are. Respect disabled components when possible.
+        if (const Component* listenerComponent = dynamic_cast<const Component*>(listener))
+        {
+            if (!listenerComponent->IsEnabled())
+            {
+                continue;
+            }
+        }
+
+        listener->OnAnimationEvent(anEvent);
+    }
+}
+
+void AnimationEventDispatcherComponent::DispatchToPostMaster(const AnimationEventContext& anEvent) const
+{
+    if (!Essentials::globalPostMaster || !anEvent.owner)
+    {
+        return;
+    }
+
+    AnimationEventMessage eventMessage;
+    eventMessage.record = anEvent.record;
+    eventMessage.senderObject = anEvent.owner;
+    eventMessage.sourceGraph = anEvent.graph;
+
+    Message message = {};
+    message.myMessageType = MessageType::AnimationEvent;
+    message.myData = eventMessage;
+    message.mySender = anEvent.owner;
+    Essentials::globalPostMaster->SendMsg(message);
 }
