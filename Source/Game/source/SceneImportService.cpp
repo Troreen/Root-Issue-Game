@@ -844,6 +844,8 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
 
                 if (name == "modelTextures")
                 {
+                    // Scene model overrides win when authored per instance. If the instance
+                    // only overrides the model path, keep the prefab's texture assignments.
                     const MeshTextureOverrides* mergedTextureOverrides =
                         std::any_cast<MeshTextureOverrides>(&existingPropertyIt->second);
                     const bool hasMergedTextures =

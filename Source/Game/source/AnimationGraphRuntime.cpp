@@ -123,6 +123,8 @@ namespace
         {
             textValue = NormalizeAssetPath(textValue);
 
+            // Clip properties are authored as paths, but graph nodes expect an
+            // AnimationClipReference property. Other strings are plain StringIds.
             if (aKey.rfind("clip_", 0) == 0)
             {
                 Tga::CopyOnWriteWrapper<Tga::AnimationClipReference> clipReference =
@@ -170,6 +172,8 @@ bool AnimationGraphRuntime::Initialize(
     PopulateSourceProperties(someSourceProperties);
     EnsureCommonDefaults();
 
+    // ScriptManager uses extensionless ids; NormalizeScriptId keeps authored .tgscript
+    // paths readable in content files while matching runtime lookup rules.
     myScript = Tga::ScriptManager::GetScript(myGraphScriptId);
     if (!myScript)
     {
@@ -180,6 +184,8 @@ bool AnimationGraphRuntime::Initialize(
     myScriptInstance.emplace(myScript);
     myScriptInstance->Init();
 
+    // Fill missing properties after Init so graph-authored Read Property nodes always have
+    // something typed to read, even when an older prefab does not define every value yet.
     EnsureGraphReadPropertiesExist();
 
     myFrameNumber = 0;
@@ -221,6 +227,8 @@ bool AnimationGraphRuntime::Update(float aDeltaTime, const std::shared_ptr<Tga::
     updateContext.dynamicProperties = &myDynamicProperties;
     updateContext.staticProperties = &myStaticProperties;
 
+    // The graph script writes a PoseAndMotion value to "<model property>_pose".
+    // That keeps the graph data-driven: the runtime does not need to know which nodes exist.
     myScriptInstance->Update(updateContext);
 
     auto poseIt = myDynamicProperties.find(myPosePropertyName);
@@ -238,6 +246,8 @@ bool AnimationGraphRuntime::Update(float aDeltaTime, const std::shared_ptr<Tga::
 
     if (poseAndMotion->desiredSyncedPlaybackRateWeight > 0.0f)
     {
+        // Blend nodes can request synchronized playback. Keep this normalized so looping
+        // clips can share phase across multiple branches.
         mySyncedTime += poseAndMotion->desiredSyncedPlaybackRate * aDeltaTime;
         mySyncedTime -= std::floor(mySyncedTime);
         if (mySyncedTime < 0.0f)
@@ -342,6 +352,8 @@ void AnimationGraphRuntime::PopulateSourceProperties(const std::unordered_map<st
         const Tga::StringId propertyName = Tga::StringRegistry::RegisterOrGetString(name.c_str());
         myDynamicProperties[propertyName] = property;
 
+        // Model path is used both by the graph's "Animate Model" node and by fallback
+        // defaults when the authored model property is missing.
         if (name == "modelPath")
         {
             std::string path;
@@ -365,6 +377,8 @@ void AnimationGraphRuntime::EnsureCommonDefaults()
 {
     if (!myModelPathHint.empty())
     {
+        // Most graphs read "model", but older data sometimes reads "modelPath".
+        // Keep both populated with the resolved model path.
         myDynamicProperties[myModelPropertyName] = Tga::Property::Create<Tga::StringId>(
             Tga::StringRegistry::RegisterOrGetString(myModelPathHint.c_str()));
 
@@ -423,6 +437,8 @@ void AnimationGraphRuntime::EnsureGraphReadPropertiesExist()
             const std::string propertyNameText = propertyName.GetString();
             std::string clipPath = BuildDefaultClipPathFromPropertyName(propertyNameText);
 
+            // Preserve authored clip references when present. The generated fallback is only
+            // for old/simple graphs that read a clip property before content has assigned it.
             auto clipPropertyIt = myDynamicProperties.find(propertyName);
             if (clipPropertyIt != myDynamicProperties.end())
             {

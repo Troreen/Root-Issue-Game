@@ -20,7 +20,7 @@ namespace Tga
 class AnimationGraphComponent;
 
 /// Component that renders a skinned/animated 3D model using TGE's ModelDrawer.
-/// Animation playback is driven externally via SetPose().
+/// Animation playback is driven externally via SetPose(), usually by AnimationGraphComponent.
 class AnimatedMeshComponent final : public Component
 {
 public:
@@ -88,6 +88,7 @@ public:
 
     void FlipY(bool aFacingRight);
 
+    /// Applies per-mesh texture overrides authored on the Model property in .tgo/scene data.
     void SetTextureOverrides(const MeshTextureOverrides& someTextureOverrides);
 
 private:

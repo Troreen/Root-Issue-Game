@@ -5,6 +5,8 @@
 struct AnimationEventContext;
 class AnimationGraphComponent;
 
+// Drains events emitted by AnimationGraphComponent and forwards them to local listeners
+// plus the global PostMaster. Put this on the same GameObject as the graph.
 class AnimationEventDispatcherComponent final : public ScriptComponent
 {
 protected:

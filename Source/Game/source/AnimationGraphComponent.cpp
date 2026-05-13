@@ -7,7 +7,7 @@
 
 namespace
 {
-	constexpr float RootMotionEpsilon = 1e-6f;
+    constexpr float RootMotionEpsilon = 1e-6f;
 
     bool TryReadStringFromAny(const std::any& aValue, std::string& outValue)
     {
@@ -167,6 +167,7 @@ void AnimationGraphComponent::OnStart()
 
 void AnimationGraphComponent::OnUpdate(const float aDeltaTime)
 {
+    // Objects can be constructed before all components are initialized, so resolve lazily.
     if (!myAnimatedMesh)
     {
         if (GameObject* owner = GetOwner())
@@ -175,6 +176,8 @@ void AnimationGraphComponent::OnUpdate(const float aDeltaTime)
         }
     }
 
+    // The runtime can only evaluate once the skinned model exists, because pose generation
+    // needs the model skeleton. This also lets scene loading add graph and mesh in any order.
     if (!myAnimatedMesh || !myAnimatedMesh->IsValid())
     {
         return;
@@ -191,6 +194,7 @@ void AnimationGraphComponent::OnUpdate(const float aDeltaTime)
     Tga::LocalSpacePose generatedPose;
     if (myRuntime.Update(aDeltaTime, myAnimatedMesh->GetModel(), generatedPose))
     {
+        // Runtime only produces data; this component decides how it affects the GameObject.
         myAnimatedMesh->SetPose(generatedPose);
 
         const Tga::Vector3f rootMotionTranslationDelta = myRuntime.ConsumeRootMotionTranslation();
@@ -217,8 +221,8 @@ void AnimationGraphComponent::OnScriptDestroy()
     myRuntime.Reset();
     myEventQueue.Clear();
     myAnimatedMesh = nullptr;
-	myPendingRootMotionTranslation = Tga::Vector3f();
-	myPendingRootMotionRotation = Tga::Quatf();
+    myPendingRootMotionTranslation = Tga::Vector3f();
+    myPendingRootMotionRotation = Tga::Quatf();
 }
 
 bool AnimationGraphComponent::InitializeRuntimeIfPossible()
@@ -241,6 +245,8 @@ bool AnimationGraphComponent::InitializeRuntimeIfPossible()
 
     if (myGraphPath.empty())
     {
+        // Prefer the path given to the component, but support old data where the graph path
+        // only exists as a source property from the scene or prefab.
         auto it = mySourceProperties.find("animation_graph");
         if (it != mySourceProperties.end())
         {
@@ -304,6 +310,8 @@ void AnimationGraphComponent::ApplyRootMotionToOwner(
 
     if (localTranslationDelta.LengthSqr() > RootMotionEpsilon)
     {
+        // Pose generation reports root motion in model-local space; movement components
+        // expect world-space translation on the GameObject transform.
         const CommonUtilities::Vector3<float> worldTranslationDelta =
             RotateLocalOffsetToWorld(ownerTransform, localTranslationDelta);
         ownerTransform.Translate(worldTranslationDelta);

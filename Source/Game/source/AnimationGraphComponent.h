@@ -10,6 +10,9 @@
 
 class AnimatedMeshComponent;
 
+// Game-facing wrapper around AnimationGraphRuntime.
+// Owns the graph instance for one GameObject, applies generated poses to the
+// sibling AnimatedMeshComponent, and optionally applies root motion to the owner transform.
 class AnimationGraphComponent final : public ScriptComponent
 {
 public:
@@ -32,6 +35,8 @@ public:
 
     void SetSourceProperties(const std::unordered_map<std::string, std::any>& someProperties);
 
+    // Parameter writes are intentionally thin pass-throughs so gameplay code does not
+    // need to know about TGE script Property types or StringId conversion.
     bool SetFloatParameter(const std::string& aName, float aValue);
     bool SetIntParameter(const std::string& aName, int aValue);
     bool SetBoolParameter(const std::string& aName, bool aValue);
@@ -41,6 +46,8 @@ public:
     AnimationEventQueue& GetEventQueue();
     const AnimationEventQueue& GetEventQueue() const;
 
+    // Returns root motion accumulated since the previous consume without applying it.
+    // This is useful for controllers that want to own movement themselves.
     bool ConsumeRootMotion(Tga::Vector3f& outTranslation, Tga::Quatf& outRotation);
 
     void Reset() override;
@@ -65,6 +72,7 @@ private:
 
     std::unordered_map<std::string, std::any> mySourceProperties;
 
+    // Cached after startup because graph evaluation runs every frame.
     AnimatedMeshComponent* myAnimatedMesh = nullptr;
 
     AnimationEventQueue myEventQueue;

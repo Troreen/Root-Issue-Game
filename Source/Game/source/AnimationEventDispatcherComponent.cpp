@@ -43,7 +43,11 @@ void AnimationEventDispatcherComponent::OnLateUpdate(float aDeltaTime)
         context.owner = GetOwner();
         context.graph = graph;
 
+        // Dispatch locally first so components on the animated object can react without
+        // going through the global message bus.
         DispatchToLocalListeners(context);
+
+        // Also publish globally for systems that are not components on the animated object.
         DispatchToPostMaster(context);
     }
 }

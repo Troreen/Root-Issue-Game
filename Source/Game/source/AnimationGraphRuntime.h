@@ -25,6 +25,9 @@ namespace Tga
 class AnimationGraphRuntime
 {
 public:
+    // Converts scene/prefab data into script properties and creates a fresh script instance.
+    // The runtime itself is engine-facing: it evaluates graph script nodes and returns pose data,
+    // while AnimationGraphComponent decides how to apply that pose to a GameObject.
     bool Initialize(
         const std::string& aGraphPath,
         const std::string& aModelPropertyName,
@@ -36,6 +39,8 @@ public:
 
     bool IsReady() const;
 
+    // Runs one graph tick and writes the generated pose for the caller to apply.
+    // Returns false when the graph did not produce a pose this frame.
     bool Update(float aDeltaTime, const std::shared_ptr<Tga::Model>& aModel, Tga::LocalSpacePose& outPose);
 
     bool SetFloatParameter(const std::string& aName, float aValue);
@@ -50,6 +55,8 @@ public:
     Tga::Quatf ConsumeRootMotionRotation();
 
 private:
+    // Source properties are authored as std::any in SceneObjectData; the script runtime needs
+    // strongly typed Tga::Property values keyed by StringId.
     void PopulateSourceProperties(const std::unordered_map<std::string, std::any>& someSourceProperties);
     void EnsureCommonDefaults();
     void EnsureGraphReadPropertiesExist();
@@ -83,6 +90,7 @@ private:
     std::unordered_map<Tga::StringId, Tga::Property> myDynamicProperties;
     std::unordered_map<Tga::StringId, Tga::Property> myStaticProperties;
 
+    // Optional sink for animation notifies emitted during pose generation.
     AnimationEventQueue* myEventQueue = nullptr;
 
     unsigned int myFrameNumber = 0;
