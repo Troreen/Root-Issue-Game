@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "ModelFactory.h"
 
+#include <chrono>
 #include <fstream>
 #include <nlohmann/json.hpp>
 
 #include <tge/animation/animationPlayer.h>
+#include <tge/debug/LoadingProfiler.h>
 #include <tge/graphics/DX11.h>
 #include <tge/util/StringCast.h>
 #include <tge/model/Model.h>
@@ -878,6 +880,7 @@ Tga::BoxSphereBounds Tga::ModelFactory::CalculateBoxSphereBounds(std::vector<Tga
 
 std::shared_ptr<Animation> ModelFactory::GetAnimation(const std::string& someFilePath, const std::shared_ptr<Model>& aModel)
 {
+	const auto startTime = std::chrono::steady_clock::now();
 	std::string resolvedPath = Tga::Settings::ResolveAssetPath(someFilePath);
 
 	// The FBX SDK doesn't like widechar :(.
@@ -885,7 +888,12 @@ std::shared_ptr<Animation> ModelFactory::GetAnimation(const std::string& someFil
 
 	auto it = myLoadedAnimations.find(AnimationIdentifer{ resolvedPath , aModel });
 	if (it != myLoadedAnimations.end())
+	{
+		const double milliseconds =
+			std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - startTime).count();
+		LoadingProfiler::GetInstance().RecordAnimationLoad(someFilePath, milliseconds, true);
 		return it->second;
+	}
 
 	if (TGA::FBX::Importer::LoadAnimationA(resolvedPath, fbxAnimation))
 	{
@@ -915,14 +923,22 @@ std::shared_ptr<Animation> ModelFactory::GetAnimation(const std::string& someFil
 
 		myLoadedAnimations[AnimationIdentifer{ resolvedPath , aModel }] = animation;
 
+		const double milliseconds =
+			std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - startTime).count();
+		LoadingProfiler::GetInstance().RecordAnimationLoad(someFilePath, milliseconds, false);
 		return animation;
 	}
 
+	const double milliseconds =
+		std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - startTime).count();
+	LoadingProfiler::GetInstance().RecordAnimationLoad(someFilePath, milliseconds, false);
 	return nullptr;
 }
 
 AnimationPlayer ModelFactory::GetAnimationPlayer(const std::string& someFilePath, const std::shared_ptr<Model>& aModel)
 {
+	LoadingProfiler::Scope scope("ModelFactory::GetAnimationPlayer");
+	LoadingProfiler::GetInstance().RecordAnimationPath(someFilePath);
 	AnimationPlayer instance;
 	std::shared_ptr<Animation> animation = GetAnimation(someFilePath, aModel);
 	if (animation)
@@ -933,11 +949,21 @@ AnimationPlayer ModelFactory::GetAnimationPlayer(const std::string& someFilePath
 
 std::shared_ptr<Model> ModelFactory::GetModel(const std::string& someFilePath)
 {
+	const auto startTime = std::chrono::steady_clock::now();
 	auto it = myLoadedModels.find(someFilePath);
 	if (it != myLoadedModels.end())
+	{
+		const double milliseconds =
+			std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - startTime).count();
+		LoadingProfiler::GetInstance().RecordModelLoad(someFilePath, milliseconds, true);
 		return it->second;
+	}
 
-	return LoadModel(someFilePath);
+	std::shared_ptr<Model> model = LoadModel(someFilePath);
+	const double milliseconds =
+		std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - startTime).count();
+	LoadingProfiler::GetInstance().RecordModelLoad(someFilePath, milliseconds, false);
+	return model;
 }
 
 void ModelFactory::OnModelChanged(const std::string& aUnresolvedPath)

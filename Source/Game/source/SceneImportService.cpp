@@ -1,4 +1,4 @@
-﻿#include "SceneImportService.h"
+#include "SceneImportService.h"
 
 #include "GameObject.h"
 #include "GameObjectFactory.h"
@@ -6,6 +6,7 @@
 #include "SceneObjectData.h"
 
 #include <CommonUtilities/Quaternion.hpp>
+#include <tge/debug/LoadingProfiler.h>
 #include <tge/Model/ModelFactory.h>
 #include <tge/Math/Quaternion.h>
 #include <tge/error/ErrorManager.h>
@@ -22,10 +23,12 @@
 #include <algorithm>
 #include <cctype>
 #include <charconv>
+#include <chrono>
 #include <cstdlib>
 #include <exception>
 #include <filesystem>
 #include <fstream>
+#include <mutex>
 #include <sstream>
 #include <stdexcept>
 #include <string_view>
@@ -39,6 +42,26 @@ namespace
         std::string factoryType;
         std::unordered_map<std::string, std::any> properties;
     };
+
+    double GetElapsedMilliseconds(const std::chrono::steady_clock::time_point aStartTime)
+    {
+        return std::chrono::duration<double, std::milli>(
+            std::chrono::steady_clock::now() - aStartTime).count();
+    }
+
+    Tga::SceneObjectDefinitionManager& GetCachedSceneObjectDefinitions()
+    {
+        static Tga::SceneObjectDefinitionManager manager;
+        static std::once_flag initOnce;
+
+        Tga::LoadingProfiler::Scope scope("SceneObjectDefinitionManager::GetCached");
+        std::call_once(initOnce, []()
+            {
+                manager.Init(Tga::Settings::GameAssetRoot().string().c_str());
+            });
+
+        return manager;
+    }
 
     std::string TrimWhitespace(std::string aValue)
     {
@@ -579,6 +602,7 @@ namespace
 
 std::vector<SceneObjectData> SceneImportService::LoadSceneObjects(const std::string& scenePath) const
 {
+    Tga::LoadingProfiler::Scope loadScope("SceneImportService::LoadSceneObjects");
     std::vector<SceneObjectData> sceneObjects;
 
     Tga::Scene scene;
@@ -587,19 +611,28 @@ std::vector<SceneObjectData> SceneImportService::LoadSceneObjects(const std::str
         std::cout << "[SceneImport] Failed to load scene file: " << scenePath << "\n";
         return sceneObjects;
     }
+    Tga::LoadingProfiler::GetInstance().RecordObjectCount(scene.GetSceneObjects().size());
 
-    Tga::SceneObjectDefinitionManager sceneDefinitionManager;
-    const std::string gameAssetRootPath = Tga::Settings::GameAssetRoot().string();
-    sceneDefinitionManager.Init(gameAssetRootPath.c_str());
+    Tga::SceneObjectDefinitionManager& sceneDefinitionManager = GetCachedSceneObjectDefinitions();
 
     std::vector<Tga::ScenePropertyDefinition> sceneObjectProperties;
+    sceneObjectProperties.reserve(32);
+    sceneObjects.reserve(scene.GetSceneObjects().size());
+
+    double propertyMergeMilliseconds = 0.0;
+    double dataExtractionMilliseconds = 0.0;
+    double objectLoopMilliseconds = 0.0;
     
     for (const auto& p : scene.GetSceneObjects())
     {
+        const auto objectLoopStartTime = std::chrono::steady_clock::now();
         sceneObjectProperties.clear();
+        auto phaseStartTime = std::chrono::steady_clock::now();
         p.second->CalculateCombinedPropertySet(sceneDefinitionManager, sceneObjectProperties);
+        propertyMergeMilliseconds += GetElapsedMilliseconds(phaseStartTime);
 
         // Build SceneObjectData from editor properties
+        phaseStartTime = std::chrono::steady_clock::now();
         SceneObjectData data;
         data.name = p.second->GetName();
 
@@ -629,6 +662,7 @@ std::vector<SceneObjectData> SceneImportService::LoadSceneObjects(const std::str
                 // Store model path for both static and animated models
                 data.properties["modelPath"] = std::string(path.GetString());
                 data.properties["model"] = std::string(path.GetString());
+                Tga::LoadingProfiler::GetInstance().RecordModelPath(path.GetString());
 
                 // Extract texture overrides regardless of model type (static or animated)
                 MeshTextureOverrides textureOverrides;
@@ -642,6 +676,7 @@ std::vector<SceneObjectData> SceneImportService::LoadSceneObjects(const std::str
                         {
                             textureOverrides.textures[meshIndex][textureIndex] = textureId.GetString();
                             hasAnyTextureOverrides = true;
+                            Tga::LoadingProfiler::GetInstance().RecordTexturePath(textureId.GetString());
                         }
                     }
                 }
@@ -691,11 +726,17 @@ std::vector<SceneObjectData> SceneImportService::LoadSceneObjects(const std::str
             {
                 // Convert StringId to std::string
                 data.properties[propName] = std::string(strIdPtr->GetString());
+                if (propName == "Tag" || propName == "tag")
+                {
+                    Tga::LoadingProfiler::GetInstance().RecordTag(strIdPtr->GetString());
+                }
             }
             else if (auto* clipRefPtr =
                          property.value.Get<Tga::CopyOnWriteWrapper<Tga::AnimationClipReference>>())
             {
-                data.properties[propName] = std::string(clipRefPtr->Get().path.GetString());
+                const std::string clipPath = clipRefPtr->Get().path.GetString();
+                data.properties[propName] = clipPath;
+                Tga::LoadingProfiler::GetInstance().RecordAnimationPath(clipPath);
             }
             else if (auto* sceneRefPtr =
                          property.value.Get<Tga::CopyOnWriteWrapper<Tga::SceneReference>>())
@@ -711,9 +752,18 @@ std::vector<SceneObjectData> SceneImportService::LoadSceneObjects(const std::str
                 data.properties[propName] = *colorPtr;
             }
         }
+        dataExtractionMilliseconds += GetElapsedMilliseconds(phaseStartTime);
 
         sceneObjects.push_back(std::move(data));
+        objectLoopMilliseconds += GetElapsedMilliseconds(objectLoopStartTime);
     }
+
+    Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::PropertyMerge", propertyMergeMilliseconds);
+    Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::DataExtraction", dataExtractionMilliseconds);
+    Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::ObjectLoopTotal", objectLoopMilliseconds);
+    Tga::LoadingProfiler::GetInstance().RecordPhase(
+        "SceneImportService::ObjectLoopUntracked",
+        objectLoopMilliseconds - propertyMergeMilliseconds - dataExtractionMilliseconds);
 
     return sceneObjects;
 }
@@ -728,6 +778,8 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
 std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
     const std::vector<SceneObjectData>& someSceneObjects) const
 {
+    Tga::LoadingProfiler::Scope buildScope("SceneImportService::BuildGameObjects");
+
     auto isAnimationAssetPathProperty = [](const std::string& aPropertyName) {
         return aPropertyName == "animation_graph" || aPropertyName.rfind("clip_", 0) == 0;
     };
@@ -744,6 +796,9 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
 
     std::vector<std::unique_ptr<GameObject>> objects;
     objects.reserve(someSceneObjects.size());
+    double prefabParseMilliseconds = 0.0;
+    double propertyMergeMilliseconds = 0.0;
+    double factoryCreateMilliseconds = 0.0;
 
     for (const SceneObjectData& sceneObject : someSceneObjects)
     {
@@ -756,8 +811,11 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
 
         try
         {
+            auto phaseStartTime = std::chrono::steady_clock::now();
             const PrefabData prefabData = ParsePrefab(prefabPath);
+            prefabParseMilliseconds += GetElapsedMilliseconds(phaseStartTime);
 
+            phaseStartTime = std::chrono::steady_clock::now();
             SceneObjectData merged = sceneObject;
             for (const auto& [name, value] : prefabData.properties)
             {
@@ -794,9 +852,12 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
                     existingPropertyIt->second = value;
                 }
             }
+            propertyMergeMilliseconds += GetElapsedMilliseconds(phaseStartTime);
 
+            phaseStartTime = std::chrono::steady_clock::now();
             std::unique_ptr<GameObject> gameObject =
                 GameObjectFactory::GetInstance().Build(prefabData.factoryType, merged);
+            factoryCreateMilliseconds += GetElapsedMilliseconds(phaseStartTime);
             if (gameObject)
             {
                 auto& transform = gameObject->GetTransform();
@@ -819,6 +880,10 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
                 exception.what());
         }
     }
+
+    Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::PrefabParse", prefabParseMilliseconds);
+    Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::PrefabMerge", propertyMergeMilliseconds);
+    Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::FactoryCreate", factoryCreateMilliseconds);
 
     return objects;
 }

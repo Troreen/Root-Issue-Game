@@ -1,21 +1,18 @@
 #pragma once
 
 #include "SceneRenderer.h"
-#include "SceneImportService.h"
+#include "SceneLoadingService.h"
 #include "CameraSystem.h"
 #include "InputHandler.h"
 #include "Essentials.h"
 #include "VfxSystem.h"
-#include "SceneObjectData.h"
 #include "Timer.h"
 #include "tge/text/text.h"
 #include "GameObjectFactoryRegistrations.h"
 #include "MeshComponent.h"
 
 #include <algorithm>
-#include <chrono>
 #include <cmath>
-#include <future>
 #include <iostream>
 #include <limits>
 
@@ -77,42 +74,10 @@ public:
     virtual ~State() = default;
 
 protected:
-    void StartSceneLoadAsync(const std::string& aScenePath, bool aForceReload = false)
-    {
-        if (aScenePath.empty() || (!aForceReload && aScenePath == mySceneName))
-        {
-            return;
-        }
-
-        // Async loading is temporarily disabled. Keep the old implementation for easy rollback.
-#if 0
-        myVfxSystem.BeginSceneTransition(mySceneName, aScenePath);
-
-        mySceneLoadTarget = aScenePath;
-
-        myIsSceneLoading = true;
-        mySceneLoadFuture = std::async(std::launch::async, [scenePath = aScenePath]()
-            {
-                SceneImportService importer;
-                return importer.LoadSceneObjects(scenePath);
-            });
-#endif
-
-        myVfxSystem.BeginSceneTransition(mySceneName, aScenePath);
-        mySceneLoadTarget = aScenePath;
-        myIsSceneLoading = false;
-        LoadScene(aScenePath);
-        mySceneLoadTarget.clear();
-
-        myPendingFocusRecoveryFrames = 120;
-        TryRecoverWindowFocus();
-        if (Tga::Engine* engine = Tga::Engine::GetInstance(); engine && engine->GetHWND())
-        {
-            myInputHandler.SetWindowHandle(*engine->GetHWND());
-        }
-    };
     void ApplyLoadedScene(std::vector<std::unique_ptr<GameObject>>&& someObjects, const std::string& aScenePath)
     {
+        Tga::LoadingProfiler::Scope scope("State::ApplyLoadedScene");
+
         mySceneName = aScenePath;
         myCameraSystem->SetSceneName(mySceneName);
         myCameraSystem->ResetTransientEffects();
@@ -139,6 +104,8 @@ protected:
             object->Init(*engine);
             myGameObjects.push_back(std::move(object));
         }
+
+        SceneLoadingService::FinishSceneApply();
     }
     void ClearSceneObjects()
     {
@@ -194,12 +161,6 @@ protected:
 #ifdef _DEBUG
         myCameraSystem->RenderDebugUi();
 #endif
-    }
-    void LoadScene(const std::string& aScenePath)
-    {
-        SceneImportService importer;
-        auto importedObjects = importer.BuildGameObjects(aScenePath);
-        ApplyLoadedScene(std::move(importedObjects), aScenePath);
     }
     void TryRecoverWindowFocus()
     {
@@ -280,11 +241,7 @@ protected:
     CommonUtilities::Timer myTimer;
 
     std::string mySceneName;
-    std::future<std::vector<SceneObjectData>> mySceneLoadFuture;
-    std::string mySceneLoadTarget;
-    std::string myQueuedSceneRequest;
 
-    bool myIsSceneLoading;
     int myPendingFocusRecoveryFrames;
 
     bool myEnablePointLights;

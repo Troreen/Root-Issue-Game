@@ -118,9 +118,6 @@ void MainMenu::Init(CameraSystem& aCamera, const char* argv[])
 	myCameraSystem = &aCamera;
 	{
 		mySceneName.clear();
-		mySceneLoadTarget.clear();
-		myQueuedSceneRequest.clear();
-		myIsSceneLoading = false;
 		myPendingFocusRecoveryFrames = 0;
 		myEnablePointLights = true;
 		myEnableDirectionalLight = true;
@@ -158,11 +155,6 @@ eState MainMenu::Update()
 
 void MainMenu::Render()
 {
-	if (myIsSceneLoading)
-	{
-		RenderLoadingScreen();
-		return;
-	}
 	Tga::Engine& engine = *Tga::Engine::GetInstance();
 	auto& graphicsEngine = engine.GetGraphicsEngine();
 	auto& graphicsStateStack = graphicsEngine.GetGraphicsStateStack();

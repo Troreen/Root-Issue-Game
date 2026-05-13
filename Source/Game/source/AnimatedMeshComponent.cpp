@@ -5,6 +5,7 @@
 
 #include <CommonUtilities/Matrix4x4.hpp>
 #include <tge/animation/AnimationPlayer.h>
+#include <tge/debug/LoadingProfiler.h>
 #include <tge/drawers/ModelDrawer.h>
 #include <tge/engine.h>
 #include <tge/graphics/GraphicsEngine.h>
@@ -252,6 +253,8 @@ AnimatedMeshComponent::AnimatedMeshComponent(std::string aModelPath, const std::
 
 void AnimatedMeshComponent::Init(Tga::Engine& /*anEngine*/)
 {
+    Tga::LoadingProfiler::Scope scope("AnimatedMeshComponent::Init");
+
     if (!myModelPath.empty() && !IsValid())
     {
         myInstance = Tga::ModelFactory::GetInstance().GetAnimatedModelInstance(myModelPath);

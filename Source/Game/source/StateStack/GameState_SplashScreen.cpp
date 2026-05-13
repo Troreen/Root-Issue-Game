@@ -28,7 +28,7 @@ eState SplashScreen::Update()
 	{	
 		if (Essentials::globalInputManager.get()->IsKeyPressed(i))
 		{
-			return eState::eMainMenu;
+			return eState::ePlaying;
 		}
 	}
 	if (mySpriteProperties.myColor.a < 0.99f && !mySplashScreenState[0])
@@ -116,16 +116,11 @@ eState SplashScreen::Update()
 		mySplashScreenState[5] = true;
 		return eState::COUNT;
 	}
-	return eState::eMainMenu;
+	return eState::ePlaying;
 }
 
 void SplashScreen::Render()
 {
-	if (myIsSceneLoading)
-	{
-		RenderLoadingScreen();
-		return;
-	}
 	Tga::DX11::BackBuffer->SetAsActiveTarget();
 
 

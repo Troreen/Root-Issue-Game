@@ -1,6 +1,8 @@
 #include <stdafx.h>
 #include "SceneObjectDefinitionManager.h"
 
+#include <tge/debug/LoadingProfiler.h>
+
 #include <fstream>
 
 using namespace Tga;
@@ -9,10 +11,22 @@ SceneObjectDefinitionManager::SceneObjectDefinitionManager() {}
 
 void SceneObjectDefinitionManager::Init(std::string_view aProjectPath)
 {
+	LoadingProfiler::Scope scope("SceneObjectDefinitionManager::Init");
+	std::size_t objectDefinitionFileCount = 0;
+	std::uintmax_t objectDefinitionByteCount = 0;
+
 	for (const auto& entry : fs::recursive_directory_iterator(aProjectPath))
 	{
 		if (entry.is_regular_file() && entry.path().extension() == ".tgo") 
 		{
+			++objectDefinitionFileCount;
+			std::error_code fileSizeError;
+			const std::uintmax_t fileSize = fs::file_size(entry.path(), fileSizeError);
+			if (!fileSizeError)
+			{
+				objectDefinitionByteCount += fileSize;
+			}
+
 			std::unique_ptr<SceneObjectDefinition> definition = std::make_unique<SceneObjectDefinition>();
 
 			std::string path = fs::relative(entry.path(), Tga::Settings::GameAssetRoot()).string();
@@ -28,6 +42,8 @@ void SceneObjectDefinitionManager::Init(std::string_view aProjectPath)
 			}
 		}
 	}
+
+	LoadingProfiler::GetInstance().RecordObjectDefinitionStats(objectDefinitionFileCount, objectDefinitionByteCount);
 }
 
 SceneObjectDefinition* SceneObjectDefinitionManager::CreateOrGet(const fs::path& aPath)

@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 #include <CommonUtilities/Matrix4x4.hpp>
+#include <tge/debug/LoadingProfiler.h>
 #include <tge/drawers/ModelDrawer.h>
 #include <tge/engine.h>
 #include <tge/graphics/GraphicsEngine.h>
@@ -172,6 +173,8 @@ MeshComponent::MeshComponent(const Tga::ModelInstance& aInstance, const std::str
 
 void MeshComponent::Init(Tga::Engine& /*anEngine*/)
 {
+    Tga::LoadingProfiler::Scope scope("MeshComponent::Init");
+
     if (!myModelPath.empty() && !IsValid())
     {
         ReloadModel();
@@ -373,6 +376,8 @@ void MeshComponent::SetModelPath(const std::string& aModelPath)
 
 bool MeshComponent::ReloadModel()
 {
+    Tga::LoadingProfiler::Scope scope("MeshComponent::ReloadModel");
+
     if (myModelPath.empty())
     {
         return false;

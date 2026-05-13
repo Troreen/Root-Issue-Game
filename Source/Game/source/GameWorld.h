@@ -2,17 +2,10 @@
 
 #include <CommonUtilities/InputHandler.h>
 #include <CommonUtilities/Timer.h>
-#include <tge/text/Text.h>
 
-#include <future>
-#include <memory>
 #include <string>
-#include <vector>
 
 #include "CameraSystem.h"
-#include "SceneObjectData.h"
-#include "SceneRenderer.h"
-#include "VfxSystem.h"
 
 #include "StateStack.hpp"
 
@@ -51,43 +44,15 @@ private:
     static constexpr float ourFixedTimeStep = 1.0f / 60.0f;
     static constexpr int ourMaxFixedUpdatesPerFrame = 4;
 
-    void LoadScene(const std::string& aScenePath);
-    void StartSceneLoadAsync(const std::string& aScenePath, bool aForceReload = false);
-    void PollSceneLoadCompletion();
-    void TryRecoverWindowFocus();
-    void ApplyLoadedScene(std::vector<std::unique_ptr<GameObject>>&& someObjects, const std::string& aScenePath);
-    void ClearSceneObjects();
-    void UnloadActiveLevel(bool aClearSceneName);
-
     void RegisterCommands(const char* argv[]);
-
-    void RenderDefault();
-    void RenderLoadingScreen();
 
     CommonUtilities::InputHandler myInputHandler;
     CommonUtilities::Timer myTimer;
 
     CameraSystem& myCameraSystem;
 
-    std::vector<std::unique_ptr<GameObject>> myGameObjects;
-    VfxSystem myVfxSystem;
-    SceneRenderer mySceneRenderer;
-
-    std::string mySceneName;
-    std::future<std::vector<SceneObjectData>> mySceneLoadFuture;
-    std::string mySceneLoadTarget;
-    std::string myQueuedSceneRequest;
-    bool myIsSceneLoading;
     float myFixedTimeAccumulator = 0.0f;
-    int myPendingFocusRecoveryFrames;
-
-    bool myEnablePointLights;
-    bool myEnableDirectionalLight;
-    
-    bool myEnableAmbientLight;
     bool myIsFirstFrame;
-
-    Tga::Text myLoadingText;
 
     StateStack myWorldStateStack;
 

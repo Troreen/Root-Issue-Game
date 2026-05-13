@@ -3,17 +3,15 @@
 
 #include "GameObjectFactoryRegistrations.h"
 #include "MeshComponent.h"
-#include "SceneImportService.h"
 
 #include <algorithm>
-#include <chrono>
 #include <cmath>
-#include <future>
 #include <iostream>
 #include <limits>
 
 #include <Windows.h>
 
+#include <tge/debug/LoadingProfiler.h>
 #include <tge/engine.h>
 #include <tge/animation/Script/AnimationNodes.h>
 #include <tge/error/ErrorManager.h>
@@ -201,27 +199,13 @@ namespace
 using namespace Tga;
 
 GameWorld::GameWorld()
-	: myLoadingText("Text/Evil Bible.ttf", Tga::FontSize_72)
-	, myCameraSystem(*Essentials::globalCamera.get())
+	: myCameraSystem(*Essentials::globalCamera.get())
 {
-	mySceneName.clear();
-	mySceneLoadTarget.clear();
-	myQueuedSceneRequest.clear();
-	myIsSceneLoading = false;
-	myPendingFocusRecoveryFrames = 0;
-	myEnablePointLights = true;
-	myEnableDirectionalLight = true;
-	myEnableAmbientLight = true;
 	myIsFirstFrame = true;
 }
 
 GameWorld::~GameWorld()
 {
-	if (mySceneLoadFuture.valid())
-	{
-		mySceneLoadFuture.wait();
-	}
-
 	VfxService::Set(nullptr);
 }
 
@@ -229,7 +213,7 @@ void GameWorld::Init(const char* argv[])
 {
 	myWorldStateStack;
 	myWorldStateStack.PushStack(std::vector<State*>());
-	myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
+	myWorldStateStack.GetCurrentStateStack()->push_back(new SplashScreen());
 
 	myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 
@@ -293,115 +277,6 @@ void GameWorld::Update(float /* aDeltaTime */, const char* argv[])
 	//}
 
 	//myVfxSystem.Update(deltaTime);
-}
-
-void GameWorld::ClearSceneObjects()
-{
-	for (auto it = myGameObjects.begin(); it != myGameObjects.end();)
-	{
-		if (!(*it) || !(*it)->IsPersistent())
-		{
-			it = myGameObjects.erase(it);
-			continue;
-		}
-
-		++it;
-	}
-}
-
-void GameWorld::LoadScene(const std::string& aScenePath)
-{
-	SceneImportService importer;
-	auto importedObjects = importer.BuildGameObjects(aScenePath);
-	ApplyLoadedScene(std::move(importedObjects), aScenePath);
-}
-
-void GameWorld::StartSceneLoadAsync(const std::string& aScenePath, const bool aForceReload)
-{
-	if (aScenePath.empty() || (!aForceReload && aScenePath == mySceneName))
-	{
-		return;
-	}
-
-	// Async loading is temporarily disabled. Keep the old implementation for easy rollback.
-#if 0
-	myVfxSystem.BeginSceneTransition(mySceneName, aScenePath);
-
-	mySceneLoadTarget = aScenePath;
-
-	myIsSceneLoading = true;
-	mySceneLoadFuture = std::async(std::launch::async, [scenePath = aScenePath]()
-		{
-			SceneImportService importer;
-			return importer.LoadSceneObjects(scenePath);
-		});
-#endif
-
-	myVfxSystem.BeginSceneTransition(mySceneName, aScenePath);
-	mySceneLoadTarget = aScenePath;
-	myIsSceneLoading = false;
-	LoadScene(aScenePath);
-	mySceneLoadTarget.clear();
-
-	myPendingFocusRecoveryFrames = 120;
-	TryRecoverWindowFocus();
-	if (Tga::Engine* engine = Tga::Engine::GetInstance(); engine && engine->GetHWND())
-	{
-		myInputHandler.SetWindowHandle(*engine->GetHWND());
-	}
-}
-
-void GameWorld::PollSceneLoadCompletion()
-{
-	// Async loading is temporarily disabled. Keep the old implementation for easy rollback.
-#if 0
-	if (!myIsSceneLoading || !mySceneLoadFuture.valid())
-	{
-		return;
-	}
-
-	if (mySceneLoadFuture.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
-	{
-		return;
-	}
-
-	auto sceneObjects = mySceneLoadFuture.get();
-	const std::string loadedScene = mySceneLoadTarget;
-	mySceneLoadTarget.clear();
-	myIsSceneLoading = false;
-	auto importedObjects = BuildSceneObjects(sceneObjects);
-	ApplyLoadedScene(std::move(importedObjects), loadedScene);
-
-	myPendingFocusRecoveryFrames = 120;
-	TryRecoverWindowFocus();
-	if (Tga::Engine* engine = Tga::Engine::GetInstance(); engine && engine->GetHWND())
-	{
-		myInputHandler.SetWindowHandle(*engine->GetHWND());
-	}
-
-	if (!myQueuedSceneRequest.empty() && myQueuedSceneRequest != mySceneName)
-	{
-		const std::string queuedScene = myQueuedSceneRequest;
-		myQueuedSceneRequest.clear();
-		StartSceneLoadAsync(queuedScene);
-	}
-#endif
-}
-
-void GameWorld::UnloadActiveLevel(const bool aClearSceneName)
-{
-	myVfxSystem.ClearActiveEffects();
-
-	myCameraSystem.ResetTransientEffects();
-	myCameraSystem.SetSceneName("");
-
-	if (aClearSceneName)
-	{
-		mySceneName.clear();
-		Essentials::globalSceneManager->SetCurrentScene("");
-	}
-
-	ClearSceneObjects();
 }
 
 void GameWorld::RegisterCommands(const char* argv[])
@@ -483,48 +358,6 @@ void GameWorld::RegisterCommands(const char* argv[])
 	Console->ListCommands();
 }
 
-void GameWorld::TryRecoverWindowFocus()
-{
-	if (myPendingFocusRecoveryFrames <= 0)
-	{
-		return;
-	}
-
-	RestoreGameWindowFocusIfNeeded();
-	--myPendingFocusRecoveryFrames;
-}
-
-void GameWorld::ApplyLoadedScene(std::vector<std::unique_ptr<GameObject>>&& someObjects, const std::string& aScenePath)
-{
-	mySceneName = aScenePath;
-	myCameraSystem.SetSceneName(mySceneName);
-	myCameraSystem.ResetTransientEffects();
-	Essentials::globalSceneManager->SetCurrentScene(mySceneName);
-
-	ClearSceneObjects();
-
-	Tga::Engine* engine = Tga::Engine::GetInstance();
-	if (!engine)
-	{
-		ERROR_PRINT("GameWorld::ApplyLoadedScene failed to access engine instance.");
-		return;
-	}
-
-	std::cout << "[GameWorld] Loaded " << someObjects.size() << " objects from scene: " << mySceneName << "\n";
-
-	for (auto& object : someObjects)
-	{
-		if (!object)
-		{
-			continue;
-		}
-
-		object->Init(*engine);
-		myGameObjects.push_back(std::move(object));
-	}
-
-}
-
 void GameWorld::Render()
 {
 #ifdef _DEBUG
@@ -545,50 +378,6 @@ void GameWorld::Render()
 		myIsFirstFrame = false;
 	}
 
-}
-
-void GameWorld::RenderLoadingScreen()
-{
-	Tga::Engine* engine = Tga::Engine::GetInstance();
-	if (!engine)
-	{
-		return;
-	}
-
-	auto& graphicsEngine = engine->GetGraphicsEngine();
-	auto& graphicsStateStack = graphicsEngine.GetGraphicsStateStack();
-
-	const int dotCount = static_cast<int>(std::fmod(myTimer.GetTotalTime() * 2.0, 4.0));
-	std::string loadingText = "Loading";
-	loadingText.append(static_cast<size_t>(dotCount), '.');
-
-	const Tga::Vector2ui resolution = engine->GetRenderSize();
-	myLoadingText.SetText(loadingText);
-	myLoadingText.SetPosition({
-		0.5f * static_cast<float>(resolution.x) - 0.5f * myLoadingText.GetWidth(),
-		0.5f * static_cast<float>(resolution.y)
-		});
-
-	Tga::DX11::BackBuffer->SetAsActiveTarget();
-	Tga::DX11::BackBuffer->Clear({ 0.0f, 0.0f, 0.0f, 1.0f });
-	graphicsStateStack.SetDefaultCamera();
-	myLoadingText.Render();
-}
-
-void GameWorld::RenderDefault()
-{
-	mySceneRenderer.Render(
-		myGameObjects,
-		myCameraSystem,
-		myVfxSystem,
-		myEnablePointLights,
-		myEnableDirectionalLight,
-		myEnableAmbientLight,
-		gEnableFrustumCulling);
-
-#ifdef _DEBUG
-	myCameraSystem.RenderDebugUi();
-#endif
 }
 
 CommonUtilities::InputHandler& GameWorld::GetInputHandler()

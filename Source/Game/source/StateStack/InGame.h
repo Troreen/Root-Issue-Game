@@ -2,6 +2,7 @@
 #include "State.hpp"
 #include "CombatSystem.h"
 #include "RuntimeCollisionSystem.h"
+#include "SceneTransitionController.h"
 #include "WorldTransitionService.h"
 
 #include <string>
@@ -22,22 +23,14 @@ public:
 		float aFadeOutSeconds) override;
 
 private:
-	enum class SceneFadeState
-	{
-		None,
-		FadingOutForSceneLoad,
-		FadingInAfterSceneLoad
-	};
-
+	void ApplyTransitionScene(
+		std::vector<std::unique_ptr<GameObject>>&& someObjects,
+		const std::string& aScenePath,
+		const std::string& aTargetSpawnId);
 	void ConsumeCollisionContacts(const std::vector<CollisionContact>& someContacts);
-	void UpdateSceneFade(float aDeltaTime);
 	void RenderSceneFadeOverlay();
 
 	CombatSystem myCombatSystem;
 	RuntimeCollisionSystem myRuntimeCollisionSystem;
-	SceneFadeState mySceneFadeState = SceneFadeState::None;
-	std::string myPendingSceneTransitionTarget;
-	std::string myPendingSceneTransitionSpawnId;
-	float mySceneFadeAlpha = 0.0f;
-	float mySceneFadeDuration = 0.5f;
+	SceneTransitionController mySceneTransitionController;
 };
