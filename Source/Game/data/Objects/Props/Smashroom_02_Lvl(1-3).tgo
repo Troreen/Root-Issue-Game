@@ -72,7 +72,7 @@
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "animation\\Animation Graphs\\Smashroom_02_Lvl(1-3).tgscript"
+      "value": "animations\\Animation Graphs\\Smashroom_02_Lvl(1-3).tgscript"
     },
     {
       "description": "",

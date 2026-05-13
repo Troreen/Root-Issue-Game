@@ -90,7 +90,7 @@
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "animation\\Animation Graphs\\Lever.tgscript"
+      "value": "animations\\Animation Graphs\\Lever.tgscript"
     },
     {
       "description": "",

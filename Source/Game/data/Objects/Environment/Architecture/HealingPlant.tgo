@@ -81,7 +81,7 @@
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "animation\\Animation Graphs\\HealingPlant.tgscript"
+      "value": "animations\\Animation Graphs\\HealingPlant.tgscript"
     },
     {
       "description": "",

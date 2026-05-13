@@ -347,7 +347,12 @@ namespace
 
         if (!animationGraphPath.empty() && ShouldUseIdleOnlyAnimation(aData, animationGraphPath))
         {
-            anObject.AddComponent<AnimatedMeshComponent>(modelPath);
+            AnimatedMeshComponent* animatedMeshComponent = anObject.AddComponent<AnimatedMeshComponent>(modelPath);
+            MeshTextureOverrides textureOverrides;
+            if (aData.TryGetProperty<MeshTextureOverrides>("modelTextures", textureOverrides))
+            {
+                animatedMeshComponent->SetTextureOverrides(textureOverrides);
+            }
 
             AnimationGraphComponent* graphComponent = anObject.AddComponent<AnimationGraphComponent>(animationGraphPath);
             graphComponent->SetSourceProperties(aData.properties);

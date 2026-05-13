@@ -72,7 +72,7 @@
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "animation\\Animation Graphs\\GoopEggs.tgscript"
+      "value": "animations\\Animation Graphs\\GoopEggs.tgscript"
     },
     {
       "description": "",

@@ -130,9 +130,12 @@ namespace
         GameObject* owner = GetOwner();
         const std::string ownerName = owner ? owner->GetName() : "unknown";
 
-        std::cout << "[AnimatedMeshComponent::RefreshMaterialBindings] object='" << ownerName 
-                  << "' model='" << myModelPath << "' baseName='" << baseName 
-                  << "' meshCount=" << model->GetMeshCount() << "\n";
+        if (!myHasTextureOverrides)
+        {
+            std::cout << "[AnimatedMeshComponent] object='" << ownerName
+                << "' model='" << myModelPath
+                << "' has no authored texture overrides; using model defaults.\n";
+        }
 
         for (int i = 0; i < static_cast<int>(model->GetMeshCount()); ++i)
         {
@@ -152,8 +155,6 @@ namespace
             const std::string& overrideMaterial = getTextureOverride(2);
             const std::string& overrideFx = getTextureOverride(3);
 
-            std::cout << "  [Mesh " << i << "] Searching for textures...\n";
-
             std::vector<std::string> albedoCandidates;
             if (!overrideAlbedo.empty()) albedoCandidates.push_back(overrideAlbedo);
             AppendModelNameChannelCandidates(albedoCandidates, baseName, "_c.dds", "_C.dds");
@@ -165,14 +166,6 @@ namespace
                 &appliedAlbedoPath))
             {
                 myInstance.SetTexture(i, 0, albedo);
-                std::cout << "    Albedo (ch0): " << appliedAlbedoPath << " [OK]\n";
-            }
-            else
-            {
-                std::cout << "    Albedo (ch0): NOT FOUND (tried " << albedoCandidates.size() << " candidates)\n";
-                for (const auto& cand : albedoCandidates) {
-                    std::cout << "      - " << cand << "\n";
-                }
             }
 
             std::vector<std::string> normalCandidates;
@@ -186,14 +179,6 @@ namespace
                 &appliedNormalPath))
             {
                 myInstance.SetTexture(i, 1, normal);
-                std::cout << "    Normal (ch1): " << appliedNormalPath << " [OK]\n";
-            }
-            else
-            {
-                std::cout << "    Normal (ch1): NOT FOUND (tried " << normalCandidates.size() << " candidates)\n";
-                for (const auto& cand : normalCandidates) {
-                    std::cout << "      - " << cand << "\n";
-                }
             }
 
             std::vector<std::string> materialCandidates;
@@ -207,14 +192,6 @@ namespace
                 &appliedMaterialPath))
             {
                 myInstance.SetTexture(i, 2, material);
-                std::cout << "    Material (ch2): " << appliedMaterialPath << " [OK]\n";
-            }
-            else
-            {
-                std::cout << "    Material (ch2): NOT FOUND (tried " << materialCandidates.size() << " candidates)\n";
-                for (const auto& cand : materialCandidates) {
-                    std::cout << "      - " << cand << "\n";
-                }
             }
 
             std::vector<std::string> fxCandidates;
@@ -228,14 +205,6 @@ namespace
                 &appliedFxPath))
             {
                 myInstance.SetTexture(i, 3, fx);
-                std::cout << "    FX (ch3): " << appliedFxPath << " [OK]\n";
-            }
-            else
-            {
-                std::cout << "    FX (ch3): NOT FOUND (tried " << fxCandidates.size() << " candidates)\n";
-                for (const auto& cand : fxCandidates) {
-                    std::cout << "      - " << cand << "\n";
-                }
             }
         }
     }

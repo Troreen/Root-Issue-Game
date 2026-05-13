@@ -373,6 +373,22 @@ namespace
         return hasAnyOverrides;
     }
 
+    bool HasAnyModelTextureOverride(const MeshTextureOverrides& someTextureOverrides)
+    {
+        for (int meshIndex = 0; meshIndex < MeshTextureOverrides::kMaxMeshCount; ++meshIndex)
+        {
+            for (int textureIndex = 0; textureIndex < MeshTextureOverrides::kTextureChannelCount; ++textureIndex)
+            {
+                if (!someTextureOverrides.textures[meshIndex][textureIndex].empty())
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     PrefabData ParseJsonTgo(const std::string& aText, const std::string& aPath)
     {
         PrefabData data;
@@ -823,6 +839,20 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
                 if (existingPropertyIt == merged.properties.end())
                 {
                     merged.properties[name] = value;
+                    continue;
+                }
+
+                if (name == "modelTextures")
+                {
+                    const MeshTextureOverrides* mergedTextureOverrides =
+                        std::any_cast<MeshTextureOverrides>(&existingPropertyIt->second);
+                    const bool hasMergedTextures =
+                        mergedTextureOverrides && HasAnyModelTextureOverride(*mergedTextureOverrides);
+                    if (!hasMergedTextures)
+                    {
+                        existingPropertyIt->second = value;
+                    }
+
                     continue;
                 }
 
