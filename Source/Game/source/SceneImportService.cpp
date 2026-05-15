@@ -794,11 +794,52 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
         return false;
     };
 
+    Tga::LoadingProfiler::GetInstance().RecordObjectCount(someSceneObjects.size());
+
     std::vector<std::unique_ptr<GameObject>> objects;
     objects.reserve(someSceneObjects.size());
+    double prefabResolveMilliseconds = 0.0;
     double prefabParseMilliseconds = 0.0;
     double propertyMergeMilliseconds = 0.0;
     double factoryCreateMilliseconds = 0.0;
+
+    // Level scenes often contain hundreds of instances of the same few prefab types.
+    // Cache path resolution and parsed .tgo data for this build so repeated rocks,
+    // trees, and tiles do not rescan/reparse the same files on the main thread.
+    std::unordered_map<std::string, std::string> prefabPathCache;
+    std::unordered_map<std::string, PrefabData> prefabDataCache;
+
+    auto resolvePrefabPathCached = [&](const std::string& aTypeId) -> const std::string& {
+        auto cachedPathIt = prefabPathCache.find(aTypeId);
+        if (cachedPathIt != prefabPathCache.end())
+        {
+            return cachedPathIt->second;
+        }
+
+        const auto phaseStartTime = std::chrono::steady_clock::now();
+        std::string prefabPath = ResolvePrefabPath(aTypeId);
+        prefabResolveMilliseconds += GetElapsedMilliseconds(phaseStartTime);
+
+        auto [insertedIt, wasInserted] = prefabPathCache.emplace(aTypeId, std::move(prefabPath));
+        UNREFERENCED_PARAMETER(wasInserted);
+        return insertedIt->second;
+    };
+
+    auto getPrefabDataCached = [&](const std::string& aPrefabPath) -> const PrefabData& {
+        auto cachedPrefabIt = prefabDataCache.find(aPrefabPath);
+        if (cachedPrefabIt != prefabDataCache.end())
+        {
+            return cachedPrefabIt->second;
+        }
+
+        const auto phaseStartTime = std::chrono::steady_clock::now();
+        PrefabData prefabData = ParsePrefab(aPrefabPath);
+        prefabParseMilliseconds += GetElapsedMilliseconds(phaseStartTime);
+
+        auto [insertedIt, wasInserted] = prefabDataCache.emplace(aPrefabPath, std::move(prefabData));
+        UNREFERENCED_PARAMETER(wasInserted);
+        return insertedIt->second;
+    };
 
     for (const SceneObjectData& sceneObject : someSceneObjects)
     {
@@ -807,15 +848,12 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
             continue;
         }
 
-        const std::string prefabPath = ResolvePrefabPath(sceneObject.typeId);
-
         try
         {
-            auto phaseStartTime = std::chrono::steady_clock::now();
-            const PrefabData prefabData = ParsePrefab(prefabPath);
-            prefabParseMilliseconds += GetElapsedMilliseconds(phaseStartTime);
+            const std::string& prefabPath = resolvePrefabPathCached(sceneObject.typeId);
+            const PrefabData& prefabData = getPrefabDataCached(prefabPath);
 
-            phaseStartTime = std::chrono::steady_clock::now();
+            auto phaseStartTime = std::chrono::steady_clock::now();
             SceneObjectData merged = sceneObject;
             for (const auto& [name, value] : prefabData.properties)
             {
@@ -881,6 +919,7 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
         }
     }
 
+    Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::PrefabResolvePath", prefabResolveMilliseconds);
     Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::PrefabParse", prefabParseMilliseconds);
     Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::PrefabMerge", propertyMergeMilliseconds);
     Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::FactoryCreate", factoryCreateMilliseconds);
