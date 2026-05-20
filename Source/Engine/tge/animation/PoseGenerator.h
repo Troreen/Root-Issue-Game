@@ -13,6 +13,7 @@ namespace Tga
 	{
 		StringId id;
 		StringId clipPath;
+		StringId scriptId;
 		float time = 0.f;
 	};
 

@@ -19,6 +19,7 @@ namespace Tga
 
 		bool IsEmpty() const { return myString == nullptr; }
 		const char* GetString() const { return myString ? myString : ""; };
+		//void SetString(const std::string& aString) { myString = aString.c_str(); }
 	private:
 		friend class StringRegistry;
 		friend StringId operator""_tgaid(const char*, std::size_t);

@@ -6,15 +6,18 @@
 #include <functional>
 #include <vector>
 
+struct SceneObjectData;
+
 class PlayerControllerComponent : public ScriptComponent
 {
 public:
 	using ForcedMoveCompleteCallback = std::function<void()>;
 
-	PlayerControllerComponent() = default;
+	PlayerControllerComponent(const SceneObjectData& aData);
 	~PlayerControllerComponent() = default;
 
 	void Reset() override;
+	void Save() override;
 	void OnStart() override;
 	void OnUpdate(float aDeltaTime) override;
 
@@ -28,6 +31,7 @@ public:
 	void FaceDirection(const CommonUtilities::Vector3<float>& aDirection);
 
 	void FireBullet();
+	void EnableGun(bool aEnable);
 
 private:
 	void UpdateForcedMove(float aDeltaTime);

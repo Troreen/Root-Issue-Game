@@ -10,7 +10,7 @@ public:
 	PlayerState_Charge_Attack();
 
 	void Update(float aDeltaTime, PlayerControllerComponent& aController) override;
-	void ResetValues() override;
+	void SetValues() override;
 
 private:
 	float myChargeTimer;

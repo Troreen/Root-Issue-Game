@@ -19,7 +19,6 @@ void SwitchComponent::Receive(const Message& aMSG)
 
 void SwitchComponent::Toggle()
 {
-	std::cout << myMessageID << std::endl;
 	myIsActivated = !myIsActivated;
 	Message a;
 	a.myInt = myMessageID;
@@ -31,10 +30,4 @@ void SwitchComponent::Toggle()
 void SwitchComponent::OnUpdate(float aDeltaTime)
 {
 	aDeltaTime;
-	/*
-	if (Essentials::globalInputManager->AnyInputPressed())
-	{
-		std::cout << myMessageID << std::endl;
-		Toggle();
-	}*/
 }

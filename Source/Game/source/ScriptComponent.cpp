@@ -2,6 +2,11 @@
 
 #include "GameObject.h"
 
+#include <tge/debug/LoadingProfiler.h>
+
+#include <chrono>
+#include <typeinfo>
+
 void ScriptComponent::Init(Tga::Engine& anEngine)
 {
     Component::Init(anEngine);
@@ -58,7 +63,11 @@ void ScriptComponent::EnsureStarted()
     }
 
     myHasStarted = true;
+    const auto startTime = std::chrono::steady_clock::now();
     OnStart();
+    const double milliseconds =
+        std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - startTime).count();
+    Tga::LoadingProfiler::GetInstance().RecordScriptStart(typeid(*this).name(), milliseconds);
 }
 
 bool ScriptComponent::IsActiveAndEnabledInHierarchy() const

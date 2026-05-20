@@ -39,13 +39,14 @@ UICanvas::~UICanvas()
     }
 }
 
-void UICanvas::Init(const Tga::StringId& aCanvasName, Tga::CanvasObjectDefinitionManager& aManager)
+void UICanvas::Init(const std::string& aCanvasName, Tga::CanvasObjectDefinitionManager& aManager)
 {
-    myCanvas = aManager.Get(aCanvasName);
+	Tga::StringId canvasName = Tga::StringRegistry::RegisterOrGetString(aCanvasName);
+    myCanvas = aManager.Get(canvasName);
 
     if (!myCanvas)
     {
-        printf("Failed to load canvas: %s\n", aCanvasName.GetString());
+        printf("Failed to load canvas: %s\n", canvasName.GetString());
         return;
     }
 
@@ -170,7 +171,7 @@ void UICanvas::NavigationControl()
 
 	if (keyNavigationDirPressed != Tga::Vector2f{ 0.f,0.f })
 	{
-		Essentials::myCursor->SetCursorVisible(false);
+		//Essentials::myCursor->SetCursorVisible(false);
 		myMouseActive = false;
 
 		SelectableUIProperties* selectableProperties;
@@ -199,39 +200,64 @@ void UICanvas::NavigationControl()
 		if (keyNavigationDirPressed.y == 1.f)
 		{
 			int nextIndex = selectableProperties->navigation[0];
-			RuntimeUIElement* nextElement = &myElements[nextIndex];
-			if (nextIndex != -1 && !GetIsHidden(nextElement->definition->generalProperties.name))
+			if (nextIndex != -1)
 			{
-				mySelectedElement = nextElement;
+				RuntimeUIElement* nextElement = &myElements[nextIndex];
+				if (nextElement)
+				{
+					if (!GetIsHidden(nextElement->definition->generalProperties.name))
+					{
+						mySelectedElement = nextElement;
+					}
+				}
 			}
 		}
 		else if (keyNavigationDirPressed.y == -1.f)
 		{
 			int nextIndex = selectableProperties->navigation[1];
-			RuntimeUIElement* nextElement = &myElements[nextIndex];
-			if (nextIndex != -1 && !GetIsHidden(nextElement->definition->generalProperties.name))
+			if (nextIndex != -1)
 			{
-				mySelectedElement = nextElement;
+				RuntimeUIElement* nextElement = &myElements[nextIndex];
+				if (nextElement)
+				{
+					if (!GetIsHidden(nextElement->definition->generalProperties.name))
+					{
+						mySelectedElement = nextElement;
+					}
+				}
 			}
 		}
 
 		if (keyNavigationDirPressed.x == -1.f)
 		{
 			int nextIndex = selectableProperties->navigation[2];
-			RuntimeUIElement* nextElement = &myElements[nextIndex];
-			if (nextIndex != -1 && !GetIsHidden(nextElement->definition->generalProperties.name))
+			if (nextIndex != -1)
 			{
-				mySelectedElement = nextElement;
+				RuntimeUIElement* nextElement = &myElements[nextIndex];
+				if (nextElement)
+				{
+					if (!GetIsHidden(nextElement->definition->generalProperties.name))
+					{
+						mySelectedElement = nextElement;
+					}
+				}
 			}
 		}
 		else if (keyNavigationDirPressed.x == 1.f)
 		{
 			int nextIndex = selectableProperties->navigation[3];
-			RuntimeUIElement* nextElement = &myElements[nextIndex];
-			if (nextIndex != -1 && !GetIsHidden(nextElement->definition->generalProperties.name))
+			if (nextIndex != -1)
 			{
-				mySelectedElement = nextElement;
+				RuntimeUIElement* nextElement = &myElements[nextIndex];
+				if (nextElement)
+				{
+					if (!GetIsHidden(nextElement->definition->generalProperties.name))
+					{
+						mySelectedElement = nextElement;
+					}
+				}
 			}
+
 		}
 	}
 	else if(mousePos != myLastMousePosition)
@@ -239,7 +265,7 @@ void UICanvas::NavigationControl()
 		Tga::Vector2f mouseDelta = Essentials::globalInputManager->GetMouseDelta();
 		if (mouseDelta.x > 0.f || mouseDelta.y > 0.f)
 		{
-			Essentials::myCursor->SetCursorVisible(true);
+			//Essentials::myCursor->SetCursorVisible(true);
 			myMouseActive = true;
 		}
 
@@ -327,7 +353,7 @@ void UICanvas::InteractionControl()
 			if constexpr (std::is_same_v<T, UISlider>)
 			{
 				isFocused = !isFocused;
-				Essentials::myCursor->SetCursorVisible(false);
+				//Essentials::myCursor->SetCursorVisible(false);
 			}
 			else if constexpr (std::is_same_v<T, UIToggle>)
 			{
@@ -343,7 +369,7 @@ void UICanvas::InteractionControl()
 			if constexpr (std::is_same_v<T, UISlider>)
 			{
 				isFocused = false;
-				Essentials::myCursor->SetCursorVisible(!isFocused);
+				//Essentials::myCursor->SetCursorVisible(!isFocused);
 			}
 			}, mySelectedElement->definition->uiElementProperties);
 	}
@@ -570,5 +596,7 @@ void UICanvas::Render()
 			params
 		);
 	}
+
+	CanvasObjectDefinition::DrawQueued();
 }
 

@@ -42,6 +42,7 @@ namespace Tga
 		void Init();
 
 		Script& CreateNewScript(const std::string_view& aName);
+		bool OpenScript(const std::string_view& aName);
 		void MarkScriptAsRemoved(const std::string_view aName);
 		void MarkScriptAsAdded(const std::string_view aName);
 		void DisplayEditor(const std::string_view& aActiveScript, ScriptPinId &aPinToTrigger, bool aIsRunning);

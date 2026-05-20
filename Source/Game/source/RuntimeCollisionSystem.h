@@ -16,6 +16,11 @@ public:
     void Run(std::vector<std::unique_ptr<GameObject>>& someGameObjects);
     void AuditRequiredColliders(const std::vector<std::unique_ptr<GameObject>>& someGameObjects) const;
 
+    bool Raycast(
+        const std::vector<std::unique_ptr<GameObject>>& someGameObjects,
+        const CollisionRaycastQuery& aQuery,
+        CollisionRaycastHit& outHit) const;
+
     const std::vector<CollisionContact>& GetContacts() const;
 
 private:
@@ -29,4 +34,5 @@ private:
 
     std::vector<CollisionContact> myContacts;
     std::unordered_map<std::uint64_t, CollisionPairState> myCollisionPairsLastFrame;
+    std::unordered_map<std::uint64_t, CommonUtilities::Vector3<float>> myPreviousColliderPositionsById;
 };

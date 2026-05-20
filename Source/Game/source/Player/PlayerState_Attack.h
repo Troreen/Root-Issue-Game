@@ -8,7 +8,7 @@ public:
 	PlayerState_Attack();
 
 	void Update(float aDeltaTime, PlayerControllerComponent& aController) override;
-	void ResetValues() override;
+	void SetValues() override;
 private:
 
 	bool myInputAttack;

@@ -1,6 +1,11 @@
 #include "GameObject.h"
+#include "ToggleComponent.h"
+#include "BoxColliderComponent.h"
+
+#include <tge/debug/LoadingProfiler.h>
 
 #include <atomic>
+#include <chrono>
 #include <cstdint>
 #include <utility>
 
@@ -23,6 +28,8 @@ GameObject::~GameObject()
 
 void GameObject::Init(Tga::Engine& anEngine)
 {
+    const auto startTime = std::chrono::steady_clock::now();
+
     myEngine = &anEngine;
     myIsInitialized = true;
 
@@ -30,6 +37,21 @@ void GameObject::Init(Tga::Engine& anEngine)
     {
         component->Init(anEngine);
     }
+
+    if (ToggleComponent* toggleComponent = GetComponent<ToggleComponent>())
+    {
+        GetComponent<ToggleComponent>()->Initialize();
+        /*auto& transform = GetTransform();
+        this->GetTransform().SetPosition(Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y - 400.0f, transform.GetPosition().z));*/
+    }
+    if (this->HasComponent<BoxColliderComponent>())
+    {
+        GetComponent<BoxColliderComponent>()->Init(anEngine);
+    }
+
+    const double milliseconds =
+        std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - startTime).count();
+    Tga::LoadingProfiler::GetInstance().RecordGameObjectInit(myName, myTag, milliseconds);
 }
 
 void GameObject::Reset()
@@ -37,6 +59,14 @@ void GameObject::Reset()
     for (auto& component : myComponents)
     {
         component->Reset();
+    }
+}
+
+void GameObject::Save()
+{
+    for (auto& component : myComponents)
+    {
+        component->Save();
     }
 }
 
@@ -197,4 +227,12 @@ void GameObject::RemoveAllComponents()
     }
 
     myComponents.clear();
+}
+
+void GameObject::DisableAllComponents()
+{
+    for (auto& component : myComponents)
+    {
+        component->SetEnabled(false);
+    }
 }

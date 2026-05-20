@@ -12,7 +12,7 @@ Cursor::~Cursor()
 
 void Cursor::SceneLoaded()
 {
-	myUICanvas.Init(Tga::StringRegistry::RegisterOrGetString("CursorCanvas"),  *Essentials::globalCanvasManager);
+	myUICanvas.Init("CursorCanvas",  *Essentials::globalCanvasManager);
 	myCursor = myUICanvas.GetImage("CursorImage");
 	myCursorElement = myUICanvas.GetElement("CursorImage")->definition;
 	ShowCursor(false);

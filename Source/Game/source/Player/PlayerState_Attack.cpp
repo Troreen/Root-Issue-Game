@@ -49,11 +49,14 @@ void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aCo
 
 	if (!myHasSpawnedHitbox)
 	{
-		StartPlayerMeleeAttack(*myOwner);
+		// Animation-event combat test path: attack audio and hitbox are now
+		// authored in the attack animation event script.
+		// Essentials::globalAudioManager->PlaySFX(SoundID::ePlayerAttack);
+		// StartPlayerMeleeAttack(*myOwner);
 		myHasSpawnedHitbox = true;
 	}
 
-	if (myAttackTimer < 0.2f && Essentials::GetEssentials().globalInputManager->IsKeyPressed(static_cast<int>(Keys::RETURN)))
+	if (myAttackTimer < 0.2f && Essentials::GetEssentials().globalInputManager->IsKeyPressed(static_cast<int>(Keys::SPACE)))
 	{
 		myInputAttack = true;
 	}
@@ -93,7 +96,7 @@ void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aCo
 	myAnimationGraph->SetFloatParameter("w_attack_basic02", myAttackFromRight ? 0.f : 1.f);
 }
 
-void PlayerState_Attack::ResetValues()
+void PlayerState_Attack::SetValues()
 {
 	myInputAttack = false;
 	myAttackFromRight = !myAttackFromRight;

@@ -1,5 +1,6 @@
 #include "EnemyAttackComponent.h"
 #include "EnemyMovementComponent.h"
+#include "AnimationGraphComponent.h"
 #include "GameObject.h"
 
 EnemyAttackComponent::EnemyAttackComponent(const EnemyData& someEnemyData)
@@ -11,16 +12,38 @@ void EnemyAttackComponent::OnStart()
 {
     myAttackData.owner = GetOwner();
     myMovement = GetOwner()->GetComponent<EnemyMovementComponent>();
-    myAttackData.team = CombatTeam::Enemy;
-    myAttackData.type = AttackType::EnemyMelee;
-    myAttackData.collisionShape = CollisionShapeType::Sphere;
-    myAttackData.damage = 1;
-    myAttackData.localCenterOffset = CommonUtilities::Vector3<float>(0.0f, 90.0f, 0.0f);
-    myAttackData.radius = 190.0f;
-    myAttackData.activeDurationSeconds = 0.16f;
-    myAttackData.knockbackStrength = 450.0f;
-    myAttackData.onlyHitForwardHemisphere = true;
-    myAttackData.targetLayers.AddLayer(ObjectLayer::Player);
+    myAnimationGraph = GetOwner()->GetComponent<AnimationGraphComponent>();
+    
+    switch (myEnemyData.EnemyType)
+    {
+    case EnemyType::BasicEnemy:
+        myAttackData.team = CombatTeam::Enemy;
+        myAttackData.type = AttackType::EnemyMelee;
+        myAttackData.collisionShape = CollisionShapeType::Sphere;
+        myAttackData.damage = 1;
+        myAttackData.localCenterOffset = CommonUtilities::Vector3<float>(0.0f, 90.0f, 0.0f);
+        myAttackData.radius = 190.0f;
+        myAttackData.activeDurationSeconds = 0.16f;
+        myAttackData.knockbackStrength = 450.0f;
+        myAttackData.onlyHitForwardHemisphere = true;
+        myAttackData.targetLayers.AddLayer(ObjectLayer::Player);
+        break;
+    case EnemyType::RollingEnemy:
+        myAttackData.team = CombatTeam::Enemy;
+        myAttackData.type = AttackType::EnemyRoll;
+        myAttackData.collisionShape = CollisionShapeType::Sphere;
+        myAttackData.damage = 1;
+        myAttackData.localCenterOffset = CommonUtilities::Vector3<float>(0.0f, 90.0f, 0.0f);
+        myAttackData.radius = 200.0f;
+        myAttackData.activeDurationSeconds = 0.16f;
+        myAttackData.knockbackStrength = 450.0f;
+        myAttackData.onlyHitForwardHemisphere = false;
+        myAttackData.targetLayers.AddLayer(ObjectLayer::Player);
+            break;
+    default:
+        break;
+    }
+
 }
 
 void EnemyAttackComponent::OnUpdate(float aDeltaTime)
@@ -62,12 +85,13 @@ void EnemyAttackComponent::UpdateWindup(float aDeltaTime)
     {
         myMovement->RotateTowards(myAttackDirection, aDeltaTime);
         myMovement->StopMoving();
+        myRollStartPosition = GetOwner()->GetTransform().GetPosition();
     }
 
     if (myTimer <= 0.0f)
     {
         myState = AttackState::Active;
-        myTimer = myAttackData.activeDurationSeconds;
+        myTimer = myEnemyData.AttackWindup;
     }
 }
 
@@ -81,16 +105,46 @@ void EnemyAttackComponent::UpdateActive(float aDeltaTime)
 
     if (myEnemyData.EnemyType == EnemyType::RollingEnemy && myMovement)
     {
+        if (myAnimationGraph)
+        {
+            myAnimationGraph->SetFloatParameter("w_roll_idle", 1.0f);
+            myAnimationGraph->SetFloatParameter("w_charge", 0.0f);
+        }
+
         myMovement->MoveForward(aDeltaTime);
+
+        auto& pos = GetOwner()->GetTransform().GetPosition();
+
+        float distance = (pos - myRollStartPosition).Length();
+
+        if (distance >= myEnemyData.RollDistance)
+        {
+            //myState = AttackState::Recovery;
+            myState = AttackState::Idle;
+
+            myTimer = myEnemyData.AttackRecovery;
+            myCooldownTimer = myEnemyData.AttackCooldown;
+
+            myMovement->StopMoving();
+            myAnimationGraph->SetFloatParameter("w_roll_idle", 0.0f);
+            myAnimationGraph->SetFloatParameter("w_knockback", 1.0f);
+        }
     }
-
-    myTimer -= aDeltaTime;
-
-    if (myTimer <= 0.0f)
+    else
     {
-        myState = AttackState::Recovery;
-        myTimer = myEnemyData.AttackRecovery;
+        myTimer -= aDeltaTime;
+
+        if (myTimer <= 0.0f)
+        {
+            //myState = AttackState::Recovery;
+            myState = AttackState::Idle;
+
+            myTimer = myEnemyData.AttackRecovery;
+
+            myCooldownTimer = myEnemyData.AttackCooldown;
+        }
     }
+
 }
 
 void EnemyAttackComponent::UpdateRecovery(float aDeltaTime)
@@ -100,6 +154,7 @@ void EnemyAttackComponent::UpdateRecovery(float aDeltaTime)
     if (myTimer <= 0.0f)
     {
         myState = AttackState::Idle;
+
         myCooldownTimer = myEnemyData.AttackCooldown;
     }
 }

@@ -281,6 +281,7 @@ bool AnimationGraphRuntime::Update(float aDeltaTime, const std::shared_ptr<Tga::
             AnimationEventRecord record;
             record.id = event.id;
             record.clipPath = event.clipPath;
+            record.scriptId = event.scriptId;
             record.time = event.time;
             myEventQueue->Push(record);
         }

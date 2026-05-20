@@ -21,6 +21,7 @@ Essentials::Essentials()
 	globalCanvasManager = std::make_unique<Tga::CanvasObjectDefinitionManager>();
 
 	globalPostMaster = std::make_unique <PostMaster>();
+	globalAnimationEvents = std::make_unique<AnimationEventService>();
 
 	myDynamicGameObjects = std::make_unique<std::vector<std::unique_ptr<GameObject>>>();
 }

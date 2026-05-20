@@ -9,9 +9,11 @@ public:
 	~PlayerState_Walk() = default;
 
 	void Update(float aDeltaTime, PlayerControllerComponent& aController) override;
-private:
 
+	void SetHasGun(bool aGiveGun);
+private:
+	
+	bool myHasGun;
 	float myWalkSpeed;
-	//Test
 };
 

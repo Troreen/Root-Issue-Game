@@ -8,9 +8,6 @@ void Particle::Init(const ParticleSettings& someParticleSettings)
 	myTransform.SetPosition(someParticleSettings.initalPosition);
 	myTimeLeft = mySettings.timeToLive;
 
-	// TODO: Multiply in order Scale * Rotation * Translation to make the new transform. 
-	// Maybe do it in the emitter instead??? Make sure it doesn't cost too much doing these multiplications!!!
-
 	myInstance.myTransform.SetForward(mySettings.rotation.GetForward().ToTga());
 	myInstance.myTransform.SetRight(mySettings.rotation.GetRight().ToTga());
 	myInstance.myTransform.SetUp(mySettings.rotation.GetUp().ToTga());
@@ -25,7 +22,11 @@ void Particle::Init(const ParticleSettings& someParticleSettings)
 	myInstance.myTransform(2, 3) *= static_cast<float>(mySize.y);
 
 	// Temp
-	mySettings.swayAmplitude = 0;
+	/*mySettings.swayAmplitudeX = 1;
+	mySettings.swayAmplitudeZ = 3;
+	mySettings.swayFrequencyX = 3;
+	mySettings.swayFrequencyZ = 3;*/
+	
 }
 
 void Particle::SetNext(Particle* aNext) 
@@ -47,14 +48,14 @@ bool Particle::Animate(float aTimeDelta)
 	}
 
 	// TODO: Temporary code
-	
-	/*float x = myTransform.GetPosition().x;
-	x += static_cast<float>(mySettings.swayAmplitude * std::sin(10 * myTimeLeft));
-	myTransform.SetPosition({ x, myTransform.GetPosition().y, myTransform.GetPosition().y });*/
-	// end
-
+	myTransform.SetPosition({
+		myTransform.GetPosition().x + static_cast<float>(mySettings.sinAmplitudeX * std::sin(mySettings.sinFrequencyX * myTimeLeft + mySettings.myOffsetX)),
+		myTransform.GetPosition().y + static_cast<float>(mySettings.sinAmplitudeY * std::sin(mySettings.sinFrequencyY * myTimeLeft + mySettings.myOffsetY)),
+		myTransform.GetPosition().z + static_cast<float>(mySettings.sinAmplitudeZ * std::sin(mySettings.sinFrequencyZ * myTimeLeft + mySettings.myOffsetZ))});
+	//end
 
 	// Setting position
+	mySettings.linearVelocity.y -= mySettings.gravity;
 	myTransform.Translate(mySettings.linearVelocity * aTimeDelta);
 	Tga::Vector3f pos = myTransform.GetPosition().ToTga();
 	myInstance.myTransform.SetPosition(pos);

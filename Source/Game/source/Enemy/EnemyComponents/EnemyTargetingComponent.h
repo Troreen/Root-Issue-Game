@@ -7,7 +7,8 @@ class EnemyTargetingComponent : public ScriptComponent
 {
 public:
 
-	EnemyTargetingComponent();
+	EnemyTargetingComponent() = delete;
+	EnemyTargetingComponent(float aDetectionRange);
 	~EnemyTargetingComponent();
 
 	void OnUpdate(float aDeltaTime) override;
@@ -16,7 +17,7 @@ public:
 
 private:
 
-	float myDetectionRange = 500.0f;
+	float myDetectionRange;
 	bool myTargetIsInRange;
 
 };

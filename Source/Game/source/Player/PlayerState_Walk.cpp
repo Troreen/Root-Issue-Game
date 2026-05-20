@@ -20,11 +20,6 @@ PlayerState_Walk::PlayerState_Walk()
 
 void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aController)
 {
-	if (myOwner->GetComponent<DamageableComponent>()->IsDead())
-	{
-		aController.SetState(PlayerState_Master::Instance().myDeathState.get());
-	}
-
 	CommonUtilities::Vector3<float> direction;
 	CommonUtilities::Vector3<float> forwardAxis = Essentials::globalCamera.get()->GetCamera().GetTransform().GetForward();
 	forwardAxis.y = 0;
@@ -71,7 +66,7 @@ void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aCont
 		myWalkAnimation = 0.f;
 	}
 
-	if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::MOUSELBUTTON)))
+	if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::MOUSELBUTTON)) && myHasGun)
 	{
 		myWalkAnimation = 0;
 		aController.SetState(PlayerState_Master::Instance().myChargeAttackState.get());
@@ -86,5 +81,14 @@ void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aCont
 		myAnimationGraph->SetFloatParameter("w_walk", myWalkAnimation);
 	}
 
+}
+
+void PlayerState_Walk::SetHasGun(bool aGiveGun)
+{
+	if (GameObject* player = myOwner)
+	{
+		player->GetComponent<PlayerControllerComponent>()->SetState(PlayerState_Master::Instance().myUpgradeState.get());
+	}
+	myHasGun = aGiveGun;
 }
 

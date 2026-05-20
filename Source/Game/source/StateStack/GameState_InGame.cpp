@@ -1,5 +1,6 @@
 #include "InGame.h"
 #include <tge/animation/Script/AnimationNodes.h>
+#include <tge/script/Nodes/AnimationEventNodes.h>
 #include <tge/script/Nodes/CommonMathNodes.h>
 #include <tge/script/Nodes/CommonNodes.h>
 
@@ -10,6 +11,7 @@
 #include "GameObject.h"
 #include "ObbColliderComponent.h"
 #include "SphereColliderComponent.h"
+#include "PauseMenuComponent.h"
 
 #include <tge/drawers/SpriteDrawer.h>
 #include <tge/graphics/DX11.h>
@@ -33,6 +35,7 @@ namespace
 		Tga::RegisterCommonNodes();
 		Tga::RegisterCommonMathNodes();
 		Tga::RegisterAnimationNodes();
+		Tga::RegisterAnimationEventNodes();
 
 		isRegistered = true;
 	}
@@ -127,6 +130,10 @@ namespace
 
 InGame::~InGame()
 {
+	if (Essentials::globalAnimationEvents)
+	{
+		Essentials::globalAnimationEvents->Clear();
+	}
 	mySceneTransitionController.Shutdown();
 	WorldTransitionService::SetListener(nullptr);
 	WorldTransitionService::EndSequence();
@@ -196,8 +203,9 @@ eState InGame::Update()
 
 	myTimer.Update();
 	myInputHandler.UpdateInput();
+
 	TryRecoverWindowFocus();
-	const float deltaTime = myTimer.GetDeltaTime();
+	const float deltaTime = Essentials::GetDeltaTime();
 
 	//PollSceneLoadCompletion();
 
@@ -256,6 +264,11 @@ eState InGame::Update()
 		object->LateUpdate(deltaTime);
 	}
 
+	if (Essentials::globalAnimationEvents)
+	{
+		Essentials::globalAnimationEvents->Update(deltaTime);
+	}
+
 	myRuntimeCollisionSystem.Run(myGameObjects);
 	ConsumeCollisionContacts(myRuntimeCollisionSystem.GetContacts());
 	myCombatSystem.Update(deltaTime, myGameObjects);
@@ -271,6 +284,12 @@ eState InGame::Update()
 	Essentials::PushGameObjectsInto(myGameObjects);
 	UICanvas::UpdateAll();
 	mySceneTransitionController.Update(deltaTime);
+
+	if (Essentials::GetPlayer()->GetComponent<PauseMenuComponent>()->ReturnToMainMenu())
+	{
+		return eState::ePopState;
+	}
+
 	return eState::COUNT;
 }
 

@@ -156,6 +156,45 @@ void Tga::WindowsWindow::SetResolution(Vector2ui aResolution)
 	::SetWindowPos(myWindowHandle, 0, 0, 0, aResolution.x, aResolution.y, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 }
 
+void Tga::WindowsWindow::SetBorderless(bool aEnabled)
+{
+	DWORD new_style = (aEnabled) ? WS_VISIBLE | WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN : WS_OVERLAPPEDWINDOW;
+	DWORD old_style = static_cast<DWORD>(::GetWindowLongPtrW(myWindowHandle, GWL_STYLE));
+
+	if (old_style != new_style)
+	{
+		::SetWindowLongPtrW(myWindowHandle, GWL_STYLE, static_cast<LONG>(new_style));
+
+		if (aEnabled)
+		{
+			myResolutionWithBorderDifference = myResolution;
+			int w = GetSystemMetrics(SM_CXSCREEN);
+			int h = GetSystemMetrics(SM_CYSCREEN);
+
+			::SetWindowPos(myWindowHandle, nullptr, 0, 0, w, h, SWP_FRAMECHANGED);
+		}
+		else
+		{
+
+			auto windowSize = myResolution;
+			RECT r;
+			GetClientRect(myWindowHandle, &r); //get window rect of control relative to screen
+			int horizontal = r.right - r.left;
+			int vertical = r.bottom - r.top;
+
+			int diffX = windowSize.x - horizontal;
+			int diffY = windowSize.y - vertical;
+
+			SetResolution(windowSize + Vector2ui(diffX, diffY));
+			::SetWindowPos(myWindowHandle, nullptr, 0, 0, windowSize.x + diffX, windowSize.y + diffY, SWP_FRAMECHANGED);
+			myResolutionWithBorderDifference = windowSize + Vector2ui(diffX, diffY);
+		}
+
+		//::SetWindowPos(myWindowHandle, nullptr, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
+		::ShowWindow(myWindowHandle, SW_SHOW);
+	}
+}
+
 void Tga::WindowsWindow::Close()
 {
 	DestroyWindow(myWindowHandle);

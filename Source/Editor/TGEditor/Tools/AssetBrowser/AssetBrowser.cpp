@@ -15,6 +15,7 @@
 #include <AnimationClip/AnimationClipDocument.h>
 #include <ObjectDefinition/ObjectDefinitionDocument.h>
 #include <Scene/SceneDocument.h>
+#include <ScriptEditor/ScriptDocument.h>
 
 #include <IconFontHeaders/IconsLucide.h>
 #include <p4/p4.h>
@@ -61,6 +62,15 @@ namespace
 		}
 
 		return false;
+	}
+
+	void OpenScriptDocument(const fs::path& aRelativeScriptPath)
+	{
+		fs::path scriptPath = aRelativeScriptPath;
+		std::unique_ptr<ScriptDocument> scriptDocument = std::make_unique<ScriptDocument>();
+		scriptDocument->Init(scriptPath.string());
+
+		Editor::GetEditor()->AddDocument(std::move(scriptDocument));
 	}
 }
 
@@ -368,7 +378,10 @@ void AssetBrowser::Draw()
 						{
 							if (itemStatus.doubleClicked)
 							{
-								TryOpenScriptViaOwningObjectDefinition(path);
+								if (!TryOpenScriptViaOwningObjectDefinition(path))
+								{
+									OpenScriptDocument(path);
+								}
 							}
 						}
 					}

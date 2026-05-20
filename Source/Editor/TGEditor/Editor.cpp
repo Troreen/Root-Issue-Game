@@ -37,6 +37,7 @@
 #include <ImGuizmo.h>
 
 #include <tge/script/Nodes/CommonNodes.h>
+#include <tge/script/Nodes/AnimationEventNodes.h>
 #include <tge/script/Nodes/ExampleNodes.h>
 #include <tge/script/Nodes/CommonMathNodes.h>
 #include <tge/script/Nodes/SceneObjectNodes.h>
@@ -122,6 +123,7 @@ void Tga::Editor::Init(const EditorConfiguration& aEditorConfiguration)
 	Tga::RegisterCommonNodes();
 	Tga::RegisterCommonMathNodes();
 	Tga::RegisterAnimationNodes();
+	Tga::RegisterAnimationEventNodes();
 
 	RegisterExampleNodes();
 

@@ -91,6 +91,11 @@ void EnemyMovementComponent::StopMoving()
 	myVelocity = { 0.0f, 0.0f, 0.0f };
 }
 
+void EnemyMovementComponent::SetMovementSpeed(float aMoveSpeed)
+{
+	mySpeed = aMoveSpeed;
+}
+
 void EnemyMovementComponent::RotateTowards(const CommonUtilities::Vector3<float>& aDirection, float aDeltaTime)
 {
 	auto& transform = GetOwner()->GetTransform();

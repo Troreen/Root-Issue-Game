@@ -13,8 +13,9 @@ class ParticleEmitterComponent;
 class EnemyAttackComponent;
 class DamageableComponent;
 
-enum class BasicEnemyState
+enum class EnemyState
 {
+	Spawn,
 	Idle,
 	Wander,
 	Chasing,
@@ -49,16 +50,19 @@ public:
 	void SetAggro(bool aState);
 
 	void Reset() override;
+	void Save() override;
 
 private:
 
 	//Basic Enemy
 	void HandleStatesBasicEnemy(float aDeltaTime);
+	void HandleStatesRollingEnemy(float aDeltaTime);
 
-	void ChangeState(const BasicEnemyState& aState);
+	void ChangeState(const EnemyState& aState);
 
-	std::string StringifyState(const BasicEnemyState& aState) const;
+	std::string StringifyState(const EnemyState& aState) const;
 
+	void UpdateSpawn(float aDeltaTime);
 	void UpdateIdle(float aDeltaTime);
 	void UpdateWander(float aDeltaTime);
 	void UpdateChasing(float aDeltaTime);
@@ -72,11 +76,9 @@ private:
 	float GetRandomAngleDegreeToRad(float aMin, float aMax);
 	float GetRandomFloat(float aMin, float aMax);
 
-	void HandleStatesRollingEnemy();
 
 	void BasicEnemyLogicUpdate(float aDeltaTime);
 	void RollingEnemyLogicUpdate(float aDeltaTime);
-
 
 	void AILogicUpdate(float aDeltaTime);
 
@@ -84,8 +86,8 @@ private:
 
 	EnemyData myEnemyData;
 
-	BasicEnemyState myCurrentState;
-	BasicEnemyState myPreviousState;
+	EnemyState myCurrentState;
+	EnemyState myPreviousState;
 
 	//RollingEnemyState myCurrentStateForRolling;
 	//RollingEnemyState myPreviousStateForRolling;
@@ -104,9 +106,11 @@ private:
 
 	bool myIsAggro = false;
 	bool myHasBeenInitialized = false;
+	bool myActiveAfterSave = true;
 
 	float myAnimationWeight;
 	//float myChangeFromIdleTime = 5.0f;
+	float mySpawnTimer = 0.0f;
 	float myIdleTimer = 0.0f;
 	float myWanderTimer = 0.0f;
 	float myDeathTimer = 3.0f;

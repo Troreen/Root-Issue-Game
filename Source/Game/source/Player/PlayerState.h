@@ -12,6 +12,7 @@ public:
 	{
 	}
 	virtual void Update(float aTimeDelta, PlayerControllerComponent& aController) = 0;
+	virtual void SetValues() {};
 	virtual void ResetValues() {};
 	void BindToOwner(GameObject* anOwner)
 	{

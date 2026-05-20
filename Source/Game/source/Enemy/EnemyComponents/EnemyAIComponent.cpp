@@ -34,7 +34,16 @@ EnemyAIComponent::EnemyAIComponent(const EnemyData& someEnemyData)
 {
 	myEnemyData = someEnemyData;
 	myType = someEnemyData.EnemyType;
-	myCurrentState = BasicEnemyState::Idle;
+
+	if (myEnemyData.ShouldSpawn)
+	{
+		myCurrentState = EnemyState::Spawn;
+	}
+	else
+	{
+		myCurrentState = EnemyState::Idle;
+	}
+
 	myPreviousState = myCurrentState;
 	myAnimationWeight = 0.0f;
 }
@@ -101,6 +110,7 @@ void EnemyAIComponent::Init(Tga::Engine& /*aEngine*/)
 
 	myIdleTimer = GetRandomFloat(1.0f, 2.0f);
 	myWanderTimer = GetRandomFloat(1.5f, 3.0f);
+	mySpawnTimer = myEnemyData.SpawnTime;
 
 	PickNewDirection();
 
@@ -110,6 +120,7 @@ void EnemyAIComponent::Init(Tga::Engine& /*aEngine*/)
 void EnemyAIComponent::OnStart()
 {
 	myAnimationWeight = 0.0f;
+
 }
 
 void EnemyAIComponent::OnUpdate(float aDeltaTime)
@@ -129,11 +140,13 @@ void EnemyAIComponent::SetAggro(bool aState)
 
 void EnemyAIComponent::Reset()
 {
+	if (!myActiveAfterSave) return;
+
 	GetOwner()->SetActive(true);
 	
 	ResetAnimations();
 
-	myCurrentState = BasicEnemyState::Idle;
+	myCurrentState = EnemyState::Idle;
 	myIsAggro = false;
 	myAnimationWeight = 0.0f;
 	myIdleTimer = GetRandomFloat(1.0f, 2.0f);
@@ -142,26 +155,46 @@ void EnemyAIComponent::Reset()
 	myMaxSpeed = 450.0f;
 }
 
+void EnemyAIComponent::Save()
+{
+	myActiveAfterSave = myCurrentState != EnemyState::Death;
+}
+
 void EnemyAIComponent::HandleStatesBasicEnemy(float aDeltaTime)
 {
 	switch (myCurrentState)
 	{
-	case BasicEnemyState::Idle:
+	case EnemyState::Spawn:
+		UpdateSpawn(aDeltaTime);
+		break;
+	case EnemyState::Idle:
 		UpdateIdle(aDeltaTime);
 		break;
-	case BasicEnemyState::Wander:
+	case EnemyState::Wander:
 		UpdateWander(aDeltaTime);
 		break;
-	case BasicEnemyState::Chasing:
+	case EnemyState::Chasing:
 		UpdateChasing(aDeltaTime);
 		break;
-	case BasicEnemyState::Attacking:
+	case EnemyState::Attacking:
+		if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eBasicAttackVox))
+		{
+			Essentials::globalAudioManager->PlaySFX(SoundID::eBasicAttackVox);
+		}
 		UpdateAttacking(aDeltaTime);
 		break;
-	case BasicEnemyState::Hurt:
+	case EnemyState::Hurt:
+		if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eBasicVox))
+		{
+			Essentials::globalAudioManager->PlaySFX(SoundID::eBasicVox);
+		}
 		UpdateHurt(aDeltaTime);
 		break;
-	case BasicEnemyState::Death:
+	case EnemyState::Death:
+		if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eEnemyDeadVox))
+		{
+			Essentials::globalAudioManager->PlaySFX(SoundID::eEnemyDeadVox);
+		}
 		UpdateDeath(aDeltaTime);
 		break;
 	default:
@@ -169,7 +202,7 @@ void EnemyAIComponent::HandleStatesBasicEnemy(float aDeltaTime)
 	}
 }
 
-void EnemyAIComponent::ChangeState(const BasicEnemyState& aState)
+void EnemyAIComponent::ChangeState(const EnemyState& aState)
 {
 	if (aState != myCurrentState)
 	{
@@ -180,24 +213,37 @@ void EnemyAIComponent::ChangeState(const BasicEnemyState& aState)
 	}
 }
 
-std::string EnemyAIComponent::StringifyState(const BasicEnemyState& aState) const
+std::string EnemyAIComponent::StringifyState(const EnemyState& aState) const
 {
 	switch (aState)
 	{
-	case BasicEnemyState::Idle:
+	case EnemyState::Idle:
 		return "Idle";
-	case BasicEnemyState::Wander:
+	case EnemyState::Wander:
 		return "Wander";
-	case BasicEnemyState::Chasing:
+	case EnemyState::Chasing:
 		return "Chasing";
-	case BasicEnemyState::Attacking:
+	case EnemyState::Attacking:
 		return "Attacking";
-	case BasicEnemyState::Hurt:
+	case EnemyState::Hurt:
 		return "Hurt";
-	case BasicEnemyState::Death:
+	case EnemyState::Death:
 		return "Death";
 	default:
 		return "Unknown";
+	}
+}
+
+void EnemyAIComponent::UpdateSpawn(float aDeltaTime)
+{
+	mySpawnTimer -= aDeltaTime;
+
+	if (mySpawnTimer < 0.0f)
+	{
+		myAnimationGraph->SetFloatParameter("w_spawn", 0.0f);
+		myAnimationGraph->SetFloatParameter("w_aggro_walk", 1.0f);
+		myMovement->SetMovementSpeed(myEnemyData.ChaseSpeed);
+		ChangeState(EnemyState::Chasing);
 	}
 }
 
@@ -211,10 +257,17 @@ void EnemyAIComponent::UpdateIdle(float aDeltaTime)
 
 	myIdleTimer -= aDeltaTime;
 
+	if (myDamageableComponent->TookDamageThisFrame())
+	{
+		myAnimationGraph->SetFloatParameter("w_hurt", 1.0f);
+		ChangeState(EnemyState::Hurt);
+		return;
+	}
+
 	if (myIdleTimer <= 0.0f)
 	{
 		myAnimationGraph->SetFloatParameter("w_walk", 1.0f);
-		ChangeState(BasicEnemyState::Wander);
+		ChangeState(EnemyState::Wander);
 		myWanderTimer = GetRandomFloat(1.5f, 3.0f);
 	}
 
@@ -227,11 +280,20 @@ void EnemyAIComponent::UpdateWander(float aDeltaTime)
 
 	myWanderTimer -= aDeltaTime;
 
+	if (myDamageableComponent->TookDamageThisFrame())
+	{
+		myAnimationGraph->SetFloatParameter("w_walk", 0.f);
+		myAnimationGraph->SetFloatParameter("w_hurt", 1.0f);
+		ChangeState(EnemyState::Hurt);
+		return;
+	}
+
 	if (myTargeting->IsTargetInRange())
 	{
 		myAnimationGraph->SetFloatParameter("w_walk", 0);
 		myAnimationGraph->SetFloatParameter("w_aggro_walk", 1.0f);
-		ChangeState(BasicEnemyState::Chasing);
+		myMovement->SetMovementSpeed(myEnemyData.ChaseSpeed);
+		ChangeState(EnemyState::Chasing);
 		myIsAggro = true;
 	}
 
@@ -240,7 +302,7 @@ void EnemyAIComponent::UpdateWander(float aDeltaTime)
 		if (GetRandomFloat(0.0f, 1.0f) < 0.3f)
 		{
 			myAnimationGraph->SetFloatParameter("w_walk", 0);
-			ChangeState(BasicEnemyState::Idle);
+			ChangeState(EnemyState::Idle);
 			myIdleTimer = GetRandomFloat(1.0f, 2.0f);
 		}
 		else
@@ -268,7 +330,7 @@ void EnemyAIComponent::UpdateChasing(float aDeltaTime)
 	{
 		myAnimationGraph->SetFloatParameter("w_death", 1.0f);
 		myAnimationGraph->SetFloatParameter("w_aggro_walk", 0.f);
-		ChangeState(BasicEnemyState::Death);
+		ChangeState(EnemyState::Death);
 		return;
 	}
 
@@ -276,7 +338,7 @@ void EnemyAIComponent::UpdateChasing(float aDeltaTime)
 	{
 		myAnimationGraph->SetFloatParameter("w_aggro_walk", 0.f);
 		myAnimationGraph->SetFloatParameter("w_hurt", 1.0f);
-		ChangeState(BasicEnemyState::Hurt);
+		ChangeState(EnemyState::Hurt);
 		return;
 	}
 
@@ -284,10 +346,19 @@ void EnemyAIComponent::UpdateChasing(float aDeltaTime)
 	{
 		if (myAttack->CanAttack())
 		{
-			myAnimationGraph->SetFloatParameter("w_aggro_walk", 0);
-			myAnimationGraph->SetFloatParameter("w_attack", 1.0f);
+			if (myType == EnemyType::BasicEnemy)
+			{
+				myAnimationGraph->SetFloatParameter("w_aggro_walk", 0);
+				myAnimationGraph->SetFloatParameter("w_attack", 1.0f);
+			}
+			else
+			{
+				myAnimationGraph->SetFloatParameter("w_charge", 1.0f);
+				myAnimationGraph->SetFloatParameter("w_walk", 0.0f);
+
+			}
 			myAttack->StartAttack(target);
-			ChangeState(BasicEnemyState::Attacking);
+			ChangeState(EnemyState::Attacking);
 			return;
 		}
 	}
@@ -298,27 +369,53 @@ void EnemyAIComponent::UpdateChasing(float aDeltaTime)
 void EnemyAIComponent::UpdateAttacking(float aDeltaTime)
 {
 	aDeltaTime;
-
-	if (myDamageableComponent->IsDead())
+	if (myType == EnemyType::BasicEnemy)
 	{
-		myAnimationGraph->SetFloatParameter("w_death", 1.0f);
-		ChangeState(BasicEnemyState::Death);
-		return;
+		if (myDamageableComponent->IsDead())
+		{
+			myAnimationGraph->SetFloatParameter("w_death", 1.0f);
+			ChangeState(EnemyState::Death);
+			return;
+		}
+
+		if (myDamageableComponent->TookDamageThisFrame())
+		{
+			myAnimationGraph->SetFloatParameter("w_hurt", 1.0f);
+			myAnimationGraph->SetFloatParameter("w_attack", 0.0f);
+			ChangeState(EnemyState::Hurt);
+			return;
+		}
+
+		if (!myAttack->IsAttacking())
+		{
+			myAnimationGraph->SetFloatParameter("w_attack", 0.0f);
+			myAnimationGraph->SetFloatParameter("w_aggro_walk", 1.0f);
+			ChangeState(EnemyState::Chasing);
+		}
 	}
-
-	if (myDamageableComponent->TookDamageThisFrame())
+	else
 	{
-		myAnimationGraph->SetFloatParameter("w_hurt", 1.0f);
-		myAnimationGraph->SetFloatParameter("w_attack", 0.0f);
-		ChangeState(BasicEnemyState::Hurt);
-		return;
-	}
+		if (myDamageableComponent->IsDead())
+		{
+			myAnimationGraph->SetFloatParameter("w_death_standing", 1.0f);
+			ChangeState(EnemyState::Death);
+			return;
+		}
 
-	if (!myAttack->IsAttacking())
-	{
-		myAnimationGraph->SetFloatParameter("w_attack", 0.0f);
-		myAnimationGraph->SetFloatParameter("w_aggro_walk", 1.0f);
-		ChangeState(BasicEnemyState::Chasing);
+		if (myDamageableComponent->TookDamageThisFrame())
+		{
+			myAnimationGraph->SetFloatParameter("w_hurt", 1.0f);
+			myAnimationGraph->SetFloatParameter("w_charge", 0.0f);
+			ChangeState(EnemyState::Hurt);
+			return;
+		}
+
+		if (!myAttack->IsAttacking())
+		{
+			myAnimationGraph->SetFloatParameter("w_walk", 1.0f);
+			myAnimationGraph->SetFloatParameter("w_knockback", 0.0f);
+			ChangeState(EnemyState::Chasing);
+		}
 	}
 }
 
@@ -340,7 +437,7 @@ void EnemyAIComponent::UpdateHurt(float aDeltaTime)
 			myAnimationGraph->SetFloatParameter("w_aggro_walk", 1.0f);
 			myAnimationGraph->SetFloatParameter("w_hurt", 0.0f);
 			myHurtTimer = 0.5f;
-			ChangeState(BasicEnemyState::Chasing);
+			ChangeState(EnemyState::Chasing);
 		}
 		else
 		{
@@ -348,7 +445,7 @@ void EnemyAIComponent::UpdateHurt(float aDeltaTime)
 			myAnimationGraph->SetFloatParameter("w_aggro_walk", 1.0f);
 			myAnimationGraph->SetFloatParameter("w_hurt", 0.0f);
 			myHurtTimer = 0.5f;
-			ChangeState(BasicEnemyState::Chasing);
+			ChangeState(EnemyState::Chasing);
 		}
 
 	}
@@ -385,8 +482,50 @@ void EnemyAIComponent::ResetAnimations()
 	myAnimationGraph->SetFloatParameter("w_hurt", 0.0f);
 }
 
-void EnemyAIComponent::HandleStatesRollingEnemy()
+void EnemyAIComponent::HandleStatesRollingEnemy(float aDeltaTime)
 {
+	switch (myCurrentState)
+	{
+	case EnemyState::Spawn:
+		UpdateSpawn(aDeltaTime);
+		break;
+	case EnemyState::Idle:
+		UpdateIdle(aDeltaTime);
+		break;
+	case EnemyState::Wander:
+		UpdateWander(aDeltaTime);
+		break;
+	case EnemyState::Chasing:
+		if (Essentials::globalAudioManager->IsEventPlaying(SoundID::eRoll))
+		{
+			Essentials::globalAudioManager->StopMusic(SoundID::eRoll, true);
+		}
+		UpdateChasing(aDeltaTime);
+		break;
+	case EnemyState::Attacking:
+		if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eRoll))
+		{
+			Essentials::globalAudioManager->PlaySFX(SoundID::eRoll);
+		}
+		UpdateAttacking(aDeltaTime);
+		break;
+	case EnemyState::Hurt:
+		if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eHeavyVox))
+		{
+			Essentials::globalAudioManager->PlaySFX(SoundID::eHeavyVox);
+		}
+		UpdateHurt(aDeltaTime);
+		break;
+	case EnemyState::Death:
+		if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eEnemyDeadVox))
+		{
+			Essentials::globalAudioManager->PlaySFX(SoundID::eEnemyDeadVox);
+		}
+		UpdateDeath(aDeltaTime);
+		break;
+	default:
+		break;
+	}
 }
 
 void EnemyAIComponent::BasicEnemyLogicUpdate(float aDeltaTime)
@@ -402,8 +541,9 @@ void EnemyAIComponent::BasicEnemyLogicUpdate(float aDeltaTime)
 	normalized = std::clamp(normalized, 0.0f, 1.0f);*/
 }
 
-void EnemyAIComponent::RollingEnemyLogicUpdate(float /*aDeltaTime*/)
+void EnemyAIComponent::RollingEnemyLogicUpdate(float aDeltaTime)
 {
+	HandleStatesRollingEnemy(aDeltaTime);
 }
 
 void EnemyAIComponent::AILogicUpdate(float aDeltaTime)

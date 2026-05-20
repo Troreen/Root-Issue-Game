@@ -19,6 +19,7 @@ namespace Tga
 		bool Init(const EngineConfiguration& aWndCfg, HINSTANCE& aHInstanceToFill, HWND*& aHwnd);
 		HWND GetWindowHandle() const {return myWindowHandle;}
 		void SetResolution(Vector2ui aResolution);
+		void SetBorderless(bool aEnabled);
 		void Close();
 		unsigned int GetWidth()
 		{

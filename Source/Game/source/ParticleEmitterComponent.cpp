@@ -35,13 +35,22 @@ void ParticleEmitterComponent::Update(float aDeltaTime)
 {
 	for (auto it = mySettingsCollection.begin(); it != mySettingsCollection.end(); ++it)
 	{
-		if (it->second.shouldBurst || it->second.shouldEmitContinuously)
+		if (it->second.shouldBurst || it->second.shouldEmitContinuously || it->second.emissionDuration > 0)
 		{
-			// TODO: Temporary code
 			CommonUtilities::Transform<float> transform = Essentials::globalCamera.get()->GetCamera().GetTransform();
 			transform.SetPosition(GetOwner()->GetTransform().GetPosition());
-			//CommonUtilities::Transform<float> transform = GetOwner()->GetTransform();
-			// End
+			if (it->second.spawnOffsetIsLocal)
+			{
+				CommonUtilities::Transform ownerTransform = GetOwner()->GetTransform();
+				CommonUtilities::Vector3 rightOffset = it->second.spawnOffset.x * ownerTransform.GetRight();
+				CommonUtilities::Vector3 upOffset = it->second.spawnOffset.y * ownerTransform.GetUp();
+				CommonUtilities::Vector3 forwardOffset = it->second.spawnOffset.z * ownerTransform.GetForward();
+				transform.Translate(rightOffset + upOffset + forwardOffset);
+			}
+			else
+			{
+				transform.Translate(it->second.spawnOffset);
+			}
 
 			if (it->second.shouldBurst)
 			{
@@ -53,7 +62,7 @@ void ParticleEmitterComponent::Update(float aDeltaTime)
 				it->second.shouldBurst = false;
 			}
 
-			if (it->second.shouldEmitContinuously)
+			if (it->second.shouldEmitContinuously || it->second.emissionDuration > 0)
 			{
 				it->second.emissionAccumulator += aDeltaTime * it->second.emissionRate;
 
@@ -63,6 +72,11 @@ void ParticleEmitterComponent::Update(float aDeltaTime)
 				for (int i = 0; i < nbrToEmit; ++i)
 				{
 					Emit(it->first, transform);
+				}
+
+				if (it->second.emissionDuration > 0)
+				{
+					it->second.emissionDuration -= aDeltaTime;
 				}
 			}
 		}
@@ -75,16 +89,26 @@ void ParticleEmitterComponent::Burst(const ParticleType& aParticleType)
 	mySettingsCollection[aParticleType].shouldBurst = true;
 }
 
+void ParticleEmitterComponent::SetOffset(const ParticleType& aParticleType, const CommonUtilities::Vector3<float>& anOffset)
+{
+	assert(mySettingsCollection.contains(aParticleType));
+	mySettingsCollection[aParticleType].spawnOffset = anOffset;
+}
+
 void ParticleEmitterComponent::SetEmissionDirection(const ParticleType& aParticleType, const CommonUtilities::Vector3<float>& aDirection)
 {
 	assert(mySettingsCollection.contains(aParticleType));
 	mySettingsCollection[aParticleType].emissionDir = aDirection;
-	//mySettingsCollection[aParticleType].directionModified = true; // Is this even needed????
 }
 
 void ParticleEmitterComponent::SetContinuousEmission(const ParticleType& aParticleType, bool aStatus)
 {
 	mySettingsCollection[aParticleType].shouldEmitContinuously = aStatus;
+}
+
+void ParticleEmitterComponent::SetEmissionWithDuration(const ParticleType& aParticleType, float aDuration)
+{
+	mySettingsCollection[aParticleType].emissionDuration = aDuration;
 }
 
 void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, const CommonUtilities::Transform<float>& aTransform)
@@ -118,8 +142,7 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 		settings = {
 			.timeToLive = emitterSettings->lifeTimeMax,
 			.initalPosition = aTransform.GetPosition() + randomOffset,
-			.linearVelocity = forward * emitterSettings->startSpeedMax,
-			.rotation = aTransform.GetRotation()
+			.linearVelocity = forward * emitterSettings->startSpeedMax
 		};
 		break;
 	}
@@ -140,8 +163,7 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 		settings = {
 			.timeToLive = emitterSettings->lifeTimeMax,
 			.initalPosition = aTransform.GetPosition(),
-			.linearVelocity = dir * emitterSettings->startSpeedMax,
-			.rotation = aTransform.GetRotation()
+			.linearVelocity = dir * emitterSettings->startSpeedMax
 		};
 
 		break;
@@ -190,17 +212,26 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 		settings.timeToLive = emitterSettings->lifeTimeMin;
 	}
 
-	/*if (emitterSettings->startSpeedMin != emitterSettings->startSpeedMax)
-	{
-		std::uniform_real_distribution<float> speedDist(emitterSettings->startSpeedMin, emitterSettings->startSpeedMax);
-		settings.linearVelocity = speedDist(rng);
-	}
-	else
-	{
-		settings.linearVelocity = emitterSettings->startSpeedMin;
-	}*/
+	settings.gravity = emitterSettings->gravity;
 
-	//settings.size = mySettingsCollection[aParticleType].startSizeMax;
+	if (emitterSettings->shouldBillboard)
+	{
+		settings.rotation = aTransform.GetRotation();
+	}
+
+	settings.sinAmplitudeX = emitterSettings->sinAmplitudeX;
+	settings.sinAmplitudeY = emitterSettings->sinAmplitudeY;
+	settings.sinAmplitudeZ = emitterSettings->sinAmplitudeZ;
+	settings.sinFrequencyX = emitterSettings->sinFrequencyX;
+	settings.sinFrequencyY = emitterSettings->sinFrequencyZ;
+	settings.sinFrequencyZ = emitterSettings->sinFrequencyZ;
+	if (!emitterSettings->sinSynchronized)
+	{
+		settings.myOffsetX = 2*PI * dist01(rng);
+		settings.myOffsetY = 2*PI * dist01(rng);
+		settings.myOffsetZ = 2*PI * dist01(rng);
+	}
+
 	VfxService::SpawnParticle(aParticleType, settings);
 }
 

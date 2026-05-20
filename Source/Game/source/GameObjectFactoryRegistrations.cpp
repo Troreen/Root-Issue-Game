@@ -27,11 +27,14 @@
 #include "PickUpComponent.h"
 #include <tge/animation/AnimationPlayer.h>
 #include "SphereColliderComponent.h"
+#include "StaticSpriteComponent.h"
 #include "TeleporterTunnelComponent.h"
 #include "WorldTriggerHelpers.h"
+#include "GunUpgradeComponent.h"
 
 #include "SwitchComponent.h"
 #include "ToggleComponent.h"
+#include "SwitchTriggerComponent.h"
 
 // Enemy Components
 #include "EnemyMovementComponent.h"
@@ -39,11 +42,19 @@
 #include "EnemyTargetingComponent.h"
 #include "EnemyAttackComponent.h"
 
+//UI
+#include "SplashScreenComponent.h"
+#include "MainMenuComponent.h"
+#include "HUDComponent.h"
+#include "PauseMenuComponent.h"
+
 #include <algorithm>
+#include <any>
 #include <cctype>
 #include <iostream>
 #include <utility>
 #include "Essentials.h"
+#include "CheckpointComponent.h"
 
 namespace
 {
@@ -323,25 +334,27 @@ namespace
         }
     }
 
-    void ApplyAnimatedModel(GameObject& anObject, const SceneObjectData& aData)
+    void ApplyOptionalSprite(GameObject& anObject, const SceneObjectData& aData)
     {
-        const std::string modelPath = aData.GetPropertyOr<std::string>("modelPath", "");
-        if (!modelPath.empty())
+        SceneSpriteData spriteData;
+        if (aData.TryGetProperty<SceneSpriteData>("Sprite", spriteData) && !spriteData.texturePath.empty())
         {
-            AnimatedMeshComponent* animatedMeshComponent = anObject.AddComponent<AnimatedMeshComponent>(modelPath);
-            // Optionally apply texture overrides if authored
-            MeshTextureOverrides textureOverrides;
-            if (aData.TryGetProperty<MeshTextureOverrides>("modelTextures", textureOverrides))
+            anObject.AddComponent<StaticSpriteComponent>(std::move(spriteData));
+            return;
+        }
+
+        for (const auto& [propertyName, propertyValue] : aData.properties)
+        {
+            (void)propertyName;
+            const SceneSpriteData* candidateSpriteData = std::any_cast<SceneSpriteData>(&propertyValue);
+            if (candidateSpriteData && !candidateSpriteData->texturePath.empty())
             {
-                std::cout << "[GameObjectFactoryRegistrations] Applying texture overrides to animated mesh: " << anObject.GetName() << "\n";
-                animatedMeshComponent->SetTextureOverrides(textureOverrides);
-            }
-            else
-            {
-                std::cout << "[GameObjectFactoryRegistrations] No texture overrides found in TGO for: " << anObject.GetName() << "\n";
+                anObject.AddComponent<StaticSpriteComponent>(*candidateSpriteData);
+                return;
             }
         }
     }
+
     void EnsureTriggerCollider(GameObject& anObject)
     {
         if (!anObject.GetComponent<BoxColliderComponent>() &&
@@ -361,6 +374,7 @@ namespace
         auto object = std::make_unique<GameObject>(aData.name);
         ApplyLayer(*object, aData, ObjectLayer::WorldStatic);
         ApplyCommonModel(*object, aData);
+        ApplyOptionalSprite(*object, aData);
         ApplyAuthoredCollider(*object, aData);
 
         return object;
@@ -372,8 +386,8 @@ namespace
 
         MeleeEnemyData.EnemyType = EnemyType::BasicEnemy;
 
-        MeleeEnemyData.WalkSpeed = 300.0f;
-        MeleeEnemyData.ChaseSpeed = 450.0f;
+        MeleeEnemyData.WalkSpeed = 200.0f;
+        MeleeEnemyData.ChaseSpeed = 350.0f;
         MeleeEnemyData.RotationSpeed = 5.0f;
 
         MeleeEnemyData.DetectionRange = 600.0f;
@@ -387,10 +401,10 @@ namespace
         //MeleeEnemyData.WanderTurnAngleMin = -30.0f;
         //MeleeEnemyData.WanderTurnAngleMax = 30.0f;
 
-        MeleeEnemyData.AttackRange = 180.0f;
-        MeleeEnemyData.AttackCooldown = 2.0f;
-        MeleeEnemyData.AttackWindup = 0.3f;
-        MeleeEnemyData.AttackRecovery = 1.0f;
+        MeleeEnemyData.AttackRange = 200.0f;
+        MeleeEnemyData.AttackCooldown = 1.0f;
+        MeleeEnemyData.AttackWindup = 0.6f;
+        MeleeEnemyData.AttackRecovery = 0.1f;
 
         return MeleeEnemyData;
     }
@@ -398,6 +412,29 @@ namespace
     EnemyData CreateRollingEnemyData(const SceneObjectData& /*aData*/)
     {
         EnemyData RollingEnemyData;
+
+        RollingEnemyData.EnemyType = EnemyType::RollingEnemy;
+
+        RollingEnemyData.WalkSpeed = 200.0f;
+        RollingEnemyData.ChaseSpeed = 300.0f;
+        RollingEnemyData.RotationSpeed = 5.0f;
+
+        RollingEnemyData.DetectionRange = 600.0f;
+
+        //RollingEnemyData.IdleTimeMin = 1.0f;
+        //RollingEnemyData.IdleTimeMax = 2.0f;
+
+        //RollingEnemyData.WanderTimeMin = 1.5f;
+        //RollingEnemyData.WanderTimeMax = 3.0f;
+
+        //RollingEnemyData.WanderTurnAngleMin = -30.0f;
+        //RollingEnemyData.WanderTurnAngleMax = 30.0f;
+
+        RollingEnemyData.AttackRange = 400.0f;
+        RollingEnemyData.AttackCooldown = 1.0f;
+        RollingEnemyData.AttackWindup = 1.0f;
+        RollingEnemyData.AttackRecovery = 0.1f;
+
         return RollingEnemyData;
     }
 
@@ -406,6 +443,7 @@ namespace
         auto object = std::make_unique<GameObject>(aData.name);
         ApplyLayer(*object, aData, ObjectLayer::Enemy);
         ApplyCommonModel(*object, aData);
+        ApplyOptionalSprite(*object, aData);
         ApplyAuthoredCollider(*object, aData);
         if (!object->GetComponent<BoxColliderComponent>() &&
             !object->GetComponent<SphereColliderComponent>() &&
@@ -430,16 +468,67 @@ namespace
         }
 
         object->AddComponent<EnemyAIComponent>(data);
-        object->AddComponent<EnemyMovementComponent>();
-        object->AddComponent<EnemyTargetingComponent>();
+        EnemyMovementComponent* movement = object->AddComponent<EnemyMovementComponent>();
+        movement->SetMovementSpeed(data.WalkSpeed);
+
+        object->AddComponent<EnemyTargetingComponent>(data.DetectionRange);
         object->AddComponent<KnockbackComponent>();
         object->AddComponent<EnemyAttackComponent>(data);
         object->AddComponent<ResetComponent>(aData);
+
         DamageableComponent* damageable = object->AddComponent<DamageableComponent>(health);
         damageable->SetCurrentHealth(health);
         damageable->SetDamagePerHit(damage);
         ParticleEmitterComponent* emitter = object->AddComponent<ParticleEmitterComponent>();
         emitter->AttachSettings();
+        return object;
+    }
+
+    std::unique_ptr<GameObject> BuildRollingEnemy(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::Enemy);
+        ApplyCommonModel(*object, aData);
+        ApplyOptionalSprite(*object, aData);
+        ApplyAuthoredCollider(*object, aData);
+        if (!object->GetComponent<BoxColliderComponent>() &&
+            !object->GetComponent<SphereColliderComponent>() &&
+            !object->GetComponent<CapsuleColliderComponent>() &&
+            !object->GetComponent<ObbColliderComponent>())
+        {
+            object->AddComponent<CapsuleColliderComponent>(50.0f, 180.0f, Vector3f::Zero, false, true);
+        }
+
+        EnemyData data = CreateRollingEnemyData(aData);
+
+        int health = aData.GetPropertyOr<int>("health", 4);
+        if (health < 1)
+        {
+            health = 1;
+        }
+
+        int damage = aData.GetPropertyOr<int>("damage", 1);
+        if (damage < 1)
+        {
+            damage = 1;
+        }
+
+        object->AddComponent<EnemyAIComponent>(data);
+        EnemyMovementComponent* movement = object->AddComponent<EnemyMovementComponent>();
+        movement->SetMovementSpeed(data.WalkSpeed);
+
+        object->AddComponent<EnemyTargetingComponent>(data.DetectionRange);
+        object->AddComponent<KnockbackComponent>();
+        object->AddComponent<EnemyAttackComponent>(data);
+        object->AddComponent<ResetComponent>(aData);
+
+        DamageableComponent* damageable = object->AddComponent<DamageableComponent>(health);
+        damageable->SetCurrentHealth(health);
+        damageable->SetDamagePerHit(damage);
+
+        ParticleEmitterComponent* emitter = object->AddComponent<ParticleEmitterComponent>();
+        emitter->AttachSettings();
+
         return object;
     }
 
@@ -449,11 +538,14 @@ namespace
         Essentials::SetPlayer(*object);
         ApplyLayer(*object, aData, ObjectLayer::Player);
         ApplyCommonModel(*object, aData);
+        ApplyOptionalSprite(*object, aData);
         ApplyAuthoredCollider(*object, aData);
         object->AddComponent<ResetComponent>(aData);
-        object->AddComponent<PlayerControllerComponent>();
+        object->AddComponent<PlayerControllerComponent>(aData);
         object->AddComponent<CameraComponent>();
         object->AddComponent<MouseDirectionComponent>();
+        object->AddComponent<PauseMenuComponent>();
+        object->AddComponent<HUDComponent>();
 
         int health = aData.GetPropertyOr<int>("health", 4);
         if (health < 1)
@@ -463,6 +555,7 @@ namespace
 
         DamageableComponent* damageable = object->AddComponent<DamageableComponent>(health);
         damageable->SetCurrentHealth(health);
+
         return object;
     }
 
@@ -471,8 +564,23 @@ namespace
         auto object = std::make_unique<GameObject>(aData.name);
         ApplyLayer(*object, aData, ObjectLayer::Pickup);
         ApplyCommonModel(*object, aData);
+        ApplyOptionalSprite(*object, aData);
         ApplyAuthoredCollider(*object, aData);
         object->AddComponent<PickUpComponent>();
+        return object;
+    }
+
+    std::unique_ptr<GameObject> BuildGeyser(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::WorldStatic);
+        ApplyCommonModel(*object, aData);
+        //ApplyAuthoredCollider(*object, aData);
+
+        ParticleEmitterComponent* emitter = object->AddComponent<ParticleEmitterComponent>();
+        emitter->AttachSettings();
+        emitter->SetContinuousEmission(ParticleType::Smoke, true);
+        
         return object;
     }
 
@@ -481,6 +589,7 @@ namespace
         auto object = std::make_unique<GameObject>(aData.name);
         ApplyLayer(*object, aData, ObjectLayer::Switch);
         ApplyCommonModel(*object, aData);
+        ApplyOptionalSprite(*object, aData);
         ApplyAuthoredCollider(*object, aData);
 
         if (!object->GetComponent<BoxColliderComponent>() &&
@@ -500,9 +609,39 @@ namespace
         auto object = std::make_unique<GameObject>(aData.name);
         ApplyLayer(*object, aData, ObjectLayer::WorldStatic);
         ApplyCommonModel(*object, aData);
+        ApplyOptionalSprite(*object, aData);
         ApplyAuthoredCollider(*object, aData);
 
-        object->AddComponent<ToggleComponent>(aData.GetPropertyOr("UniqueID", 0));
+        object->AddComponent<ToggleComponent>(aData.GetPropertyOr("UniqueID", 0), aData.GetPropertyOr("IsActivated?", false), aData.GetPropertyOr("TypeID", 0));
+        return object;
+    }
+
+    std::unique_ptr<GameObject> BuildToggleLevelTransitionDoor(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::Trigger);
+        ApplyCommonModel(*object, aData);
+        ApplyOptionalSprite(*object, aData);
+        ApplyAuthoredCollider(*object, aData);
+        EnsureTriggerCollider(*object);
+
+        object->AddComponent<ToggleComponent>(aData.GetPropertyOr("UniqueID", 0), aData.GetPropertyOr("IsActivated?", false), aData.GetPropertyOr("TypeID", 0));
+        object->AddComponent<LevelTransitionDoorComponent>(
+            aData.GetPropertyOr<std::string>("targetScene", ""),
+            aData.GetPropertyOr<std::string>("targetSpawnId", ""),
+            aData.GetPropertyOr<float>("autoWalkSpeed", 600.0f),
+            aData.GetPropertyOr<float>("fadeOutSeconds", 0.5f));
+        return object;
+    }
+
+    std::unique_ptr<GameObject> BuildSwitchTriggerComponent(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::Trigger);
+        ApplyCommonModel(*object, aData);
+        ApplyAuthoredCollider(*object, aData);
+        EnsureTriggerCollider(*object);
+        object->AddComponent<SwitchTriggerComponent>(aData.GetPropertyOr("UniqueID", 0), aData.GetPropertyOr("TriggerOnce", false));
         return object;
     }
 
@@ -511,6 +650,7 @@ namespace
         auto object = std::make_unique<GameObject>(aData.name);
         ApplyLayer(*object, aData, ObjectLayer::Trigger);
         ApplyCommonModel(*object, aData);
+        ApplyOptionalSprite(*object, aData);
         ApplyAuthoredCollider(*object, aData);
         EnsureTriggerCollider(*object);
 
@@ -528,6 +668,7 @@ namespace
         auto object = std::make_unique<GameObject>(aData.name);
         ApplyLayer(*object, aData, ObjectLayer::Trigger);
         ApplyCommonModel(*object, aData);
+        ApplyOptionalSprite(*object, aData);
         ApplyAuthoredCollider(*object, aData);
         EnsureTriggerCollider(*object);
 
@@ -539,6 +680,46 @@ namespace
 
         return object;
     }
+
+    std::unique_ptr<GameObject> BuildCheckpoint(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::Switch);
+        ApplyCommonModel(*object, aData);
+        ApplyAuthoredCollider(*object, aData);
+
+        object->AddComponent<CheckpointComponent>();
+
+        ParticleEmitterComponent* emitter = object->AddComponent<ParticleEmitterComponent>();
+        emitter->AttachSettings();
+
+        return object;
+    }
+
+    std::unique_ptr<GameObject> BuildGunUpgrade(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::Pickup);
+        ApplyCommonModel(*object, aData);
+        ApplyAuthoredCollider(*object, aData);
+
+        object->AddComponent<GunUpgradeComponent>();
+        return object;
+    }
+    std::unique_ptr<GameObject> BuildSplashScreen(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::UI);
+        object->AddComponent<SplashScreenComponent>();
+        return object;
+    }
+    /*std::unique_ptr<GameObject> BuildMainMenu(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::UI);
+        object->AddComponent<MainMenuComponent>();
+        return object;
+    }*/
 }
 
 void RegisterGameObjectFactories()
@@ -546,10 +727,18 @@ void RegisterGameObjectFactories()
     GameObjectFactory& factory = GameObjectFactory::GetInstance();
     factory.Register("StaticWorld", BuildStaticWorld);
     factory.Register("BasicMeleeEnemy", BuildBasicMeleeEnemy);
+    factory.Register("RollingEnemy", BuildRollingEnemy);
     factory.Register("Player", BuildPlayer);
     factory.Register("Pickup", BuildPickUp);
     factory.Register("Switch", SwitchBuild);
     factory.Register("Toggle", BuildToggle);
     factory.Register("LevelTransitionDoor", BuildLevelTransitionDoor);
     factory.Register("TeleporterTunnel", BuildTeleporterTunnel);
+    factory.Register("LevelTransitionToggle", BuildToggleLevelTransitionDoor);
+    factory.Register("Checkpoint", BuildCheckpoint);
+    factory.Register("CollideTrigger", BuildSwitchTriggerComponent);
+    factory.Register("GunUpgrade", BuildGunUpgrade);
+    factory.Register("SplashScreen", BuildSplashScreen);
+    factory.Register("Geyser", BuildGeyser);
+    //factory.Register("MainMenu", BuildMainMenu);
 }

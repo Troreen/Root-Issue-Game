@@ -36,8 +36,10 @@ enum class eState
     eOptions,
     ePlaying,
     eSplashScreen,
+    eIntro,
     ePopState,
     ePopStack,
+    eLoadInGameWithIntro,
     COUNT
 };
 
@@ -158,7 +160,7 @@ protected:
             myEnableAmbientLight, true
             );
 
-#ifdef _DEBUG
+#ifndef _RETAIL
         myCameraSystem->RenderDebugUi();
 #endif
     }

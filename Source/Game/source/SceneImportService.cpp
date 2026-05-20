@@ -32,6 +32,8 @@
 #include <sstream>
 #include <stdexcept>
 #include <string_view>
+#include <unordered_map>
+#include <utility>
 
 namespace
 {
@@ -373,6 +375,54 @@ namespace
         return hasAnyOverrides;
     }
 
+    bool TryParseSceneSpriteData(const Json& aValue, SceneSpriteData& outSpriteData)
+    {
+        if (!aValue.is_object())
+        {
+            return false;
+        }
+
+        std::string texturePath;
+        if (aValue.contains("texturePath") && aValue["texturePath"].is_string())
+        {
+            texturePath = aValue["texturePath"].get<std::string>();
+        }
+        else if (aValue.contains("textures") && aValue["textures"].is_array() &&
+            !aValue["textures"].empty() && aValue["textures"][0].is_string())
+        {
+            texturePath = aValue["textures"][0].get<std::string>();
+        }
+
+        if (texturePath.empty())
+        {
+            return false;
+        }
+
+        SceneSpriteData spriteData;
+        spriteData.texturePath = texturePath;
+
+        if (aValue.contains("size") && aValue["size"].is_array() && aValue["size"].size() >= 2 &&
+            aValue["size"][0].is_number() && aValue["size"][1].is_number())
+        {
+            spriteData.size = {
+                aValue["size"][0].get<float>(),
+                aValue["size"][1].get<float>()
+            };
+        }
+
+        if (aValue.contains("pivot") && aValue["pivot"].is_array() && aValue["pivot"].size() >= 2 &&
+            aValue["pivot"][0].is_number() && aValue["pivot"][1].is_number())
+        {
+            spriteData.pivot = {
+                aValue["pivot"][0].get<float>(),
+                aValue["pivot"][1].get<float>()
+            };
+        }
+
+        outSpriteData = std::move(spriteData);
+        return true;
+    }
+
     bool HasAnyModelTextureOverride(const MeshTextureOverrides& someTextureOverrides)
     {
         for (int meshIndex = 0; meshIndex < MeshTextureOverrides::kMaxMeshCount; ++meshIndex)
@@ -415,6 +465,7 @@ namespace
             throw std::runtime_error("ParsePrefab missing properties array in file: " + aPath);
         }
 
+        bool hasSpriteProperty = false;
         for (const Json& property : properties)
         {
             if (!property.is_object() || !property.contains("name") || !property.contains("value"))
@@ -458,6 +509,18 @@ namespace
                 continue;
             }
 
+            if (type == "Sprite")
+            {
+                SceneSpriteData spriteData;
+                if (TryParseSceneSpriteData(value, spriteData))
+                {
+                    data.properties[name] = std::move(spriteData);
+                    hasSpriteProperty = true;
+                }
+
+                continue;
+            }
+
             if (type == "Animation Clip")
             {
                 if (value.is_object() && value.contains("clip_path") && value["clip_path"].is_string())
@@ -483,6 +546,11 @@ namespace
             {
                 data.properties[name] = parsedValue;
             }
+        }
+
+        if (data.factoryType.empty() && hasSpriteProperty)
+        {
+            data.factoryType = "StaticWorld";
         }
 
         if (data.factoryType.empty())
@@ -702,6 +770,19 @@ std::vector<SceneObjectData> SceneImportService::LoadSceneObjects(const std::str
                     data.properties["modelTextures"] = textureOverrides;
                 }
             }
+            else if (property.type == Tga::GetPropertyType<Tga::CopyOnWriteWrapper<Tga::SceneSprite>>())
+            {
+                const Tga::SceneSprite& value = property.value.Get<Tga::CopyOnWriteWrapper<Tga::SceneSprite>>()->Get();
+                if (!value.textures[0].IsEmpty())
+                {
+                    SceneSpriteData spriteData;
+                    spriteData.texturePath = value.textures[0].GetString();
+                    spriteData.size = { value.size.x, value.size.y };
+                    spriteData.pivot = { value.pivot.x, value.pivot.y };
+                    data.properties[property.name.GetString()] = std::move(spriteData);
+                    Tga::LoadingProfiler::GetInstance().RecordTexturePath(value.textures[0].GetString());
+                }
+            }
         }
 
         // Extract transform
@@ -759,6 +840,19 @@ std::vector<SceneObjectData> SceneImportService::LoadSceneObjects(const std::str
             {
                 data.properties[propName] = std::string(sceneRefPtr->Get().path.GetString());
             }
+            else if (auto* spritePtr =
+                         property.value.Get<Tga::CopyOnWriteWrapper<Tga::SceneSprite>>())
+            {
+                const Tga::SceneSprite& sprite = spritePtr->Get();
+                if (!sprite.textures[0].IsEmpty())
+                {
+                    SceneSpriteData spriteData;
+                    spriteData.texturePath = sprite.textures[0].GetString();
+                    spriteData.size = { sprite.size.x, sprite.size.y };
+                    spriteData.pivot = { sprite.pivot.x, sprite.pivot.y };
+                    data.properties[propName] = std::move(spriteData);
+                }
+            }
             else if (auto* vec3Ptr = property.value.Get<Tga::Vector3f>())
             {
                 data.properties[propName] = CommonUtilities::Vector3<float>(vec3Ptr->X, vec3Ptr->Y, vec3Ptr->Z);
@@ -810,11 +904,52 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
         return false;
     };
 
+    Tga::LoadingProfiler::GetInstance().RecordObjectCount(someSceneObjects.size());
+
     std::vector<std::unique_ptr<GameObject>> objects;
     objects.reserve(someSceneObjects.size());
+    double prefabResolveMilliseconds = 0.0;
     double prefabParseMilliseconds = 0.0;
     double propertyMergeMilliseconds = 0.0;
     double factoryCreateMilliseconds = 0.0;
+
+    // Level scenes often contain hundreds of instances of the same few prefab types.
+    // Cache path resolution and parsed .tgo data for this build so repeated rocks,
+    // trees, and tiles do not rescan/reparse the same files on the main thread.
+    std::unordered_map<std::string, std::string> prefabPathCache;
+    std::unordered_map<std::string, PrefabData> prefabDataCache;
+
+    auto resolvePrefabPathCached = [&](const std::string& aTypeId) -> const std::string& {
+        auto cachedPathIt = prefabPathCache.find(aTypeId);
+        if (cachedPathIt != prefabPathCache.end())
+        {
+            return cachedPathIt->second;
+        }
+
+        const auto phaseStartTime = std::chrono::steady_clock::now();
+        std::string prefabPath = ResolvePrefabPath(aTypeId);
+        prefabResolveMilliseconds += GetElapsedMilliseconds(phaseStartTime);
+
+        auto [insertedIt, wasInserted] = prefabPathCache.emplace(aTypeId, std::move(prefabPath));
+        UNREFERENCED_PARAMETER(wasInserted);
+        return insertedIt->second;
+    };
+
+    auto getPrefabDataCached = [&](const std::string& aPrefabPath) -> const PrefabData& {
+        auto cachedPrefabIt = prefabDataCache.find(aPrefabPath);
+        if (cachedPrefabIt != prefabDataCache.end())
+        {
+            return cachedPrefabIt->second;
+        }
+
+        const auto phaseStartTime = std::chrono::steady_clock::now();
+        PrefabData prefabData = ParsePrefab(aPrefabPath);
+        prefabParseMilliseconds += GetElapsedMilliseconds(phaseStartTime);
+
+        auto [insertedIt, wasInserted] = prefabDataCache.emplace(aPrefabPath, std::move(prefabData));
+        UNREFERENCED_PARAMETER(wasInserted);
+        return insertedIt->second;
+    };
 
     for (const SceneObjectData& sceneObject : someSceneObjects)
     {
@@ -823,15 +958,12 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
             continue;
         }
 
-        const std::string prefabPath = ResolvePrefabPath(sceneObject.typeId);
-
         try
         {
-            auto phaseStartTime = std::chrono::steady_clock::now();
-            const PrefabData prefabData = ParsePrefab(prefabPath);
-            prefabParseMilliseconds += GetElapsedMilliseconds(phaseStartTime);
+            const std::string& prefabPath = resolvePrefabPathCached(sceneObject.typeId);
+            const PrefabData& prefabData = getPrefabDataCached(prefabPath);
 
-            phaseStartTime = std::chrono::steady_clock::now();
+            auto phaseStartTime = std::chrono::steady_clock::now();
             SceneObjectData merged = sceneObject;
             for (const auto& [name, value] : prefabData.properties)
             {
@@ -913,6 +1045,7 @@ std::vector<std::unique_ptr<GameObject>> SceneImportService::BuildGameObjects(
         }
     }
 
+    Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::PrefabResolvePath", prefabResolveMilliseconds);
     Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::PrefabParse", prefabParseMilliseconds);
     Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::PrefabMerge", propertyMergeMilliseconds);
     Tga::LoadingProfiler::GetInstance().RecordPhase("SceneImportService::FactoryCreate", factoryCreateMilliseconds);

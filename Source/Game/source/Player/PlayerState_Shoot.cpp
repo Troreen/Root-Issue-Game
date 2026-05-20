@@ -23,7 +23,7 @@ void PlayerState_Shoot::Update(float aDeltaTime, PlayerControllerComponent& aCon
 	}
 }
 
-void PlayerState_Shoot::ResetValues()
+void PlayerState_Shoot::SetValues()
 {
 	myFireTimer = 0.5f;
 }

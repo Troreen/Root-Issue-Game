@@ -18,6 +18,7 @@
 #include <tge/graphics/DX11.h>
 #include <tge/graphics/GraphicsEngine.h>
 #include <tge/graphics/GraphicsStateStack.h>
+#include <tge/script/Nodes/AnimationEventNodes.h>
 #include <tge/script/Nodes/CommonMathNodes.h>
 #include <tge/script/Nodes/CommonNodes.h>
 
@@ -30,6 +31,7 @@
 #include "MainMenu.h"
 #include "Options.h"
 #include "SplashScreen.h"
+#include "Intro.h"
 #include <tge/settings/settings.h>
 
 
@@ -46,6 +48,7 @@ namespace
 		Tga::RegisterCommonNodes();
 		Tga::RegisterCommonMathNodes();
 		Tga::RegisterAnimationNodes();
+		Tga::RegisterAnimationEventNodes();
 
 		isRegistered = true;
 	}
@@ -211,14 +214,15 @@ GameWorld::~GameWorld()
 
 void GameWorld::Init(const char* argv[])
 {
+	std::string rootPath = Tga::Settings::GameAssetRoot().string();
+	Essentials::globalCanvasManager->Init(rootPath);
+	Tga::Engine::GetInstance()->SetBorderless(true);
 	myWorldStateStack;
 	myWorldStateStack.PushStack(std::vector<State*>());
 	myWorldStateStack.GetCurrentStateStack()->push_back(new SplashScreen());
 
 	myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 
-	std::string rootPath = Tga::Settings::GameAssetRoot().string();
-	Essentials::globalCanvasManager->Init(rootPath);
 
 	Essentials::globalAudioManager->Init();
 #ifdef _DEBUG
@@ -247,12 +251,22 @@ void GameWorld::Update(float /* aDeltaTime */, const char* argv[])
 		myWorldStateStack.GetCurrentStateStack()->push_back(new SplashScreen());
 		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 		break;
+	case eState::eIntro:
+		myWorldStateStack.GetCurrentStateStack()->push_back(new Intro);
+		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
+		break;
 	case eState::ePopState:
 		myWorldStateStack.PopState();
 		myWorldStateStack.GetCurrentStateStack()->back()->SetCamera(myCameraSystem);
+		myWorldStateStack.GetCurrentStateStack()->back()->Init(myCameraSystem, argv);
 		break;
 	case eState::ePopStack:
 		myWorldStateStack.PopStack();
+		break;
+	case eState::eLoadInGameWithIntro:
+		myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
+		myWorldStateStack.GetCurrentStateStack()->push_back(new Intro);
+		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 		break;
 	default:
 		return;

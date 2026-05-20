@@ -14,6 +14,7 @@
 #include "Cursor.h"
 #include "PostMaster.h"
 #include "GameObject.h"
+#include "AnimationEventService.h"
 
 class GameObject;
 
@@ -53,6 +54,7 @@ public:
 	static inline std::unique_ptr<Tga::CanvasObjectDefinitionManager> globalCanvasManager;
 	static inline std::unique_ptr<Cursor> myCursor;
 	static inline std::unique_ptr<PostMaster> globalPostMaster;
+	static inline std::unique_ptr<AnimationEventService> globalAnimationEvents;
 
 	static inline std::unique_ptr<Console> globalConsoleManager;
 

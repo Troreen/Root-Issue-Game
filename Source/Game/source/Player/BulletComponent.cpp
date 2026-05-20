@@ -26,9 +26,28 @@ namespace
 
 }
 
+BulletComponent::BulletComponent()
+{
+
+}
+
 void BulletComponent::SetTransform(CommonUtilities::Transform<float> aTransform)
 {
-	mySpeed = 1000.f;
+	myAttackData.owner = GetOwner();
+	myAttackData.team = CombatTeam::Player;
+	myAttackData.type = AttackType::Ranged;
+	myAttackData.collisionShape = CollisionShapeType::Sphere;
+	myAttackData.damage = 1;
+	myAttackData.localCenterOffset = CommonUtilities::Vector3<float>(0.0f, 100.f, 0.0f);
+	myAttackData.radius = 50.0f;
+	myAttackData.activeDurationSeconds = 0.1f;
+	myAttackData.knockbackStrength = 450.0f;
+	myAttackData.onlyHitForwardHemisphere = false;
+	myAttackData.targetLayers.AddLayer(ObjectLayer::Enemy);
+	myAttackData.targetLayers.AddLayer(ObjectLayer::Switch);
+
+	myCollider = GetOwner()->GetComponent<CapsuleColliderComponent>();
+	mySpeed = 2000.f;
 	myTimer = 2.f;
 	myTransform = aTransform;
 	GetOwner()->GetTransform() = aTransform;
@@ -36,13 +55,22 @@ void BulletComponent::SetTransform(CommonUtilities::Transform<float> aTransform)
 
 void BulletComponent::OnUpdate(float aDeltaTime)
 {
-	std::cout << "Cock\n";
 	myTimer -= aDeltaTime;
 	if (myTimer < 0)
 	{
 		GetOwner()->SetActive(false);
 	}
 
+	if (myCollider->IsInside())
+	{
+		std::cout << "Inside\n";
+
+		CombatService::StartAttack(myAttackData);
+
+		
+		/*(*this).SetEnabled(false);*/
+		GetOwner()->DisableAllComponents();
+	}
 	GetOwner()->GetTransform().Translate(myTransform.GetForward() * mySpeed * aDeltaTime);
 }
 

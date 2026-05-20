@@ -69,6 +69,11 @@ AnimationClip* Tga::GetAnimationClip(StringId path)
 			AnimationEventMarker marker;
 			marker.time = eventTime;
 			marker.id = StringRegistry::RegisterOrGetString(eventIdText.c_str());
+			const std::string scriptIdText = eventJson.value("script", "");
+			if (!scriptIdText.empty())
+			{
+				marker.scriptId = StringRegistry::RegisterOrGetString(scriptIdText.c_str());
+			}
 			clip.events.push_back(marker);
 		}
 
@@ -107,10 +112,17 @@ void Tga::SaveAnimationClip(StringId path)
 			continue;
 		}
 
-		events.push_back({
+		nlohmann::json eventJson = {
 			{ "time", marker.time },
 			{ "id", marker.id.GetString() },
-			});
+			};
+
+		if (!marker.scriptId.IsEmpty())
+		{
+			eventJson["script"] = marker.scriptId.GetString();
+		}
+
+		events.push_back(eventJson);
 	}
 
 	nlohmann::json json = {

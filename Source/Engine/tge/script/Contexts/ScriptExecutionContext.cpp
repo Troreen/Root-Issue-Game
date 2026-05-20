@@ -17,6 +17,7 @@ ScriptExecutionContext::ScriptExecutionContext(ScriptRuntimeInstance& scriptRunt
 	, myUpdateContext(updateContext)
 	, myNodeId(nodeId)
 	, myNodeRuntimeInstance(nodeRuntimeInstance)
+	, myTriggeredOutputCount(0)
 {}
 
 ScriptExecutionContext::~ScriptExecutionContext()

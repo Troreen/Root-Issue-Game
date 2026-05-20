@@ -8,22 +8,31 @@
 #include "AnimationGraphComponent.h"
 #include "MeshComponent.h"
 #include "ParticleEmitterComponent.h"
+#include "CapsuleColliderComponent.h"
+#include "DamageableComponent.h"
+#include "SceneObjectData.h"
 
 
 #include <algorithm>
 #include <cmath>
 #include <utility>
 
+PlayerControllerComponent::PlayerControllerComponent(const SceneObjectData& aData)
+{
+	PlayerState_Master::Instance().myWalkState->SetHasGun(aData.GetPropertyOr<bool>("colliderOffset", false));
+	PlayerState_Master::Instance().myWalkState->SetHasGun(aData.GetPropertyOr<bool>("HasGun", true));
+}
+
 void PlayerControllerComponent::Reset()
 {
 	StopForcedMove();
 	SetState(PlayerState_Master::Instance().myWalkState.get());
+}
 
-	if (auto* animationGraph = GetOwner()->GetComponent<AnimationGraphComponent>())
-	{
-		animationGraph->SetFloatParameter("w_death", 0.f);
-	}
-
+void PlayerControllerComponent::Save()
+{
+	DamageableComponent* component = GetOwner()->GetComponent<DamageableComponent>();
+	component->SetCurrentHealth(component->GetMaxHealth());
 }
 
 void PlayerControllerComponent::OnStart()
@@ -44,12 +53,22 @@ void PlayerControllerComponent::OnUpdate(float aDeltaTime)
 		return;
 	}
 
+	if (GetOwner()->GetComponent<DamageableComponent>()->IsDead() &&
+		myState != PlayerState_Master::Instance().myDeathState.get())
+	{
+		SetState(PlayerState_Master::Instance().myDeathState.get());
+	}
+
 	myState->BindToOwner(GetOwner());
 	myState->Update(aDeltaTime, *this);
 }
 
 void PlayerControllerComponent::SetState(PlayerState* aState)
 {
+	if (myState)
+	{
+		myState->ResetValues();
+	}
 	myState = aState;
 	if (!myState)
 	{
@@ -57,24 +76,40 @@ void PlayerControllerComponent::SetState(PlayerState* aState)
 	}
 
 	myState->BindToOwner(GetOwner());
-	myState->ResetValues();
+	myState->SetValues();
 }
 
 
 void PlayerControllerComponent::FireBullet()
 {
-	std::unique_ptr<GameObject> bullet = std::make_unique<GameObject>("MeleeEnemy");
+	std::unique_ptr<GameObject> bullet = std::make_unique<GameObject>("Bullet");
+	bullet->SetLayer(ObjectLayer::Projectile);
 
 	//bullet->AddComponent<MeshComponent>("animations/SK/SK_CH_Player.fbx");
 
 	ParticleEmitterComponent* particle = bullet->AddComponent<ParticleEmitterComponent>();
 	particle->AttachSettings();
-	particle->SetContinuousEmission(ParticleType::Blood, true);
+	particle->SetEmissionDirection(ParticleType::EnergySmall, -GetOwner()->GetTransform().GetForward());
+	// Set new offset based on mesh size in the future. 
+	// There's now a SetOffset function for emittercomponent to be used in the future. 
+	// For now, spawning offset can be set through VFX_emitter_settings.json
+	particle->SetContinuousEmission(ParticleType::EnergySmall, true);
+
+	CapsuleColliderComponent* collider = bullet->AddComponent<CapsuleColliderComponent>(20.f, 200.f);
+	collider->SetIsTrigger(true);
 
 	BulletComponent* component = bullet->AddComponent<BulletComponent>();
 	component->SetTransform(GetOwner()->GetTransform());
 
 	Essentials::AddGameObject(bullet);
+}
+
+void PlayerControllerComponent::EnableGun(bool aEnable)
+{
+	if (PlayerState_Walk* walk = PlayerState_Master::myWalkState.get())
+	{
+		walk->SetHasGun(aEnable);
+	}
 }
 
 void PlayerControllerComponent::StartForcedMoveTo(

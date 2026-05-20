@@ -21,6 +21,7 @@
 #include <tge/graphics/GraphicsEngine.h>
 #include <tge/graphics/GraphicsStateStack.h>
 #include <tge/model/Model.h>
+#include "StaticSpriteComponent.h"
 
 
 namespace
@@ -280,6 +281,8 @@ void SceneRenderer::Render(
 
     graphicsStateStack.SetBlendState(Tga::BlendState::AlphaBlend);
     graphicsStateStack.SetDepthStencilState(Tga::DepthStencilState::WriteLessOrEqual);
+    graphicsStateStack.SetDepthStencilState(Tga::DepthStencilState::ReadOnlyLessOrEqual);
+    graphicsStateStack.SetRasterizerState(Tga::RasterizerState::NoFaceCulling);
 
     std::stable_sort(
         transparentObjects.begin(),

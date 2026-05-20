@@ -31,8 +31,11 @@ public:
     /// Override this to load textures, set up sprites, etc.
     virtual void Init(Tga::Engine& anEngine);
 
-    //Reloads data in componets. Called when ReloadComponent recieves a message
+    //Reloads data in componets. Called when ReloadComponent recieves a ReloadScene message
     virtual void Reset();
+
+    //Saves data in componets for next reset. Called when ReloadComponent recieves a SaveScene message
+    virtual void Save();
 
     /// Update the game object. Called every frame.
     /// <param name="aDeltaTime">Time in seconds since last frame</param>
@@ -108,6 +111,7 @@ public:
     template <typename T>
     void GetComponentsOfType(std::vector<T*>& outComponents) const
     {
+        // Supports interface-style component queries, e.g. AnimationEventListener.
         for (const auto& component : myComponents)
         {
             if (auto* casted = dynamic_cast<T*>(component.get()))
@@ -142,6 +146,7 @@ public:
     }
 
     void RemoveAllComponents();
+    void DisableAllComponents();
 
 protected:
     Transformf myTransform;

@@ -47,6 +47,8 @@ void AnimationEventDispatcherComponent::OnLateUpdate(float aDeltaTime)
         // going through the global message bus.
         DispatchToLocalListeners(context);
 
+        DispatchToAnimationEventService(context);
+
         // Also publish globally for systems that are not components on the animated object.
         DispatchToPostMaster(context);
     }
@@ -55,11 +57,19 @@ void AnimationEventDispatcherComponent::OnLateUpdate(float aDeltaTime)
 void AnimationEventDispatcherComponent::OnDisable()
 {
     ClearQueuedEvents();
+    if (Essentials::globalAnimationEvents)
+    {
+        Essentials::globalAnimationEvents->ReleaseOwner(GetOwner());
+    }
 }
 
 void AnimationEventDispatcherComponent::OnScriptDestroy()
 {
     ClearQueuedEvents();
+    if (Essentials::globalAnimationEvents)
+    {
+        Essentials::globalAnimationEvents->ReleaseOwner(GetOwner());
+    }
     myGraph = nullptr;
 }
 
@@ -114,6 +124,14 @@ void AnimationEventDispatcherComponent::DispatchToLocalListeners(const Animation
         }
 
         listener->OnAnimationEvent(anEvent);
+    }
+}
+
+void AnimationEventDispatcherComponent::DispatchToAnimationEventService(const AnimationEventContext& anEvent) const
+{
+    if (Essentials::globalAnimationEvents)
+    {
+        Essentials::globalAnimationEvents->Dispatch(anEvent);
     }
 }
 

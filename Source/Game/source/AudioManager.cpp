@@ -58,7 +58,7 @@ void AudioManager::Update(const float aDeltaTime)
 
 void AudioManager::PlaySFX(const SoundID aSoundID)
 {
-	SoundEngine::PlayEventOneShot(aSoundID);
+	SoundEngine::PlayEvent(myMusicList[aSoundID]);
 }
 
 void AudioManager::PlayMusic(const SoundID aMusicID, const bool aUninterrupted)
@@ -205,6 +205,41 @@ void AudioManager::RegisterAllEvents()
 	myMusicList.insert({ SoundID::eVineBoom, SoundEngine::CreateEventInstance(SoundID::eVineBoom)});
 	SoundEngine::RegisterEvent("event:/MusicLoop", SoundID::eMusicLoop);
 	myMusicList.insert({ SoundID::eMusicLoop, SoundEngine::CreateEventInstance(SoundID::eMusicLoop) });
+	SoundEngine::RegisterEvent("event:/BasicMonsterVox", SoundID::eBasicVox);
+	myMusicList.insert({ SoundID::eBasicVox, SoundEngine::CreateEventInstance(SoundID::eBasicVox) });
+	SoundEngine::RegisterEvent("event:/BasicEnemyAttackVox", SoundID::eBasicAttackVox);
+	myMusicList.insert({ SoundID::eBasicAttackVox, SoundEngine::CreateEventInstance(SoundID::eBasicAttackVox) });
+
+	SoundEngine::RegisterEvent("event:/HeavyMonsterVox", SoundID::eHeavyVox);
+	myMusicList.insert({ SoundID::eHeavyVox, SoundEngine::CreateEventInstance(SoundID::eHeavyVox) });
+
+	SoundEngine::RegisterEvent("event:/HeavyMonsterRolling", SoundID::eRoll);
+	myMusicList.insert({ SoundID::eRoll, SoundEngine::CreateEventInstance(SoundID::eRoll) });
+	SoundEngine::RegisterEvent("event:/HeavyMonsterRollBegin", SoundID::eRollBegin);
+	myMusicList.insert({ SoundID::eRollBegin, SoundEngine::CreateEventInstance(SoundID::eRollBegin) });
+	SoundEngine::RegisterEvent("event:/EnemyDeadVox", SoundID::eEnemyDeadVox);
+	myMusicList.insert({ SoundID::eEnemyDeadVox, SoundEngine::CreateEventInstance(SoundID::eEnemyDeadVox) });
+
+
+	SoundEngine::RegisterEvent("event:/PlayerChargeGun", SoundID::eCharge);
+	myMusicList.insert({ SoundID::eCharge, SoundEngine::CreateEventInstance(SoundID::eCharge) });
+
+	SoundEngine::RegisterEvent("event:/PlayerGunShoot", SoundID::eShoot);
+	myMusicList.insert({ SoundID::eShoot, SoundEngine::CreateEventInstance(SoundID::eShoot) });
+
+	SoundEngine::RegisterEvent("event:/PlayerAttack", SoundID::ePlayerAttack);
+	myMusicList.insert({ SoundID::ePlayerAttack, SoundEngine::CreateEventInstance(SoundID::ePlayerAttack) });
+
+	SoundEngine::RegisterEvent("event:/Gore", SoundID::eGore);
+	myMusicList.insert({ SoundID::eGore, SoundEngine::CreateEventInstance(SoundID::eGore) });
+
+
+	SoundEngine::RegisterEvent("event:/MainMenuMusic", SoundID::eMainMenuMusic);
+	myMusicList.insert({ SoundID::eMainMenuMusic, SoundEngine::CreateEventInstance(SoundID::eMainMenuMusic) });
+	SoundEngine::RegisterEvent("event:/Level1Music", SoundID::eMusicLevel1);
+	myMusicList.insert({ SoundID::eMusicLevel1, SoundEngine::CreateEventInstance(SoundID::eMusicLevel1) });
+	SoundEngine::RegisterEvent("event:/Level3Music", SoundID::eMusicLevel3);
+	myMusicList.insert({ SoundID::eMusicLevel3, SoundEngine::CreateEventInstance(SoundID::eMusicLevel3) });
 }
 
 AudioManager::AudioManager()

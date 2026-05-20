@@ -20,6 +20,7 @@ private:
     AnimationGraphComponent* ResolveGraph();
     void ClearQueuedEvents();
     void DispatchToLocalListeners(const AnimationEventContext& anEvent) const;
+    void DispatchToAnimationEventService(const AnimationEventContext& anEvent) const;
     void DispatchToPostMaster(const AnimationEventContext& anEvent) const;
 
     AnimationGraphComponent* myGraph = nullptr;

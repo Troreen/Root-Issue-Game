@@ -193,6 +193,7 @@ namespace
 			EmittedAnimationEvent event;
 			event.id = marker.id;
 			event.clipPath = aClip.animationSourcePath;
+			event.scriptId = marker.scriptId;
 			event.time = marker.time;
 			context.emittedEvents->push_back(event);
 		}

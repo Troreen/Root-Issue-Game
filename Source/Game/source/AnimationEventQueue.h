@@ -10,6 +10,7 @@ struct AnimationEventRecord
 {
     Tga::StringId id;
     Tga::StringId clipPath;
+    Tga::StringId scriptId;
     float time = 0.0f;
 };
 

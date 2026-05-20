@@ -101,6 +101,11 @@ namespace
 
 		if (lowered == "blood") return ParticleType::Blood;
 		if (lowered == "test") return ParticleType::Test;
+		if (lowered == "dust") return ParticleType::Dust;
+		if (lowered == "energy") return ParticleType::Energy;
+		if (lowered == "energysmall") return ParticleType::EnergySmall;
+		if (lowered == "smoke") return ParticleType::Smoke;
+		if (lowered == "pebbles") return ParticleType::Pebbles;
 
 		assert(false && "Unknown particle type");
 		return ParticleType::Test;
@@ -291,10 +296,22 @@ bool VfxSystem::SpawnPoolParticle(const ParticleType& aParticleType, const Parti
 
 std::unordered_map<ParticleType, ParticleEmitterSettings>* VfxSystem::GetEmissionSettingsForObject(std::string anObjectName)
 {
-	anObjectName.erase(remove_if(anObjectName.begin(), anObjectName.end(), [](char c)
+	if (anObjectName.find("Geyser") != std::string::npos)
+	{
+		size_t pos = anObjectName.find('(');
+		if (pos != std::string::npos)
 		{
-			return !isalpha(c);
-		}), anObjectName.end());
+			anObjectName.erase(pos);
+		}
+
+	}
+	else
+	{
+		anObjectName.erase(remove_if(anObjectName.begin(), anObjectName.end(), [](char c)
+			{
+				return !isalpha(c);
+			}), anObjectName.end());
+	}
 
 	assert(myEmitterSettings.contains(anObjectName));
 	return &myEmitterSettings[anObjectName];
@@ -888,7 +905,7 @@ bool VfxSystem::LoadParticleDefinitions(const std::string& aPath)
 		}
 	}
 
-	
+
 
 	if (json.contains("gameObjects"))
 	{
@@ -908,6 +925,50 @@ bool VfxSystem::LoadParticleDefinitions(const std::string& aPath)
 				if (emitterEntry.is_string())
 				{
 					std::string ref = emitterEntry.get<std::string>();
+
+					if (!sharedEmitters.contains(ref))
+					{
+						std::cout << "Missing shared emitter: " << ref << std::endl;
+						continue;
+					}
+
+					emitterJson = sharedEmitters[ref];
+				}
+				else if (emitterEntry.is_object())
+				{
+					std::string ref = emitterEntry.value("ref", "");
+
+					if (!ref.empty())
+					{
+						if (!sharedEmitters.contains(ref))
+						{
+							std::cout << "Missing shared emitter: " << ref << std::endl;
+							continue;
+						}
+
+						emitterJson = sharedEmitters[ref];
+
+						for (auto& [key, value] : emitterEntry.items())
+						{
+							if (key == "ref")
+								continue;
+
+							emitterJson[key] = value;
+						}
+					}
+					else
+					{
+						// Fully local emitter
+						emitterJson = emitterEntry;
+					}
+				}
+
+
+				/*Json emitterJson;
+
+				if (emitterEntry.is_string())
+				{
+					std::string ref = emitterEntry.get<std::string>();
 					if (!sharedEmitters.contains(ref))
 					{
 						std::cout << "Missing shared emitter: " << ref << std::endl;
@@ -918,7 +979,7 @@ bool VfxSystem::LoadParticleDefinitions(const std::string& aPath)
 				else
 				{
 					emitterJson = emitterEntry;
-				}
+				}*/
 
 				std::string typeStr = emitterJson.value("particleType", "");
 				ParticleType type = ParseParticleType(typeStr);
@@ -932,13 +993,23 @@ bool VfxSystem::LoadParticleDefinitions(const std::string& aPath)
 
 				settings.emissionRate = emitterJson.value("emissionRate", 0.f);
 
+				settings.spawnOffset = ParseVector3(emitterJson.value("spawnOffset", Json::array()), { 0.0f, 0.0f, 0.0f });
+				settings.spawnOffsetIsLocal = emitterJson.value("spawnOffsetIsLocal", true);
+
 				settings.lifeTimeMin = emitterJson.value("lifeTimeMin", 0.f);
 				settings.lifeTimeMax = emitterJson.value("lifeTimeMax", 1.f);
 
 				settings.startSpeedMin = emitterJson.value("startSpeedMin", 0.f);
 				settings.startSpeedMax = emitterJson.value("startSpeedMax", 0.f);
+				settings.gravity = emitterJson.value("gravity", 0.f);
 
 				settings.coneAngle = emitterJson.value("coneAngle", 45.f);
+
+				CommonUtilities::Vector3<float> boxBounds = {};
+				boxBounds.x = emitterJson.value("boxBoundsX", 0.f);
+				boxBounds.y = emitterJson.value("boxBoundsY", 0.f);
+				boxBounds.z = emitterJson.value("boxBoundsZ", 0.f);
+				settings.boxBounds = boxBounds;
 
 				settings.startSizeMin = emitterJson.value("startSizeMin", 1.f);
 				settings.startSizeMax = emitterJson.value("startSizeMax", 1.f);
@@ -952,9 +1023,17 @@ bool VfxSystem::LoadParticleDefinitions(const std::string& aPath)
 				settings.shouldBurst = settings.burstCount > 0;
 				settings.shouldEmitContinuously = settings.emissionRate > 0;
 
+				settings.sinAmplitudeX = emitterJson.value("sinAmplitudeX", 0.f);
+				settings.sinAmplitudeY = emitterJson.value("sinAmplitudeY", 0.f);
+				settings.sinAmplitudeZ = emitterJson.value("sinAmplitudeZ", 0.f);
+				settings.sinFrequencyX = emitterJson.value("sinFrequencyX", 0.f);
+				settings.sinAmplitudeY = emitterJson.value("sinFrequencyY", 0.f);
+				settings.sinAmplitudeZ = emitterJson.value("sinAmplitudeZ", 0.f);
+				settings.sinSynchronized = emitterJson.value("sinSynchronized", false);
+
 				emitterMap[type] = settings;
 
-				std::cout << "[VFX] Loaded emitter for object: " << objectName 
+				std::cout << "[VFX] Loaded emitter for object: " << objectName
 					<< " with shape: " << emitterJson.value("emissionShape", "") << std::endl;
 			}
 		}

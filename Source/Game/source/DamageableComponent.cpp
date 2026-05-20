@@ -127,6 +127,8 @@ bool DamageableComponent::IsDead() const
 void DamageableComponent::Reset()
 {
     myCurrentHealth = myMaxHealth;
+    myHasDied = false;
+    myDamageInvulnerabilityTimer = 0.0f;
 }
 
 void DamageableComponent::SetOnDamageCallback(std::function<void(int, GameObject*)> aCallback)

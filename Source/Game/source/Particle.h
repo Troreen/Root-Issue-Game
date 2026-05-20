@@ -9,14 +9,30 @@ enum class ParticleType
 {
 	Test,
 	Blood,
+	Dust,
+	Energy,
+	EnergySmall,
+	Smoke,
+	Pebbles,
 	COUNT
 };
 
 struct ParticleSettings 
 {
 	float timeToLive = 0;
-	float swayAmplitude = 0;
+
+	float sinAmplitudeX = 0;
+	float sinAmplitudeY = 0;
+	float sinAmplitudeZ = 0;
+	float sinFrequencyX = 0;
+	float sinFrequencyY = 0;
+	float sinFrequencyZ = 0;
+	float myOffsetX = 0;
+	float myOffsetY = 0;
+	float myOffsetZ = 0;
+
 	float myOffset = 0;
+	float gravity = 980;
 	CommonUtilities::Vector2<float> size;
 	CommonUtilities::Vector3<float> initalPosition;
 	CommonUtilities::Vector3<float> linearVelocity;

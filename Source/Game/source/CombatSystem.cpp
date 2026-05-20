@@ -14,6 +14,9 @@
 #include <tge/math/color.h>
 #include <tge/primitives/LinePrimitive.h>
 #include "SwitchComponent.h"
+#include "CheckpointComponent.h"
+
+#include "Essentials.h"
 
 #include <algorithm>
 #include <cmath>
@@ -362,9 +365,17 @@ void CombatSystem::Update(float aDeltaTime, std::vector<std::unique_ptr<GameObje
                 {
                     target->GetComponent<SwitchComponent>()->Toggle();
                 }
+                else if (target->HasComponent<CheckpointComponent>())
+                {
+                    target->GetComponent<CheckpointComponent>()->Toggle();
+                }
                 break;
             default:
                 break;
+            }
+            if (target->GetName() == "Player")
+            {
+                Essentials::globalAudioManager->PlaySFX(SoundID::eGore);
             }
         }
 

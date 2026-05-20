@@ -2,15 +2,27 @@
 #include "Essentials.h"
 #include <iostream>
 #include "GameObject.h"
+#include "BoxColliderComponent.h"
+#include "tge/engine.h"
 
-ToggleComponent::ToggleComponent(int anID): myUniqueID(anID), myPostMaster(Essentials::globalPostMaster.get())
+ToggleComponent::ToggleComponent(int anID, bool aActive, int anTypeID) : myUniqueID(anID), myIsActivated(aActive), myTypeID(anTypeID), myPostMaster(Essentials::globalPostMaster.get())
 {
 	myPostMaster->Subscribe(MessageType::ActivateSwitch, this);
 }
 
 ToggleComponent::~ToggleComponent()
 {
-	/*myPostMaster->Unsubscribe(MessageType::ActivateSwitch, this);*/
+	myPostMaster->Unsubscribe(MessageType::ActivateSwitch, this);
+}
+
+void ToggleComponent::Initialize()
+{
+	if (myIsActivated == true)
+	{
+		std::cout << "TOGGLE!" << std::endl;
+		myIsActivated = !myIsActivated;
+		Toggle();
+	}
 }
 
 void ToggleComponent::Receive(const Message& aMSG)
@@ -29,20 +41,40 @@ void ToggleComponent::Receive(const Message& aMSG)
 void ToggleComponent::Toggle()
 {
 	myIsActivated = !myIsActivated;
-	std::cout << GetOwner() << " toggled to " << (myIsActivated ? "ON" : "OFF") << std::endl;
+	auto& engine = *Tga::Engine::GetInstance();
 	auto& transform = GetOwner()->GetTransform();
 	if (myIsActivated)
 	{
-		if (GetOwner()->GetObjDefinition() == "HubDoor_01")
+		switch (static_cast<eTypeID>(myTypeID))
 		{
-			transform.SetPosition(Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y + 150.0f, transform.GetPosition().z));
+		case eTypeID::eNothing:
+			break;
+		case eTypeID::eDoor:
+			this->GetOwner()->GetTransform().SetPosition(Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y - 400.0f, transform.GetPosition().z));
+			if (GetOwner()->HasComponent<BoxColliderComponent>())
+			{
+				GetOwner()->GetComponent<BoxColliderComponent>()->Init(engine);
+			}
+			break;
+		default:
+			break;
 		}
 	}
 	else
 	{
-		if (GetOwner()->GetObjDefinition() == "HubDoor_01")
+		switch (static_cast<eTypeID>(myTypeID))
 		{
-			transform.SetPosition(Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y - 150.0f, transform.GetPosition().z));
+		case eTypeID::eNothing:
+			break;
+		case eTypeID::eDoor:
+			transform.SetPosition(Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y + 400.0f, transform.GetPosition().z));
+			if (GetOwner()->HasComponent<BoxColliderComponent>())
+			{
+				GetOwner()->GetComponent<BoxColliderComponent>()->Init(engine);
+			}
+			break;
+		default:
+			break;
 		}
 	}
 }

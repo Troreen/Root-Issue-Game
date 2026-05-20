@@ -28,7 +28,7 @@ eState SplashScreen::Update()
 	{	
 		if (Essentials::globalInputManager.get()->IsKeyPressed(i))
 		{
-			return eState::ePlaying;
+			return eState::eMainMenu;
 		}
 	}
 	if (mySpriteProperties.myColor.a < 0.99f && !mySplashScreenState[0])
@@ -54,9 +54,9 @@ eState SplashScreen::Update()
 		mySplashScreenState[1] = true;
 		Tga::Engine& engine = *Tga::Engine::GetInstance();
 		Tga::SpriteSharedData myObj;
-		if (engine.GetTextureManager().TryGetTexture("Sprites/Kaspers_Logo.dds"))
+		if (engine.GetTextureManager().TryGetTexture("..//Source/Game/data/Assets/Art/2D/UI/P4G1_logo.dds"))
 		{
-			myObj.myTexture = engine.GetTextureManager().GetTexture("Sprites/Kaspers_Logo.dds");
+			myObj.myTexture = engine.GetTextureManager().GetTexture("..//Source/Game/data/Assets/Art/2D/UI/P4G1_logo.dds");
 			mySpriteList = myObj;
 		}
 		return eState::COUNT;
@@ -116,7 +116,7 @@ eState SplashScreen::Update()
 		mySplashScreenState[5] = true;
 		return eState::COUNT;
 	}
-	return eState::ePlaying;
+	return eState::eMainMenu;
 }
 
 void SplashScreen::Render()

@@ -19,7 +19,7 @@ class UICanvas
 public:
     UICanvas();
     ~UICanvas();
-    void Init(const Tga::StringId& aCanvasPath, Tga::CanvasObjectDefinitionManager& aManager);
+    void Init(const std::string& aCanvasPath, Tga::CanvasObjectDefinitionManager& aManager);
     static void UpdateAll();
     static void RenderAll();
 

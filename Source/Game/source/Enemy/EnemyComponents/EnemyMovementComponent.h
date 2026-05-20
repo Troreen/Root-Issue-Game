@@ -18,6 +18,8 @@ public:
 	void MoveForward(float aDeltaTime);
 	void StopMoving();
 
+	void SetMovementSpeed(float aMoveSpeed);
+
 	// Temporary
 	void MoveRandomly(float aDeltaTime);
 
@@ -29,7 +31,7 @@ private:
 
 	float GetRandomAngleDegreeToRad(float aMin, float aMax);
 
-	float mySpeed = 200.0f;
+	float mySpeed;
 	float myMoveDistance = 0.0f;
 	float myTargetDistance = 500.0f;
 	CommonUtilities::Vector3<float> myVelocity = { 0.0f, 0.0f, 0.0f };

@@ -59,18 +59,18 @@ public:
 		}
 		if (!stateStack.empty() && !stateStack.back().empty())
 		{
-			auto& Camera = *stateStack.back().back()->GetCameraSystem();
+			/*auto& Camera = *stateStack.back().back()->GetCameraSystem();*/
 			delete stateStack.back().back();
 			stateStack.back().pop_back();
 			if (stateStack.back().empty())
 			{
 				stateStack.pop_back();
 			}
-			if (!stateStack.empty() && !stateStack.back().empty())
+			/*if (!stateStack.empty() && !stateStack.back().empty())
 			{
 				Camera = *stateStack.back().back()->GetCameraSystem();
 				Essentials::SetPlayer(*stateStack.back().back()->GetPlayer());
-			}
+			}*/
 		}
 	}
 

@@ -4,8 +4,16 @@
 #include <unordered_map>
 #include <any>
 
+#include <CommonUtilities/Vector2.hpp>
 #include <CommonUtilities/Vector3.hpp>
 #include <CommonUtilities/Quaternion.hpp>
+
+struct SceneSpriteData
+{
+    std::string texturePath;
+    CommonUtilities::Vector2<float> size = { 100.0f, 100.0f };
+    CommonUtilities::Vector2<float> pivot = { 0.5f, 0.5f };
+};
 
 /// Holds all properties read from an editor scene object.
 /// This data is passed to the GameObjectFactory for instantiation.

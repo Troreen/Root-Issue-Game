@@ -3,8 +3,9 @@
 #include "Essentials.h"
 #include "GameObject.h"
 
-EnemyTargetingComponent::EnemyTargetingComponent()
+EnemyTargetingComponent::EnemyTargetingComponent(float aDetectionRange)
 {
+	myDetectionRange = aDetectionRange;
 }
 
 EnemyTargetingComponent::~EnemyTargetingComponent()

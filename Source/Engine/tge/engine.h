@@ -154,6 +154,10 @@ namespace Tga
         float GetTotalTime() const { return myTotalTime; }
         float GetUnscaledDeltaTime() const { return myUnscaledDeltaTime; }
         float GetUnscaledTotalTime() const { return myUnscaledTotalTime; }
+
+        float GetTimeScale() const { return myTimeScale; }
+        void SetTimeScale(const float aTimeScale) { myTimeScale = aTimeScale; }
+
         HWND* GetHWND() const;
         HINSTANCE GetHInstance() const;
       
@@ -162,6 +166,9 @@ namespace Tga
 		void SetResolution(const Vector2ui &aResolution);
 
         void SetFullScreen(bool aFullScreen);
+        void SetBorderless(bool aBorderless);
+
+        bool GetIsBorderless();
 		
 		void SetClearColor(const Color& aClearColor);
         const Color& GetClearColor() const { return myWindowConfiguration.myClearColor; }
@@ -221,8 +228,13 @@ namespace Tga
         float myUnscaledTotalTime;
         float myUnscaledDeltaTime;
 
+        float myTimeScale;
+
 		DX::StepTimer myTimer;
 
 		bool myShouldExit; // Only used when using beginframe and endframe
+
+        bool myIsBorderless;
+
     };
 }

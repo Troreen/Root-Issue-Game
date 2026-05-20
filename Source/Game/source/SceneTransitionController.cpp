@@ -17,6 +17,8 @@ namespace
 {
     constexpr float kMinimumFadeSeconds = 0.01f;
 
+    // Passive preload should never point back at the scene we are already in.
+    // Same-scene reloads can still be requested explicitly with forceReload.
     bool IsValidPreloadTarget(const std::string& aCandidate, const std::string& aCurrentScene)
     {
         return !aCandidate.empty() && aCandidate != aCurrentScene;
@@ -63,6 +65,11 @@ bool SceneTransitionController::LoadBootScene(const std::string& aScenePath)
     return true;
 }
 
+// -----------------------------------------------------------------------------
+// Runtime requests
+// -----------------------------------------------------------------------------
+// Runtime transitions are funneled through this method so fade, queueing, preload
+// reuse, and profiler boundaries stay consistent.
 bool SceneTransitionController::RequestTransition(const Request& aRequest)
 {
     Request request = aRequest;
@@ -85,6 +92,8 @@ bool SceneTransitionController::RequestTransition(const Request& aRequest)
         || myState == State::ApplyingLoadedScene
         || myState == State::FadingIn)
     {
+        // Linear progression only needs one replacement request. Repeated trigger
+        // spam should not create a backlog of obsolete transitions.
         QueueRequest(request);
         return true;
     }
@@ -120,6 +129,8 @@ void SceneTransitionController::Update(const float aDeltaTime)
         }
 
         LoadedSceneData sceneData = myRequestedSceneFuture.get();
+        // Data is ready, but GameObjects still are not built here. The fade-out
+        // gives us a full-black point to do main-thread construction safely.
         SceneLoadingService::MarkSceneObjectsReady();
         StartFadeOutWithPreparedData({
             sceneData.scenePath,
@@ -134,6 +145,7 @@ void SceneTransitionController::Update(const float aDeltaTime)
         myFadeAlpha = (std::min)(1.0f, myFadeAlpha + aDeltaTime / myFadeSeconds);
         if (myFadeAlpha >= 1.0f)
         {
+            // All visible scene replacement happens behind the black overlay.
             ApplyPreparedScene();
         }
         return;
@@ -161,6 +173,8 @@ void SceneTransitionController::CancelPendingWork()
         myPreloadFuture.wait();
     }
 
+    // std::future does not support cancellation. Waiting above keeps ownership
+    // simple and prevents a worker from outliving the gameplay state it loaded for.
     myState = State::Idle;
     myHasQueuedRequest = false;
     myHasPreparedSceneData = false;
@@ -234,6 +248,10 @@ std::string SceneTransitionController::ResolveScenePath(const std::string& aScen
     return aScenePath;
 }
 
+// -----------------------------------------------------------------------------
+// Requested transition path
+// -----------------------------------------------------------------------------
+
 void SceneTransitionController::StartRequestedScenePrepare(const Request& aRequest)
 {
     if (mySceneTransitionCallback)
@@ -244,6 +262,8 @@ void SceneTransitionController::StartRequestedScenePrepare(const Request& aReque
 
     myRequestedSceneFuture = std::async(std::launch::async, [scenePath = aRequest.targetScene]()
         {
+            // Worker-thread work is limited to cache reads, .leveldata parsing, and
+            // plain SceneObjectData creation. Factories/components are built at black.
             return SceneLoadingService::LoadSceneDataAsyncSafe(scenePath);
         });
     myState = State::PreparingRequestedScene;
@@ -266,6 +286,9 @@ void SceneTransitionController::ApplyPreparedScene()
     }
 
     myState = State::ApplyingLoadedScene;
+
+    // Main-thread boundary: factories, components, render data, scripts, and
+    // gameplay objects are allowed to come alive only after fade-out reaches black.
     LoadedSceneObjects loadedObjects;
     loadedObjects.scenePath = myPreparedSceneData.scenePath;
     loadedObjects.objects = SceneLoadingService::BuildGameObjects(myPreparedSceneData.objects);
@@ -290,6 +313,10 @@ void SceneTransitionController::FinishFadeIn()
     TryConsumeQueuedRequest();
 }
 
+// -----------------------------------------------------------------------------
+// Queueing
+// -----------------------------------------------------------------------------
+
 void SceneTransitionController::QueueRequest(const Request& aRequest)
 {
     if (myActiveRequest.targetScene == aRequest.targetScene
@@ -313,6 +340,10 @@ void SceneTransitionController::TryConsumeQueuedRequest()
     myHasQueuedRequest = false;
     RequestTransition(queuedRequest);
 }
+
+// -----------------------------------------------------------------------------
+// Passive one-slot preload
+// -----------------------------------------------------------------------------
 
 void SceneTransitionController::StartPreloadFromSceneData(
     const std::string& aLoadedScenePath,
@@ -344,6 +375,8 @@ void SceneTransitionController::StartPreloadFromSceneData(
 
     if (targets.size() != 1)
     {
+        // Ambiguous authored exits are not guessed. The actual trigger request
+        // still loads normally when the player chooses a path.
         myState = myState == State::Preloading ? State::Idle : myState;
         return;
     }
@@ -351,6 +384,8 @@ void SceneTransitionController::StartPreloadFromSceneData(
     myPreloadScenePath = *targets.begin();
     myPreloadFuture = std::async(std::launch::async, [scenePath = myPreloadScenePath]()
         {
+            // This warms parsed scene data only. It must not construct live
+            // GameObjects or GPU/render resources on the worker thread.
             return SceneLoadingService::LoadSceneDataAsyncSafe(scenePath);
         });
 
@@ -412,6 +447,8 @@ bool SceneTransitionController::TryAttachPendingPreload(const Request& aRequest)
         return false;
     }
 
+    // The player selected the scene that was already being passively prepared,
+    // so the passive future becomes the active requested future.
     myRequestedSceneFuture = std::move(myPreloadFuture);
     myActiveRequest = aRequest;
     myState = State::PreparingRequestedScene;

@@ -10,6 +10,20 @@ enum SoundID
 	eVineBoom,
 	eMusicLoop,
 	eStep,
+	eBasicVox,
+	eHeavyVox,
+	eCharge,
+	eShoot,
+	eRollBegin,
+	eRoll,
+	ePlayerAttack,
+	eEnemyDeadVox,
+	eBasicAttackVox,
+	eGore,
+	eMainMenuMusic,
+	eMusicLevel1,
+	eMusicLevel2,
+	eMusicLevel3,
 	eUnknown
 };
 

@@ -5,6 +5,7 @@
 
 
 class EnemyMovementComponent;
+class AnimationGraphComponent;
 
 enum class AttackState
 {
@@ -40,6 +41,7 @@ private:
 private:
 
     EnemyMovementComponent* myMovement = nullptr;
+    AnimationGraphComponent* myAnimationGraph = nullptr;
 
     EnemyData myEnemyData;
     AttackData myAttackData;
@@ -50,6 +52,7 @@ private:
     float myCooldownTimer = 0.0f;
 
     CommonUtilities::Vector3<float> myAttackDirection;
+    CommonUtilities::Vector3<float> myRollStartPosition;
 
     bool myHasAppliedAttack = false;
 };

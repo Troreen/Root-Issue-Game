@@ -7,6 +7,7 @@
 #include <tge/script/ScriptManager.h>
 #include <tge/script/JsonData.h>
 #include <tge/script/Script.h>
+#include <tge/script/Nodes/AnimationEventNodes.h>
 
 #include <ScriptEditor/Commands/CreateLinkCommand.h>
 #include <ScriptEditor/Commands/CreateNodeCommand.h>
@@ -20,6 +21,7 @@
 
 #include <tge/ImGui/ImGuiInterface.h>
 #include <tge/editor/CommandManager/CommandManager.h>
+#include <tge/settings/settings.h>
 #include <tge/stringRegistry/StringRegistry.h>
 
 #include <imnodes/imnodes.h>
@@ -27,14 +29,143 @@
 
 #include <IconFontHeaders/IconsLucide.h>
 
+#include <algorithm>
 #include <sstream>
 #include <fstream>
 #include <filesystem>
+#include <vector>
 
 using namespace Tga;
 
 static std::unique_ptr<ScriptRuntimeInstance> locScriptRuntimeInstance;
 static int frameNumber = 0;
+
+namespace
+{
+	bool HasStringChoice(const std::vector<std::string>& someChoices, const std::string_view aChoice)
+	{
+		return std::find(someChoices.begin(), someChoices.end(), aChoice) != someChoices.end();
+	}
+
+	void DrawStringIdComboContents(
+		Tga::StringId& aValue,
+		const std::vector<std::string>& someChoices,
+		const char* anEmptyText,
+		bool& outChanged)
+	{
+		if (someChoices.empty())
+		{
+			ImGui::TextDisabled("%s", anEmptyText);
+		}
+
+		const std::string_view currentValue = aValue.GetString();
+		if (!currentValue.empty() && !HasStringChoice(someChoices, currentValue))
+		{
+			ImGui::BeginDisabled();
+			ImGui::Selectable(currentValue.data(), true);
+			ImGui::EndDisabled();
+			ImGui::Separator();
+		}
+
+		for (const std::string& choice : someChoices)
+		{
+			const bool isSelected = currentValue == choice;
+			if (ImGui::Selectable(choice.c_str(), isSelected))
+			{
+				aValue = Tga::StringRegistry::RegisterOrGetString(choice);
+				outChanged = true;
+			}
+
+			if (isSelected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+	}
+
+	bool DrawStringIdCombo(Tga::StringId& aValue, const std::vector<std::string>& someChoices, const char* anEmptyText)
+	{
+		const char* preview = aValue.IsEmpty() ? "<none>" : aValue.GetString();
+		bool changed = false;
+
+		if (ImGui::BeginCombo("##animation-event-choice", preview))
+		{
+			DrawStringIdComboContents(aValue, someChoices, anEmptyText, changed);
+			ImGui::EndCombo();
+		}
+
+		return changed;
+	}
+
+	bool DrawStringIdCombo(Tga::StringId& aValue, std::span<const char* const> someChoices, const char* anEmptyText)
+	{
+		std::vector<std::string> choices;
+		choices.reserve(someChoices.size());
+		for (const char* choice : someChoices)
+		{
+			choices.emplace_back(choice);
+		}
+
+		return DrawStringIdCombo(aValue, choices, anEmptyText);
+	}
+
+	bool TryShowAnimationEventChoiceEditor(
+		const Tga::Script& aScript,
+		const Tga::ScriptNodeId aNodeId,
+		const Tga::ScriptPin& aPin,
+		Tga::Property& aValue,
+		bool& outDidChange)
+	{
+		outDidChange = false;
+
+		if (aPin.dataType != Tga::GetPropertyType<Tga::StringId>())
+		{
+			return false;
+		}
+
+		Tga::StringId* stringValue = aValue.Get<Tga::StringId>();
+		if (!stringValue)
+		{
+			return false;
+		}
+
+		const std::string_view nodeType = Tga::ScriptNodeTypeRegistry::GetNodeTypeShortName(aScript.GetType(aNodeId));
+		if (nodeType == "Play SFX" && aPin.name == "Sound"_tgaid)
+		{
+			outDidChange = DrawStringIdCombo(*stringValue, Tga::GetAnimationEventSfxIds(), "No SFX choices registered");
+			return true;
+		}
+
+		if (nodeType == "Start Combat Attack")
+		{
+			if (aPin.name == "Team"_tgaid)
+			{
+				outDidChange = DrawStringIdCombo(*stringValue, Tga::GetAnimationEventCombatTeamIds(), "No combat teams registered");
+				return true;
+			}
+
+			if (aPin.name == "Attack Type"_tgaid)
+			{
+				outDidChange = DrawStringIdCombo(*stringValue, Tga::GetAnimationEventAttackTypeIds(), "No attack types registered");
+				return true;
+			}
+
+			if (aPin.name == "Shape"_tgaid)
+			{
+				outDidChange = DrawStringIdCombo(*stringValue, Tga::GetAnimationEventCollisionShapeIds(), "No collision shapes registered");
+				return true;
+			}
+
+			if (aPin.name == "Target Layer"_tgaid)
+			{
+				outDidChange = DrawStringIdCombo(*stringValue, Tga::GetAnimationEventTargetLayerIds(), "No target layers registered");
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
 
 EditorScriptManager& EditorScriptManager::GetInstance()
 {
@@ -183,6 +314,25 @@ Script& Tga::EditorScriptManager::CreateNewScript(const std::string_view& aName)
 	ScriptManager::AddEditableScript(aName, std::make_unique<Script>());
 	myOpenScripts.insert({ std::string(aName), EditorScriptData{ScriptManager::GetEditableScript(aName), {}, ImNodes::EditorContextCreate()} });
 	return *ScriptManager::GetEditableScript(aName);
+}
+
+bool Tga::EditorScriptManager::OpenScript(const std::string_view& aName)
+{
+	if (myOpenScripts.contains(aName))
+	{
+		return true;
+	}
+
+	Script* script = ScriptManager::GetEditableScript(aName);
+	if (!script)
+	{
+		return false;
+	}
+
+	EditorScriptData data{ script, {}, ImNodes::EditorContextCreate() };
+	data.latestSavedSequenceNumber = script->GetSequenceNumber();
+	myOpenScripts.insert({ std::string(aName), data });
+	return true;
 }
 
 void Tga::EditorScriptManager::MarkScriptAsRemoved(const std::string_view aName)
@@ -436,7 +586,12 @@ void Tga::EditorScriptManager::DisplayEditor(const std::string_view& aActiveScri
 
 						ImGui::SameLine();
 
-						if (pinCurrentValue.ShowImGuiEditor())
+						bool didChange = false;
+						if (!TryShowAnimationEventChoiceEditor(script, currentNodeId, pin, pinCurrentValue, didChange))
+						{
+							didChange = pinCurrentValue.ShowImGuiEditor();
+						}
+						if (didChange)
 						{
 							CommandManager::DoCommand(std::make_shared<SetOverridenValueCommand>(script, activeScript.selection, pinId, pinCurrentValue));
 						}
@@ -882,7 +1037,12 @@ void Tga::EditorScriptManager::DisplayEditor(const std::string_view& aActiveScri
 
 						ImGui::SameLine();
 
-						if (pinCurrentValue.ShowImGuiEditor())
+						bool didChange = false;
+						if (!TryShowAnimationEventChoiceEditor(script, currentNodeId, pin, pinCurrentValue, didChange))
+						{
+							didChange = pinCurrentValue.ShowImGuiEditor();
+						}
+						if (didChange)
 						{
 							CommandManager::DoCommand(std::make_shared<SetOverridenValueCommand>(script, activeScript.selection, pinId, pinCurrentValue));
 						}

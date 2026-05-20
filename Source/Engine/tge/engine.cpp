@@ -181,6 +181,8 @@ bool Engine::InternalStart()
 	ImGuiInterface::Init();
 #endif // !_RETAIL
 
+	myTimeScale = 1.f;
+
 	myStartOfTime = std::chrono::steady_clock::now();
 
 
@@ -293,6 +295,19 @@ void Tga::Engine::SetFullScreen(bool aFullScreen)
 	}
 }
 
+void Tga::Engine::SetBorderless(bool aBorderless)
+{
+	myWindow->SetBorderless(aBorderless);
+	myIsBorderless = aBorderless;
+	myWantToUpdateSize = true;
+	UpdateWindowSizeChanges();
+}
+
+bool Tga::Engine::GetIsBorderless()
+{
+	return myIsBorderless;
+}
+
 bool Tga::Engine::IsDebugFeatureOn(DebugFeature aFeature) const
 {
 	const bool all = ((myWindowConfiguration.myActivateDebugSystems & DebugFeature::All) == DebugFeature::All);
@@ -363,8 +378,8 @@ void Engine::EndFrame( void )
 
 	myTimer.Tick([&]()
 	{
-		myDeltaTime = static_cast<float>(myTimer.GetElapsedSeconds());
-		myTotalTime += static_cast<float>(myTimer.GetElapsedSeconds());
+		myDeltaTime = static_cast<float>(myTimer.GetElapsedSeconds() * myTimeScale);
+		myTotalTime += static_cast<float>(myTimer.GetElapsedSeconds() * myTimeScale);
 		myUnscaledDeltaTime = static_cast<float>(myTimer.GetElapsedSeconds());
 		myUnscaledTotalTime += static_cast<float>(myTimer.GetElapsedSeconds());
 	});

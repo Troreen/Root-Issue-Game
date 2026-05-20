@@ -215,6 +215,7 @@ void CanvasDefinitionDocument::Update(float aTimeDelta, InputManager& inputManag
 		graphicsStateStack.SetDepthStencilState(DepthStencilState::ReadOnlyLess);
 
 		CanvasObjectDefinition::DrawQueued();
+		
 		Tga::Engine::GetInstance()->GetDebugDrawer().DrawPendingDebugLines();
 		myViewport.EndDraw();
 

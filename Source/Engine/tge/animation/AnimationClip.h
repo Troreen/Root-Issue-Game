@@ -13,6 +13,7 @@ namespace Tga
 	{
 		float time = 0.f;
 		StringId id;
+		StringId scriptId;
 	};
 
 	struct AnimationClip

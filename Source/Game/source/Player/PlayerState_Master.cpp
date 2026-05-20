@@ -9,6 +9,7 @@ PlayerState_Master::PlayerState_Master()
 	myChargeAttackState = std::make_unique<PlayerState_Charge_Attack>();
 	myShootState = std::make_unique<PlayerState_Shoot>();
 	myDeathState = std::make_unique<PlayerState_Death>();
+	myUpgradeState = std::make_unique<PlayerState_Pickup_Gun>();
 }
 
 PlayerState_Master& PlayerState_Master::Instance()
