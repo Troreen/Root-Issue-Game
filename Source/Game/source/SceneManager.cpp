@@ -16,6 +16,19 @@ namespace
     {
         return path.extension() == ".tgs";
     }
+
+    bool IsSceneCachePath(const std::filesystem::path& path)
+    {
+        for (const std::filesystem::path& part : path)
+        {
+            if (part == ".scene_cache")
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 //SceneManager& SceneManager::GetInstance()
@@ -29,7 +42,7 @@ void SceneManager::RefreshSceneList()
     myScenes.clear();
 
     std::filesystem::path root = Tga::Settings::GameAssetRoot();
-    std::filesystem::path levelsPath = root / "levels";
+    std::filesystem::path levelsPath = root / "Levels";
 
     if (!std::filesystem::exists(levelsPath))
     {
@@ -44,7 +57,7 @@ void SceneManager::RefreshSceneList()
         }
 
         const std::filesystem::path& path = entry.path();
-        if (!IsTgsFile(path))
+        if (IsSceneCachePath(path) || !IsTgsFile(path))
         {
             continue;
         }

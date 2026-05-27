@@ -2,6 +2,13 @@
   "name": "Player",
   "object-definition": "Player",
   "path": "",
+  "properties": [
+    {
+      "name": "HasGun",
+      "type": "Bool",
+      "value": false
+    }
+  ],
   "rotation": [
     0.0,
     -0.0,
@@ -13,8 +20,8 @@
     1.0
   ],
   "translation": [
-    250.0,
+    50.0,
     300.0,
-    -2650.0
+    -2950.0
   ]
 }

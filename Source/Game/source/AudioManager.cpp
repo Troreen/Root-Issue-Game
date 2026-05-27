@@ -240,6 +240,9 @@ void AudioManager::RegisterAllEvents()
 	myMusicList.insert({ SoundID::eMusicLevel1, SoundEngine::CreateEventInstance(SoundID::eMusicLevel1) });
 	SoundEngine::RegisterEvent("event:/Level3Music", SoundID::eMusicLevel3);
 	myMusicList.insert({ SoundID::eMusicLevel3, SoundEngine::CreateEventInstance(SoundID::eMusicLevel3) });
+
+	SoundEngine::RegisterEvent("event:/IntroSFX", SoundID::eIntroSFX);
+	myMusicList.insert({ SoundID::eIntroSFX, SoundEngine::CreateEventInstance(SoundID::eIntroSFX) });
 }
 
 AudioManager::AudioManager()

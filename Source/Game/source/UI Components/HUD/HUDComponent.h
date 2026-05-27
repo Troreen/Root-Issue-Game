@@ -2,6 +2,8 @@
 #include "ScriptComponent.h"
 #include "UICanvas.h"
 
+class DamageableComponent;
+
 class HUDComponent : public ScriptComponent
 {
 public:
@@ -14,5 +16,10 @@ public:
 private:
 
 	UICanvas myUICanvas;
+
+	DamageableComponent* myHealthComponent = nullptr;
+
+	int myPlayerMaxHealth;
+	int myPlayerCurrentHealth;
 };
 

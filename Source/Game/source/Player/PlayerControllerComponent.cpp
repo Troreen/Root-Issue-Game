@@ -19,13 +19,13 @@
 
 PlayerControllerComponent::PlayerControllerComponent(const SceneObjectData& aData)
 {
-	PlayerState_Master::Instance().myWalkState->SetHasGun(aData.GetPropertyOr<bool>("colliderOffset", false));
-	PlayerState_Master::Instance().myWalkState->SetHasGun(aData.GetPropertyOr<bool>("HasGun", true));
+	myHasGun = aData.GetPropertyOr<bool>("HasGun", true);
 }
 
 void PlayerControllerComponent::Reset()
 {
 	StopForcedMove();
+	StopScriptedPickupAnimation(false);
 	SetState(PlayerState_Master::Instance().myWalkState.get());
 }
 
@@ -38,10 +38,17 @@ void PlayerControllerComponent::Save()
 void PlayerControllerComponent::OnStart()
 {
 	SetState(PlayerState_Master::Instance().myWalkState.get());
+	PlayerState_Master::Instance().myWalkState.get()->SetHasGunOnStart(myHasGun);
 }
 
 void PlayerControllerComponent::OnUpdate(float aDeltaTime)
 {
+	if (myScriptedPickupActive)
+	{
+		UpdateScriptedPickupAnimation(aDeltaTime);
+		return;
+	}
+
 	if (myForcedMoveActive)
 	{
 		UpdateForcedMove(aDeltaTime);
@@ -95,7 +102,7 @@ void PlayerControllerComponent::FireBullet()
 	// For now, spawning offset can be set through VFX_emitter_settings.json
 	particle->SetContinuousEmission(ParticleType::EnergySmall, true);
 
-	CapsuleColliderComponent* collider = bullet->AddComponent<CapsuleColliderComponent>(20.f, 200.f);
+	CapsuleColliderComponent* collider = bullet->AddComponent<CapsuleColliderComponent>(20.f, 450.f);
 	collider->SetIsTrigger(true);
 
 	BulletComponent* component = bullet->AddComponent<BulletComponent>();
@@ -111,6 +118,30 @@ void PlayerControllerComponent::EnableGun(bool aEnable)
 		walk->SetHasGun(aEnable);
 	}
 }
+
+bool PlayerControllerComponent::IsMoveInput()
+{
+	return Essentials::globalInputManager->PressingPlayerMovingUp() ||
+		Essentials::globalInputManager->PressingPlayerMovingLeft() ||
+		Essentials::globalInputManager->PressingPlayerMovingDown() ||
+		Essentials::globalInputManager->PressingPlayerMovingRight();
+}
+
+bool PlayerControllerComponent::IsFireInput()
+{
+	return Essentials::globalInputManager->IsKeyHeld(static_cast<int>(Keys::MOUSELBUTTON));
+}
+
+void PlayerControllerComponent::OnAnimationEvent(const AnimationEventContext& aEvent)
+{
+	const std::string eventName = aEvent.record.id.GetString();
+
+	if (eventName == "attack_end")
+	{
+		SetState(PlayerState_Master::Instance().myWalkState.get());
+	}
+}
+
 
 void PlayerControllerComponent::StartForcedMoveTo(
 	const CommonUtilities::Vector3<float>& aTargetPosition,
@@ -134,6 +165,46 @@ void PlayerControllerComponent::StopForcedMove()
 bool PlayerControllerComponent::IsForcedMoveActive() const
 {
 	return myForcedMoveActive;
+}
+
+bool PlayerControllerComponent::StartScriptedPickupAnimation(
+	const std::string& aParameterName,
+	const float aDuration,
+	ScriptedAnimationCompleteCallback aOnComplete)
+{
+	GameObject* owner = GetOwner();
+	if (!owner || aParameterName.empty() || aDuration <= 0.0f)
+	{
+		return false;
+	}
+
+	auto* animationGraph = owner->GetComponent<AnimationGraphComponent>();
+	if (!animationGraph)
+	{
+		return false;
+	}
+
+	StopForcedMove();
+	StopScriptedPickupAnimation(false);
+	SetWalkAnimation(0.0f);
+
+	if (myState)
+	{
+		myState->ResetValues();
+		myState = nullptr;
+	}
+
+	myScriptedPickupParameterName = aParameterName;
+	myScriptedPickupTimer = aDuration;
+	myScriptedPickupCompleteCallback = std::move(aOnComplete);
+	myScriptedPickupActive = true;
+	animationGraph->SetFloatParameter(myScriptedPickupParameterName, 1.0f);
+	return true;
+}
+
+bool PlayerControllerComponent::IsScriptedPickupAnimationActive() const
+{
+	return myScriptedPickupActive;
 }
 
 void PlayerControllerComponent::FaceDirection(const CommonUtilities::Vector3<float>& aDirection)
@@ -185,6 +256,48 @@ void PlayerControllerComponent::UpdateForcedMove(const float aDeltaTime)
 	owner->GetTransform().Translate(direction * step);
 	FaceDirection(direction);
 	SetWalkAnimation(1.0f);
+}
+
+void PlayerControllerComponent::UpdateScriptedPickupAnimation(const float aDeltaTime)
+{
+	myScriptedPickupTimer -= aDeltaTime;
+	if (myScriptedPickupTimer > 0.0f)
+	{
+		return;
+	}
+
+	StopScriptedPickupAnimation(true);
+}
+
+void PlayerControllerComponent::StopScriptedPickupAnimation(const bool aShouldComplete)
+{
+	if (!myScriptedPickupActive)
+	{
+		return;
+	}
+
+	GameObject* owner = GetOwner();
+	if (owner)
+	{
+		if (auto* animationGraph = owner->GetComponent<AnimationGraphComponent>())
+		{
+			animationGraph->SetFloatParameter(myScriptedPickupParameterName, 0.0f);
+		}
+	}
+
+	myScriptedPickupActive = false;
+	myScriptedPickupTimer = 0.0f;
+	myScriptedPickupParameterName.clear();
+
+	ScriptedAnimationCompleteCallback callback = std::move(myScriptedPickupCompleteCallback);
+	myScriptedPickupCompleteCallback = {};
+
+	SetState(PlayerState_Master::Instance().myWalkState.get());
+
+	if (aShouldComplete && callback)
+	{
+		callback();
+	}
 }
 
 void PlayerControllerComponent::SetWalkAnimation(const float aWeight)

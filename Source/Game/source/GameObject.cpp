@@ -1,6 +1,7 @@
 #include "GameObject.h"
-#include "ToggleComponent.h"
-#include "BoxColliderComponent.h"
+
+#include "CollisionListener.h"
+#include "CollisionTypes.h"
 
 #include <tge/debug/LoadingProfiler.h>
 
@@ -36,17 +37,6 @@ void GameObject::Init(Tga::Engine& anEngine)
     for (auto& component : myComponents)
     {
         component->Init(anEngine);
-    }
-
-    if (ToggleComponent* toggleComponent = GetComponent<ToggleComponent>())
-    {
-        GetComponent<ToggleComponent>()->Initialize();
-        /*auto& transform = GetTransform();
-        this->GetTransform().SetPosition(Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y - 400.0f, transform.GetPosition().z));*/
-    }
-    if (this->HasComponent<BoxColliderComponent>())
-    {
-        GetComponent<BoxColliderComponent>()->Init(anEngine);
     }
 
     const double milliseconds =
@@ -234,5 +224,43 @@ void GameObject::DisableAllComponents()
     for (auto& component : myComponents)
     {
         component->SetEnabled(false);
+    }
+}
+
+void GameObject::DispatchCollisionContact(const CollisionContact& aContact)
+{
+    GameObject* other = aContact.GetOther(*this);
+    if (other == nullptr)
+    {
+        return;
+    }
+
+    for (auto& component : myComponents)
+    {
+        if (!component || !component->IsEnabled())
+        {
+            continue;
+        }
+
+        CollisionListener* collisionListener = dynamic_cast<CollisionListener*>(component.get());
+        if (collisionListener == nullptr)
+        {
+            continue;
+        }
+
+        switch (aContact.phase)
+        {
+        case CollisionPhase::Enter:
+            collisionListener->OnCollisionEnter(aContact, *other);
+            break;
+        case CollisionPhase::Stay:
+            collisionListener->OnCollisionStay(aContact, *other);
+            break;
+        case CollisionPhase::Exit:
+            collisionListener->OnCollisionExit(aContact, *other);
+            break;
+        default:
+            break;
+        }
     }
 }

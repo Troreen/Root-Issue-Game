@@ -1,0 +1,12 @@
+{
+  "animation_source_path": "animations\\FBX\\Environment\\A_EN_RootDoor_Open.fbx",
+  "cycle_count": 1.0,
+  "cycle_offset": 0.0,
+  "end_time": 1.6666666269302368,
+  "events": [],
+  "is_looping": false,
+  "is_sync": false,
+  "playback_rate": 1.0,
+  "preview_model_path": "animations\\SK\\SK_ENV_Root_Door.fbx",
+  "start_time": 0.0
+}

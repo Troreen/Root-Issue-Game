@@ -2,13 +2,33 @@
   "links": [
     {
       "id": 0,
-      "sourcePin": 1,
-      "targetPin": 3
+      "sourcePin": 11,
+      "targetPin": 12
     },
     {
       "id": 1,
       "sourcePin": 5,
       "targetPin": 0
+    },
+    {
+      "id": 2,
+      "sourcePin": 13,
+      "targetPin": 7
+    },
+    {
+      "id": 3,
+      "sourcePin": 1,
+      "targetPin": 6
+    },
+    {
+      "id": 4,
+      "sourcePin": 15,
+      "targetPin": 8
+    },
+    {
+      "id": 5,
+      "sourcePin": 9,
+      "targetPin": 3
     }
   ],
   "nodes": [
@@ -27,8 +47,8 @@
       "id": 1,
       "name": "",
       "position": [
-        547.0,
-        268.0
+        795.0,
+        259.0
       ],
       "type": "Animate Model"
     },
@@ -41,6 +61,46 @@
         113.0
       ],
       "type": "Read Animation Clip Property"
+    },
+    {
+      "customData": null,
+      "id": 3,
+      "name": "",
+      "position": [
+        566.0,
+        264.0
+      ],
+      "type": "Blend Pose"
+    },
+    {
+      "customData": null,
+      "id": 4,
+      "name": "",
+      "position": [
+        82.0,
+        374.0
+      ],
+      "type": "Read Animation Clip Property"
+    },
+    {
+      "customData": null,
+      "id": 5,
+      "name": "",
+      "position": [
+        324.0,
+        307.0
+      ],
+      "type": "Play Clip"
+    },
+    {
+      "customData": null,
+      "id": 6,
+      "name": "",
+      "position": [
+        338.0,
+        450.0
+      ],
+      "type": "Read Float Property"
     }
   ],
   "pins": [
@@ -94,6 +154,96 @@
       "id": 5,
       "name": "Value",
       "node": 2,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 6,
+      "name": "Pose A",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 7,
+      "name": "Pose B",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Float",
+      "id": 8,
+      "name": "Blend Amount",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 9,
+      "name": "Pose",
+      "node": 3,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 10,
+      "name": "Name",
+      "node": 4,
+      "role": "Input",
+      "type": "Property",
+      "value": "clip_destroy"
+    },
+    {
+      "datatype": "Animation Clip",
+      "id": 11,
+      "name": "Value",
+      "node": 4,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Animation Clip",
+      "id": 12,
+      "name": "Clip",
+      "node": 5,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 13,
+      "name": "Pose",
+      "node": 5,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 14,
+      "name": "Name",
+      "node": 6,
+      "role": "Input",
+      "type": "Property",
+      "value": "w_destroy"
+    },
+    {
+      "datatype": "Float",
+      "id": 15,
+      "name": "Value",
+      "node": 6,
       "role": "Output",
       "type": "Property",
       "value": null

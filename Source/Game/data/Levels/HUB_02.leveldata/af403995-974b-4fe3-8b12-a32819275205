@@ -1,0 +1,27 @@
+{
+  "name": "LevelTransitionDoor",
+  "object-definition": "LevelTransitionDoor",
+  "path": "",
+  "properties": [
+    {
+      "name": "targetScene",
+      "type": "StringId",
+      "value": "Level3_Oskar"
+    }
+  ],
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    1149.0885009765625,
+    0.0,
+    396.36468505859375
+  ]
+}

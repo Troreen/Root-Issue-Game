@@ -1,0 +1,20 @@
+{
+  "name": "HUB_Chair_03",
+  "object-definition": "HUB_Chair_03",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    2185.0,
+    0.0,
+    100.0
+  ]
+}

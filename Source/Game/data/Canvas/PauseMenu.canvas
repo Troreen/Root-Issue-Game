@@ -1,0 +1,1002 @@
+{
+  "parent": "",
+  "referenceResolution": [
+    1920,
+    1080
+  ],
+  "renderOrder": [
+    1,
+    2,
+    11,
+    0,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "showBounds": true,
+  "uiElements": [
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": false,
+      "hiercharyDisplayOrder": 1,
+      "name": "PauseMenu",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": -1,
+      "scaleUniformly": true,
+      "size": [
+        100.0,
+        100.0
+      ],
+      "type": "ElementGroup"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "tint": [
+          0.0,
+          0.0,
+          0.0,
+          0.9607843160629272
+        ]
+      },
+      "groupIndex": -1,
+      "hide": false,
+      "hiercharyDisplayOrder": 0,
+      "name": "Background",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        1925.0,
+        1085.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "tint": [
+          0.0,
+          1.0,
+          0.9420850276947021,
+          1.0
+        ]
+      },
+      "groupIndex": 0,
+      "hide": false,
+      "hiercharyDisplayOrder": 2,
+      "name": "PauseMenuPanel",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": 1,
+      "scaleUniformly": true,
+      "size": [
+        512.0,
+        1024.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "customMouseSelectionBounds": false,
+        "image": {
+          "sceneReference": "DefaultUIAssets/DefaultUIButtonBackground.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "mouseSelectionBounds": [
+          100.0,
+          100.0
+        ],
+        "navigation": [
+          6,
+          4,
+          -1,
+          -1
+        ],
+        "text": {
+          "fontScale": 2.0,
+          "fontSize": 24,
+          "horizontalAlign": 1,
+          "sceneReference": "DefaultUIAssets\\Arial.ttf",
+          "text": "Resume",
+          "tint": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "verticalAlign": 1
+        }
+      },
+      "groupIndex": 0,
+      "hide": false,
+      "hiercharyDisplayOrder": 4,
+      "name": "ResumeButton",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        300.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        200.0
+      ],
+      "type": "Button"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "customMouseSelectionBounds": false,
+        "image": {
+          "sceneReference": "DefaultUIAssets/DefaultUIButtonBackground.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "mouseSelectionBounds": [
+          100.0,
+          100.0
+        ],
+        "navigation": [
+          3,
+          5,
+          -1,
+          -1
+        ],
+        "text": {
+          "fontScale": 2.0,
+          "fontSize": 24,
+          "horizontalAlign": 1,
+          "sceneReference": "DefaultUIAssets\\Arial.ttf",
+          "text": "Settings",
+          "tint": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "verticalAlign": 1
+        }
+      },
+      "groupIndex": 0,
+      "hide": false,
+      "hiercharyDisplayOrder": 4,
+      "name": "SettingsButton",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        100.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        200.0
+      ],
+      "type": "Button"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "customMouseSelectionBounds": false,
+        "image": {
+          "sceneReference": "DefaultUIAssets/DefaultUIButtonBackground.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "mouseSelectionBounds": [
+          100.0,
+          100.0
+        ],
+        "navigation": [
+          4,
+          6,
+          -1,
+          -1
+        ],
+        "text": {
+          "fontScale": 2.0,
+          "fontSize": 18,
+          "horizontalAlign": 1,
+          "sceneReference": "DefaultUIAssets\\Arial.ttf",
+          "text": "Main Menu",
+          "tint": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "verticalAlign": 1
+        }
+      },
+      "groupIndex": 0,
+      "hide": false,
+      "hiercharyDisplayOrder": 5,
+      "name": "MainMenuButton",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        -100.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        200.0
+      ],
+      "type": "Button"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "customMouseSelectionBounds": false,
+        "image": {
+          "sceneReference": "DefaultUIAssets/DefaultUIButtonBackground.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "mouseSelectionBounds": [
+          100.0,
+          100.0
+        ],
+        "navigation": [
+          5,
+          3,
+          -1,
+          -1
+        ],
+        "text": {
+          "fontScale": 2.0,
+          "fontSize": 24,
+          "horizontalAlign": 1,
+          "sceneReference": "DefaultUIAssets\\Arial.ttf",
+          "text": "Quit",
+          "tint": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "verticalAlign": 1
+        }
+      },
+      "groupIndex": 0,
+      "hide": false,
+      "hiercharyDisplayOrder": 6,
+      "name": "QuitButton",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        -300.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        200.0
+      ],
+      "type": "Button"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 2.0,
+        "fontSize": 30,
+        "horizontalAlign": 1,
+        "sceneReference": "DefaultUIAssets/arial.ttf",
+        "text": "PAUSED",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 0,
+      "hide": false,
+      "hiercharyDisplayOrder": 7,
+      "name": "PausedText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        440.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        500.0,
+        100.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": true,
+      "hiercharyDisplayOrder": 8,
+      "name": "SettingsPauseMenu",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": -1,
+      "scaleUniformly": true,
+      "size": [
+        100.0,
+        100.0
+      ],
+      "type": "ElementGroup"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 2.0,
+        "fontSize": 30,
+        "horizontalAlign": 1,
+        "sceneReference": "DefaultUIAssets/arial.ttf",
+        "text": "SETTINGS",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 8,
+      "hide": false,
+      "hiercharyDisplayOrder": 9,
+      "name": "SettingsText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        440.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        500.0,
+        100.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "customMouseSelectionBounds": false,
+        "image": {
+          "sceneReference": "DefaultUIAssets/DefaultUIButtonBackground.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "mouseSelectionBounds": [
+          100.0,
+          100.0
+        ],
+        "navigation": [
+          19,
+          12,
+          -1,
+          -1
+        ],
+        "text": {
+          "fontScale": 2.0,
+          "fontSize": 30,
+          "horizontalAlign": 1,
+          "sceneReference": "DefaultUIAssets\\Arial.ttf",
+          "text": "Back",
+          "tint": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "verticalAlign": 1
+        }
+      },
+      "groupIndex": 8,
+      "hide": false,
+      "hiercharyDisplayOrder": 10,
+      "name": "BackButtonSettings",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        -300.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        200.0
+      ],
+      "type": "Button"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "tint": [
+          0.0,
+          1.0,
+          0.20077204704284668,
+          1.0
+        ]
+      },
+      "groupIndex": 8,
+      "hide": false,
+      "hiercharyDisplayOrder": 11,
+      "name": "SettingsPanel",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": 1,
+      "scaleUniformly": true,
+      "size": [
+        512.0,
+        1024.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "background": {
+          "sceneReference": "DefaultUIAssets/DefaultUISliderBackground.ddS",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "customMouseSelectionBounds": false,
+        "defaultValue": 0.5,
+        "fill": {
+          "sceneReference": "DefaultUIAssets/DefaultUISliderFill.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "handle": {
+          "sceneReference": "DefaultUIAssets/DefaultUISliderHandle.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "maxValue": 1.0,
+        "minValue": 0.0,
+        "mouseSelectionBounds": [
+          100.0,
+          100.0
+        ],
+        "navigation": [
+          10,
+          15,
+          -1,
+          -1
+        ]
+      },
+      "groupIndex": 8,
+      "hide": false,
+      "hiercharyDisplayOrder": 12,
+      "name": "MasterVolumeSlider",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        240.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        100.0
+      ],
+      "type": "Slider"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 30,
+        "horizontalAlign": 1,
+        "sceneReference": "DefaultUIAssets/arial.ttf",
+        "text": "Master Volume",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 8,
+      "hide": false,
+      "hiercharyDisplayOrder": 13,
+      "name": "MasterVolumeText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        300.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        100.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 30,
+        "horizontalAlign": 1,
+        "sceneReference": "DefaultUIAssets/arial.ttf",
+        "text": "Music Volume",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 8,
+      "hide": false,
+      "hiercharyDisplayOrder": 14,
+      "name": "MusicVolumeText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        150.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        100.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "background": {
+          "sceneReference": "DefaultUIAssets/DefaultUISliderBackground.ddS",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "customMouseSelectionBounds": false,
+        "defaultValue": 0.5,
+        "fill": {
+          "sceneReference": "DefaultUIAssets/DefaultUISliderFill.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "handle": {
+          "sceneReference": "DefaultUIAssets/DefaultUISliderHandle.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "maxValue": 1.0,
+        "minValue": 0.0,
+        "mouseSelectionBounds": [
+          100.0,
+          100.0
+        ],
+        "navigation": [
+          12,
+          17,
+          -1,
+          -1
+        ]
+      },
+      "groupIndex": 8,
+      "hide": false,
+      "hiercharyDisplayOrder": 15,
+      "name": "MusicVolumeSlider",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        90.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        100.0
+      ],
+      "type": "Slider"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 30,
+        "horizontalAlign": 1,
+        "sceneReference": "DefaultUIAssets/arial.ttf",
+        "text": "SFX Volume",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 8,
+      "hide": false,
+      "hiercharyDisplayOrder": 16,
+      "name": "SfxVolumeText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        100.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "background": {
+          "sceneReference": "DefaultUIAssets/DefaultUISliderBackground.ddS",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "customMouseSelectionBounds": false,
+        "defaultValue": 0.5,
+        "fill": {
+          "sceneReference": "DefaultUIAssets/DefaultUISliderFill.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "handle": {
+          "sceneReference": "DefaultUIAssets/DefaultUISliderHandle.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "maxValue": 1.0,
+        "minValue": 0.0,
+        "mouseSelectionBounds": [
+          100.0,
+          100.0
+        ],
+        "navigation": [
+          15,
+          19,
+          -1,
+          -1
+        ]
+      },
+      "groupIndex": 8,
+      "hide": false,
+      "hiercharyDisplayOrder": 17,
+      "name": "SfxVolumeSlider",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        -60.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        100.0
+      ],
+      "type": "Slider"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 30,
+        "horizontalAlign": 0,
+        "sceneReference": "DefaultUIAssets/arial.ttf",
+        "text": "Fullscreen",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 8,
+      "hide": false,
+      "hiercharyDisplayOrder": 18,
+      "name": "FullscreenText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        -150.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        100.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "background": {
+          "sceneReference": "DefaultUIAssets/DefaultUIToggleBackground.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "checkmark": {
+          "sceneReference": "DefaultUIAssets/DefaultUIToggleCheckmark.dds",
+          "tint": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "customMouseSelectionBounds": false,
+        "defaultOn": true,
+        "mouseSelectionBounds": [
+          100.0,
+          100.0
+        ],
+        "navigation": [
+          17,
+          10,
+          -1,
+          -1
+        ]
+      },
+      "groupIndex": 8,
+      "hide": false,
+      "hiercharyDisplayOrder": 19,
+      "name": "FullscreenToggle",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        100.0,
+        -150.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        50.0,
+        50.0
+      ],
+      "type": "Toggle"
+    }
+  ]
+}

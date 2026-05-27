@@ -24,6 +24,7 @@ enum SoundID
 	eMusicLevel1,
 	eMusicLevel2,
 	eMusicLevel3,
+	eIntroSFX,
 	eUnknown
 };
 

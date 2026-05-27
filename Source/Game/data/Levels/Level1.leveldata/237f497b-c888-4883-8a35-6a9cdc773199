@@ -1,0 +1,27 @@
+{
+  "name": "TeleporterTunnel(3)",
+  "object-definition": "TeleporterTunnel",
+  "path": "",
+  "properties": [
+    {
+      "name": "pairId",
+      "type": "Int",
+      "value": 1
+    }
+  ],
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    740.614013671875,
+    300.0,
+    9416.6416015625
+  ]
+}

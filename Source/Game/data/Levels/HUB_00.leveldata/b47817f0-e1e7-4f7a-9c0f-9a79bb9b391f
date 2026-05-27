@@ -1,0 +1,20 @@
+{
+  "name": "HubDoor_02(1)",
+  "object-definition": "HubDoor_02",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    1150.697265625,
+    0.0,
+    -800.0
+  ]
+}

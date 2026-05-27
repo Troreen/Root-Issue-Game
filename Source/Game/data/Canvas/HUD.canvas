@@ -1,0 +1,372 @@
+{
+  "parent": "",
+  "referenceResolution": [
+    1920,
+    1080
+  ],
+  "renderOrder": [
+    5,
+    0,
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    9
+  ],
+  "showBounds": true,
+  "uiElements": [
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 30,
+        "horizontalAlign": 0,
+        "sceneReference": "DefaultUIAssets/arial.ttf",
+        "text": "Health",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 0
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 0,
+      "name": "HealthText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        325.0,
+        -95.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        150.0,
+        50.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 1,
+      "name": "Health1",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        275.0,
+        -145.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        50.0,
+        50.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 2,
+      "name": "Health2",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        325.0,
+        -145.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        50.0,
+        50.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 3,
+      "name": "Health3",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        375.0,
+        -145.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        50.0,
+        50.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": false,
+      "hiercharyDisplayOrder": 4,
+      "name": "HUD",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": 2,
+      "scaleUniformly": true,
+      "size": [
+        100.0,
+        100.0
+      ],
+      "type": "ElementGroup"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          0.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": false,
+      "hiercharyDisplayOrder": 5,
+      "name": "RefrenceResolution",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": 3,
+      "scaleUniformly": true,
+      "size": [
+        1920.0,
+        1080.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 30,
+        "horizontalAlign": 0,
+        "sceneReference": "DefaultUIAssets/arial.ttf",
+        "text": "Weapons",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 0
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 6,
+      "name": "WeaponsText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        100.0,
+        -95.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        180.0,
+        50.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 7,
+      "name": "SwordImage",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        60.0,
+        -170.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        100.0,
+        100.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 8,
+      "name": "GunImage",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        160.0,
+        -170.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        100.0,
+        100.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 9,
+      "name": "Health4",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        425.0,
+        -145.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        50.0,
+        50.0
+      ],
+      "type": "Image"
+    }
+  ]
+}

@@ -170,6 +170,7 @@ namespace
 		if (MatchesText(aLayerName, "Player")) return ObjectLayer::Player;
 		if (MatchesText(aLayerName, "Enemy")) return ObjectLayer::Enemy;
 		if (MatchesText(aLayerName, "WorldStatic")) return ObjectLayer::WorldStatic;
+		if (MatchesText(aLayerName, "WorldDamageable")) return ObjectLayer::WorldDamageable;
 		if (MatchesText(aLayerName, "Projectile")) return ObjectLayer::Projectile;
 		if (MatchesText(aLayerName, "Trigger")) return ObjectLayer::Trigger;
 		if (MatchesText(aLayerName, "Pickup")) return ObjectLayer::Pickup;

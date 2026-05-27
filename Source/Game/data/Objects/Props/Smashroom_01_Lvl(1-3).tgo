@@ -8,25 +8,7 @@
       "is-per-instance": false,
       "name": "factoryType",
       "type": "StringId",
-      "value": "StaticWorld"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "typeId",
-      "type": "StringId",
-      "value": "SK_P_Smashroom_01_Lvl(1-3)"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "name",
-      "type": "StringId",
-      "value": "SK_P_Smashroom_01_Lvl(1-3)"
+      "value": "Destructible"
     },
     {
       "description": "",
@@ -79,27 +61,11 @@
       "group": "Animation",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "animation_graph_template",
-      "type": "StringId",
-      "value": "idle_only"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_model_property",
-      "type": "StringId",
-      "value": "model"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_auto_bootstrap",
-      "type": "Bool",
-      "value": true
+      "name": "clip_destroy",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Smashroom_destroy.tgac"
+      }
     },
     {
       "description": "",
@@ -109,8 +75,44 @@
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "AnimationClips\\\\Grafik\\\\SK_P_Smashroom_01_Lvl(1-3)_idle.tgac"
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Smashroom_idle.tgac"
       }
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderHeight",
+      "type": "Float",
+      "value": 500.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderRadius",
+      "type": "Float",
+      "value": 20.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "Int",
+      "value": 2
     }
   ]
 }

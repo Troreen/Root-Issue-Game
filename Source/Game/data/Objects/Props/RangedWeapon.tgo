@@ -1,69 +1,51 @@
 {
-    "parent-object-definition":  "",
-    "properties":  [
-                       {
-                           "description":  "",
-                           "group":  "",
-                           "is-dynamic":  false,
-                           "is-per-instance":  false,
-                           "name":  "factoryType",
-                           "type":  "StringId",
-                           "value":  "StaticWorld"
-                       },
-                       {
-                           "description":  "",
-                           "group":  "",
-                           "is-dynamic":  false,
-                           "is-per-instance":  false,
-                           "name":  "typeId",
-                           "type":  "StringId",
-                           "value":  "SM_P_RangedWeapon"
-                       },
-                       {
-                           "description":  "",
-                           "group":  "",
-                           "is-dynamic":  false,
-                           "is-per-instance":  false,
-                           "name":  "name",
-                           "type":  "StringId",
-                           "value":  "SM_P_RangedWeapon"
-                       },
-                       {
-                           "description":  "",
-                           "group":  "",
-                           "is-dynamic":  false,
-                           "is-per-instance":  false,
-                           "name":  "model",
-                           "type":  "Model",
-                           "value":  {
-                                         "path":  "Assets\\\\Art\\\\3D\\\\Characters\\\\SM_P_RangedWeapon.fbx",
-                                         "textures":  [
-                                                          [
-                                                              "",
-                                                              "",
-                                                              "",
-                                                              ""
-                                                          ],
-                                                          [
-                                                              "",
-                                                              "",
-                                                              "",
-                                                              ""
-                                                          ],
-                                                          [
-                                                              "",
-                                                              "",
-                                                              "",
-                                                              ""
-                                                          ],
-                                                          [
-                                                              "",
-                                                              "",
-                                                              "",
-                                                              ""
-                                                          ]
-                                                      ]
-                                     }
-                       }
-                   ]
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "StaticWorld"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "Assets\\\\Art\\\\3D\\\\Characters\\\\SM_P_RangedWeapon.fbx",
+        "textures": [
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    }
+  ]
 }

@@ -18,18 +18,18 @@
       "name": "model",
       "type": "Model",
       "value": {
-        "path": "Assets\\Art\\3D\\Environment\\SM_EN_LargeBush_01.fbx",
+        "path": "Assets\\Art\\3D\\Environment\\SM_EN_LargeBush_01_Lvl1.fbx",
         "textures": [
           [
-            "Assets\\Art\\Textures\\T_ColorAtlas_Lvl1.dds",
-            "",
-            "",
+            "Assets\\Art\\Textures\\Decoration\\T_Bush_01_c.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Bush_01_n.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Bush_01_m.dds",
             ""
           ],
           [
-            "",
-            "",
-            "",
+            "Assets\\Art\\Textures\\Decoration\\T_Bush_01_c.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Bush_01_n.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Bush_01_m.dds",
             ""
           ],
           [
@@ -54,7 +54,7 @@
       "is-per-instance": false,
       "name": "name",
       "type": "StringId",
-      "value": "SK_EN_Bush_01"
+      "value": "LargeBush_01"
     },
     {
       "description": "",
@@ -63,54 +63,7 @@
       "is-per-instance": false,
       "name": "typeId",
       "type": "StringId",
-      "value": "SK_EN_Bush_01"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_auto_bootstrap",
-      "type": "Bool",
-      "value": true
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_graph",
-      "type": "StringId",
-      "value": "animations\\Animation Graphs\\Bush_01.tgscript"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_graph_template",
-      "type": "StringId",
-      "value": "idle_only"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_model_property",
-      "type": "StringId",
-      "value": "model"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_idle",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Bush_01.tgac"
-      }
+      "value": "LargeBush_01"
     },
     {
       "description": "",

@@ -21,9 +21,9 @@
         "path": "Assets\\Art\\3D\\Environment\\SK_EN_Coral_02.fbx",
         "textures": [
           [
-            "Assets\\Art\\Textures\\T_ColorAtlas_Lvl3.dds",
-            "",
-            "",
+            "Assets\\Art\\Textures\\Decoration\\T_Coral_01_c.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Coral_01_n.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Coral_01_m.dds",
             ""
           ],
           [
@@ -52,27 +52,9 @@
       "group": "",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "name",
-      "type": "StringId",
-      "value": "SK_EN_Corrale_01"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
       "name": "typeId",
       "type": "StringId",
-      "value": "SK_EN_Corrale_01"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_auto_bootstrap",
-      "type": "Bool",
-      "value": true
+      "value": "Corrale_02"
     },
     {
       "description": "",
@@ -88,28 +70,10 @@
       "group": "Animation",
       "is-dynamic": false,
       "is-per-instance": false,
-      "name": "animation_graph_template",
-      "type": "StringId",
-      "value": "idle_only"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_model_property",
-      "type": "StringId",
-      "value": "model"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Coral_01.tgac"
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Coral_02.tgac"
       }
     },
     {

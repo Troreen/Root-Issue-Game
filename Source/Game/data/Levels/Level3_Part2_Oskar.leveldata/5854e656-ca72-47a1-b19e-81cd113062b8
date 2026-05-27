@@ -1,0 +1,20 @@
+{
+  "name": "CollisionBlock_3x9_OBB(7)",
+  "object-definition": "CollisionBlock_3x9_OBB",
+  "path": "",
+  "rotation": [
+    0.0,
+    45.000003814697266,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -1071.75146484375,
+    0.0,
+    -1454.593994140625
+  ]
+}

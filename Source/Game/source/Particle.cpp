@@ -26,10 +26,10 @@ void Particle::Init(const ParticleSettings& someParticleSettings)
 	mySettings.swayAmplitudeZ = 3;
 	mySettings.swayFrequencyX = 3;
 	mySettings.swayFrequencyZ = 3;*/
-	
+
 }
 
-void Particle::SetNext(Particle* aNext) 
+void Particle::SetNext(Particle* aNext)
 {
 	myNext = aNext;
 }
@@ -41,21 +41,21 @@ Particle* Particle::GetNext() const
 
 bool Particle::Animate(float aTimeDelta)
 {
-
-	if (!InUse()) 
+	if (!InUse())
 	{
 		return false;
 	}
 
-	// TODO: Temporary code
-	myTransform.SetPosition({
-		myTransform.GetPosition().x + static_cast<float>(mySettings.sinAmplitudeX * std::sin(mySettings.sinFrequencyX * myTimeLeft + mySettings.myOffsetX)),
-		myTransform.GetPosition().y + static_cast<float>(mySettings.sinAmplitudeY * std::sin(mySettings.sinFrequencyY * myTimeLeft + mySettings.myOffsetY)),
-		myTransform.GetPosition().z + static_cast<float>(mySettings.sinAmplitudeZ * std::sin(mySettings.sinFrequencyZ * myTimeLeft + mySettings.myOffsetZ))});
-	//end
+	if (mySettings.sinAmplitudeX > 0 || mySettings.sinAmplitudeY > 0 || mySettings.sinAmplitudeZ > 0)
+	{
+		myTransform.SetPosition({
+			myTransform.GetPosition().x + static_cast<float>(mySettings.sinAmplitudeX * std::sin(mySettings.sinFrequencyX * myTimeLeft + mySettings.myOffsetX)),
+			myTransform.GetPosition().y + static_cast<float>(mySettings.sinAmplitudeY * std::sin(mySettings.sinFrequencyY * myTimeLeft + mySettings.myOffsetY)),
+			myTransform.GetPosition().z + static_cast<float>(mySettings.sinAmplitudeZ * std::sin(mySettings.sinFrequencyZ * myTimeLeft + mySettings.myOffsetZ)) });
+	}
 
 	// Setting position
-	mySettings.linearVelocity.y -= mySettings.gravity;
+	mySettings.linearVelocity.y -= mySettings.gravity * aTimeDelta;
 	myTransform.Translate(mySettings.linearVelocity * aTimeDelta);
 	Tga::Vector3f pos = myTransform.GetPosition().ToTga();
 	myInstance.myTransform.SetPosition(pos);

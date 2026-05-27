@@ -1,0 +1,20 @@
+{
+  "name": "Sand_3x3(97)",
+  "object-definition": "Sand_3x3",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -300.0,
+    -1.52587890625e-05,
+    -900.0
+  ]
+}

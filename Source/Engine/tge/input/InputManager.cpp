@@ -381,6 +381,26 @@ bool InputManager::PressingPlayerMovingRight()
 		);
 }
 
+bool Tga::InputManager::PressingPlayerMovingUp()
+{
+	return (
+		IsKeyHeld(static_cast<int>(EngineCU::Keys::W)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::W)) ||
+		IsKeyHeld(static_cast<int>(EngineCU::Keys::UP)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::UP)) ||
+		IsButtonDown(Tga::GamepadButton::Dpad_Up) && !IsButtonReleased(Tga::GamepadButton::Dpad_Up) /*||*/
+		/*LeftStickHeldRight() || RightStickHeldRight() || RightTrigger()*/
+		);
+}
+
+bool Tga::InputManager::PressingPlayerMovingDown()
+{
+	return (
+		IsKeyHeld(static_cast<int>(EngineCU::Keys::S)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::S)) ||
+		IsKeyHeld(static_cast<int>(EngineCU::Keys::DOWN)) && !IsKeyReleased(static_cast<int>(EngineCU::Keys::DOWN)) ||
+		IsButtonDown(Tga::GamepadButton::Dpad_Down) && !IsButtonReleased(Tga::GamepadButton::Dpad_Down) /*||*/
+		/*LeftStickHeldRight() || RightStickHeldRight() || RightTrigger()*/
+		);
+}
+
 bool InputManager::PressingJump() const
 {
 	return (
@@ -401,7 +421,10 @@ bool InputManager::ReleasingJump()
 		);
 }
 
-
+bool InputManager::PressingPlayerAim()
+{
+	return IsKeyHeld(static_cast<int>(EngineCU::Keys::MOUSELBUTTON)) || IsButtonDown(Tga::GamepadButton::RB);
+}
 
 bool InputManager::PressingToggleUp()
 {

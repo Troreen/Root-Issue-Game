@@ -117,11 +117,13 @@ public:
 	bool RightStickHeldDown();
 
 
-
 	bool PressingPlayerMovingLeft();
 	bool PressingPlayerMovingRight();
+	bool PressingPlayerMovingUp();
+	bool PressingPlayerMovingDown();
 	bool PressingJump() const;
 	bool ReleasingJump();
+	bool PressingPlayerAim();
 
 	bool PressingToggleUp();
 	bool PressingToggleLeft() const;

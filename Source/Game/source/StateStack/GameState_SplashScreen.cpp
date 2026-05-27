@@ -1,18 +1,25 @@
 #include "SplashScreen.h"
+#include "Essentials.h"
+
+#include <tge/engine.h>
+#include <tge/graphics/DX11.h>
+#include <tge/graphics/GraphicsEngine.h>
 #include <tge/texture/TextureManager.h>
 #include "tge/drawers/SpriteDrawer.h"
 #include <tge/math/Matrix4x4.h>
+#include <Windows.h>
 
 void SplashScreen::Init(CameraSystem& aCamera, const char* argv[])
 {
+	Essentials::globalEngine->SetClearColor({ 0,0,0,1 });
 	myCameraSystem = &aCamera;
 	argv;
 	mySplashScreenState;
 	Tga::Engine& engine = *Tga::Engine::GetInstance();
 	Tga::SpriteSharedData myObj;
-	if (engine.GetTextureManager().TryGetTexture("Sprites/tga-logo-white.dds"))
+	if (engine.GetTextureManager().TryGetTexture("..//Source/Game/data/Assets/Art/2D/UI/TgaLogo.dds"))
 	{
-		myObj.myTexture = engine.GetTextureManager().GetTexture("Sprites/tga-logo-white.dds");
+		myObj.myTexture = engine.GetTextureManager().GetTexture("..//Source/Game/data/Assets/Art/2D/UI/TgaLogo.dds");
 		mySpriteList = myObj;
 	}
 	myCameraSystem->Init();
@@ -40,6 +47,7 @@ eState SplashScreen::Update()
 	{
 		mySpriteProperties.myColor.a = 1.0f;
 		mySplashScreenState[0] = true;
+		Sleep(1000);
 		return eState::COUNT;
 	}
 
@@ -122,13 +130,18 @@ eState SplashScreen::Update()
 void SplashScreen::Render()
 {
 	Tga::DX11::BackBuffer->SetAsActiveTarget();
-
-
-	auto& engine = *Tga::Engine::GetInstance();
-	Tga::Vector2f resolution = { static_cast<float>(Tga::Engine::GetInstance()->GetRenderSize().x), static_cast<float>(Tga::Engine::GetInstance()->GetRenderSize().y) };
+	Tga::Engine& engine = *Tga::Engine::GetInstance();
+	Tga::Vector2ui intResolution = engine.GetRenderSize();
+	Tga::Vector2f resolution = { (float)intResolution.x, (float)intResolution.y };
+	
 	Tga::SpriteDrawer& spriteDrawer(engine.GetGraphicsEngine().GetSpriteDrawer());
+
+	Tga::Vector2f SpriteSize = Tga::Vector2f(static_cast<float>(mySpriteList.myTexture->CalculateTextureSize().x), static_cast<float>(mySpriteList.myTexture->CalculateTextureSize().y));
+
 	mySpriteProperties.myPosition = resolution * 0.5f;
-	mySpriteProperties.mySize = resolution.y;
+	mySpriteProperties.mySize = (Tga::Vector2f{ 0.0003f, 0.0005f }) * (resolution * SpriteSize);
+
+	mySpriteList.myTexture->CalculateTextureSize();
 	spriteDrawer.Draw(mySpriteList, mySpriteProperties);
 	Tga::DX11::BackBuffer->SetAsActiveTarget(Tga::DX11::DepthBuffer);
 	RenderDefault();

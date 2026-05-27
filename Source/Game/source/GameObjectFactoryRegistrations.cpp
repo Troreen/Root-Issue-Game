@@ -11,6 +11,7 @@
 #include "DamageableComponent.h"
 #include "GameObject.h"
 #include "GameObjectFactory.h"
+#include "HubUpgradePickupComponent.h"
 #include "KnockbackComponent.h"
 #include "LevelTransitionDoorComponent.h"
 #include "MeshComponent.h"
@@ -31,6 +32,9 @@
 #include "TeleporterTunnelComponent.h"
 #include "WorldTriggerHelpers.h"
 #include "GunUpgradeComponent.h"
+#include "SpawnerComponent.h"
+#include "DestructibleComponent.h"
+#include "GeneratorComponent.h"
 
 #include "SwitchComponent.h"
 #include "ToggleComponent.h"
@@ -41,6 +45,7 @@
 #include "EnemyAIComponent.h"
 #include "EnemyTargetingComponent.h"
 #include "EnemyAttackComponent.h"
+#include "EnemyAnimationComponent.h"
 
 //UI
 #include "SplashScreenComponent.h"
@@ -466,14 +471,16 @@ namespace
         {
             damage = 1;
         }
-
+        data.ShouldSpawn = aData.GetPropertyOr("spawnable", false);
         object->AddComponent<EnemyAIComponent>(data);
+
         EnemyMovementComponent* movement = object->AddComponent<EnemyMovementComponent>();
         movement->SetMovementSpeed(data.WalkSpeed);
 
         object->AddComponent<EnemyTargetingComponent>(data.DetectionRange);
         object->AddComponent<KnockbackComponent>();
         object->AddComponent<EnemyAttackComponent>(data);
+        object->AddComponent<EnemyAnimationComponent>();
         object->AddComponent<ResetComponent>(aData);
 
         DamageableComponent* damageable = object->AddComponent<DamageableComponent>(health);
@@ -499,6 +506,8 @@ namespace
             object->AddComponent<CapsuleColliderComponent>(50.0f, 180.0f, Vector3f::Zero, false, true);
         }
 
+        object->AddComponent<SphereColliderComponent>(100.f, Vector3f(0,100.f,0), true);
+
         EnemyData data = CreateRollingEnemyData(aData);
 
         int health = aData.GetPropertyOr<int>("health", 4);
@@ -512,6 +521,7 @@ namespace
         {
             damage = 1;
         }
+        data.ShouldSpawn = aData.GetPropertyOr("spawnable", false);
 
         object->AddComponent<EnemyAIComponent>(data);
         EnemyMovementComponent* movement = object->AddComponent<EnemyMovementComponent>();
@@ -544,8 +554,8 @@ namespace
         object->AddComponent<PlayerControllerComponent>(aData);
         object->AddComponent<CameraComponent>();
         object->AddComponent<MouseDirectionComponent>();
-        object->AddComponent<PauseMenuComponent>();
         object->AddComponent<HUDComponent>();
+        object->AddComponent<PauseMenuComponent>();
 
         int health = aData.GetPropertyOr<int>("health", 4);
         if (health < 1)
@@ -591,14 +601,6 @@ namespace
         ApplyCommonModel(*object, aData);
         ApplyOptionalSprite(*object, aData);
         ApplyAuthoredCollider(*object, aData);
-
-        if (!object->GetComponent<BoxColliderComponent>() &&
-            !object->GetComponent<SphereColliderComponent>() &&
-            !object->GetComponent<CapsuleColliderComponent>() &&
-            !object->GetComponent<ObbColliderComponent>())
-        {
-            object->AddComponent<CapsuleColliderComponent>(50.0f, 180.0f, Vector3f::Zero, false, true);
-        }
 
         object->AddComponent<SwitchComponent>(aData.GetPropertyOr("UniqueID", 0));
         return object;
@@ -684,7 +686,7 @@ namespace
     std::unique_ptr<GameObject> BuildCheckpoint(const SceneObjectData& aData)
     {
         auto object = std::make_unique<GameObject>(aData.name);
-        ApplyLayer(*object, aData, ObjectLayer::Switch);
+        object->SetLayer(ObjectLayer::WorldDamageable);
         ApplyCommonModel(*object, aData);
         ApplyAuthoredCollider(*object, aData);
 
@@ -706,6 +708,26 @@ namespace
         object->AddComponent<GunUpgradeComponent>();
         return object;
     }
+
+    std::unique_ptr<GameObject> BuildHubUpgradePickup(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::Pickup);
+        ApplyCommonModel(*object, aData);
+        ApplyAuthoredCollider(*object, aData);
+
+        if (!object->GetComponent<BoxColliderComponent>() &&
+            !object->GetComponent<SphereColliderComponent>() &&
+            !object->GetComponent<CapsuleColliderComponent>() &&
+            !object->GetComponent<ObbColliderComponent>())
+        {
+            WorldTriggerHelpers::AddDefaultBoxTrigger(*object, Vector3f(300.0f, 300.0f, 300.0f));
+        }
+
+        object->AddComponent<HubUpgradePickupComponent>(aData);
+        return object;
+    }
+
     std::unique_ptr<GameObject> BuildSplashScreen(const SceneObjectData& aData)
     {
         auto object = std::make_unique<GameObject>(aData.name);
@@ -720,25 +742,91 @@ namespace
         object->AddComponent<MainMenuComponent>();
         return object;
     }*/
+    std::unique_ptr<GameObject> BuildSpawner(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+
+        object->AddComponent<ResetComponent>(aData);
+        auto component = object->AddComponent<SpanwnerComponent>();
+        component->SetRadius(aData.GetPropertyOr("triggerRadius", 100.f));
+
+        return object;
+    }
+    std::unique_ptr<GameObject> BuildDestructible(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+
+        object->SetLayer(ObjectLayer::WorldDamageable);
+        ApplyCommonModel(*object, aData);
+        ApplyOptionalSprite(*object, aData);
+        ApplyAuthoredCollider(*object, aData);
+
+
+        object->AddComponent<ResetComponent>(aData);
+        object->AddComponent<DesctructibleComponent>();
+
+        return object;
+    }
+
+    std::unique_ptr<GameObject> BuildGenerator(const SceneObjectData& aData)
+    {
+        auto object = std::make_unique<GameObject>(aData.name);
+        ApplyLayer(*object, aData, ObjectLayer::WorldStatic);
+        ApplyCommonModel(*object, aData);
+        ApplyOptionalSprite(*object, aData);
+        ApplyAuthoredCollider(*object, aData);
+
+        ParticleEmitterComponent* emitter = object->AddComponent<ParticleEmitterComponent>();
+        emitter->AttachSettings();
+        emitter->SetEmissionDirection(ParticleType::Spark, { 0,0,-1 });
+
+        object->AddComponent<GeneratorComponent>();
+
+        return object;
+    }
+
+    void RegisterWorldFactories(GameObjectFactory& factory)
+    {
+        factory.Register("StaticWorld", BuildStaticWorld);
+        factory.Register("Geyser", BuildGeyser);
+        factory.Register("Destructible", BuildDestructible);
+        factory.Register("SparkyGenerator", BuildGenerator);
+    }
+
+    void RegisterCharacterFactories(GameObjectFactory& factory)
+    {
+        factory.Register("Player", BuildPlayer);
+        factory.Register("BasicMeleeEnemy", BuildBasicMeleeEnemy);
+        factory.Register("RollingEnemy", BuildRollingEnemy);
+    }
+
+    void RegisterInteractionFactories(GameObjectFactory& factory)
+    {
+        factory.Register("Pickup", BuildPickUp);
+        factory.Register("Switch", SwitchBuild);
+        factory.Register("Toggle", BuildToggle);
+        factory.Register("LevelTransitionDoor", BuildLevelTransitionDoor);
+        factory.Register("TeleporterTunnel", BuildTeleporterTunnel);
+        factory.Register("LevelTransitionToggle", BuildToggleLevelTransitionDoor);
+        factory.Register("Checkpoint", BuildCheckpoint);
+        factory.Register("CollideTrigger", BuildSwitchTriggerComponent);
+        factory.Register("GunUpgrade", BuildGunUpgrade);
+        factory.Register("HubUpgradePickup", BuildHubUpgradePickup);
+        factory.Register("Spawner", BuildSpawner);
+    }
+
+    void RegisterUiFactories(GameObjectFactory& factory)
+    {
+        factory.Register("SplashScreen", BuildSplashScreen);
+        //factory.Register("MainMenu", BuildMainMenu);
+    }
 }
 
 void RegisterGameObjectFactories()
 {
     GameObjectFactory& factory = GameObjectFactory::GetInstance();
-    factory.Register("StaticWorld", BuildStaticWorld);
-    factory.Register("BasicMeleeEnemy", BuildBasicMeleeEnemy);
-    factory.Register("RollingEnemy", BuildRollingEnemy);
-    factory.Register("Player", BuildPlayer);
-    factory.Register("Pickup", BuildPickUp);
-    factory.Register("Switch", SwitchBuild);
-    factory.Register("Toggle", BuildToggle);
-    factory.Register("LevelTransitionDoor", BuildLevelTransitionDoor);
-    factory.Register("TeleporterTunnel", BuildTeleporterTunnel);
-    factory.Register("LevelTransitionToggle", BuildToggleLevelTransitionDoor);
-    factory.Register("Checkpoint", BuildCheckpoint);
-    factory.Register("CollideTrigger", BuildSwitchTriggerComponent);
-    factory.Register("GunUpgrade", BuildGunUpgrade);
-    factory.Register("SplashScreen", BuildSplashScreen);
-    factory.Register("Geyser", BuildGeyser);
-    //factory.Register("MainMenu", BuildMainMenu);
+    RegisterWorldFactories(factory);
+    RegisterCharacterFactories(factory);
+    RegisterInteractionFactories(factory);
+    RegisterUiFactories(factory);
 }

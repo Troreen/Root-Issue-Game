@@ -1,0 +1,20 @@
+{
+  "name": "Dirt_3x3(81)",
+  "object-definition": "Dirt_3x3",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    500.0,
+    300.0,
+    5200.0
+  ]
+}

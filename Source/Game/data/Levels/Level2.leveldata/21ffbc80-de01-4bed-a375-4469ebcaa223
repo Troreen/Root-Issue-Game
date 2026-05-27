@@ -1,0 +1,20 @@
+{
+  "name": "Geyser_01(14)",
+  "object-definition": "Geyser_01",
+  "path": "Setdressing",
+  "rotation": [
+    0.0,
+    32.811763763427734,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    2822.560791015625,
+    0.0,
+    3764.21337890625
+  ]
+}

@@ -417,11 +417,22 @@ void UICanvas::SetSelectedElement(const std::string aID)
 	if(mySelectedElement != nullptr)
 		mySelectedElement->definition->generalProperties.size = mySelectedOriginalSize;
 	mySelectedElement = GetElement(aID);
+	if (mySelectedElement == nullptr)
+	{
+		printf("Failed to select UI element: %s\n", aID.c_str());
+		return;
+	}
+
 	mySelectedOriginalSize = mySelectedElement->definition->generalProperties.size;
 }
 
 const std::string UICanvas::GetSelectedElementName()
 {
+	if (mySelectedElement == nullptr)
+	{
+		return {};
+	}
+
 	return mySelectedElement->definition->generalProperties.name;
 }
 
@@ -500,7 +511,7 @@ UIElementGroup* UICanvas::GetElementGroup(const std::string aID)
 bool UICanvas::GetElementPressed(std::string aID)
 {
 	RuntimeUIElement* element = GetElement(aID);
-	if (element == nullptr)
+	if (element == nullptr || mySelectedElement == nullptr)
 		return false;
 
 	SelectableUIProperties* selectableProperties = nullptr;
@@ -557,6 +568,11 @@ float UICanvas::GetSliderValue(std::string aID)
 void UICanvas::SetIsHidden(std::string aID, const bool aIsHidden)
 {
 	RuntimeUIElement* element = GetElement(aID);
+	if (element == nullptr)
+	{
+		printf("Failed to set UI element hidden state: %s\n", aID.c_str());
+		return;
+	}
 
 	element->definition->generalProperties.hide = aIsHidden;
 }
@@ -564,6 +580,11 @@ void UICanvas::SetIsHidden(std::string aID, const bool aIsHidden)
 bool UICanvas::GetIsHidden(std::string aID)
 {
 	RuntimeUIElement* element = GetElement(aID);
+	if (element == nullptr)
+	{
+		return true;
+	}
+
 	return element->definition->generalProperties.hide;
 }
 

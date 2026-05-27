@@ -19,6 +19,8 @@ namespace Tga
 using Vector3f = CommonUtilities::Vector3<float>;
 using Transformf = CommonUtilities::Transform<float>;
 
+struct CollisionContact;
+
 /// Base class for all game objects in the game world.
 /// Provides common functionality like position, rotation, input handling, and rendering.
 class GameObject
@@ -147,6 +149,7 @@ public:
 
     void RemoveAllComponents();
     void DisableAllComponents();
+    void DispatchCollisionContact(const CollisionContact& aContact);
 
 protected:
     Transformf myTransform;

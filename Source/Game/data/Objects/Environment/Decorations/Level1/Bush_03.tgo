@@ -1,0 +1,51 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "StaticWorld"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "Assets\\Art\\3D\\Environment\\SK_EN_Bush_03.fbx",
+        "textures": [
+          [
+            "Assets\\Art\\Textures\\Decoration\\T_Bush_03_c.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Bush_03_n.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Bush_03_m.dds",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    }
+  ]
+}

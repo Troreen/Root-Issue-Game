@@ -1,0 +1,20 @@
+{
+  "name": "RollingEnemy(1)",
+  "object-definition": "RollingEnemy",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    4501.599609375,
+    -7.314032700378448e-05,
+    2685.189453125
+  ]
+}

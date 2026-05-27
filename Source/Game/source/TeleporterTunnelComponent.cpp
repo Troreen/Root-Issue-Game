@@ -5,6 +5,8 @@
 #include "Player/PlayerControllerComponent.h"
 #include "WorldTransitionService.h"
 #include "WorldTriggerHelpers.h"
+#include "SceneTransitionController.h"
+#include "Essentials.h"
 
 #include <algorithm>
 #include <cassert>
@@ -49,6 +51,11 @@ void TeleporterTunnelComponent::SuppressUntilExit()
 	mySuppressUntilExit = true;
 	mySuppressHasSeenInside = false;
 	myWasInside = true;
+}
+
+void TeleporterTunnelComponent::Receive(const Message& aMSG)
+{
+	aMSG;
 }
 
 void TeleporterTunnelComponent::OnStart()
@@ -224,6 +231,12 @@ void TeleporterTunnelComponent::StartTeleportSequence(TeleporterTunnelComponent&
 			const float axisHalfExtent = (std::abs(direction.x) > 0.0f) ? halfExtents.x : halfExtents.z;
 			WorldTriggerHelpers::Vector3f exitTarget = destinationCenter + direction * (axisHalfExtent + destination->myExitPadding);
 			exitTarget.y = playerPosition.y;
+
+			PostMaster* PostMaster = Essentials::globalPostMaster.get();
+
+			Message a;
+			a.myMessageType = MessageType::LoadScene;
+			PostMaster->SendMsg(a);
 
 			playerController->StartForcedMoveTo(
 				exitTarget,

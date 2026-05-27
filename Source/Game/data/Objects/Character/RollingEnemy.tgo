@@ -8,7 +8,7 @@
                            "is-per-instance":  false,
                            "name":  "factoryType",
                            "type":  "StringId",
-                           "value":  "BasicMeleeEnemy"
+                           "value":  "RollingEnemy"
                        },
                        {
                            "description":  "",
@@ -21,49 +21,31 @@
                                          "path":  "animations\\SK\\SK_CH_Enemy_Heavy.fbx",
                                          "textures":  [
                                                           [
-                                                              "",
-                                                              "",
-                                                              "",
+                                                              "Assets\\Art\\Textures\\Enemies\\T_Enemy_02_c.dds",
+                                                              "Assets\\Art\\Textures\\Enemies\\T_Enemy_02_n.dds",
+                                                              "Assets\\Art\\Textures\\Enemies\\T_Enemy_02_m.dds",
                                                               ""
                                                           ],
                                                           [
-                                                              "",
-                                                              "",
-                                                              "",
+                                                              "Assets\\Art\\Textures\\Enemies\\T_Enemy_02_c.dds",
+                                                              "Assets\\Art\\Textures\\Enemies\\T_Enemy_02_n.dds",
+                                                              "Assets\\Art\\Textures\\Enemies\\T_Enemy_02_m.dds",
                                                               ""
                                                           ],
                                                           [
-                                                              "",
-                                                              "",
-                                                              "",
+                                                              "Assets\\Art\\Textures\\Enemies\\T_Enemy_02_c.dds",
+                                                              "Assets\\Art\\Textures\\Enemies\\T_Enemy_02_n.dds",
+                                                              "Assets\\Art\\Textures\\Enemies\\T_Enemy_02_m.dds",
                                                               ""
                                                           ],
                                                           [
-                                                              "",
-                                                              "",
-                                                              "",
+                                                              "Assets\\Art\\Textures\\Enemies\\T_Enemy_02_c.dds",
+                                                              "Assets\\Art\\Textures\\Enemies\\T_Enemy_02_n.dds",
+                                                              "Assets\\Art\\Textures\\Enemies\\T_Enemy_02_m.dds",
                                                               ""
                                                           ]
                                                       ]
                                      }
-                       },
-                       {
-                           "description":  "",
-                           "group":  "",
-                           "is-dynamic":  false,
-                           "is-per-instance":  false,
-                           "name":  "name",
-                           "type":  "StringId",
-                           "value":  "RollingEnemy"
-                       },
-                       {
-                           "description":  "",
-                           "group":  "Animation",
-                           "is-dynamic":  false,
-                           "is-per-instance":  false,
-                           "name":  "animation_auto_bootstrap",
-                           "type":  "Bool",
-                           "value":  true
                        },
                        {
                            "description":  "",
@@ -79,28 +61,10 @@
                            "group":  "Animation",
                            "is-dynamic":  false,
                            "is-per-instance":  false,
-                           "name":  "animation_graph_template",
-                           "type":  "StringId",
-                           "value":  "idle_only"
-                       },
-                       {
-                           "description":  "",
-                           "group":  "Animation",
-                           "is-dynamic":  false,
-                           "is-per-instance":  false,
-                           "name":  "animation_model_property",
-                           "type":  "StringId",
-                           "value":  "model"
-                       },
-                       {
-                           "description":  "",
-                           "group":  "Animation",
-                           "is-dynamic":  false,
-                           "is-per-instance":  false,
                            "name":  "clip_aggro",
                            "type":  "Animation Clip",
                            "value":  {
-                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Aggro.fbx"
+                                         "clip_path":  "animations\\TGAC\\Enemy_Heavy\\A_Enemy_Heavy_Aggro.tgac"
                                      }
                        },
                        {
@@ -111,7 +75,7 @@
                            "name":  "clip_block",
                            "type":  "Animation Clip",
                            "value":  {
-                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Block.fbx"
+                                         "clip_path":  "animations\\TGAC\\Enemy_Heavy\\A_Enemy_Heavy_Block.tgac"
                                      }
                        },
                        {
@@ -122,7 +86,7 @@
                            "name":  "clip_charge",
                            "type":  "Animation Clip",
                            "value":  {
-                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Charge.fbx"
+                                         "clip_path":  "animations\\TGAC\\Enemy_Heavy\\A_Enemy_Heavy_Charge.tgac"
                                      }
                        },
                        {
@@ -133,7 +97,7 @@
                            "name":  "clip_death_laying",
                            "type":  "Animation Clip",
                            "value":  {
-                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Death_Laying.fbx"
+                                         "clip_path":  "animations\\TGAC\\Enemy_Heavy\\A_Enemy_Death_Laying.tgac"
                                      }
                        },
                        {
@@ -144,7 +108,7 @@
                            "name":  "clip_death_standing",
                            "type":  "Animation Clip",
                            "value":  {
-                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Death_Standing.fbx"
+                                         "clip_path":  "animations\\TGAC\\Enemy_Heavy\\A_Enemy_Death_Standing.tgac"
                                      }
                        },
                        {
@@ -155,7 +119,7 @@
                            "name":  "clip_hurt",
                            "type":  "Animation Clip",
                            "value":  {
-                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Hurt.fbx"
+                                         "clip_path":  "animations\\TGAC\\Enemy_Heavy\\A_Enemy_Heavy_Hurt_Standing.tgac"
                                      }
                        },
                        {
@@ -166,7 +130,7 @@
                            "name":  "clip_idle",
                            "type":  "Animation Clip",
                            "value":  {
-                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Idle.fbx"
+                                         "clip_path":  "animations\\TGAC\\Enemy_Heavy\\A_Enemy_Heavy_Idle.tgac"
                                      }
                        },
                        {
@@ -177,7 +141,7 @@
                            "name":  "clip_knockback",
                            "type":  "Animation Clip",
                            "value":  {
-                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Knockback.fbx"
+                                         "clip_path":  "animations\\TGAC\\Enemy_Heavy\\A_Enemy_Heavy_Knockback.tgac"
                                      }
                        },
                        {
@@ -188,7 +152,7 @@
                            "name":  "clip_roll_idle",
                            "type":  "Animation Clip",
                            "value":  {
-                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Roll_Idle.fbx"
+                                         "clip_path":  "animations\\TGAC\\Enemy_Heavy\\A_Enemy_Heavy_Roll_Idle.tgac"
                                      }
                        },
                        {
@@ -199,7 +163,7 @@
                            "name":  "clip_spawn",
                            "type":  "Animation Clip",
                            "value":  {
-                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Spawn.fbx"
+                                         "clip_path":  "animations\\TGAC\\Enemy_Heavy\\A_Enemy_Heavy_Spawn.tgac"
                                      }
                        },
                        {
@@ -210,7 +174,7 @@
                            "name":  "clip_walk",
                            "type":  "Animation Clip",
                            "value":  {
-                                         "clip_path":  "animations\\FBX\\Enemy_Heavy\\A_Enemy_Heavy_Walk.fbx"
+                                         "clip_path":  "animations\\TGAC\\Enemy_Heavy\\A_Enemy_Heavy_Walk.tgac"
                                      }
                        },
                        {
@@ -328,7 +292,7 @@
                            "is-per-instance":  true,
                            "name":  "anim_speed",
                            "type":  "Float",
-                           "value":  1
+                           "value":  1.0
                        }
                    ]
 }

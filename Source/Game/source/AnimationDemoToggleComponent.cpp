@@ -90,7 +90,7 @@ void AnimationDemoToggleComponent::OnUpdate(const float aDeltaTime)
     bool changed = false;
     bool activeClipChanged = false;
 
-    if (WasJustPressed(VK_RIGHT, myPrevNextDown))
+    /*if (WasJustPressed(VK_RIGHT, myPrevNextDown))
     {
         myActiveIndex = (myActiveIndex + 1) % static_cast<int>(myClipPropertyNames.size());
         myBlendToNeighbor = 0.0f;
@@ -116,7 +116,7 @@ void AnimationDemoToggleComponent::OnUpdate(const float aDeltaTime)
         myBlendToNeighbor = 0.0f;
         changed = true;
         activeClipChanged = true;
-    }
+    }*/
 
     if (UpdateBlendInput(aDeltaTime))
     {

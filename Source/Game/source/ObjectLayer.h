@@ -3,6 +3,7 @@
 enum class ObjectLayer
 {
     WorldStatic,
+    WorldDamageable,
     UI,
     Player,
     Enemy,

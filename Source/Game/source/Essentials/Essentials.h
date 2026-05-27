@@ -15,6 +15,7 @@
 #include "PostMaster.h"
 #include "GameObject.h"
 #include "AnimationEventService.h"
+#include "EnemyAIComponent.h"
 
 class GameObject;
 
@@ -43,6 +44,9 @@ public:
 	static void AddGameObject(std::unique_ptr<GameObject>& aGameObject);
 	static void PushGameObjectsInto(std::vector<std::unique_ptr<GameObject>>& outGameobjects);
 
+	static void AddEnemy(EnemyAIComponent* aEnemy);
+	static void PushEnemyInto(std::vector<EnemyAIComponent*>& outGameobjects);
+
 	static GameObject* GetPlayer();
 	static void SetPlayer(GameObject& aPlayer);
 
@@ -58,12 +62,12 @@ public:
 
 	static inline std::unique_ptr<Console> globalConsoleManager;
 
-
 	static inline bool ShutdownQueued;
 
 private:
 	
 	static inline std::unique_ptr<std::vector<std::unique_ptr<GameObject>>> myDynamicGameObjects;
+	static inline std::unique_ptr<std::vector<EnemyAIComponent*>> myEnemiesToSpawn;
 	static inline GameObject* myPlayer;
 
 	Essentials();

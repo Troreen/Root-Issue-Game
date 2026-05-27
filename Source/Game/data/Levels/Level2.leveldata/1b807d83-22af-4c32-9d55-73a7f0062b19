@@ -1,0 +1,20 @@
+{
+  "name": "Rockwall_3x3_03_Lvl2(25)",
+  "object-definition": "Rockwall_3x3_03_Lvl2",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -1199.99755859375,
+    600.0,
+    5399.99951171875
+  ]
+}

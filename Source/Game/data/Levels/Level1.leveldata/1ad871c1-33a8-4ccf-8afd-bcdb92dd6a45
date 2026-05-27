@@ -1,0 +1,20 @@
+{
+  "name": "CollisionBlock_1x1(1)",
+  "object-definition": "CollisionBlock_1x1",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    250.0,
+    300.0,
+    10300.0
+  ]
+}

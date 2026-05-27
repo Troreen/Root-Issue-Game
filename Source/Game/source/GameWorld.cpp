@@ -8,6 +8,7 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
+#include <memory>
 
 #include <Windows.h>
 
@@ -32,6 +33,7 @@
 #include "Options.h"
 #include "SplashScreen.h"
 #include "Intro.h"
+#include "Log.h"
 #include <tge/settings/settings.h>
 
 
@@ -218,8 +220,8 @@ void GameWorld::Init(const char* argv[])
 	Essentials::globalCanvasManager->Init(rootPath);
 	Tga::Engine::GetInstance()->SetBorderless(true);
 	myWorldStateStack;
-	myWorldStateStack.PushStack(std::vector<State*>());
-	myWorldStateStack.GetCurrentStateStack()->push_back(new SplashScreen());
+	myWorldStateStack.PushStack(StateStack::StateList{});
+	myWorldStateStack.PushState(std::make_unique<SplashScreen>());
 
 	myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 
@@ -232,27 +234,28 @@ void GameWorld::Init(const char* argv[])
 
 void GameWorld::Update(float /* aDeltaTime */, const char* argv[])
 {
+	Essentials::globalAudioManager->Update(Essentials::GetDeltaTime());
 	switch (myWorldStateStack.GetCurrentState()->Update())
 	{
 	case eState::eMainMenu:
-		myWorldStateStack.GetCurrentStateStack()->push_back(new MainMenu());
+		myWorldStateStack.PushState(std::make_unique<MainMenu>());
 
 		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 		break;
 	case eState::eOptions:
-		myWorldStateStack.GetCurrentStateStack()->push_back(new Options());
+		myWorldStateStack.PushState(std::make_unique<Options>());
 		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 		break;
 	case eState::ePlaying:
-		myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
+		myWorldStateStack.PushState(std::make_unique<InGame>());
 		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 		break;
 	case eState::eSplashScreen:
-		myWorldStateStack.GetCurrentStateStack()->push_back(new SplashScreen());
+		myWorldStateStack.PushState(std::make_unique<SplashScreen>());
 		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 		break;
 	case eState::eIntro:
-		myWorldStateStack.GetCurrentStateStack()->push_back(new Intro);
+		myWorldStateStack.PushState(std::make_unique<Intro>());
 		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 		break;
 	case eState::ePopState:
@@ -264,8 +267,29 @@ void GameWorld::Update(float /* aDeltaTime */, const char* argv[])
 		myWorldStateStack.PopStack();
 		break;
 	case eState::eLoadInGameWithIntro:
-		myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
-		myWorldStateStack.GetCurrentStateStack()->push_back(new Intro);
+		Essentials::globalAudioManager->StopAllEvents();
+		Essentials::globalAudioManager->StopMusic(SoundID::eMainMenuMusic, true);
+		myWorldStateStack.PushState(std::make_unique<InGame>());
+		myWorldStateStack.PushState(std::make_unique<Intro>());
+		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
+		break;
+	case eState::eLoadFirstLevel:
+		argv[1] = "Levels/HUB_00.tgs";
+		myWorldStateStack.PushState(std::make_unique<InGame>());
+		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
+		break;
+	case eState::eLoadSecondLevel:
+		argv[1] = "Levels/HUB_01.tgs";
+		myWorldStateStack.PushState(std::make_unique<InGame>());
+		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
+		break;
+	case eState::eLoadThirdLevel:
+		argv[1] = "Levels/HUB_02.tgs";
+		myWorldStateStack.PushState(std::make_unique<InGame>());
+		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
+		break;
+	case eState::eLoadFirstLog:
+		myWorldStateStack.PushState(std::make_unique<LogTransition>());
 		myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 		break;
 	default:
@@ -305,20 +329,20 @@ void GameWorld::RegisterCommands(const char* argv[])
 			switch (static_cast<int>(args[0][0]))
 			{
 			case 49:
-				myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
+				myWorldStateStack.PushState(std::make_unique<InGame>());
 				myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 				break;
 				// TEMP STATES!
 			case 50:
-				myWorldStateStack.GetCurrentStateStack()->push_back(new Options());
+				myWorldStateStack.PushState(std::make_unique<Options>());
 				myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 				break;
 			case 51:
-				myWorldStateStack.GetCurrentStateStack()->push_back(new MainMenu());
+				myWorldStateStack.PushState(std::make_unique<MainMenu>());
 				myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 				break;
 			case 52:
-				myWorldStateStack.GetCurrentStateStack()->push_back(new SplashScreen());
+				myWorldStateStack.PushState(std::make_unique<SplashScreen>());
 				myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 				// END TEMP STATES
 			default:
@@ -361,7 +385,7 @@ void GameWorld::RegisterCommands(const char* argv[])
 			std::cout << name << std::endl;
 
 			std::string fullname = "Levels/" + name + ".tgs";
-			myWorldStateStack.GetCurrentStateStack()->push_back(new InGame());
+			myWorldStateStack.PushState(std::make_unique<InGame>());
 			argv[1] = fullname.c_str();
 			myWorldStateStack.GetCurrentState()->Init(myCameraSystem, argv);
 

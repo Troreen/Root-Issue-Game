@@ -1,0 +1,20 @@
+{
+  "name": "GoopEggs",
+  "object-definition": "GoopEggs",
+  "path": "Setdressing",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    982.8084106445313,
+    0.0,
+    -2587.294677734375
+  ]
+}

@@ -1,0 +1,255 @@
+{
+  "links": [
+    {
+      "id": 0,
+      "sourcePin": 1,
+      "targetPin": 3
+    },
+    {
+      "id": 1,
+      "sourcePin": 4,
+      "targetPin": 6
+    }
+  ],
+  "nodes": [
+    {
+      "customData": null,
+      "id": 0,
+      "name": "",
+      "position": [
+        80.0,
+        120.0
+      ],
+      "type": "On Animation Event"
+    },
+    {
+      "customData": null,
+      "id": 1,
+      "name": "",
+      "position": [
+        346.0,
+        112.0
+      ],
+      "type": "Play SFX"
+    },
+    {
+      "customData": null,
+      "id": 2,
+      "name": "",
+      "position": [
+        612.0,
+        84.0
+      ],
+      "type": "Start Combat Attack"
+    }
+  ],
+  "pins": [
+    {
+      "datatype": null,
+      "id": 1,
+      "name": "Out",
+      "node": 0,
+      "role": "Output",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 2,
+      "name": "Event Id",
+      "node": 0,
+      "role": "Input",
+      "type": "Property",
+      "value": "debug_attack_event"
+    },
+    {
+      "datatype": null,
+      "id": 3,
+      "name": "In",
+      "node": 1,
+      "role": "Input",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": null,
+      "id": 4,
+      "name": "Out",
+      "node": 1,
+      "role": "Output",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 5,
+      "name": "Sound",
+      "node": 1,
+      "role": "Input",
+      "type": "Property",
+      "value": "PlayerAttack"
+    },
+    {
+      "datatype": null,
+      "id": 6,
+      "name": "In",
+      "node": 2,
+      "role": "Input",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 8,
+      "name": "Team",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": "Player"
+    },
+    {
+      "datatype": "StringId",
+      "id": 9,
+      "name": "Attack Type",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": "MeleeLight"
+    },
+    {
+      "datatype": "StringId",
+      "id": 10,
+      "name": "Shape",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": "Sphere"
+    },
+    {
+      "datatype": "StringId",
+      "id": 11,
+      "name": "Target Layer",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": "Enemy"
+    },
+    {
+      "datatype": "StringId",
+      "id": 12,
+      "name": "Target Layer",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": "Switch"
+    },
+    {
+      "datatype": "StringId",
+      "id": 13,
+      "name": "Target Layer",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": "WorldDamageable"
+    },
+    {
+      "datatype": "Int",
+      "id": 14,
+      "name": "Damage",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": 1
+    },
+    {
+      "datatype": "Float",
+      "id": 15,
+      "name": "Radius",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": 190.0
+    },
+    {
+      "datatype": "Float",
+      "id": 16,
+      "name": "Duration",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": 0.1599999964237213
+    },
+    {
+      "datatype": "Float",
+      "id": 17,
+      "name": "Knockback",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": 450.0
+    },
+    {
+      "datatype": "Bool",
+      "id": 18,
+      "name": "Only Forward",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": true
+    },
+    {
+      "datatype": "Float",
+      "id": 19,
+      "name": "Offset X",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": 0.0
+    },
+    {
+      "datatype": "Float",
+      "id": 20,
+      "name": "Offset Y",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": 90.0
+    },
+    {
+      "datatype": "Float",
+      "id": 21,
+      "name": "Offset Z",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": 0.0
+    },
+    {
+      "datatype": "Float",
+      "id": 22,
+      "name": "Size X",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": 0.0
+    },
+    {
+      "datatype": "Float",
+      "id": 23,
+      "name": "Size Y",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": 0.0
+    },
+    {
+      "datatype": "Float",
+      "id": 24,
+      "name": "Size Z",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": 0.0
+    }
+  ]
+}

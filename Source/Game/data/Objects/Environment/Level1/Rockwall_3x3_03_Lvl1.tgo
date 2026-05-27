@@ -1,60 +1,51 @@
 {
-  "parent-object-definition": "",
-  "properties": [
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "factoryType",
-      "type": "StringId",
-      "value": "StaticWorld"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "model",
-      "type": "Model",
-      "value": {
-        "path": "Assets\\Art\\3D\\Environment\\Rock Walls\\SM_EN_RockWall_3x3_03_Lvl1.fbx",
-        "textures": [
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ]
-        ]
-      }
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "typeId",
-      "type": "StringId",
-      "value": "Rockwall_3x3_03_Lvl1"
-    }
-  ]
+    "parent-object-definition":  "",
+    "properties":  [
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "factoryType",
+                           "type":  "StringId",
+                           "value":  "StaticWorld"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "model",
+                           "type":  "Model",
+                           "value":  {
+                                         "path":  "Assets\\Art\\3D\\Environment\\Rock Walls\\SM_EN_RockWall_3x3_03_Lvl1.fbx",
+                                         "textures":  [
+                                                          [
+                                                              "Assets\\Art\\Textures\\Rockwalls\\T_Rockwall_01_Lvl1_c.dds",
+                                                              "Assets\\Art\\Textures\\Rockwalls\\T_Rockwall_01_Lvl1_n.dds",
+                                                              "Assets\\Art\\Textures\\Rockwalls\\T_Rockwall_01_Lvl1_m.dds",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ]
+                                                      ]
+                                     }
+                       }
+                   ]
 }

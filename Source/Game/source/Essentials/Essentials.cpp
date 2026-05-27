@@ -24,6 +24,8 @@ Essentials::Essentials()
 	globalAnimationEvents = std::make_unique<AnimationEventService>();
 
 	myDynamicGameObjects = std::make_unique<std::vector<std::unique_ptr<GameObject>>>();
+
+	myEnemiesToSpawn = std::make_unique<std::vector<EnemyAIComponent*>>();
 }
 
 Essentials::~Essentials()
@@ -76,6 +78,17 @@ void Essentials::PushGameObjectsInto(std::vector<std::unique_ptr<GameObject>>& o
 {
 	outGameobjects.insert(outGameobjects.end(), std::make_move_iterator(myDynamicGameObjects->begin()), std::make_move_iterator(myDynamicGameObjects->end()));
 	myDynamicGameObjects->clear();
+}
+
+void Essentials::AddEnemy(EnemyAIComponent* aEnemy)
+{
+	myEnemiesToSpawn->push_back(aEnemy);
+}
+
+void Essentials::PushEnemyInto(std::vector<EnemyAIComponent*>& outGameobjects)
+{
+	outGameobjects.insert(outGameobjects.end(), myEnemiesToSpawn->begin(), myEnemiesToSpawn->end());
+	myEnemiesToSpawn->clear();
 }
 
 GameObject* Essentials::GetPlayer()

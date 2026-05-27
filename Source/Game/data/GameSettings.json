@@ -1,0 +1,25 @@
+{
+  "sceneLighting": {
+    "Levels/HUB_00.tgs": {
+      "ambientColor": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "ambientIntensity": 1.0,
+      "directionalColor": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "directionalIntensity": 0.10000000149011612,
+      "directionalRotationDegrees": [
+        225.0,
+        -45.0,
+        0.0
+      ],
+      "enableAmbientLight": true,
+      "enableDirectionalLight": true
+    }
+  }
+}

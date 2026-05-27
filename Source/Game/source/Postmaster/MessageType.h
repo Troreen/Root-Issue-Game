@@ -3,6 +3,7 @@ enum class MessageType
 {
 	SaveScene,
 	LoadScene,
+	SpawnEnemies,
 	ReloadScene,
 	Upgrade,
 	UpgradeText,

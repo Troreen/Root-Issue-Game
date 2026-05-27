@@ -23,6 +23,8 @@ namespace
 		attack.knockbackStrength = 450.0f;
 		attack.onlyHitForwardHemisphere = true;
 		attack.targetLayers.AddLayer(ObjectLayer::Enemy);
+		attack.targetLayers.AddLayer(ObjectLayer::Switch);
+		attack.targetLayers.AddLayer(ObjectLayer::WorldDamageable);
 
 		CombatService::StartAttack(attack);
 	}
@@ -30,13 +32,16 @@ namespace
 
 PlayerState_Attack::PlayerState_Attack()
 {
+	//
 	myAttackFromRight = false;
 	myHasSpawnedHitbox = false;
 
 	myAttackLungeImpulse = 10.f;
-	myAttackTime = 0.4f;
 
-	myAttackLungeDamp = myAttackLungeImpulse / myAttackTime;
+	myAttackTime = 1.1f;
+	myNextAttackTime = myAttackTime - 0.35f;
+
+	myAttackLungeDamp = myAttackLungeImpulse / 0.4f;
 }
 
 void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aController)
@@ -47,16 +52,22 @@ void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aCo
 		return;
 	}
 
+	if (myEnd)
+	{
+		aController.SetState(PlayerState_Master::Instance().myWalkState.get());
+		return;
+	}
+
 	if (!myHasSpawnedHitbox)
 	{
 		// Animation-event combat test path: attack audio and hitbox are now
 		// authored in the attack animation event script.
 		// Essentials::globalAudioManager->PlaySFX(SoundID::ePlayerAttack);
-		// StartPlayerMeleeAttack(*myOwner);
+		//StartPlayerMeleeAttack(*myOwner);
 		myHasSpawnedHitbox = true;
 	}
 
-	if (myAttackTimer < 0.2f && Essentials::GetEssentials().globalInputManager->IsKeyPressed(static_cast<int>(Keys::SPACE)))
+	if (myAttackTimer < myNextAttackTime + 0.2f && Essentials::GetEssentials().globalInputManager->IsKeyPressed(static_cast<int>(Keys::SPACE)))
 	{
 		myInputAttack = true;
 	}
@@ -67,18 +78,8 @@ void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aCo
 
 	transform.Translate(transform.GetForward() * std::max(myAttackLungeSpeed, 0.f));
 
-	if (myAttackTimer < 0.1f)
+	if (myAttackTimer < myNextAttackTime)
 	{
-		if (myAttackTimer < 0)
-		{
-			aController.SetState(PlayerState_Master::Instance().myWalkState.get());
-
-			myAnimationGraph->SetFloatParameter("w_attack_basic01", 0);
-			myAnimationGraph->SetFloatParameter("w_attack_basic02", 0);
-
-			return;
-		}
-
 		if (myInputAttack)
 		{
 			myInputAttack = false;
@@ -86,21 +87,36 @@ void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aCo
 			myAttackFromRight = !myAttackFromRight;
 			myAttackLungeSpeed = myAttackLungeImpulse;
 			myHasSpawnedHitbox = false;
+
+			myAnimationGraph->SetFloatParameter("w_attack_basic01", 0.f);
+			myAnimationGraph->SetFloatParameter("w_attack_basic02", myAttackFromRight ? 1.f : 0.f);
+			myAnimationGraph->SetFloatParameter("w_attack_basic03", myAttackFromRight ? 0.f : 1.f);
+		}
+
+		else if (aController.IsMoveInput())
+		{
+			aController.SetState(PlayerState_Master::Instance().myWalkState.get());
 		}
 	}
 
-
-
 	myAttackTimer -= aDeltaTime;
-	myAnimationGraph->SetFloatParameter("w_attack_basic01", myAttackFromRight ? 1.f : 0.f);
-	myAnimationGraph->SetFloatParameter("w_attack_basic02", myAttackFromRight ? 0.f : 1.f);
 }
 
 void PlayerState_Attack::SetValues()
 {
+	myAnimationGraph->SetFloatParameter("w_attack_basic01", 1.f);
+
+	myEnd = false;
 	myInputAttack = false;
-	myAttackFromRight = !myAttackFromRight;
+	myAttackFromRight = false;
 	myHasSpawnedHitbox = false;
 	myAttackTimer = myAttackTime;
 	myAttackLungeSpeed = myAttackLungeImpulse;
+}
+
+void PlayerState_Attack::ResetValues()
+{
+	myAnimationGraph->SetFloatParameter("w_attack_basic01", 0);
+	myAnimationGraph->SetFloatParameter("w_attack_basic02", 0);
+	myAnimationGraph->SetFloatParameter("w_attack_basic03", 0);
 }

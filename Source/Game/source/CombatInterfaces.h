@@ -60,6 +60,7 @@ struct AttackData
     float knockbackStrength = 0.0f;
     std::int32_t damage = 0;
     bool onlyHitForwardHemisphere = true;
+    bool isContinuous = false;
 };
 
 struct HitEvent

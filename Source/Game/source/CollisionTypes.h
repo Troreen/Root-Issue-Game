@@ -50,6 +50,21 @@ struct CollisionContact
         return nullptr;
     }
 
+    CommonUtilities::Vector3<float> GetNormalFor(const GameObject& anObject) const
+    {
+        if (first == &anObject)
+        {
+            return normal;
+        }
+
+        if (second == &anObject)
+        {
+            return -normal;
+        }
+
+        return { 0.0f, 0.0f, 0.0f };
+    }
+
     bool InvolvesLayer(ObjectLayer aLayer) const
     {
         return (first && first->GetLayer() == aLayer) ||

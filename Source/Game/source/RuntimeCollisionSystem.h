@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CollisionTypes.h"
+#include "RuntimeCollisionTypes.h"
 
 #include <cstdint>
 #include <memory>
@@ -24,15 +25,7 @@ public:
     const std::vector<CollisionContact>& GetContacts() const;
 
 private:
-    struct CollisionPairState
-    {
-        std::uint64_t firstId = 0;
-        std::uint64_t secondId = 0;
-        GameObject* first = nullptr;
-        GameObject* second = nullptr;
-    };
-
     std::vector<CollisionContact> myContacts;
-    std::unordered_map<std::uint64_t, CollisionPairState> myCollisionPairsLastFrame;
+    std::unordered_map<std::uint64_t, RuntimeCollision::CollisionPairState> myCollisionPairsLastFrame;
     std::unordered_map<std::uint64_t, CommonUtilities::Vector3<float>> myPreviousColliderPositionsById;
 };

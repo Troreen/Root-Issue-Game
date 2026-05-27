@@ -1,0 +1,60 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "Model",
+      "type": "Model",
+      "value": {
+        "path": "Assets\\Art\\3D\\Environment\\SM_EN_DeadAstro02.fbx",
+        "textures": [
+          [
+            "Assets\\Art\\Textures\\T_DeadAstro01_c.dds",
+            "Assets\\Art\\Textures\\T_DeadAstro_01_n.dds",
+            "Assets\\Art\\Textures\\T_DeadAstro01_m.dds",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "StaticWorld"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "typeId",
+      "type": "StringId",
+      "value": "DeadAstro02"
+    }
+  ]
+}

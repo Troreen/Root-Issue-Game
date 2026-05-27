@@ -1,5 +1,7 @@
 #include "InGame.h"
+#include "AudioManager.h"
 #include <tge/animation/Script/AnimationNodes.h>
+#include <tge/engine.h>
 #include <tge/script/Nodes/AnimationEventNodes.h>
 #include <tge/script/Nodes/CommonMathNodes.h>
 #include <tge/script/Nodes/CommonNodes.h>
@@ -7,6 +9,8 @@
 #include "BoxColliderComponent.h"
 #include "CapsuleColliderComponent.h"
 #include "CombatSystem.h"
+#include "Essentials.h"
+#include "GameObjectFactoryRegistrations.h"
 #include "MeshComponent.h"
 #include "GameObject.h"
 #include "ObbColliderComponent.h"
@@ -15,11 +19,15 @@
 
 #include <tge/drawers/SpriteDrawer.h>
 #include <tge/graphics/DX11.h>
+#include <tge/graphics/GraphicsEngine.h>
+#include <tge/graphics/GraphicsStateStack.h>
 #include <tge/settings/Settings.h>
 #include <tge/sprite/sprite.h>
 #include <tge/texture/TextureManager.h>
 
 #include <algorithm>
+#include <iostream>
+#include <limits>
 #include <utility>
 
 namespace
@@ -287,6 +295,7 @@ eState InGame::Update()
 
 	if (Essentials::GetPlayer()->GetComponent<PauseMenuComponent>()->ReturnToMainMenu())
 	{
+		Essentials::globalAudioManager->StopAllEvents();
 		return eState::ePopState;
 	}
 
@@ -306,7 +315,7 @@ void InGame::Render()
 	myCombatSystem.RenderDebug();
 	RenderSceneFadeOverlay();
 
-#ifdef _DEBUG
+#ifndef _RETAIL
 	myCameraSystem->RenderDebugUi();
 #endif
 }
@@ -348,14 +357,8 @@ void InGame::RenderSceneFadeOverlay()
 		return;
 	}
 
-	const char* texturePath = "textures/T_Black_c.dds";
-	if (!engine->GetTextureManager().TryGetTexture(texturePath))
-	{
-		return;
-	}
-
 	Tga::SpriteSharedData sharedData;
-	sharedData.myTexture = engine->GetTextureManager().GetTexture(texturePath);
+	sharedData.myTexture = engine->GetTextureManager().GetWhiteSquareTexture();
 
 	const Tga::Vector2ui renderSize = engine->GetRenderSize();
 	Tga::Sprite2DInstanceData instance;
@@ -367,7 +370,7 @@ void InGame::RenderSceneFadeOverlay()
 		static_cast<float>(renderSize.x),
 		static_cast<float>(renderSize.y)
 	};
-	instance.myColor = { 1.0f, 1.0f, 1.0f, sceneFadeAlpha };
+	instance.myColor = { 0.0f, 0.0f, 0.0f, sceneFadeAlpha };
 	instance.myRenderOrder = 10000;
 
 	Tga::DX11::BackBuffer->SetAsActiveTarget();

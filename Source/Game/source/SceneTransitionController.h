@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SceneLoadingService.h"
+#include "PostMaster.h"
 
 #include <functional>
 #include <future>
@@ -13,7 +14,7 @@ class GameObject;
 // Owns runtime scene transitions for linear gameplay progression. The controller
 // keeps the rules in one place: one active transition, one replacement request,
 // and one passive preload for the most likely next scene.
-class SceneTransitionController final
+class SceneTransitionController final : public Subscriber
 {
 public:
     // Request shape used by doors, teleporters, scene-manager commands, and
@@ -56,6 +57,8 @@ public:
 
     bool IsTransitionActive() const;
     float GetFadeAlpha() const;
+
+    void Receive(const Message& aMsg) override;
 
     // Normalizes authored references so Level1, Level1.tgs, and Levels/Level1.tgs
     // match the same cache/preload key.
@@ -120,4 +123,6 @@ private:
 
     float myFadeAlpha = 0.0f;
     float myFadeSeconds = 0.5f;
+
+    PostMaster* myPostMaster;
 };

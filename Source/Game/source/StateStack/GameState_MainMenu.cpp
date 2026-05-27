@@ -1,10 +1,19 @@
 #include "MainMenu.h"
+#include "AudioManager.h"
+#include "Essentials.h"
+
 #include <tge/animation/Script/AnimationNodes.h>
+#include <tge/engine.h>
+#include <tge/input/InputManager.h>
 #include <tge/script/Nodes/CommonMathNodes.h>
 #include <tge/script/Nodes/CommonNodes.h>
 
 #include "MeshComponent.h"
 #include "GameObject.h"
+
+#include <algorithm>
+#include <iostream>
+#include <limits>
 
 namespace
 {
@@ -138,17 +147,33 @@ void MainMenu::Init(CameraSystem& aCamera, const char* argv[])
 	Tga::Engine::GetInstance()->SetClearColor(Tga::Color(0, 0, 0, 1));
 	myUICanvas.Init("MainMenu", *Essentials::globalCanvasManager);
 	myUICanvas.SetSelectedElement("StartButton");
-	myUICanvas.GetToggle("FullscreenToggle")->isOn = Tga::Engine::GetInstance()->GetIsBorderless();
+	if (UIToggle* fullscreenToggle = myUICanvas.GetToggle("FullscreenToggle"))
+	{
+		fullscreenToggle->isOn = Tga::Engine::GetInstance()->GetIsBorderless();
+	}
 
-	myUICanvas.GetSlider("MasterVolumeSlider")->currentValue = Essentials::globalAudioManager->GetMasterVolume();
-	myUICanvas.GetSlider("MusicVolumeSlider")->currentValue = Essentials::globalAudioManager->GetBusVolume(BusID::eMusic);
-	myUICanvas.GetSlider("SfxVolumeSlider")->currentValue = Essentials::globalAudioManager->GetBusVolume(BusID::eSFX);
+	if (UISlider* masterVolumeSlider = myUICanvas.GetSlider("MasterVolumeSlider"))
+	{
+		masterVolumeSlider->currentValue = Essentials::globalAudioManager->GetMasterVolume();
+	}
+	if (UISlider* musicVolumeSlider = myUICanvas.GetSlider("MusicVolumeSlider"))
+	{
+		musicVolumeSlider->currentValue = Essentials::globalAudioManager->GetBusVolume(BusID::eMusic);
+	}
+	if (UISlider* sfxVolumeSlider = myUICanvas.GetSlider("SfxVolumeSlider"))
+	{
+		sfxVolumeSlider->currentValue = Essentials::globalAudioManager->GetBusVolume(BusID::eSFX);
+	}
 
 	myUICanvas.SetIsHidden("SettingsMenu", true);
 	myUICanvas.SetIsHidden("LevelSelectMenu", true);
+	myUICanvas.SetIsHidden("CreditsMenu", true);
 	myUICanvas.SetIsHidden("MainMenu", false);
 	myUICanvas.SetIsHidden(false);
 	myStartGame = false;
+	myStartFirstLevel = false;
+	myStartSecondLevel = false;
+	myStartThirdLevel = false;
 }
 
 eState MainMenu::Update()
@@ -170,9 +195,34 @@ eState MainMenu::Update()
 
 	UICanvas::UpdateAll();
 
+	if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eMainMenuMusic))
+	{
+		Essentials::globalAudioManager->PlayMusic(SoundID::eMainMenuMusic);
+	}
+
 	if (myStartGame)
 	{
+		Essentials::globalAudioManager->StopMusic(SoundID::eMainMenuMusic, false);
+		Essentials::globalAudioManager->StopAllEvents();
 		return eState::eLoadInGameWithIntro;
+	}
+	else if (myStartFirstLevel)
+	{
+		Essentials::globalAudioManager->StopMusic(SoundID::eMainMenuMusic, false);
+		Essentials::globalAudioManager->StopAllEvents();
+		return eState::eLoadFirstLevel;
+	}
+	else if (myStartSecondLevel)
+	{
+		Essentials::globalAudioManager->StopMusic(SoundID::eMainMenuMusic, false);
+		Essentials::globalAudioManager->StopAllEvents();
+		return eState::eLoadSecondLevel;
+	}
+	else if (myStartThirdLevel)
+	{
+		Essentials::globalAudioManager->StopMusic(SoundID::eMainMenuMusic, false);
+		Essentials::globalAudioManager->StopAllEvents();
+		return eState::eLoadThirdLevel;
 	}
 
 	return eState::COUNT;
@@ -239,23 +289,22 @@ void MainMenu::UpdateMainMenuUI()
 		myUICanvas.SetIsHidden("MainMenu", false);
 		myUICanvas.SetSelectedElement("LevelSelectButton");
 	}
-	//else if (myUICanvas.GetElementPressed("CreditsButton"))
-	//{
-	//	myUICanvas.SetIsHidden("CreditsMenu", false);
-	//	myUICanvas.SetIsHidden("MainMenu", true);
-	//	myUICanvas.SetSelectedElement("BackButtonCredits");
-	//}
-	//else if (myUICanvas.GetElementPressed("BackButtonCredits") || (Essentials::globalInputManager->IsButtonPressed(Tga::GamepadButton::B) && !myUICanvas.GetIsHidden("CreditsMenu")))
-	//{
-	//	myUICanvas.SetIsHidden("CreditsMenu", true);
-	//	myUICanvas.SetIsHidden("MainMenu", false);
-	//	myUICanvas.SetSelectedElement("CreditsButton");
-	//}
+	else if (myUICanvas.GetElementPressed("CreditsButton"))
+	{
+		myUICanvas.SetIsHidden("CreditsMenu", false);
+		myUICanvas.SetIsHidden("MainMenu", true);
+		myUICanvas.SetSelectedElement("BackButtonCredits");
+	}
+	else if (myUICanvas.GetElementPressed("BackButtonCredits") || (Essentials::globalInputManager->IsButtonPressed(Tga::GamepadButton::B) && !myUICanvas.GetIsHidden("CreditsMenu")))
+	{
+		myUICanvas.SetIsHidden("CreditsMenu", true);
+		myUICanvas.SetIsHidden("MainMenu", false);
+		myUICanvas.SetSelectedElement("CreditsButton");
+	}
 	else if (myUICanvas.GetElementPressed("StartButton"))
 	{
 		myUICanvas.SetIsHidden("MainMenu", false);
 		myUICanvas.SetIsHidden("SettingsMenu", true);
-		myUICanvas.SetIsHidden("Background", true);
 		myUICanvas.SetIsHidden(true);
 
 		myStartGame = true;
@@ -266,8 +315,8 @@ void MainMenu::UpdateMainMenuUI()
 		{
 			Essentials::globalAudioManager->StopMusic(SoundID::eMainMenu, false);
 			Essentials::globalAudioManager->PlayMusic(SoundID::eTransition);
-		}*/
-
+		}
+		*/
 		//Essentials::globalSceneManager->RequestScene("IntroScene.tgs");
 
 
@@ -295,28 +344,47 @@ void MainMenu::UpdateMainMenuUI()
 	{
 		Essentials::Shutdown();
 	}
-	//else
-	//{
-	//	int pressedLevel = 0;
-	//	if (myUICanvas.GetElementPressed("Level1Button"))
-	//		pressedLevel = 1;
-	//	if (myUICanvas.GetElementPressed("Level2Button"))
-	//		pressedLevel = 2;
-	//	if (myUICanvas.GetElementPressed("Level3Button"))
-	//		pressedLevel = 3;
 
-	//	if (pressedLevel != 0)
-	//	{
-	//		Essentials::myCursor->SetCursorVisible(false);
+	// Make this return a new eState, corresponding to desired new level.
+	// Make new estate in the estate enum
+	// Handle new estate in gameworld.cpp
 
-	//		//if (Essentials::globalAudioManager->IsEventPlaying(SoundID::eMainMenu))
-	//		//{
-	//		//	Essentials::globalAudioManager->StopMusic(SoundID::eMainMenu, false);
-	//		//}
+	else
+	{
+		int pressedLevel = 0;
+		if (myUICanvas.GetElementPressed("Level1Button"))
+		{
+			pressedLevel = 1;
+			myStartFirstLevel = true;
+		}
+		if (myUICanvas.GetElementPressed("Level2Button"))
+		{
+			pressedLevel = 2;
+			myStartSecondLevel = true;
+		}
+		if (myUICanvas.GetElementPressed("Level3Button"))
+		{
+			pressedLevel = 3;
+			myStartThirdLevel = true;
+		}
 
-	//		//Essentials::globalSceneManager->RequestScene("MainGame.tgs");
+		if (pressedLevel != 0)
+		{
 
-	//		return;
-	//	}
-	//}
+			myUICanvas.SetIsHidden("MainMenu", false);
+			myUICanvas.SetIsHidden("SettingsMenu", true);
+			myUICanvas.SetIsHidden(true);
+
+			//Essentials::myCursor->SetCursorVisible(false);
+
+			//if (Essentials::globalAudioManager->IsEventPlaying(SoundID::eMainMenu))
+			//{
+			//	Essentials::globalAudioManager->StopMusic(SoundID::eMainMenu, false);
+			//}
+
+			//Essentials::globalSceneManager->RequestScene("MainGame.tgs");
+
+			return;
+		}
+	}
 }

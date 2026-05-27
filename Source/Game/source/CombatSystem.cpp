@@ -15,6 +15,7 @@
 #include <tge/primitives/LinePrimitive.h>
 #include "SwitchComponent.h"
 #include "CheckpointComponent.h"
+#include "DestructibleComponent.h"
 
 #include "Essentials.h"
 
@@ -290,6 +291,7 @@ std::uint64_t CombatSystem::StartAttack(const AttackData& anAttack)
 void CombatSystem::Update(float aDeltaTime, std::vector<std::unique_ptr<GameObject>>& someObjects)
 {
     myHitEventsThisFrame.clear();
+    bool hasHit = false;
 
     for (ActiveAttack& attack : myActiveAttacks)
     {
@@ -309,9 +311,7 @@ void CombatSystem::Update(float aDeltaTime, std::vector<std::unique_ptr<GameObje
                 continue;
             }
 
-            if (!attack.data.targetLayers.Contains(target->GetLayer()) ||
-                attack.hitTargets.find(target->GetCollisionId()) != attack.hitTargets.end() ||
-                !CollisionQuery::HasRuntimeCollider(*target))
+            if (!attack.data.targetLayers.Contains(target->GetLayer()) || attack.hitTargets.find(target->GetCollisionId()) != attack.hitTargets.end() || !CollisionQuery::HasRuntimeCollider(*target))
             {
                 continue;
             }
@@ -333,6 +333,7 @@ void CombatSystem::Update(float aDeltaTime, std::vector<std::unique_ptr<GameObje
             }
 
             attack.hitTargets.insert(target->GetCollisionId());
+            hasHit = true;
 
             const Vector3f knockback = GetKnockback(*attack.data.owner, *target, attack.data.knockbackStrength);
             if (DamageableComponent* damageable = target->GetComponent<DamageableComponent>())
@@ -344,6 +345,27 @@ void CombatSystem::Update(float aDeltaTime, std::vector<std::unique_ptr<GameObje
             {
                 knockbackReceiver->ApplyImpulse(knockback);
             }
+
+            switch (target->GetLayer())
+            {
+            case ObjectLayer::Switch:
+                if (SwitchComponent* switchComponent = target->GetComponent<SwitchComponent>())
+                {
+                    switchComponent->Toggle();
+                }
+                break;
+            case ObjectLayer::WorldDamageable:
+                if (DesctructibleComponent* destructible = target->GetComponent<DesctructibleComponent>())
+                {
+                    destructible->Toggle();
+                }
+                if (CheckpointComponent* checkPoint = target->GetComponent<CheckpointComponent>())
+                {
+                    checkPoint->Toggle();
+                }
+                break;
+            }
+
 
             HitEvent event;
             event.attackId = attack.id;
@@ -358,28 +380,22 @@ void CombatSystem::Update(float aDeltaTime, std::vector<std::unique_ptr<GameObje
                 << " attacker='" << attack.data.owner->GetName() << "'"
                 << " target='" << target->GetName() << "'"
                 << " damage=" << attack.data.damage << "\n";
-            switch (target->GetLayer())
-            {
-            case ObjectLayer::Switch:
-                if (target->HasComponent<SwitchComponent>())
-                {
-                    target->GetComponent<SwitchComponent>()->Toggle();
-                }
-                else if (target->HasComponent<CheckpointComponent>())
-                {
-                    target->GetComponent<CheckpointComponent>()->Toggle();
-                }
-                break;
-            default:
-                break;
-            }
+
             if (target->GetName() == "Player")
             {
                 Essentials::globalAudioManager->PlaySFX(SoundID::eGore);
             }
         }
 
-        attack.remainingSeconds -= aDeltaTime;
+        if (!attack.data.isContinuous)
+        {
+            attack.remainingSeconds -= aDeltaTime;
+        }
+
+        if (attack.data.isContinuous && hasHit == true)
+        {
+            attack.remainingSeconds = 0.0f;
+        }
     }
 
     myActiveAttacks.erase(

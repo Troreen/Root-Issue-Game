@@ -38,7 +38,7 @@ public:
     bool IsFollowCameraEnabled() const;
     bool IsDebugCameraEnabled() const;
 
-#ifdef _DEBUG
+#ifndef _RETAIL
     void RenderDebugUi();
 #endif
 

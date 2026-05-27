@@ -1,60 +1,51 @@
 {
-  "parent-object-definition": "",
-  "properties": [
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "factoryType",
-      "type": "StringId",
-      "value": "Bullet"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "model",
-      "type": "Model",
-      "value": {
-        "path": "Assets\\Art\\3D\\Environment\\HUB\\SM_P_Battery_02.fbx",
-        "textures": [
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ]
-        ]
-      }
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "typeId",
-      "type": "StringId",
-      "value": "Bullet"
-    }
-  ]
+    "parent-object-definition":  "",
+    "properties":  [
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "factoryType",
+                           "type":  "StringId",
+                           "value":  "Bullet"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "model",
+                           "type":  "Model",
+                           "value":  {
+                                         "path":  "Assets\\Art\\3D\\Environment\\HUB\\SM_P_Battery_02.fbx",
+                                         "textures":  [
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ]
+                                                      ]
+                                     }
+                       }
+                   ]
 }

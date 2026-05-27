@@ -1,0 +1,51 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "StaticWorld"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "Assets\\Art\\3D\\Environment\\SM_EN_Rocks_Large_Lvl3.fbx",
+        "textures": [
+          [
+            "Assets\\Art\\Textures\\Decoration\\T_Rocks_03_c.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Rocks_01_n.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Rocks_01_m.dds",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    }
+  ]
+}

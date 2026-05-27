@@ -85,30 +85,45 @@ void ParticleEmitterComponent::Update(float aDeltaTime)
 
 void ParticleEmitterComponent::Burst(const ParticleType& aParticleType)
 {
-	assert(mySettingsCollection.contains(aParticleType));
-	mySettingsCollection[aParticleType].shouldBurst = true;
+	if (mySettingsCollection.contains(aParticleType))
+	{
+		mySettingsCollection[aParticleType].shouldBurst = true;
+	}
 }
 
 void ParticleEmitterComponent::SetOffset(const ParticleType& aParticleType, const CommonUtilities::Vector3<float>& anOffset)
 {
-	assert(mySettingsCollection.contains(aParticleType));
-	mySettingsCollection[aParticleType].spawnOffset = anOffset;
+	if (mySettingsCollection.contains(aParticleType))
+	{
+		mySettingsCollection[aParticleType].spawnOffset = anOffset;
+	}
 }
 
 void ParticleEmitterComponent::SetEmissionDirection(const ParticleType& aParticleType, const CommonUtilities::Vector3<float>& aDirection)
 {
-	assert(mySettingsCollection.contains(aParticleType));
-	mySettingsCollection[aParticleType].emissionDir = aDirection;
+
+	if (mySettingsCollection.contains(aParticleType))
+	{
+		mySettingsCollection[aParticleType].emissionDir = aDirection;
+	}
 }
 
 void ParticleEmitterComponent::SetContinuousEmission(const ParticleType& aParticleType, bool aStatus)
 {
-	mySettingsCollection[aParticleType].shouldEmitContinuously = aStatus;
+	if (mySettingsCollection.contains(aParticleType))
+	{
+		mySettingsCollection[aParticleType].shouldEmitContinuously = aStatus;
+	}
+
 }
 
 void ParticleEmitterComponent::SetEmissionWithDuration(const ParticleType& aParticleType, float aDuration)
 {
-	mySettingsCollection[aParticleType].emissionDuration = aDuration;
+	if (mySettingsCollection.contains(aParticleType))
+	{
+		mySettingsCollection[aParticleType].emissionDuration = aDuration;
+	}
+
 }
 
 void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, const CommonUtilities::Transform<float>& aTransform)
@@ -118,7 +133,7 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 	static std::uniform_real_distribution<float> dist01(0.f, 1.f);
 
 	Vector3f forward = mySettingsCollection[aParticleType].emissionDir.GetNormalized();
-	Vector3f worldUp = fabs(forward.y) < 0.999f ? Vector3f(0, 1, 0) : Vector3f(1, 0, 0);
+	Vector3f worldUp = fabs(forward.y) < 0.999f ? Vector3f(0, 1, 0) : Vector3f(1, 0, 0); // Could use improvement to allow 
 	Vector3f right = worldUp.Cross(forward).GetNormalized();
 	Vector3f up = forward.Cross(right);
 
@@ -127,6 +142,13 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 
 	switch (emitterSettings->shape)
 	{
+	case EmissionShape::Disk:
+	{
+		float speed = (emitterSettings->startSpeedMax - emitterSettings->startSizeMin) * dist01(rng) + emitterSettings->startSpeedMin;
+		speed;
+
+		break;
+	}
 	case EmissionShape::Box:
 	{
 		float spread = 50.0f;
@@ -160,10 +182,12 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 
 		Vector3f dir = { x,y,z };
 
+		float speed = (emitterSettings->startSpeedMax - emitterSettings->startSizeMin) * dist01(rng) + emitterSettings->startSpeedMin;
+
 		settings = {
 			.timeToLive = emitterSettings->lifeTimeMax,
 			.initalPosition = aTransform.GetPosition(),
-			.linearVelocity = dir * emitterSettings->startSpeedMax
+			.linearVelocity = dir * speed
 		};
 
 		break;
@@ -227,9 +251,9 @@ void inline ParticleEmitterComponent::Emit(const ParticleType& aParticleType, co
 	settings.sinFrequencyZ = emitterSettings->sinFrequencyZ;
 	if (!emitterSettings->sinSynchronized)
 	{
-		settings.myOffsetX = 2*PI * dist01(rng);
-		settings.myOffsetY = 2*PI * dist01(rng);
-		settings.myOffsetZ = 2*PI * dist01(rng);
+		settings.myOffsetX = 2 * PI * dist01(rng);
+		settings.myOffsetY = 2 * PI * dist01(rng);
+		settings.myOffsetZ = 2 * PI * dist01(rng);
 	}
 
 	VfxService::SpawnParticle(aParticleType, settings);

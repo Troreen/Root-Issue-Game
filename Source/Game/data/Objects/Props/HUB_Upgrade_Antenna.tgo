@@ -1,0 +1,176 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "HubUpgradePickup"
+    },
+    {
+      "description": "Temporary antenna placeholder: reuse fuse model until dedicated antenna item assets exist.",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "Assets\\Art\\3D\\Environment\\HUB\\SM_P_Fuse.fbx",
+        "textures": [
+          [
+            "Assets\\Art\\Textures\\HUB\\T_HUBUpgrade_01_c.dds",
+            "Assets\\Art\\Textures\\HUB\\T_HUBUpgrade_01_n.dds",
+            "Assets\\Art\\Textures\\HUB\\T_HUBUpgrade_01_m.dds",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_graph",
+      "type": "StringId",
+      "value": "animations\\Animation Graphs\\HUB_UpgradePickup.tgscript"
+    },
+    {
+      "description": "Temporary antenna placeholder: reuse fuse idle clip.",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_idle",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\ENV\\A_P_Fuse.tgac"
+      }
+    },
+    {
+      "description": "Temporary antenna placeholder: reuse fuse pickup clip.",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_pickup",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\ENV\\A_P_FusePickup.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_pickup",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "StringId",
+      "value": "box"
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderIsTrigger",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderSize",
+      "type": "Float3",
+      "value": [
+        300.0,
+        300.0,
+        300.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "layer",
+      "type": "StringId",
+      "value": "Pickup"
+    },
+    {
+      "description": "",
+      "group": "Pickup",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "pickupKind",
+      "type": "StringId",
+      "value": "Antenna"
+    },
+    {
+      "description": "",
+      "group": "Pickup",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "targetScene",
+      "type": "StringId",
+      "value": ""
+    },
+    {
+      "description": "",
+      "group": "Pickup",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "targetSpawnId",
+      "type": "StringId",
+      "value": ""
+    },
+    {
+      "description": "",
+      "group": "Pickup",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "fadeOutSeconds",
+      "type": "Float",
+      "value": 0.5
+    }
+  ]
+}

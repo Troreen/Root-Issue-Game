@@ -119,15 +119,7 @@ void EnemyAttackComponent::UpdateActive(float aDeltaTime)
 
         if (distance >= myEnemyData.RollDistance)
         {
-            //myState = AttackState::Recovery;
-            myState = AttackState::Idle;
-
-            myTimer = myEnemyData.AttackRecovery;
-            myCooldownTimer = myEnemyData.AttackCooldown;
-
-            myMovement->StopMoving();
-            myAnimationGraph->SetFloatParameter("w_roll_idle", 0.0f);
-            myAnimationGraph->SetFloatParameter("w_knockback", 1.0f);
+            FinishRollingAttack();
         }
     }
     else
@@ -170,6 +162,53 @@ void EnemyAttackComponent::PerformAttack()
     transform.SetRotation(rot);
 
     CombatService::StartAttack(myAttackData);
+}
+
+void EnemyAttackComponent::FinishRollingAttack()
+{
+    myState = AttackState::Idle;
+    myTimer = myEnemyData.AttackRecovery;
+    myCooldownTimer = myEnemyData.AttackCooldown;
+
+    if (myMovement)
+    {
+        myMovement->StopMoving();
+    }
+
+    if (myAnimationGraph)
+    {
+        myAnimationGraph->SetFloatParameter("w_roll_idle", 0.0f);
+        myAnimationGraph->SetFloatParameter("w_knockback", 1.0f);
+    }
+}
+
+void EnemyAttackComponent::StopRollingAttackOnWorldCollision(GameObject& anOther)
+{
+    if (myEnemyData.EnemyType != EnemyType::RollingEnemy || myState != AttackState::Active)
+    {
+        return;
+    }
+
+    if (anOther.GetLayer() != ObjectLayer::WorldStatic)
+    {
+        return;
+    }
+
+    FinishRollingAttack();
+}
+
+void EnemyAttackComponent::OnCollisionEnter(const CollisionContact& /*aContact*/, GameObject& anOther)
+{
+    StopRollingAttackOnWorldCollision(anOther);
+}
+
+void EnemyAttackComponent::OnCollisionStay(const CollisionContact& /*aContact*/, GameObject& anOther)
+{
+    StopRollingAttackOnWorldCollision(anOther);
+}
+
+void EnemyAttackComponent::OnCollisionExit(const CollisionContact& /*aContact*/, GameObject& /*anOther*/)
+{
 }
 
 bool EnemyAttackComponent::IsAttacking() const

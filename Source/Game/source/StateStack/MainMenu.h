@@ -19,4 +19,7 @@ private:
 	UICanvas myUICanvas;
 	bool myIsOpen;
 	bool myStartGame;
+	bool myStartFirstLevel;
+	bool myStartSecondLevel;
+	bool myStartThirdLevel;
 };

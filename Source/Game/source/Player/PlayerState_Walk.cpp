@@ -28,19 +28,19 @@ void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aCont
 
 	float myWalkAnimation = 0.f;
 
-	if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::W)))
+	if (Essentials::globalInputManager.get()->PressingPlayerMovingUp())
 	{
 		direction += forwardAxis;
 	}
-	if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::A)))
+	if (Essentials::globalInputManager.get()->PressingPlayerMovingLeft())
 	{
 		direction -= rightAxis;
 	}
-	if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::S)))
+	if (Essentials::globalInputManager.get()->PressingPlayerMovingDown())
 	{
 		direction -= forwardAxis;
 	}
-	if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::D)))
+	if (Essentials::globalInputManager.get()->PressingPlayerMovingRight())
 	{
 		direction += rightAxis;
 	}
@@ -60,13 +60,13 @@ void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aCont
 		player->GetTransform().SetYawPitchRollRadians({ std::atan2f(direction.x, direction.z), 0, 0 });
 	}
 
-	if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::RETURN)))
+	/*if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::RETURN)))
 	{
 		aController.SetState(PlayerState_Master::Instance().myDeathState.get());
 		myWalkAnimation = 0.f;
-	}
+	}*/
 
-	if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::MOUSELBUTTON)) && myHasGun)
+	if (Essentials::globalInputManager.get()->PressingPlayerAim() && myHasGun)
 	{
 		myWalkAnimation = 0;
 		aController.SetState(PlayerState_Master::Instance().myChargeAttackState.get());
@@ -85,10 +85,12 @@ void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aCont
 
 void PlayerState_Walk::SetHasGun(bool aGiveGun)
 {
-	if (GameObject* player = myOwner)
-	{
-		player->GetComponent<PlayerControllerComponent>()->SetState(PlayerState_Master::Instance().myUpgradeState.get());
-	}
+	myOwner->GetComponent<PlayerControllerComponent>()->SetState(PlayerState_Master::Instance().myUpgradeState.get());
+	myHasGun = aGiveGun;
+}
+
+void PlayerState_Walk::SetHasGunOnStart(bool aGiveGun)
+{
 	myHasGun = aGiveGun;
 }
 

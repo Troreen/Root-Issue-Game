@@ -17,7 +17,7 @@
       "is-per-instance": false,
       "name": "typeId",
       "type": "StringId",
-      "value": "SK_EN_Root_01"
+      "value": "Root_03"
     },
     {
       "description": "",
@@ -39,9 +39,9 @@
         "path": "Assets\\Art\\3D\\Environment\\SM_EN_Root_03.fbx",
         "textures": [
           [
-            "Assets\\Art\\Textures\\T_ColorAtlas_Lvl1.dds",
-            "",
-            "",
+            "Assets\\Art\\Textures\\Decoration\\T_Roots_01_c.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Roots_01_n.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Roots_01_m.dds",
             ""
           ],
           [
@@ -109,7 +109,7 @@
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "AnimationClips\\\\Grafik\\\\SK_EN_Root_01_idle.tgac"
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Root_03.tgac"
       }
     }
   ]

@@ -8,10 +8,22 @@ void PauseMenuComponent::Init(Tga::Engine& /*anEngine*/)
 {
 	myUICanvas.Init("PauseMenu", *Essentials::globalCanvasManager);
 	myUICanvas.SetSelectedElement("ResumeButton");
-	myUICanvas.GetToggle("FullscreenToggle")->isOn = Tga::Engine::GetInstance()->GetIsBorderless();
-	myUICanvas.GetSlider("MasterVolumeSlider")->currentValue = Essentials::globalAudioManager->GetMasterVolume();
-	myUICanvas.GetSlider("MusicVolumeSlider")->currentValue = Essentials::globalAudioManager->GetBusVolume(BusID::eMusic);
-	myUICanvas.GetSlider("SfxVolumeSlider")->currentValue = Essentials::globalAudioManager->GetBusVolume(BusID::eSFX);
+	if (UIToggle* fullscreenToggle = myUICanvas.GetToggle("FullscreenToggle"))
+	{
+		fullscreenToggle->isOn = Tga::Engine::GetInstance()->GetIsBorderless();
+	}
+	if (UISlider* masterVolumeSlider = myUICanvas.GetSlider("MasterVolumeSlider"))
+	{
+		masterVolumeSlider->currentValue = Essentials::globalAudioManager->GetMasterVolume();
+	}
+	if (UISlider* musicVolumeSlider = myUICanvas.GetSlider("MusicVolumeSlider"))
+	{
+		musicVolumeSlider->currentValue = Essentials::globalAudioManager->GetBusVolume(BusID::eMusic);
+	}
+	if (UISlider* sfxVolumeSlider = myUICanvas.GetSlider("SfxVolumeSlider"))
+	{
+		sfxVolumeSlider->currentValue = Essentials::globalAudioManager->GetBusVolume(BusID::eSFX);
+	}
 	myUICanvas.SetIsHidden(true);
 	myUICanvas.SetIsHidden("PauseMenu", false);
 	myIsOpen = false;
@@ -134,7 +146,7 @@ void PauseMenuComponent::OnUpdate(float /*aDeltaTime*/)
 	//	
 	//	//Essentials::globalSceneManager->RequestSceneChange("TitleScene.tgs");
 	//	
-	//	Tga::Engine::GetInstance()->SetTimeScale(1.f);
+	    Tga::Engine::GetInstance()->SetTimeScale(1.f);
 		myReturnToMainMenu = true;
 	    return;
 	}

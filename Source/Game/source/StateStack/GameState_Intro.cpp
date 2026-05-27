@@ -1,7 +1,9 @@
 #include "Intro.h"
 #include "Essentials.h"
 
+#include <tge/drawers/SpriteDrawer.h>
 #include <tge/engine.h>
+#include <tge/graphics/GraphicsEngine.h>
 #include <tge/settings/settings.h>
 
 void Intro::Init(CameraSystem& aCamera, const char* argv[])
@@ -20,12 +22,14 @@ void Intro::Init(CameraSystem& aCamera, const char* argv[])
 	Tga::Vector2f videoRes = Tga::Vector2f((static_cast<float>(res.x)), static_cast<float>(res.y));
 
 	myVideoSprite.myPivot = { 0.5f,0.5f };
-	myVideoSprite.mySize = resolution;
-	myVideoSprite.myPosition.y = resolution.y * 0.25f;
+	myVideoSprite.mySize =  Tga::Vector2f(1.0f, 1.5f) * resolution;
+	myVideoSprite.myPosition.y = resolution.y * 0.15f;
 	myVideoSprite.myPosition.x = resolution.x * (0.5f + ((0.63f - 0.5f)/4));
+	Essentials::globalAudioManager->PlayMusic(SoundID::eIntroSFX);
 }
 eState Intro::Update()
 {
+	Essentials::globalAudioManager->Update(Essentials::GetDeltaTime());
 	myVideo->Update(Essentials::GetDeltaTime());
 
 	myInputHandler.UpdateInput();
@@ -33,6 +37,7 @@ eState Intro::Update()
 	{
 		if (Essentials::globalInputManager.get()->IsKeyPressed(i))
 		{
+			Essentials::globalAudioManager->StopAllEvents();
 			return eState::ePopState;
 		}
 	}

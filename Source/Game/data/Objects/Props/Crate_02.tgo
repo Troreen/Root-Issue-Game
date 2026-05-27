@@ -1,183 +1,138 @@
 {
-  "parent-object-definition": "",
-  "properties": [
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "factoryType",
-      "type": "StringId",
-      "value": "StaticWorld"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "model",
-      "type": "Model",
-      "value": {
-        "path": "Assets\\Art\\3D\\Level Assets\\SK_P_Crate_02.fbx",
-        "textures": [
-          [
-            "Assets\\Art\\Textures\\T_ColorAtlas_Lvl1.dds",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ]
-        ]
-      }
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "name",
-      "type": "StringId",
-      "value": "SK_P_Crate_02"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "typeId",
-      "type": "StringId",
-      "value": "SK_P_Crate_02"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_auto_bootstrap",
-      "type": "Bool",
-      "value": true
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_graph",
-      "type": "StringId",
-      "value": "animations\\Animation Graphs\\Crate_02.tgscript"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_graph_template",
-      "type": "StringId",
-      "value": "idle_only"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_model_property",
-      "type": "StringId",
-      "value": "model"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_idle",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "AnimationClips\\\\Grafik\\\\SK_P_Crate_02_idle.tgac"
-      }
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderHeight",
-      "type": "Float",
-      "value": 300.0
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderIsTrigger",
-      "type": "Bool",
-      "value": false
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderOffset",
-      "type": "Float3",
-      "value": [
-        0.0,
-        -100.0,
-        0.0
-      ]
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderPivotBottomMiddle",
-      "type": "Bool",
-      "value": true
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderRadius",
-      "type": "Float",
-      "value": 30.0
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderType",
-      "type": "Int",
-      "value": 2
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "layer",
-      "type": "StringId",
-      "value": "Static"
-    }
-  ]
+    "parent-object-definition":  "",
+    "properties":  [
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "factoryType",
+                           "type":  "StringId",
+                           "value":  "StaticWorld"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "model",
+                           "type":  "Model",
+                           "value":  {
+                                         "path":  "Assets\\Art\\3D\\Level Assets\\SK_P_Crate_02.fbx",
+                                         "textures":  [
+                                                          [
+                                                              "Assets\\Art\\Textures\\T_ColorAtlas_Lvl1.dds",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ]
+                                                      ]
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "animation_graph",
+                           "type":  "StringId",
+                           "value":  "animations\\Animation Graphs\\Crate_02.tgscript"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Animation",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "clip_idle",
+                           "type":  "Animation Clip",
+                           "value":  {
+                                         "clip_path":  "AnimationClips\\\\Grafik\\\\SK_P_Crate_02_idle.tgac"
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Collision",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "colliderHeight",
+                           "type":  "Float",
+                           "value":  300.0
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Collision",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "colliderIsTrigger",
+                           "type":  "Bool",
+                           "value":  false
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Collision",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "colliderOffset",
+                           "type":  "Float3",
+                           "value":  [
+                                         0.0,
+                                         -100.0,
+                                         0.0
+                                     ]
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Collision",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "colliderPivotBottomMiddle",
+                           "type":  "Bool",
+                           "value":  true
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Collision",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "colliderRadius",
+                           "type":  "Float",
+                           "value":  30.0
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Collision",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "colliderType",
+                           "type":  "Int",
+                           "value":  2
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Collision",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "layer",
+                           "type":  "StringId",
+                           "value":  "Static"
+                       }
+                   ]
 }

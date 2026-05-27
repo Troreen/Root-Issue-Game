@@ -1,0 +1,69 @@
+{
+  "links": [
+    {
+      "id": 0,
+      "sourcePin": 1,
+      "targetPin": 3
+    }
+  ],
+  "nodes": [
+    {
+      "customData": null,
+      "id": 0,
+      "name": "",
+      "position": [
+        80.0,
+        120.0
+      ],
+      "type": "On Animation Event"
+    },
+    {
+      "customData": null,
+      "id": 1,
+      "name": "",
+      "position": [
+        407.0,
+        138.0
+      ],
+      "type": "Play SFX"
+    }
+  ],
+  "pins": [
+    {
+      "datatype": null,
+      "id": 1,
+      "name": "Out",
+      "node": 0,
+      "role": "Output",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 2,
+      "name": "Event Id",
+      "node": 0,
+      "role": "Input",
+      "type": "Property",
+      "value": "debug_idle_event"
+    },
+    {
+      "datatype": null,
+      "id": 3,
+      "name": "In",
+      "node": 1,
+      "role": "Input",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 5,
+      "name": "Sound",
+      "node": 1,
+      "role": "Input",
+      "type": "Property",
+      "value": "VineBoom"
+    }
+  ]
+}

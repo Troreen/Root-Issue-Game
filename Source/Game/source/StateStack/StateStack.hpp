@@ -1,15 +1,23 @@
 #pragma once
+#include <iostream>
+#include <memory>
+#include <utility>
 #include <vector>
+
 #include "State.hpp"
 
 class StateStack
 {
-private:
-	std::vector<std::vector<State*>> stateStack;
 public:
-	void PushStack(std::vector<State*> aStateStack)
+	using StatePtr = std::unique_ptr<State>;
+	using StateList = std::vector<StatePtr>;
+
+private:
+	std::vector<StateList> stateStack;
+public:
+	void PushStack(StateList aStateStack)
 	{
-		stateStack.push_back(aStateStack);
+		stateStack.push_back(std::move(aStateStack));
 	}
 	void PopStack()
 	{
@@ -18,7 +26,7 @@ public:
 			stateStack.pop_back();
 		}
 	}
-	std::vector<State*>* GetCurrentStateStack()
+	StateList* GetCurrentStateStack()
 	{
 		if (!stateStack.empty())
 		{
@@ -39,28 +47,30 @@ public:
 	{
 		if (!stateStack.empty() && !stateStack.back().empty())
 		{
-			return stateStack.back().back();
+			return stateStack.back().back().get();
 		}
 		return nullptr;
 	}
-	void PushState(State* aState)
+	State* PushState(StatePtr aState)
 	{
-		if (!stateStack.empty())
+		if (stateStack.empty() || !aState)
 		{
-			stateStack.back().push_back(aState);
+			return nullptr;
 		}
+
+		State* state = aState.get();
+		stateStack.back().push_back(std::move(aState));
+		return state;
 	}
 	void PopState()
 	{
-		if (stateStack.back().size() < 2)
+		if (stateStack.empty() || stateStack.back().size() < 2)
 		{
 			std::cout << "[WARNING] TRIED TO POP A STACK WITH ONLY ONE STATE!!!" << std::endl;
 			return;
 		}
 		if (!stateStack.empty() && !stateStack.back().empty())
 		{
-			/*auto& Camera = *stateStack.back().back()->GetCameraSystem();*/
-			delete stateStack.back().back();
 			stateStack.back().pop_back();
 			if (stateStack.back().empty())
 			{

@@ -1,0 +1,20 @@
+{
+  "name": "Rocks_Medium_Lvl1(24)",
+  "object-definition": "Rocks_Medium_Lvl1",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -1546.0985107421875,
+    36.45542907714844,
+    4535.4970703125
+  ]
+}

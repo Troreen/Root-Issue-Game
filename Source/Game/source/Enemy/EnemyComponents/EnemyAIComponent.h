@@ -4,14 +4,15 @@
 #include <string>
 #include <Vector.hpp>
 #include <random>
+#include "Subscriber.h"
 
 class EnemyMovementComponent;
 class EnemyTargetingComponent;
-class AnimatedMeshComponent;
-class AnimationGraphComponent;
+class EnemyAnimationComponent;
 class ParticleEmitterComponent;
 class EnemyAttackComponent;
 class DamageableComponent;
+class SphereColliderComponent;
 
 enum class EnemyState
 {
@@ -21,19 +22,10 @@ enum class EnemyState
 	Chasing,
 	Attacking,
 	Hurt,
+	Stunned,
 	Death,
 	COUNT
 };
-
-//enum class RollingEnemyState
-//{
-//	Idle,
-//	Wander,
-//	Chasing,
-//	Attacking,
-//  Stunned,
-//	Death
-//};
 
 class EnemyAIComponent : public ScriptComponent
 {
@@ -44,14 +36,13 @@ public:
 	~EnemyAIComponent();
 
 	void Init(Tga::Engine& aEngine) override;
-	void OnStart() override;
 	void OnUpdate(float aDeltaTime) override;
 
 	void SetAggro(bool aState);
 
 	void Reset() override;
 	void Save() override;
-
+	void Spawn();
 private:
 
 	//Basic Enemy
@@ -68,6 +59,7 @@ private:
 	void UpdateChasing(float aDeltaTime);
 	void UpdateAttacking(float aDeltaTime);
 	void UpdateHurt(float aDeltaTime);
+	void UpdateStunned(float aDeltaTime);
 	void UpdateDeath(float aDeltaTime);
 
 	void PickNewDirection();
@@ -96,10 +88,11 @@ private:
 	EnemyTargetingComponent* myTargeting = nullptr;
 	EnemyAttackComponent* myAttack = nullptr;
 
-	AnimatedMeshComponent* myAnimation = nullptr;
-	AnimationGraphComponent* myAnimationGraph = nullptr;
+	EnemyAnimationComponent* myAnimation = nullptr;
 	ParticleEmitterComponent* myEmitterComponent = nullptr;
 	DamageableComponent* myDamageableComponent = nullptr;
+
+	SphereColliderComponent* myCollider = nullptr;
 
 
 	std::mt19937 myRandomEngine;
@@ -108,13 +101,13 @@ private:
 	bool myHasBeenInitialized = false;
 	bool myActiveAfterSave = true;
 
-	float myAnimationWeight;
-	//float myChangeFromIdleTime = 5.0f;
 	float mySpawnTimer = 0.0f;
 	float myIdleTimer = 0.0f;
 	float myWanderTimer = 0.0f;
 	float myDeathTimer = 3.0f;
 	float myHurtTimer = 0.5f;
+	float myStunnedTimer = 0.5f;
+	const float myHurtDuration = 0.5f;
 	float myMaxSpeed = 400.0f;
 
 	CommonUtilities::Vector3<float> myWanderDirection;

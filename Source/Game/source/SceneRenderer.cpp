@@ -167,23 +167,24 @@ void SceneRenderer::Render(
     auto& engine = *Tga::Engine::GetInstance();
     auto& graphicsEngine = engine.GetGraphicsEngine();
     auto& graphicsStateStack = graphicsEngine.GetGraphicsStateStack();
-    const float directionalYaw = GameDebugSettings::DirectionalLightYawDegrees();
-    const float directionalPitch = GameDebugSettings::DirectionalLightPitchDegrees();
-    const float directionalRoll = GameDebugSettings::DirectionalLightRollDegrees();
+    const GameDebugSettings::LightingSettings& lightingSettings = GameDebugSettings::CurrentLightingSettings();
+    const float directionalYaw = lightingSettings.directionalRotationDegrees[0];
+    const float directionalPitch = lightingSettings.directionalRotationDegrees[1];
+    const float directionalRoll = lightingSettings.directionalRotationDegrees[2];
     const Tga::Color directionalColor = {
-        GameDebugSettings::DirectionalLightColorR(),
-        GameDebugSettings::DirectionalLightColorG(),
-        GameDebugSettings::DirectionalLightColorB(),
+        lightingSettings.directionalColor[0],
+        lightingSettings.directionalColor[1],
+        lightingSettings.directionalColor[2],
         1.0f };
-    const float directionalIntensity = GameDebugSettings::DirectionalLightIntensity();
+    const float directionalIntensity = lightingSettings.directionalIntensity;
     const Tga::Color ambientColor = {
-        GameDebugSettings::AmbientLightColorR(),
-        GameDebugSettings::AmbientLightColorG(),
-        GameDebugSettings::AmbientLightColorB(),
+        lightingSettings.ambientColor[0],
+        lightingSettings.ambientColor[1],
+        lightingSettings.ambientColor[2],
         1.0f };
-    const float ambientIntensity = GameDebugSettings::AmbientLightIntensity();
-    const bool enableDirectionalLight = aEnableDirectionalLight && GameDebugSettings::EnableDirectionalLight();
-    const bool enableAmbientLight = aEnableAmbientLight && GameDebugSettings::EnableAmbientLight();
+    const float ambientIntensity = lightingSettings.ambientIntensity;
+    const bool enableDirectionalLight = aEnableDirectionalLight && lightingSettings.enableDirectionalLight;
+    const bool enableAmbientLight = aEnableAmbientLight && lightingSettings.enableAmbientLight;
 
     CommonUtilities::Camera3Df& camera = aCameraSystem.GetCamera();
     Tga::Camera& renderCamera = aCameraSystem.GetRenderCamera();

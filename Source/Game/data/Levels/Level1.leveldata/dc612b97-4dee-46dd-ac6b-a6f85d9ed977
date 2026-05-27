@@ -1,0 +1,20 @@
+{
+  "name": "Rocks_Large_Lvl1",
+  "object-definition": "Rocks_Large_Lvl1",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    711.492431640625,
+    278.2379150390625,
+    35.08563232421875
+  ]
+}

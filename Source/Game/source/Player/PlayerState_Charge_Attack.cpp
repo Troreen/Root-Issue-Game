@@ -24,7 +24,13 @@ void PlayerState_Charge_Attack::Update(float aDeltaTime, PlayerControllerCompone
 		return;
 	}
 
-	owner->GetTransform().SetYawPitchRollRadians(std::atan2f(myMouse->GetWorldDirection().y, myMouse->GetWorldDirection().x), 0, 0);
+	bool held = Essentials::GetEssentials().globalInputManager->PressingPlayerAim();
+	Tga::Vector2f direction = Essentials::globalInputManager->RightStickHeldDown() ? Essentials::globalInputManager->RightStick() : myMouse->GetWorldDirection();
+
+	if (held)
+	{
+		owner->GetTransform().SetYawPitchRollRadians(std::atan2f(myMouse->GetWorldDirection().y, myMouse->GetWorldDirection().x), 0, 0);
+	}
 
 	myChargeTimer -= aDeltaTime;
 
@@ -44,7 +50,7 @@ void PlayerState_Charge_Attack::Update(float aDeltaTime, PlayerControllerCompone
 	}
 
 
-	if (Essentials::GetEssentials().globalInputManager->IsKeyReleased(static_cast<int>(Keys::MOUSELBUTTON)))
+	if (!held)
 	{
 		myAnimationGraph->SetFloatParameter("w_ranged_charge", 0);
 		myAnimationGraph->SetFloatParameter("w_ranged_charge_idle", 0);

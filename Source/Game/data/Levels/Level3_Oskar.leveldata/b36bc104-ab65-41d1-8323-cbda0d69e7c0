@@ -1,0 +1,20 @@
+{
+  "name": "Rocks_Large_Lvl3(22)",
+  "object-definition": "Rocks_Large_Lvl3",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    7567.0419921875,
+    -561.9730834960938,
+    7458.33251953125
+  ]
+}

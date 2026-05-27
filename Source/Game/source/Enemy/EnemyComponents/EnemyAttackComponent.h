@@ -1,6 +1,7 @@
 #pragma once
 #include "ScriptComponent.h"
 #include "CombatSystem.h"
+#include "CollisionListener.h"
 #include "EnemyData.h"
 
 
@@ -15,7 +16,7 @@ enum class AttackState
     Recovery
 };
 
-class EnemyAttackComponent : public ScriptComponent
+class EnemyAttackComponent : public ScriptComponent, public CollisionListener
 {
 public:
 
@@ -24,6 +25,9 @@ public:
 
     void OnStart() override;
     void OnUpdate(float aDeltaTime) override;
+    void OnCollisionEnter(const CollisionContact& aContact, GameObject& anOther) override;
+    void OnCollisionStay(const CollisionContact& aContact, GameObject& anOther) override;
+    void OnCollisionExit(const CollisionContact& aContact, GameObject& anOther) override;
 
     void StartAttack(GameObject* aTarget);
 
@@ -37,6 +41,8 @@ private:
     void UpdateRecovery(float aDeltaTime);
 
     void PerformAttack();
+    void FinishRollingAttack();
+    void StopRollingAttackOnWorldCollision(GameObject& anOther);
 
 private:
 

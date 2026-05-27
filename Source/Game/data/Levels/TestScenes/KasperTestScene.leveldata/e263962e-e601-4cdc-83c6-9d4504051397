@@ -1,0 +1,32 @@
+{
+  "name": "HubDoor_01",
+  "object-definition": "HubDoor_01",
+  "path": "",
+  "properties": [
+    {
+      "name": "UniqueID",
+      "type": "Int",
+      "value": 19
+    },
+    {
+      "name": "TypeID",
+      "type": "Int",
+      "value": 1
+    }
+  ],
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    0.0,
+    0.0,
+    -292.70501708984375
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "HealingPlant",
+  "object-definition": "HealingPlant",
+  "path": "",
+  "rotation": [
+    0.0,
+    -89.99996948242188,
+    0.0
+  ],
+  "scale": [
+    0.9999996423721313,
+    1.0,
+    0.9999996423721313
+  ],
+  "translation": [
+    4450.0,
+    600.0,
+    4600.0
+  ]
+}

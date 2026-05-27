@@ -1,0 +1,20 @@
+{
+  "name": "HUB_PoopThrone_03",
+  "object-definition": "HUB_PoopThrone_03",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -698.0145874023438,
+    0.3409576416015625,
+    682.5165405273438
+  ]
+}

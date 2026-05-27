@@ -1,0 +1,20 @@
+{
+  "name": "MushroomTree(6)",
+  "object-definition": "MushroomTree",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -300.0,
+    0.0,
+    -450.0
+  ]
+}

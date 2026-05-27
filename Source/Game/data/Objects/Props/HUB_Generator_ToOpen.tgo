@@ -1,0 +1,100 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "StaticWorld"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "Assets\\Art\\3D\\Environment\\HUB\\SK_A_Generator.fbx",
+        "textures": [
+          [
+            "Assets\\Art\\Textures\\HUB\\T_Generator_01_c.dds",
+            "Assets\\Art\\Textures\\HUB\\T_Generator_01_n.dds",
+            "Assets\\Art\\Textures\\HUB\\T_Generator_01_m.dds",
+            ""
+          ],
+          [
+            "Assets\\Art\\Textures\\HUB\\T_Generator_01_c.dds",
+            "Assets\\Art\\Textures\\HUB\\T_Generator_01_n.dds",
+            "Assets\\Art\\Textures\\HUB\\T_Generator_01_m.dds",
+            ""
+          ],
+          [
+            "Assets\\Art\\Textures\\HUB\\T_Generator_01_c.dds",
+            "Assets\\Art\\Textures\\HUB\\T_Generator_01_n.dds",
+            "Assets\\Art\\Textures\\HUB\\T_Generator_01_m.dds",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "typeId",
+      "type": "StringId",
+      "value": "HUB_Generator_ToOpen"
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderSize",
+      "type": "Float3",
+      "value": [
+        600.0,
+        300.0,
+        200.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "Int",
+      "value": 0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "layer",
+      "type": "StringId",
+      "value": "Static"
+    }
+  ]
+}

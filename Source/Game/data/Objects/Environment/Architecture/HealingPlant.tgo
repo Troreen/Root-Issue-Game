@@ -8,7 +8,16 @@
       "is-per-instance": false,
       "name": "factoryType",
       "type": "StringId",
-      "value": "StaticWorld"
+      "value": "Checkpoint"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "hit",
+      "type": "Float",
+      "value": 0.0
     },
     {
       "description": "",
@@ -18,25 +27,25 @@
       "name": "model",
       "type": "Model",
       "value": {
-        "path": "animations\\SK\\SK_ENV_HealingObjects.fbx",
+        "path": "Assets\\Art\\3D\\Level Assets\\SK_A_HealingObjects.fbx",
         "textures": [
           [
+            "Assets\\Art\\Textures\\T_HealingObjects_c.dds",
             "",
-            "",
-            "",
-            ""
+            "Assets\\Art\\Textures\\T_HealingObjects_m.dds",
+            "Assets\\Art\\Textures\\T_HealingObjects_n.dds"
           ],
           [
+            "Assets\\Art\\Textures\\T_HealingObjects_c.dds",
             "",
-            "",
-            "",
-            ""
+            "Assets\\Art\\Textures\\T_HealingObjects_m.dds",
+            "Assets\\Art\\Textures\\T_HealingObjects_n.dds"
           ],
           [
+            "Assets\\Art\\Textures\\T_HealingObjects_c.dds",
             "",
-            "",
-            "",
-            ""
+            "Assets\\Art\\Textures\\T_HealingObjects_m.dds",
+            "Assets\\Art\\Textures\\T_HealingObjects_n.dds"
           ],
           [
             "",
@@ -100,6 +109,17 @@
       "name": "animation_model_property",
       "type": "StringId",
       "value": "model"
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_hit",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_HealingObjects_activate.tgac"
+      }
     },
     {
       "description": "",
@@ -177,7 +197,7 @@
       "is-per-instance": false,
       "name": "layer",
       "type": "StringId",
-      "value": "Static"
+      "value": "Switch"
     }
   ]
 }

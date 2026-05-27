@@ -1,0 +1,72 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "CollideTrigger"
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderIsTrigger",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderSize",
+      "type": "Float3",
+      "value": [
+        300.0,
+        220.0,
+        300.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "StringId",
+      "value": "box"
+    },
+    {
+      "description": "",
+      "group": "Switch",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "TriggerOnce",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "Switch",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "UniqueID",
+      "type": "Int",
+      "value": 0
+    }
+  ]
+}

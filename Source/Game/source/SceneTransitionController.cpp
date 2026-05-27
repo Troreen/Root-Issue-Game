@@ -6,6 +6,7 @@
 #include <tge/debug/LoadingProfiler.h>
 #include <tge/settings/Settings.h>
 
+#include "Essentials.h"
 #include <algorithm>
 #include <chrono>
 #include <filesystem>
@@ -33,6 +34,8 @@ void SceneTransitionController::Initialize(
     myApplySceneCallback = std::move(anApplySceneCallback);
     mySceneTransitionCallback = std::move(aSceneTransitionCallback);
     myCurrentSceneCallback = std::move(aCurrentSceneCallback);
+    myPostMaster = Essentials::globalPostMaster.get();
+    myPostMaster->Subscribe(MessageType::LoadScene, this);
 }
 
 void SceneTransitionController::Shutdown()
@@ -194,6 +197,20 @@ bool SceneTransitionController::IsTransitionActive() const
 float SceneTransitionController::GetFadeAlpha() const
 {
     return myFadeAlpha;
+}
+
+void SceneTransitionController::Receive(const Message& aMsg)
+{
+    switch (aMsg.myMessageType)
+    {
+    case MessageType::LoadScene:
+        myState = State::FadingIn;
+        myFadeSeconds = 1.f;
+        myFadeAlpha = 1.0f;
+        break;
+    default:
+        break;
+    }
 }
 
 std::string SceneTransitionController::ResolveScenePath(const std::string& aScenePath)

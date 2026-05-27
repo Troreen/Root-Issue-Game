@@ -15,24 +15,6 @@
                            "group":  "",
                            "is-dynamic":  false,
                            "is-per-instance":  false,
-                           "name":  "typeId",
-                           "type":  "StringId",
-                           "value":  "SM_P_MeleeWeapon"
-                       },
-                       {
-                           "description":  "",
-                           "group":  "",
-                           "is-dynamic":  false,
-                           "is-per-instance":  false,
-                           "name":  "name",
-                           "type":  "StringId",
-                           "value":  "SM_P_MeleeWeapon"
-                       },
-                       {
-                           "description":  "",
-                           "group":  "",
-                           "is-dynamic":  false,
-                           "is-per-instance":  false,
                            "name":  "model",
                            "type":  "Model",
                            "value":  {

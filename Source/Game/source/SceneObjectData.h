@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <string>
 #include <unordered_map>
 #include <any>
@@ -10,7 +11,10 @@
 
 struct SceneSpriteData
 {
+    static constexpr int kTextureSlotCount = 4;
+
     std::string texturePath;
+    std::array<std::string, kTextureSlotCount> texturePaths = {};
     CommonUtilities::Vector2<float> size = { 100.0f, 100.0f };
     CommonUtilities::Vector2<float> pivot = { 0.5f, 0.5f };
 };

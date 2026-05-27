@@ -1,0 +1,51 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "StaticWorld"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "Assets\\Art\\3D\\Environment\\HUB\\SM_A_Hub.fbx",
+        "textures": [
+          [
+            "Assets\\Art\\Textures\\HUB\\T_HUB_Trimsheet_03_c.dds",
+            "Assets\\Art\\Textures\\HUB\\T_HUB_Trimsheet_03_n.dds",
+            "Assets\\Art\\Textures\\HUB\\T_HUB_Trimsheet_03_m.dds",
+            ""
+          ],
+          [
+            "Assets\\Art\\Textures\\HUB\\T_HUB_Trimsheet_03_c.dds",
+            "Assets\\Art\\Textures\\HUB\\T_HUB_Trimsheet_03_n.dds",
+            "Assets\\Art\\Textures\\HUB\\T_HUB_Trimsheet_03_m.dds",
+            ""
+          ],
+          [
+            "Assets\\Art\\Textures\\HUB\\T_Glass_01_c.dds",
+            "Assets\\Art\\Textures\\HUB\\T_Glass_01_n.dds",
+            "Assets\\Art\\Textures\\HUB\\T_Glass_01_m.dds",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    }
+  ]
+}

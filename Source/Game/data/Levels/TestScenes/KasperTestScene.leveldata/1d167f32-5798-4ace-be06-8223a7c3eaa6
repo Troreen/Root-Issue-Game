@@ -1,0 +1,27 @@
+{
+  "name": "Lever",
+  "object-definition": "Lever",
+  "path": "",
+  "properties": [
+    {
+      "name": "UniqueID",
+      "type": "Int",
+      "value": 19
+    }
+  ],
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    178.58944702148438,
+    -70.0391845703125,
+    90.06500244140625
+  ]
+}

@@ -11,6 +11,7 @@ public:
 	void Update(float aDeltaTime, PlayerControllerComponent& aController) override;
 
 	void SetHasGun(bool aGiveGun);
+	void SetHasGunOnStart(bool aGiveGun);
 private:
 	
 	bool myHasGun;

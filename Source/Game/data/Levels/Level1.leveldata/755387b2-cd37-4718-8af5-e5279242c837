@@ -1,0 +1,42 @@
+{
+  "name": "TriggeableTransitions",
+  "object-definition": "TriggeableTransitions",
+  "path": "",
+  "properties": [
+    {
+      "name": "TypeID",
+      "type": "Int",
+      "value": 1
+    },
+    {
+      "name": "UniqueID",
+      "type": "Int",
+      "value": 11
+    },
+    {
+      "name": "targetScene",
+      "type": "StringId",
+      "value": "HUB_01"
+    },
+    {
+      "name": "IsActivated?",
+      "type": "Bool",
+      "value": false
+    }
+  ],
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    650.0,
+    900.0,
+    2450.0
+  ]
+}

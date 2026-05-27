@@ -1,122 +1,113 @@
 {
-  "parent-object-definition": "",
-  "properties": [
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "Model",
-      "type": "Model",
-      "value": {
-        "path": "models\\Default_1x1_Cube.fbx",
-        "textures": [
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ],
-          [
-            "",
-            "",
-            "",
-            ""
-          ]
-        ]
-      }
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "factoryType",
-      "type": "StringId",
-      "value": "StaticWorld"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "layer",
-      "type": "StringId",
-      "value": "WorldStatic"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "typeId",
-      "type": "StringId",
-      "value": "test_static"
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderIsTrigger",
-      "type": "Bool",
-      "value": false
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderOffset",
-      "type": "Float3",
-      "value": [
-        0.0,
-        0.0,
-        0.0
-      ]
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderPivotBottomMiddle",
-      "type": "Bool",
-      "value": false
-    },
-    {
-      "description": "",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderSize",
-      "type": "Float3",
-      "value": [
-        200.0,
-        200.0,
-        200.0
-      ]
-    },
-    {
-      "description": "Collision shape: 0=Box, 1=Sphere, 2=Capsule, 3=OBB",
-      "group": "Collision",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "colliderType",
-      "type": "Int",
-      "value": 0
-    }
-  ]
+    "parent-object-definition":  "",
+    "properties":  [
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "Model",
+                           "type":  "Model",
+                           "value":  {
+                                         "path":  "models\\Default_1x1_Cube.fbx",
+                                         "textures":  [
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ],
+                                                          [
+                                                              "",
+                                                              "",
+                                                              "",
+                                                              ""
+                                                          ]
+                                                      ]
+                                     }
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "factoryType",
+                           "type":  "StringId",
+                           "value":  "StaticWorld"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "layer",
+                           "type":  "StringId",
+                           "value":  "WorldStatic"
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Collision",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "colliderIsTrigger",
+                           "type":  "Bool",
+                           "value":  false
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Collision",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "colliderOffset",
+                           "type":  "Float3",
+                           "value":  [
+                                         0.0,
+                                         0.0,
+                                         0.0
+                                     ]
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Collision",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "colliderPivotBottomMiddle",
+                           "type":  "Bool",
+                           "value":  false
+                       },
+                       {
+                           "description":  "",
+                           "group":  "Collision",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "colliderSize",
+                           "type":  "Float3",
+                           "value":  [
+                                         200.0,
+                                         200.0,
+                                         200.0
+                                     ]
+                       },
+                       {
+                           "description":  "Collision shape: 0=Box, 1=Sphere, 2=Capsule, 3=OBB",
+                           "group":  "Collision",
+                           "is-dynamic":  false,
+                           "is-per-instance":  false,
+                           "name":  "colliderType",
+                           "type":  "Int",
+                           "value":  0
+                       }
+                   ]
 }

@@ -1,0 +1,20 @@
+{
+  "name": "CollisionBlock_3x3(33)",
+  "object-definition": "CollisionBlock_3x3",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    2991.455322265625,
+    300.0,
+    5692.87109375
+  ]
+}

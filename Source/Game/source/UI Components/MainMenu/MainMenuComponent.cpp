@@ -8,11 +8,23 @@ void MainMenuComponent::Init(Tga::Engine& /*anEngine*/)
 	Tga::Engine::GetInstance()->SetClearColor(Tga::Color(0, 0, 0, 1));
 	myUICanvas.Init("MainMenu", *Essentials::globalCanvasManager);
 	myUICanvas.SetSelectedElement("StartButton");
-	myUICanvas.GetToggle("FullscreenToggle")->isOn = Tga::Engine::GetInstance()->GetIsBorderless();
+	if (UIToggle* fullscreenToggle = myUICanvas.GetToggle("FullscreenToggle"))
+	{
+		fullscreenToggle->isOn = Tga::Engine::GetInstance()->GetIsBorderless();
+	}
 
-	myUICanvas.GetSlider("MasterVolumeSlider")->currentValue = Essentials::globalAudioManager->GetMasterVolume();
-	myUICanvas.GetSlider("MusicVolumeSlider")->currentValue = Essentials::globalAudioManager->GetBusVolume(BusID::eMusic);
-	myUICanvas.GetSlider("SfxVolumeSlider")->currentValue = Essentials::globalAudioManager->GetBusVolume(BusID::eSFX);
+	if (UISlider* masterVolumeSlider = myUICanvas.GetSlider("MasterVolumeSlider"))
+	{
+		masterVolumeSlider->currentValue = Essentials::globalAudioManager->GetMasterVolume();
+	}
+	if (UISlider* musicVolumeSlider = myUICanvas.GetSlider("MusicVolumeSlider"))
+	{
+		musicVolumeSlider->currentValue = Essentials::globalAudioManager->GetBusVolume(BusID::eMusic);
+	}
+	if (UISlider* sfxVolumeSlider = myUICanvas.GetSlider("SfxVolumeSlider"))
+	{
+		sfxVolumeSlider->currentValue = Essentials::globalAudioManager->GetBusVolume(BusID::eSFX);
+	}
 
 	myUICanvas.SetIsHidden("SettingsMenu", true);
 	//myUICanvas.SetIsHidden("LevelSelectMenu", true);

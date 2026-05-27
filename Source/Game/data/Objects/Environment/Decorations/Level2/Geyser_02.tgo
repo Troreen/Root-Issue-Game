@@ -8,7 +8,7 @@
       "is-per-instance": false,
       "name": "factoryType",
       "type": "StringId",
-      "value": "StaticWorld"
+      "value": "Geyser"
     },
     {
       "description": "",
@@ -36,24 +36,24 @@
       "name": "model",
       "type": "Model",
       "value": {
-        "path": "Assets\\\\Art\\\\3D\\\\Environment\\\\SM_EN_Saplings.fbx",
+        "path": "Assets\\Art\\3D\\Environment\\SM_EN_Geyser_02.fbx",
         "textures": [
           [
-            "Assets\\Art\\Textures\\T_ColorAtlas_Lvl2.dds",
-            "",
-            "",
+            "Assets\\Art\\Textures\\Decoration\\T_Geyser_01_c.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Geyser_01_n.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Geyser_01_m.dds",
             ""
           ],
           [
-            "",
-            "",
-            "",
+            "Assets\\Art\\Textures\\Decoration\\T_Geyser_01_c.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Geyser_01_n.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Geyser_01_m.dds",
             ""
           ],
           [
-            "",
-            "",
-            "",
+            "Assets\\Art\\Textures\\Decoration\\T_Geyser_01_c.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Geyser_01_n.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Geyser_01_m.dds",
             ""
           ],
           [

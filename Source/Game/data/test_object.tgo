@@ -1,0 +1,51 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "Model",
+      "type": "Model",
+      "value": {
+        "path": "models\\TMA_Matball.fbx",
+        "textures": [
+          [
+            "textures\\Matball\\Matball_Two_c.dds",
+            "textures\\Matball\\Matball_Two_n.dds",
+            "textures\\Matball\\Matball_Two_m.dds",
+            "textures\\Matball\\Matball_Two_fx.dds"
+          ],
+          [
+            "textures\\Matball\\Matball_One_c.dds",
+            "textures\\Matball\\Matball_One_n.dds",
+            "textures\\Matball\\Matball_One_m.dds",
+            "textures\\Matball\\Matball_One_fx.dds"
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "typeId",
+      "type": "StringId",
+      "value": "test"
+    }
+  ]
+}

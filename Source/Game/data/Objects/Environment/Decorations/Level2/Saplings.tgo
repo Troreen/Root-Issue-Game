@@ -21,9 +21,9 @@
         "path": "Assets\\\\Art\\\\3D\\\\Environment\\\\SM_EN_Saplings.fbx",
         "textures": [
           [
-            "Assets\\Art\\Textures\\T_ColorAtlas_Lvl2.dds",
-            "",
-            "",
+            "Assets\\Art\\Textures\\T_MushroomTree_01_C.dds",
+            "Assets\\Art\\Textures\\T_MushroomTree_01_N.dds",
+            "Assets\\Art\\Textures\\T_MushroomTree_01_M.dds",
             ""
           ],
           [
@@ -46,24 +46,6 @@
           ]
         ]
       }
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "name",
-      "type": "StringId",
-      "value": "SM_EN_Saplings"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "typeId",
-      "type": "StringId",
-      "value": "SM_EN_Saplings"
     },
     {
       "description": "",

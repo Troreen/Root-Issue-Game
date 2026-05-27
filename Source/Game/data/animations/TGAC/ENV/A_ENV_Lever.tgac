@@ -4,7 +4,7 @@
   "cycle_offset": 0.0,
   "end_time": 0.5666666626930237,
   "events": [],
-  "is_looping": true,
+  "is_looping": false,
   "is_sync": false,
   "playback_rate": 1.0,
   "preview_model_path": "animations\\SK\\SK_ENV_Lever.fbx",

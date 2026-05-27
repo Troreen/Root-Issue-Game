@@ -1,10 +1,11 @@
 #pragma once
 
 #include "ScriptComponent.h"
+#include "PostMaster.h"
 
 #include <CommonUtilities/Vector3.hpp>
 
-class TeleporterTunnelComponent final : public ScriptComponent
+class TeleporterTunnelComponent final : public ScriptComponent , public Subscriber
 {
 public:
 	TeleporterTunnelComponent(
@@ -16,6 +17,8 @@ public:
 	int GetPairId() const;
 	int GetExitDirection() const;
 	void SuppressUntilExit();
+
+	void Receive(const Message& aMSG) override;
 
 protected:
 	void OnStart() override;

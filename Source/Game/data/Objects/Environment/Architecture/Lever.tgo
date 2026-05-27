@@ -58,57 +58,12 @@
     },
     {
       "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "name",
-      "type": "StringId",
-      "value": "SK_A_Lever"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "typeId",
-      "type": "StringId",
-      "value": "SK_A_Lever"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_auto_bootstrap",
-      "type": "Bool",
-      "value": true
-    },
-    {
-      "description": "",
       "group": "Animation",
       "is-dynamic": false,
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
       "value": "animations\\Animation Graphs\\Lever.tgscript"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_graph_template",
-      "type": "StringId",
-      "value": "idle_only"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_model_property",
-      "type": "StringId",
-      "value": "model"
     },
     {
       "description": "",
@@ -169,9 +124,9 @@
       "name": "colliderSize",
       "type": "Float3",
       "value": [
-        50.0,
-        100.0,
-        50.0
+        300.0,
+        300.0,
+        300.0
       ]
     },
     {
@@ -190,7 +145,7 @@
       "is-per-instance": false,
       "name": "layer",
       "type": "StringId",
-      "value": "Static"
+      "value": "Switch"
     }
   ]
 }

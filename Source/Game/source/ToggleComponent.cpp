@@ -15,13 +15,48 @@ ToggleComponent::~ToggleComponent()
 	myPostMaster->Unsubscribe(MessageType::ActivateSwitch, this);
 }
 
+void ToggleComponent::Init(Tga::Engine& anEngine)
+{
+	(void)anEngine;
+	Initialize();
+}
+
 void ToggleComponent::Initialize()
 {
 	if (myIsActivated == true)
 	{
-		std::cout << "TOGGLE!" << std::endl;
+		auto& transform = GetOwner()->GetTransform();
 		myIsActivated = !myIsActivated;
+		myStartPos = Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z);
+		myEndPos = Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y - 400.0f, transform.GetPosition().z);
 		Toggle();
+	}
+	else
+	{
+		auto& transform = GetOwner()->GetTransform();
+		myStartPos = Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z);
+		myEndPos = Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y - 400.0f, transform.GetPosition().z);
+	}
+	myAnimPercent = 0.f;
+}
+
+void ToggleComponent::OnUpdate(float /*aDeltaTime*/)
+{
+	switch (static_cast<eTypeID>(myTypeID))
+	{
+	case eTypeID::eDoor:
+		if (myAnimPercent > 0.00f && !myIsActivated)
+		{
+			myAnimPercent -= 0.01f;
+		}
+		else if (myAnimPercent < 1.0f && myIsActivated)
+		{
+			myAnimPercent += 0.01f;
+		}
+		this->GetOwner()->GetTransform().SetPosition(Tga::Vector3f::Lerp(myStartPos, myEndPos, myAnimPercent));
+		break;
+	default:
+		break;
 	}
 }
 
@@ -42,7 +77,7 @@ void ToggleComponent::Toggle()
 {
 	myIsActivated = !myIsActivated;
 	auto& engine = *Tga::Engine::GetInstance();
-	auto& transform = GetOwner()->GetTransform();
+	/*auto& transform = GetOwner()->GetTransform();*/
 	if (myIsActivated)
 	{
 		switch (static_cast<eTypeID>(myTypeID))
@@ -50,7 +85,7 @@ void ToggleComponent::Toggle()
 		case eTypeID::eNothing:
 			break;
 		case eTypeID::eDoor:
-			this->GetOwner()->GetTransform().SetPosition(Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y - 400.0f, transform.GetPosition().z));
+			/*this->GetOwner()->GetTransform().SetPosition(Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y - 400.0f, transform.GetPosition().z));*/
 			if (GetOwner()->HasComponent<BoxColliderComponent>())
 			{
 				GetOwner()->GetComponent<BoxColliderComponent>()->Init(engine);
@@ -67,7 +102,7 @@ void ToggleComponent::Toggle()
 		case eTypeID::eNothing:
 			break;
 		case eTypeID::eDoor:
-			transform.SetPosition(Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y + 400.0f, transform.GetPosition().z));
+			/*transform.SetPosition(Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y + 400.0f, transform.GetPosition().z));*/
 			if (GetOwner()->HasComponent<BoxColliderComponent>())
 			{
 				GetOwner()->GetComponent<BoxColliderComponent>()->Init(engine);
@@ -78,3 +113,5 @@ void ToggleComponent::Toggle()
 		}
 	}
 }
+
+

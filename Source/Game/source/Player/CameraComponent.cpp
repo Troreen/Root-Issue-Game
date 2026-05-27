@@ -18,12 +18,11 @@ void CameraComponent::OnStart()
 
 	myCameraRotation = CommonUtilities::Quaternion<float>::CreateFromYawPitchRoll(yaw, pitch, 0);
 
-
 	Essentials::globalCamera->SetCameraTransformFromScene(myOffset + myPosition, myCameraRotation);
 	Tga::Vector2ui resolution = Tga::Engine::GetInstance()->GetRenderSize();
 	//const float renderScalar = 1.6f;
 	//Essentials::globalCamera->GetRenderCamera().SetOrtographicProjection((float)resolution.x * renderScalar, (float)resolution.y * renderScalar, 50000);
-	Essentials::globalCamera->GetRenderCamera().SetPerspectiveProjection(23, { (float)resolution.x, (float)resolution.y }, 1, 10000);
+	Essentials::globalCamera->GetRenderCamera().SetPerspectiveProjection(23, { (float)resolution.x, (float)resolution.y }, 100, 10000);
 }
 
 void CameraComponent::OnUpdate(float aDeltaTime)

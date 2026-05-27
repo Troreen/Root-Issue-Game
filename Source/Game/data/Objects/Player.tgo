@@ -5,6 +5,15 @@
       "description": "",
       "group": "",
       "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "HasGun",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
       "is-per-instance": false,
       "name": "factoryType",
       "type": "StringId",
@@ -48,24 +57,6 @@
       }
     },
     {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "name",
-      "type": "StringId",
-      "value": "Wrapper Demo Player"
-    },
-    {
-      "description": "",
-      "group": "",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "typeId",
-      "type": "StringId",
-      "value": "Player"
-    },
-    {
       "description": "Global speed scale for demo graph",
       "group": "Animation",
       "is-dynamic": true,
@@ -73,15 +64,6 @@
       "name": "anim_speed",
       "type": "Float",
       "value": 1.0
-    },
-    {
-      "description": "Use authored clip assets",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_auto_bootstrap",
-      "type": "Bool",
-      "value": false
     },
     {
       "description": "Enable in-game LEFT/RIGHT/HOME toggles",
@@ -93,15 +75,6 @@
       "value": true
     },
     {
-      "description": "Attach a console logger for animation event smoke tests.",
-      "group": "Animation Test",
-      "is-dynamic": false,
-      "is-per-instance": true,
-      "name": "animation_event_debug_log",
-      "type": "Bool",
-      "value": false
-    },
-    {
       "description": "Expanded player graph with locomotion, combo, charge, ranged, hurt and death branches",
       "group": "Animation",
       "is-dynamic": false,
@@ -109,15 +82,6 @@
       "name": "animation_graph",
       "type": "StringId",
       "value": "Objects\\\\Player\\\\animation_graph.tgscript"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_model_property",
-      "type": "StringId",
-      "value": "model"
     },
     {
       "description": "",
@@ -289,6 +253,39 @@
       "group": "Animation",
       "is-dynamic": false,
       "is-per-instance": false,
+      "name": "clip_upgrade",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Player\\A_Player_Upgrade.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_fuse_pickup",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Player\\A_Player_FusePickup.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_antenna_place",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\Player\\A_Player_AntennaPlace.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
       "name": "clip_walk",
       "type": "Animation Clip",
       "value": {
@@ -422,6 +419,33 @@
       "value": 0.0
     },
     {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "w_upgrade",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_fuse_pickup",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": true,
+      "is-per-instance": true,
+      "name": "w_antenna_place",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
       "description": "1.0 selects this clip in demo mode",
       "group": "Animation",
       "is-dynamic": true,
@@ -429,6 +453,15 @@
       "name": "w_walk",
       "type": "Float",
       "value": 0.0
+    },
+    {
+      "description": "Attach a console logger for animation events.",
+      "group": "Animation Test",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "animation_event_debug_log",
+      "type": "Bool",
+      "value": false
     },
     {
       "description": "",

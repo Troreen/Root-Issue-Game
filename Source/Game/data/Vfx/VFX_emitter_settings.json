@@ -2,104 +2,390 @@
   "pools": [
     {
       "title": "blood",
+      "size": 500,
+      "spriteName": "S_VFX_BloodSplat",
+      "blendState": "alpha"
+    },
+    {
+      "title": "dust",
+      "size": 10000,
+      "spriteName": "S_VFX_Dust",
+      "blendState": "alpha"
+    },
+    {
+      "title": "energy",
       "size": 1000,
-      "spriteName": "test",
+      "spriteName": "S_VFX_Energy",
+      "blendState": "additive"
+    },
+    {
+      "title": "energysmall",
+      "size": 1000,
+      "spriteName": "S_VFX_EnergySmall",
       "blendState": "additive"
     },
     {
       "title": "test",
-      "size": 300,
+      "size": 5000,
       "spriteName": "test",
       "blendState": "alpha"
+    },
+    {
+      "title": "pebbles",
+      "size": 10,
+      "spriteName": "S_VFX_Pebbles",
+      "blendState": "alpha"
+    },
+    {
+      "title": "smoke",
+      "size": 3000,
+      "spriteName": "S_VFX_Smoke01",
+      "blendState": "alpha"
+    },
+    {
+      "title": "spark",
+      "size": 100,
+      "spriteName": "S_VFX_Spark",
+      "blendState": "additive"
     }
   ],
 
   "sharedEmitters": {
-    "bloodCone": {
-      "particleType": "blood",
-      "shouldBillboard": true,
-      "emissionShape": "cone",
-      "emissionRate": 1000,
-
-      "lifeTimeMin": 0.1,
-      "lifeTimeMax": 0.5,
-
-      "startSpeedMin": 0,
-      "startSpeedMax": 300,
-
-      "coneAngle": 45,
-
-      "startSizeMin": 0.1,
-      "startSizeMax": 10,
-      "endSizeMin": 0.1,
-      "endSizeMax": 10,
-
-      "burstCount": 50,
-
-      "shouldStartActive": false
-    },
     "testSphere": {
       "particleType": "test",
       "shouldBillboard": true,
       "emissionShape": "sphere",
-      "emissionRate": 1000,
+      "emissionRate": 300,
 
-      "lifeTimeMin": 0,
-      "lifeTimeMax": 2,
+      "lifeTimeMin": 1,
+      "lifeTimeMax": 1.5,
 
       "startSpeedMin": 0,
       "startSpeedMax": 100,
+      "gravity": 0,
 
       "coneAngle": 45,
+
+      "spawnOffset": [ 0, 0, 0 ],
+      "spawnOffsetIsLocal": true,
+
+      "boxBoundsX": 50,
+      "boxBoundsY": 50,
+      "boxBoundsZ": 50,
 
       "startSizeMin": 0.1,
       "startSizeMax": 10,
       "endSizeMin": 0.1,
-      "endSizeMax": 10,
+      "endSizeMax": 0,
+
+      "sinAmplitudeX": 0,
+      "sinAmplitudeY": 0,
+      "sinAmplitudeZ": 0,
+      "sinFrequencyX": 0,
+      "sinFrequencyY": 0,
+      "sinFrequencyZ": 0,
+      "sinSynchronized": false,
 
       "burstCount": 500,
       "shouldStartActive": false
     },
-    "bulletTrail": {
-      "particleType": "test",
+    "bloodCone": {
+      "particleType": "blood",
       "shouldBillboard": true,
       "emissionShape": "cone",
-      "emissionRate": 200,
+      "emissionRate": 20,
 
       "lifeTimeMin": 0.1,
       "lifeTimeMax": 0.2,
 
-      "startSpeedMin": 0,
-      "startSpeedMax": 1,
+      "startSpeedMin": 400,
+      "startSpeedMax": 500,
+      "gravity": 10,
 
-      "coneAngle": 15,
+      "coneAngle": 30,
+
+      "spawnOffset": [ 0, 150, 0 ],
+      "spawnOffsetIsLocal": true,
+
+      "boxBoundsX": 50,
+      "boxBoundsY": 50,
+      "boxBoundsZ": 50,
+
+      "startSizeMin": 1,
+      "startSizeMax": 1,
+      "endSizeMin": 11,
+      "endSizeMax": 1,
+
+      "sinAmplitudeX": 0,
+      "sinAmplitudeY": 0,
+      "sinAmplitudeZ": 0,
+      "sinFrequencyX": 0,
+      "sinFrequencyY": 0,
+      "sinFrequencyZ": 0,
+      "sinSynchronized": false,
+
+      "burstCount": 5,
+      "shouldStartActive": false
+    },
+    "bulletTrail": {
+      "particleType": "energysmall",
+      "shouldBillboard": true,
+      "emissionShape": "cone",
+      "emissionRate": 500,
+
+      "lifeTimeMin": 0.1,
+      "lifeTimeMax": 0.2,
+
+      "startSpeedMin": 1,
+      "startSpeedMax": 200,
+      "gravity": 0,
+
+      "coneAngle": 40,
+
+      "spawnOffset": [ 0, 80, 0 ],
+      "spawnOffsetIsLocal": true,
+
+      "boxBoundsX": 50,
+      "boxBoundsY": 50,
+      "boxBoundsZ": 50,
 
       "startSizeMin": 1,
       "startSizeMax": 1,
       "endSizeMin": 1,
       "endSizeMax": 1,
 
+      "sinAmplitudeX": 0,
+      "sinAmplitudeY": 0,
+      "sinAmplitudeZ": 0,
+      "sinFrequencyX": 0,
+      "sinFrequencyY": 0,
+      "sinFrequencyZ": 0,
+      "sinSynchronized": false,
+
+      "burstCount": 500,
+      "shouldStartActive": false
+    },
+    "energyCone": {
+      "particleType": "energy",
+      "shouldBillboard": true,
+      "emissionShape": "cone",
+      "emissionRate": 50,
+
+      "lifeTimeMin": 0.2,
+      "lifeTimeMax": 0.2,
+
+      "startSpeedMin": 1,
+      "startSpeedMax": 30,
+      "gravity": 0,
+
+      "coneAngle": 30,
+
+      "spawnOffset": [ 0, 80, 0 ],
+      "spawnOffsetIsLocal": true,
+
+      "boxBoundsX": 50,
+      "boxBoundsY": 50,
+      "boxBoundsZ": 50,
+
+      "startSizeMin": 1,
+      "startSizeMax": 1,
+      "endSizeMin": 1,
+      "endSizeMax": 1,
+
+      "sinAmplitudeX": 0,
+      "sinAmplitudeY": 0,
+      "sinAmplitudeZ": 0,
+      "sinFrequencyX": 0,
+      "sinFrequencyY": 0,
+      "sinFrequencyZ": 0,
+      "sinSynchronized": false,
+
+      "burstCount": 500,
+      "shouldStartActive": false
+    },
+    "dustSphere": {
+      "particleType": "dust",
+      "shouldBillboard": true,
+      "emissionShape": "sphere",
+      "emissionRate": 50,
+
+      "lifeTimeMin": 0.2,
+      "lifeTimeMax": 0.2,
+
+      "startSpeedMin": 1,
+      "startSpeedMax": 300,
+      "gravity": 0,
+
+      "coneAngle": 30,
+
+      "spawnOffset": [ 0, 0, 0 ],
+      "spawnOffsetIsLocal": true,
+
+      "boxBoundsX": 50,
+      "boxBoundsY": 50,
+      "boxBoundsZ": 50,
+
+      "startSizeMin": 1,
+      "startSizeMax": 1,
+      "endSizeMin": 1,
+      "endSizeMax": 1,
+
+      "sinAmplitudeX": 0,
+      "sinAmplitudeY": 0,
+      "sinAmplitudeZ": 0,
+      "sinFrequencyX": 0,
+      "sinFrequencyY": 0,
+      "sinFrequencyZ": 0,
+      "sinSynchronized": false,
+
+      "burstCount": 500,
+      "shouldStartActive": false
+    },
+    "sparkCone": {
+      "particleType": "spark",
+      "shouldBillboard": true,
+      "emissionShape": "cone",
+      "emissionRate": 50,
+
+      "lifeTimeMin": 0.3,
+      "lifeTimeMax": 0.8,
+
+      "startSpeedMin": 200,
+      "startSpeedMax": 300,
+      "gravity": 10,
+
+      "coneAngle": 20,
+
+      "spawnOffset": [ 0, 0, 0 ],
+      "spawnOffsetIsLocal": true,
+
+      "boxBoundsX": 50,
+      "boxBoundsY": 50,
+      "boxBoundsZ": 50,
+
+      "startSizeMin": 1,
+      "startSizeMax": 1,
+      "endSizeMin": 1,
+      "endSizeMax": 1,
+
+      "sinAmplitudeX": 0,
+      "sinAmplitudeY": 0,
+      "sinAmplitudeZ": 0,
+      "sinFrequencyX": 0,
+      "sinFrequencyY": 0,
+      "sinFrequencyZ": 0,
+      "sinSynchronized": false,
+
+      "burstCount": 20,
+      "shouldStartActive": false
+    },
+    "smokeCone": {
+      "particleType": "smoke",
+      "shouldBillboard": true,
+      "emissionShape": "cone",
+      "emissionRate": 50,
+
+      "lifeTimeMin": 1,
+      "lifeTimeMax": 3,
+
+      "startSpeedMin": 1,
+      "startSpeedMax": 300,
+      "gravity": 0,
+
+      "coneAngle": 1,
+
+      "spawnOffset": [ 0, 80, 0 ],
+      "spawnOffsetIsLocal": true,
+
+      "boxBoundsX": 50,
+      "boxBoundsY": 50,
+      "boxBoundsZ": 50,
+
+      "startSizeMin": 1,
+      "startSizeMax": 1,
+      "endSizeMin": 1,
+      "endSizeMax": 1,
+
+      "sinAmplitudeX": 1.5,
+      "sinAmplitudeY": 0,
+      "sinAmplitudeZ": 1,
+      "sinFrequencyX": 6,
+      "sinFrequencyY": 0,
+      "sinFrequencyZ": 2,
+      "sinSynchronized": false,
+
       "burstCount": 500,
       "shouldStartActive": false
     }
-
   },
 
   "gameObjects": [
     {
       "editorname": "MeleeEnemy",
-      "emitters": [ "bloodCone", "testSphere" ]
+      "emitters": [
+        "bloodCone",
+        {
+          "ref": "testSphere",
+          "spawnOffset": [ 400, 150, 0 ]
+        }
+      ]
     },
     {
-      "editorname": "Player ",
-      "emitters": [ "bloodCone" ]
+      "editorname": "RollingEnemy",
+      "emitters": [
+        {
+          "ref": "bloodCone",
+          "spawnOffset": [0, 150, -70]
+
+        },
+        {
+          "ref": "dustSphere",
+          "spawnOffset": [ 0, 150, 100 ]
+        }
+
+      ]
+    },
+    {
+      "editorname": "Player",
+      "emitters": [
+        "bloodCone",
+        "smokeCone"
+      ]
+    },
+    {
+      "editorname": "HealingPlant",
+      "emitters": [
+        {
+          "ref": "energyCone",
+          "emissionShape": "cone",
+          "spawnOffset": [ -270, 260, 0 ],
+          "spawnOffsetIsLocal": true,
+          "startSpeedMax": 300,
+          "lifeTimeMax": 2
+        }
+      ]
     },
     {
       "editorname": "Bullet",
-      "emitters":  ["bulletTrail"]
-    }
-  ]
-}
+      "emitters": [ "bulletTrail" ]
+    },
+    {
+      "editorname": "Geyser_01",
+      "emitters": [ "smokeCone" ]
+    },
+    {
+      "editorname": "Geyser_02",
+      "emitters": [ "smokeCone" ]
+    },
+    {
+      "editorname": "HUB_Generator_01",
+      "emitters": [
+        {
+          "ref": "sparkCone",
+          "spawnOffset": [ 170, 60, 30 ]
+        }
+      ]
+} ] }
 
 // Emitter Parameters Explained:
 
@@ -109,7 +395,12 @@
 // emissionRate: Number of particles emitted per second when emitter is set to continuously emit
 // lifeTimeMin/Max: Smallest/largest amount of seconds a particle stays active once spawned
 // startSpeedMin/Max: Lowest/highest speed a particle starts with
+// gravity: Velocity change applied in the global -y direction per second
+
 // coneAngle: size of cone emission shape (if used), as measured from the cone's line of symmetry along its middle
+
+// boxBoundsX/Y/Z: Describes bounds of box shape, as measured from the center. Box emitter emit particles at positions randomly offset by -x <= posX <= x, -y <= posY <= y, -z <= posZ <= z
+
 // startSizeMin/Max: Min/Max size a particle starts its life as (as a multiple of its normal sprite size)
 // endSizeMin/Max: Min/Max size a particle ends its life as (as a multiple of its normal sprite size)
 // burstCount: Number of particles emitted in a single burst when called for

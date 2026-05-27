@@ -5,11 +5,13 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <vector>
 
 #include "Essentials/Essentials.h"
 
-#ifdef _DEBUG
+#ifndef _RETAIL
 #include "DebugSettings.h"
+#include "GameSettingsService.h"
 #include "imgui/imgui.h"
 #endif
 
@@ -447,9 +449,10 @@ void CameraSystem::SanitizeCameraBounds()
     }
 }
 
-#ifdef _DEBUG
+#ifndef _RETAIL
 void CameraSystem::RenderDebugUi()
 {
+#ifdef _DEBUG
     const auto cameraPos = myCamera.GetTransform().GetPosition();
     ImGui::TextUnformatted("Press F1 to toggle free look. Click the game window first.");
     ImGui::TextUnformatted("Move with WASD, rise with Shift, descend with Ctrl.");
@@ -458,7 +461,6 @@ void CameraSystem::RenderDebugUi()
     ImGui::Text("Free Look Active: %s", myDebugCameraEnabled ? "Yes" : "No");
 
     bool projectionChanged = false;
-    bool boundsChanged = false;
 
     if (ImGui::Checkbox("Enable Debug Camera", &myDebugCameraEnabled))
     {
@@ -477,13 +479,13 @@ void CameraSystem::RenderDebugUi()
 
     ImGui::SameLine();
     ImGui::Checkbox("Enable Follow Camera", &myFollowCameraEnabled);
-
+#endif
     bool& showCollisionShapes = GameDebugSettings::ShowColliderDebugLines();
     ImGui::Checkbox("Show Collision Shapes", &showCollisionShapes);
 
     bool& showCombatHitboxes = GameDebugSettings::ShowCombatHitboxes();
     ImGui::Checkbox("Show Combat Hitboxes", &showCombatHitboxes);
-
+#ifdef _DEBUG
     bool& enableCollisionDebugLog = GameDebugSettings::EnableCollisionDebugLog();
     ImGui::Checkbox("Log Collision Checks", &enableCollisionDebugLog);
 
@@ -521,33 +523,6 @@ void CameraSystem::RenderDebugUi()
     projectionChanged |= ImGui::SliderFloat("Near Plane", &myCameraNearPlane, 0.001f, 1000.0f, "%.3f", ImGuiSliderFlags_Logarithmic);
     projectionChanged |= ImGui::SliderFloat("Far Plane", &myCameraFarPlane, 1.0f, 500000.0f, "%.1f", ImGuiSliderFlags_Logarithmic);
 
-    ImGui::SeparatorText("Follow Camera");
-    ImGui::SliderFloat3("Follow Offset", &myFollowCamOffsetFromPlayer.x, -10000.0f, 10000.0f, "%.1f");
-
-    float followYawDegrees = RadiansToDegrees(myFollowCamYawRadians);
-    if (ImGui::SliderFloat("Follow Yaw (deg)", &followYawDegrees, -180.0f, 180.0f, "%.1f"))
-    {
-        myFollowCamYawRadians = DegreesToRadians(followYawDegrees);
-    }
-
-    float followPitchDegrees = RadiansToDegrees(myFollowCamPitchRadians);
-    if (ImGui::SliderFloat("Follow Pitch (deg)", &followPitchDegrees, -89.0f, 89.0f, "%.1f"))
-    {
-        myFollowCamPitchRadians = DegreesToRadians(followPitchDegrees);
-    }
-
-    float followRollDegrees = RadiansToDegrees(myFollowCamRollRadians);
-    if (ImGui::SliderFloat("Follow Roll (deg)", &followRollDegrees, -180.0f, 180.0f, "%.1f"))
-    {
-        myFollowCamRollRadians = DegreesToRadians(followRollDegrees);
-    }
-
-    ImGui::SliderFloat("Horizontal Padding", &myCameraHorizontalPadding, 0.0f, 2000.0f, "%.1f");
-    ImGui::SliderFloat("Vertical Padding", &myCameraVerticalPadding, 0.0f, 2000.0f, "%.1f");
-    ImGui::SliderFloat("Look Ahead Distance", &myCameraLookAheadDistance, 0.0f, 5000.0f, "%.1f");
-    ImGui::SliderFloat("Camera Lerp Speed", &myCameraLerpSpeed, 0.01f, 30.0f, "%.2f");
-    ImGui::SliderFloat("Direction Switch Threshold", &myCameraDirectionSwitchSpeedThreshold, 0.0f, 3000.0f, "%.1f");
-
     ImGui::SeparatorText("Free Look");
     ImGui::SliderFloat("Free Look Move Speed", &myFreeFlyMoveSpeed, 10.0f, 5000.0f, "%.1f", ImGuiSliderFlags_Logarithmic);
     ImGui::SliderFloat("Free Look Look Sensitivity", &myFreeFlyLookSensitivity, 0.0001f, 0.05f, "%.4f", ImGuiSliderFlags_Logarithmic);
@@ -555,70 +530,106 @@ void CameraSystem::RenderDebugUi()
 
     ImGui::SeparatorText("Lighting");
 
-    bool& enableDirectionalLight = GameDebugSettings::EnableDirectionalLight();
-    bool& enableAmbientLight = GameDebugSettings::EnableAmbientLight();
-    ImGui::Checkbox("Enable Directional Light", &enableDirectionalLight);
+    GameDebugSettings::LightingSettings& lightingSettings = GameDebugSettings::CurrentLightingSettings();
+    ImGui::Checkbox("Enable Directional Light", &lightingSettings.enableDirectionalLight);
     ImGui::SameLine();
-    ImGui::Checkbox("Enable Ambient Light", &enableAmbientLight);
+    ImGui::Checkbox("Enable Ambient Light", &lightingSettings.enableAmbientLight);
 
     if (ImGui::Button("Reset Lighting to Defaults"))
     {
         GameDebugSettings::ResetLightingSettingsToDefaults();
     }
 
-    float& directionalYawDegrees = GameDebugSettings::DirectionalLightYawDegrees();
-    float& directionalPitchDegrees = GameDebugSettings::DirectionalLightPitchDegrees();
-    float& directionalRollDegrees = GameDebugSettings::DirectionalLightRollDegrees();
-    ImGui::SliderFloat("Directional Yaw (deg)", &directionalYawDegrees, -180.0f, 180.0f, "%.1f");
-    ImGui::SliderFloat("Directional Pitch (deg)", &directionalPitchDegrees, -89.0f, 89.0f, "%.1f");
-    ImGui::SliderFloat("Directional Roll (deg)", &directionalRollDegrees, -180.0f, 180.0f, "%.1f");
+    ImGui::SliderFloat("Directional Yaw (deg)", &lightingSettings.directionalRotationDegrees[0], -180.0f, 180.0f, "%.1f");
+    ImGui::SliderFloat("Directional Pitch (deg)", &lightingSettings.directionalRotationDegrees[1], -89.0f, 89.0f, "%.1f");
+    ImGui::SliderFloat("Directional Roll (deg)", &lightingSettings.directionalRotationDegrees[2], -180.0f, 180.0f, "%.1f");
+    ImGui::ColorEdit3("Directional Color", lightingSettings.directionalColor, ImGuiColorEditFlags_HDR);
+    ImGui::DragFloat("Directional Intensity", &lightingSettings.directionalIntensity, 0.01f, 0.0f, 100.0f, "%.3f");
+    ImGui::ColorEdit3("Ambient Color", lightingSettings.ambientColor, ImGuiColorEditFlags_HDR);
+    ImGui::DragFloat("Ambient Intensity", &lightingSettings.ambientIntensity, 0.01f, 0.0f, 100.0f, "%.3f");
 
-    float& directionalColorR = GameDebugSettings::DirectionalLightColorR();
-    float& directionalColorG = GameDebugSettings::DirectionalLightColorG();
-    float& directionalColorB = GameDebugSettings::DirectionalLightColorB();
-    float directionalColor[3] = { directionalColorR, directionalColorG, directionalColorB };
-    if (ImGui::ColorEdit3("Directional Color", directionalColor, ImGuiColorEditFlags_HDR))
+    ImGui::SeparatorText("Scene Lighting");
+    static int selectedSceneIndex = 0;
+    static std::string saveStatusMessage;
+
+    SceneManager* sceneManager = Essentials::globalSceneManager.get();
+    if (sceneManager)
     {
-        directionalColorR = directionalColor[0];
-        directionalColorG = directionalColor[1];
-        directionalColorB = directionalColor[2];
+        if (ImGui::Button("Refresh Scene List"))
+        {
+            sceneManager->RefreshSceneList();
+            selectedSceneIndex = 0;
+        }
+
+        const std::vector<SceneManager::SceneEntry>& scenes = sceneManager->GetScenes();
+        if (scenes.empty())
+        {
+            sceneManager->RefreshSceneList();
+        }
+
+        const std::vector<SceneManager::SceneEntry>& refreshedScenes = sceneManager->GetScenes();
+        if (selectedSceneIndex >= static_cast<int>(refreshedScenes.size()))
+        {
+            selectedSceneIndex = 0;
+        }
+
+        const char* previewValue = refreshedScenes.empty()
+            ? "No scenes found"
+            : refreshedScenes[selectedSceneIndex].path.c_str();
+
+        if (ImGui::BeginCombo("Scene", previewValue))
+        {
+            for (int index = 0; index < static_cast<int>(refreshedScenes.size()); ++index)
+            {
+                const bool isSelected = index == selectedSceneIndex;
+                if (ImGui::Selectable(refreshedScenes[index].path.c_str(), isSelected))
+                {
+                    selectedSceneIndex = index;
+                }
+
+                if (isSelected)
+                {
+                    ImGui::SetItemDefaultFocus();
+                }
+            }
+            ImGui::EndCombo();
+        }
+
+        ImGui::BeginDisabled(refreshedScenes.empty());
+        if (ImGui::Button("Save Current Lighting To Scene"))
+        {
+            const std::string scenePath = refreshedScenes.empty() ? std::string{} : refreshedScenes[selectedSceneIndex].path;
+            const bool saved = GameSettingsService::SaveSceneLighting(scenePath, GameDebugSettings::CurrentLightingSettings());
+            saveStatusMessage = GameSettingsService::GetLastStatusMessage();
+            if (!saved && saveStatusMessage.empty())
+            {
+                saveStatusMessage = "Failed to save scene lighting.";
+            }
+        }
+        ImGui::EndDisabled();
+    }
+    else
+    {
+        ImGui::TextUnformatted("Scene manager is unavailable.");
     }
 
-    float& directionalIntensity = GameDebugSettings::DirectionalLightIntensity();
-    ImGui::DragFloat("Directional Intensity", &directionalIntensity, 0.01f, 0.0f, 100.0f, "%.3f");
-
-    float& ambientColorR = GameDebugSettings::AmbientLightColorR();
-    float& ambientColorG = GameDebugSettings::AmbientLightColorG();
-    float& ambientColorB = GameDebugSettings::AmbientLightColorB();
-    float ambientColor[3] = { ambientColorR, ambientColorG, ambientColorB };
-    if (ImGui::ColorEdit3("Ambient Color", ambientColor, ImGuiColorEditFlags_HDR))
+    if (!saveStatusMessage.empty())
     {
-        ambientColorR = ambientColor[0];
-        ambientColorG = ambientColor[1];
-        ambientColorB = ambientColor[2];
+        ImGui::TextWrapped("%s", saveStatusMessage.c_str());
     }
 
-    float& ambientIntensity = GameDebugSettings::AmbientLightIntensity();
-    ImGui::DragFloat("Ambient Intensity", &ambientIntensity, 0.01f, 0.0f, 100.0f, "%.3f");
-
-    ImGui::SeparatorText("Bounds");
-    boundsChanged |= ImGui::Checkbox("Enable Camera Bounds", &myCameraBoundsEnabled);
-    boundsChanged |= ImGui::InputFloat3("Camera Bounds Min", &myCameraBoundsMin.x, "%.1f");
-    boundsChanged |= ImGui::InputFloat3("Camera Bounds Max", &myCameraBoundsMax.x, "%.1f");
-
-    if (projectionChanged || boundsChanged)
+    if (projectionChanged)
     {
         myDebugCamFovRadians = std::clamp(myDebugCamFovRadians, kDebugCamFovMinRadians, kDebugCamFovMaxRadians);
         myFollowCamFovRadians = std::clamp(myFollowCamFovRadians, kDebugCamFovMinRadians, kDebugCamFovMaxRadians);
         myCameraFarPlane = std::clamp(myCameraFarPlane, 1.0f, kDefaultCameraFarPlane * 10.0f);
         myCameraNearPlane = std::clamp(myCameraNearPlane, 0.001f, std::max(0.002f, myCameraFarPlane - 0.001f));
         myCameraFarPlane = std::max(myCameraFarPlane, myCameraNearPlane + 0.001f);
-        SanitizeCameraBounds();
 
         const float activeFovRadians = myDebugCameraEnabled ? myDebugCamFovRadians : myFollowCamFovRadians;
         const Tga::Vector2ui resolution = Tga::Engine::GetInstance()->GetRenderSize();
         ApplyPerspectiveToCameras(myCamera, myRenderCamera, activeFovRadians, myCameraNearPlane, myCameraFarPlane, resolution);
-        myCamera.GetTransform().SetPosition(ClampCameraPositionToBounds(myCamera.GetTransform().GetPosition()));
     }
+#endif
 }
 #endif

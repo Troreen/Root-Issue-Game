@@ -131,7 +131,7 @@ void GraphicsStateStack::SetAllStatesToDefault(bool fullReset)
 {
 	RenderState renderState = {};
 	renderState.blendState = BlendState::AlphaBlend;
-	renderState.alphaTestThreshold = 0.0f;
+	renderState.alphaTestThreshold = 0.01f;
 	renderState.rasterizerState = RasterizerState::NoFaceCulling;
 	renderState.depthStencilState = DepthStencilState::WriteLess;
 	renderState.samplerAddressMode = SamplerAddressMode::Wrap;

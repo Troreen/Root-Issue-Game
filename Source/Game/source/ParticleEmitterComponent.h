@@ -13,6 +13,7 @@ enum class EmissionShape
     Box,
     Sphere,
     Cone,
+    Disk,
     COUNT
 };
 

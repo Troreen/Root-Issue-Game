@@ -1,0 +1,60 @@
+{
+  "links": [
+    {
+      "id": 0,
+      "sourcePin": 1,
+      "targetPin": 4
+    }
+  ],
+  "nodes": [
+    {
+      "customData": null,
+      "id": 0,
+      "name": "",
+      "position": [
+        596.0,
+        199.0
+      ],
+      "type": "On Animation Event"
+    },
+    {
+      "customData": null,
+      "id": 1,
+      "name": "",
+      "position": [
+        1119.0,
+        196.0
+      ],
+      "type": "Log Animation Event"
+    }
+  ],
+  "pins": [
+    {
+      "datatype": null,
+      "id": 1,
+      "name": "Out",
+      "node": 0,
+      "role": "Output",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 2,
+      "name": "Event Id",
+      "node": 0,
+      "role": "Input",
+      "type": "Property",
+      "value": "attack_end"
+    },
+    {
+      "datatype": null,
+      "id": 4,
+      "name": "In",
+      "node": 1,
+      "role": "Input",
+      "type": "Flow",
+      "value": null
+    }
+  ]
+}

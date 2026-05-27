@@ -1,0 +1,20 @@
+{
+  "name": "GoopEggs",
+  "object-definition": "GoopEggs",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -474.850830078125,
+    158.07252502441406,
+    -903.714111328125
+  ]
+}

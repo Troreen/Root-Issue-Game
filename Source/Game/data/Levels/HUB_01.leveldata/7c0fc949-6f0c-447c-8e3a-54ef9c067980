@@ -1,0 +1,20 @@
+{
+  "name": "Hub_Floor_02",
+  "object-definition": "Hub_Floor_02",
+  "path": "",
+  "rotation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    0.0,
+    0.0,
+    0.0
+  ]
+}

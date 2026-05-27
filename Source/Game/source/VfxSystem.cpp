@@ -106,6 +106,7 @@ namespace
 		if (lowered == "energysmall") return ParticleType::EnergySmall;
 		if (lowered == "smoke") return ParticleType::Smoke;
 		if (lowered == "pebbles") return ParticleType::Pebbles;
+		if (lowered == "spark") return ParticleType::Spark;
 
 		assert(false && "Unknown particle type");
 		return ParticleType::Test;
@@ -296,14 +297,13 @@ bool VfxSystem::SpawnPoolParticle(const ParticleType& aParticleType, const Parti
 
 std::unordered_map<ParticleType, ParticleEmitterSettings>* VfxSystem::GetEmissionSettingsForObject(std::string anObjectName)
 {
-	if (anObjectName.find("Geyser") != std::string::npos)
+	if (anObjectName.find("Geyser") != std::string::npos || anObjectName.find("Generator") != std::string::npos)
 	{
 		size_t pos = anObjectName.find('(');
 		if (pos != std::string::npos)
 		{
 			anObjectName.erase(pos);
 		}
-
 	}
 	else
 	{
@@ -1033,8 +1033,8 @@ bool VfxSystem::LoadParticleDefinitions(const std::string& aPath)
 
 				emitterMap[type] = settings;
 
-				std::cout << "[VFX] Loaded emitter for object: " << objectName
-					<< " with shape: " << emitterJson.value("emissionShape", "") << std::endl;
+				/*std::cout << "[VFX] Loaded emitter for object: " << objectName
+					<< " with shape: " << emitterJson.value("emissionShape", "") << std::endl;*/
 			}
 		}
 	}

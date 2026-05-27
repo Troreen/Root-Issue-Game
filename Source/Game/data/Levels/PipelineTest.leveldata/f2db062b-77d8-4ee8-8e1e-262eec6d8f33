@@ -1,0 +1,20 @@
+{
+  "name": "HUB_Upgrade_Antenna",
+  "object-definition": "HUB_Upgrade_Antenna",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    145.38714599609375,
+    -6.103515625e-05,
+    333.7000732421875
+  ]
+}

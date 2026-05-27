@@ -1,0 +1,20 @@
+{
+  "name": "GunUpgrade",
+  "object-definition": "GunUpgrade",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    321.7162780761719,
+    0.0,
+    314.4601745605469
+  ]
+}

@@ -16,7 +16,10 @@ public:
 	explicit ToggleComponent(int anID, bool aActive, int aTypeID);
 	~ToggleComponent();
 
+	void Init(Tga::Engine& anEngine) override;
 	void Initialize();
+
+	void OnUpdate(float aDeltaTime) override;
 
 	void Receive(const Message& aMSG) override;
 
@@ -29,5 +32,10 @@ private:
 	bool myIsActivated = false;
 	int myUniqueID;
 	int myTypeID;
+
+	float myAnimPercent;
+
+	Tga::Vector3f myStartPos;
+	Tga::Vector3f myEndPos;
 };
 

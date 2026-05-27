@@ -1,0 +1,29 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "Sprite",
+      "type": "Sprite",
+      "value": {
+        "pivot": [
+          0.5,
+          0.5
+        ],
+        "size": [
+          800.0,
+          800.0
+        ],
+        "textures": [
+          "Assets\\Art\\2D\\Decals\\T_D_Sand_04_C.dds",
+          "Assets\\Art\\2D\\Decals\\T_D_Sand_04_N.dds",
+          "Assets\\Art\\2D\\Decals\\T_D_Sand_04_M.dds",
+          ""
+        ]
+      }
+    }
+  ]
+}

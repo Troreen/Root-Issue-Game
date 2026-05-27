@@ -1,0 +1,152 @@
+{
+  "parent": "",
+  "referenceResolution": [
+    1920,
+    1080
+  ],
+  "renderOrder": [
+    3,
+    0,
+    1,
+    2
+  ],
+  "showBounds": true,
+  "uiElements": [
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "Assets\\Art\\2D\\UI\\TgaLogo.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": false,
+      "hiercharyDisplayOrder": 0,
+      "name": "TgaLogo",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": -1,
+      "scaleUniformly": true,
+      "size": [
+        850.0,
+        212.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "Assets\\Art\\2D\\UI\\P4G1_logo.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": false,
+      "hiercharyDisplayOrder": 1,
+      "name": "GoopyGamesLogo",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": -2,
+      "scaleUniformly": true,
+      "size": [
+        500.0,
+        500.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "Assets\\Art\\2D\\UI\\FMOD Logo White - Black Background.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": false,
+      "hiercharyDisplayOrder": 2,
+      "name": "FMODLogo",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": -3,
+      "scaleUniformly": true,
+      "size": [
+        1024.0,
+        256.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "tint": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": false,
+      "hiercharyDisplayOrder": 3,
+      "name": "Background",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        1925.0,
+        1085.0
+      ],
+      "type": "Image"
+    }
+  ]
+}

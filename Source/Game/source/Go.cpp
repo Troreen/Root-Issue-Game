@@ -57,7 +57,8 @@ void Go(const char* argv[])
 
 		while (engine.BeginFrame())
 		{
-			Essentials::GetEssentials().globalInputManager->Update();
+			Essentials::globalInputManager->Update();
+			Essentials::globalInputManager->UpdateInput();
 			gameWorld.Update(engine.GetDeltaTime(), argv);
 
 			gameWorld.Render();
