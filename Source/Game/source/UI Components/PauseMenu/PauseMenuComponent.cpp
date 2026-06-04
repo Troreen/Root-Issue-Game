@@ -28,6 +28,9 @@ void PauseMenuComponent::Init(Tga::Engine& /*anEngine*/)
 	myUICanvas.SetIsHidden("PauseMenu", false);
 	myIsOpen = false;
 	myReturnToMainMenu = false;
+	Essentials::InitCursor();
+	Essentials::myCursor->SceneLoaded();
+	Essentials::globalEngine->LockCursorToWindow();
 }
 
 void PauseMenuComponent::OnUpdate(float /*aDeltaTime*/)
@@ -39,7 +42,8 @@ void PauseMenuComponent::OnUpdate(float /*aDeltaTime*/)
 			myUICanvas.SetIsHidden(false);
 			//myIsActive = true;
 			myIsOpen = true;
-			Tga::Engine::GetInstance()->SetTimeScale(0.f);
+			Essentials::globalEngine->UnlockCursor();
+			Essentials::globalEngine->SetTimeScale(0.f);
 			//if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::ePauseMenu))
 			//{
 			//	Essentials::globalAudioManager->SetEventVolume(eLevelOne, 0);
@@ -61,7 +65,7 @@ void PauseMenuComponent::OnUpdate(float /*aDeltaTime*/)
 			Essentials::globalInputManager->IsButtonPressed(Tga::GamepadButton::Start) ||
 			myUICanvas.GetElementPressed("ResumeButton"))
 		{
-			//Essentials::myCursor->SetCursorVisible(false);
+			Essentials::myCursor->SetCursorVisible(false);
 			myUICanvas.SetIsHidden(true);
 			//myIsActive = false;
 			myIsOpen = false;
@@ -82,7 +86,8 @@ void PauseMenuComponent::OnUpdate(float /*aDeltaTime*/)
 			}
 
 			myUICanvas.SetSelectedElement("ResumeButton");
-			Tga::Engine::GetInstance()->SetTimeScale(1.f);
+			Essentials::globalEngine->SetTimeScale(1.f);
+			Essentials::globalEngine->LockCursorToWindow();
 			myUICanvas.ResetIsFocused();
 		}
 	}
@@ -124,7 +129,7 @@ void PauseMenuComponent::OnUpdate(float /*aDeltaTime*/)
 	}
 	else if (myUICanvas.GetElementPressed("MainMenuButton"))
 	{
-	//	//Essentials::myCursor->SetCursorVisible(false);
+		Essentials::myCursor->SetCursorVisible(false);
 	//	//Essentials::globalAudioManager->SetEventVolume(eLevelOne, 1);
 	//	//myLevelButtons[0] = myUICanvas.GetElement("Level1Button")->definition;
 	//	//Essentials::globalAudioManager->SetEventVolume(eLevelTwo, 1);
@@ -143,9 +148,7 @@ void PauseMenuComponent::OnUpdate(float /*aDeltaTime*/)
 	//	//Essentials::globalAudioManager->StopMusic(SoundID::eBirb, true);
 	//	//Essentials::globalAudioManager->StopMusic(SoundID::eBootsKnight, true);
 	//	//Essentials::globalAudioManager->StopMusic(SoundID::ePauseMenu, true);
-	//	
-	//	//Essentials::globalSceneManager->RequestSceneChange("TitleScene.tgs");
-	//	
+
 	    Tga::Engine::GetInstance()->SetTimeScale(1.f);
 		myReturnToMainMenu = true;
 	    return;

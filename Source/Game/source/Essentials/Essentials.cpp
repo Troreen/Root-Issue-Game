@@ -16,8 +16,6 @@ Essentials::Essentials()
 
 	ShutdownQueued = false;
 
-	myCursor = std::make_unique<Cursor>();
-
 	globalCanvasManager = std::make_unique<Tga::CanvasObjectDefinitionManager>();
 
 	globalPostMaster = std::make_unique <PostMaster>();
@@ -26,10 +24,17 @@ Essentials::Essentials()
 	myDynamicGameObjects = std::make_unique<std::vector<std::unique_ptr<GameObject>>>();
 
 	myEnemiesToSpawn = std::make_unique<std::vector<EnemyAIComponent*>>();
+
+	FirstTimeGunPickup = true;
 }
 
 Essentials::~Essentials()
 {
+}
+
+void Essentials::InitCursor()
+{
+	myCursor = std::make_unique<Cursor>();
 }
 
 float Essentials::GetTotalTime()

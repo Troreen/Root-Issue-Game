@@ -1,0 +1,12 @@
+{
+  "animation_source_path": "animations\\FBX\\Props\\A_P_Gun.fbx",
+  "cycle_count": 1.0,
+  "cycle_offset": 0.0,
+  "end_time": 6.666666507720947,
+  "events": [],
+  "is_looping": true,
+  "is_sync": false,
+  "playback_rate": 1.0,
+  "preview_model_path": "Assets\\Art\\3D\\Level Assets\\SM_P_RangedWeapon.fbx",
+  "start_time": 0.0
+}

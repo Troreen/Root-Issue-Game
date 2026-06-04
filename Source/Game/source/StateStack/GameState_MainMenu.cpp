@@ -174,6 +174,8 @@ void MainMenu::Init(CameraSystem& aCamera, const char* argv[])
 	myStartFirstLevel = false;
 	myStartSecondLevel = false;
 	myStartThirdLevel = false;
+	Essentials::InitCursor();
+	Essentials::myCursor->SceneLoaded();
 }
 
 eState MainMenu::Update()
@@ -185,6 +187,8 @@ eState MainMenu::Update()
 
 	myVfxSystem.Update(deltaTime);
 
+	UICanvas::UpdateAll();
+	Essentials::myCursor->UpdatePosition();
 	UpdateMainMenuUI();
 
 	/*if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eMusicLoop))
@@ -193,7 +197,6 @@ eState MainMenu::Update()
 	}*/
 	Essentials::globalAudioManager->Update(deltaTime);
 
-	UICanvas::UpdateAll();
 
 	if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eMainMenuMusic))
 	{
@@ -230,7 +233,8 @@ eState MainMenu::Update()
 
 void MainMenu::Render()
 {
-	
+	UICanvas::RenderAll();
+
 	/*if (myIsSceneLoading)
 	{
 		RenderLoadingScreen();
@@ -309,7 +313,7 @@ void MainMenu::UpdateMainMenuUI()
 
 		myStartGame = true;
 
-		//Essentials::myCursor->SetCursorVisible(false);
+		Essentials::myCursor->SetCursorVisible(false);
 
 		/*if (Essentials::globalAudioManager->IsEventPlaying(SoundID::eMainMenu))
 		{
@@ -375,7 +379,7 @@ void MainMenu::UpdateMainMenuUI()
 			myUICanvas.SetIsHidden("SettingsMenu", true);
 			myUICanvas.SetIsHidden(true);
 
-			//Essentials::myCursor->SetCursorVisible(false);
+			Essentials::myCursor->SetCursorVisible(false);
 
 			//if (Essentials::globalAudioManager->IsEventPlaying(SoundID::eMainMenu))
 			//{

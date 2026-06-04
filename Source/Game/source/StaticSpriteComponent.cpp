@@ -141,7 +141,9 @@ void StaticSpriteComponent::Render()
         0.0f
         });
 
-    myInstanceData.myTransform = localTransform * ToTgaMatrix(owner->GetTransform().GetWorldMatrix());
+    myInstanceData.myTransform = localTransform * myRotationOffset * ToTgaMatrix(owner->GetTransform().GetWorldMatrix()) ;
+
+    //myInstanceData.myTransform.Rotate(myRotationOffset.GetRotationAsQuaternion());
 
     //Tga::GraphicsStateStack& graphicsStateStack = engine->GetGraphicsEngine().GetGraphicsStateStack();
     //graphicsStateStack.Push();
@@ -150,4 +152,11 @@ void StaticSpriteComponent::Render()
     //graphicsStateStack.SetRasterizerState(Tga::RasterizerState::NoFaceCulling);
     engine->GetGraphicsEngine().GetSpriteDrawer().Draw(mySharedData, myInstanceData);
     //graphicsStateStack.Pop();
+}
+
+void StaticSpriteComponent::SetTranslationRotationOffset(const Tga::Vector3f& aTranslation, const Tga::Vector3f& aRotations)
+{
+    myRotationOffset = Tga::Matrix4x4f::CreateFromRollPitchYaw(aRotations);
+
+    myRotationOffset.Translate(aTranslation);
 }

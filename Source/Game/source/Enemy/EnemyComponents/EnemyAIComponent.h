@@ -1,10 +1,10 @@
 #pragma once
+
 #include "ScriptComponent.h"
 #include "EnemyData.h"
+#include "Vector.hpp"
 #include <string>
-#include <Vector.hpp>
 #include <random>
-#include "Subscriber.h"
 
 class EnemyMovementComponent;
 class EnemyTargetingComponent;
@@ -16,101 +16,82 @@ class SphereColliderComponent;
 
 enum class EnemyState
 {
-	Spawn,
-	Idle,
-	Wander,
-	Chasing,
-	Attacking,
-	Hurt,
-	Stunned,
-	Death,
-	COUNT
+    Spawn,
+    Idle,
+    Wander,
+    React,
+    Chasing,
+    Attacking,
+    Hurt,
+    Stunned,
+    Death,
+    ReturnHome
 };
 
 class EnemyAIComponent : public ScriptComponent
 {
 public:
 
-	EnemyAIComponent() = delete;
-	EnemyAIComponent(const EnemyData& someEnemyData);
-	~EnemyAIComponent();
+    EnemyAIComponent(const EnemyData& someEnemyData);
+    virtual ~EnemyAIComponent() = default;
 
-	void Init(Tga::Engine& aEngine) override;
-	void OnUpdate(float aDeltaTime) override;
+    virtual void Init(Tga::Engine& aEngine) override;
 
-	void SetAggro(bool aState);
+    virtual void OnUpdate(float aDeltaTime) override = 0;
 
-	void Reset() override;
-	void Save() override;
-	void Spawn();
-private:
+    virtual void Reset() override;
+    virtual void Save() override;
 
-	//Basic Enemy
-	void HandleStatesBasicEnemy(float aDeltaTime);
-	void HandleStatesRollingEnemy(float aDeltaTime);
+    void Spawn();
 
-	void ChangeState(const EnemyState& aState);
+protected:
 
-	std::string StringifyState(const EnemyState& aState) const;
+    void ChangeState(EnemyState aState);
 
-	void UpdateSpawn(float aDeltaTime);
-	void UpdateIdle(float aDeltaTime);
-	void UpdateWander(float aDeltaTime);
-	void UpdateChasing(float aDeltaTime);
-	void UpdateAttacking(float aDeltaTime);
-	void UpdateHurt(float aDeltaTime);
-	void UpdateStunned(float aDeltaTime);
-	void UpdateDeath(float aDeltaTime);
+    void PickNewDirection();
 
-	void PickNewDirection();
-	void ResetAnimations();
+    void MoveTowardsHome(float aDeltaTime);
 
-	float GetRandomAngleDegreeToRad(float aMin, float aMax);
-	float GetRandomFloat(float aMin, float aMax);
+    float GetRandomFloat(float min, float max);
+    float GetRandomAngleDegreeToRad(float min, float max);
 
+    std::string StringifyState(const EnemyState& aState) const;
 
-	void BasicEnemyLogicUpdate(float aDeltaTime);
-	void RollingEnemyLogicUpdate(float aDeltaTime);
+protected:
 
-	void AILogicUpdate(float aDeltaTime);
+    EnemyData myEnemyData;
 
-	EnemyType myType;
+    EnemyState myCurrentState = EnemyState::Idle;
+    EnemyState myPreviousState = EnemyState::Idle;
 
-	EnemyData myEnemyData;
+    EnemyMovementComponent* myMovement = nullptr;
+    EnemyTargetingComponent* myTargeting = nullptr;
+    EnemyAnimationComponent* myAnimation = nullptr;
+    ParticleEmitterComponent* myEmitterComponent = nullptr;
+    EnemyAttackComponent* myAttack = nullptr;
+    DamageableComponent* myDamageableComponent = nullptr;
+    //SphereColliderComponent* myCollider = nullptr;
 
-	EnemyState myCurrentState;
-	EnemyState myPreviousState;
+    std::mt19937 myRandomEngine;
 
-	//RollingEnemyState myCurrentStateForRolling;
-	//RollingEnemyState myPreviousStateForRolling;
+    bool myIsAggro = false;
+    bool myHasBeenInitialized = false;
+    bool myActiveAfterSave = true;
+    bool myFirstHit = true;
 
-	EnemyMovementComponent* myMovement = nullptr;
-	EnemyTargetingComponent* myTargeting = nullptr;
-	EnemyAttackComponent* myAttack = nullptr;
+    float mySpawnTimer = 0.f;
+    float myIdleTimer = 0.f;
+    float myWanderTimer = 0.f;
+    float myReactionTimer = 0.8f;
+    float myDeathTimer = 3.f;
+    float myStunnedTimer = 1.0f;
+    float myHurtTimer = 0.2f;
+    const float myHurtDuration = 0.2f;
 
-	EnemyAnimationComponent* myAnimation = nullptr;
-	ParticleEmitterComponent* myEmitterComponent = nullptr;
-	DamageableComponent* myDamageableComponent = nullptr;
+    float myChaseRange = 1000.f;
+    float myLeashDistance = 1800.f;
+    float myReturnTolerance = 50.f;
 
-	SphereColliderComponent* myCollider = nullptr;
-
-
-	std::mt19937 myRandomEngine;
-
-	bool myIsAggro = false;
-	bool myHasBeenInitialized = false;
-	bool myActiveAfterSave = true;
-
-	float mySpawnTimer = 0.0f;
-	float myIdleTimer = 0.0f;
-	float myWanderTimer = 0.0f;
-	float myDeathTimer = 3.0f;
-	float myHurtTimer = 0.5f;
-	float myStunnedTimer = 0.5f;
-	const float myHurtDuration = 0.5f;
-	float myMaxSpeed = 400.0f;
-
-	CommonUtilities::Vector3<float> myWanderDirection;
-
+    CommonUtilities::Vector3<float> myWanderDirection;
+    CommonUtilities::Vector3<float> myStartPosition;
 };
-

@@ -30,7 +30,7 @@ namespace Tga
 			SamplerAddressMode samplerAddressMode;
 			
 			uint32_t shaderDataVersion;
-			float alphaTestThreshold = 0.01f;
+			float alphaTestThreshold = 0.02f;
 			Tga::Vector4f customShaderParameters;
 
 			uint32_t lightDataVersion;

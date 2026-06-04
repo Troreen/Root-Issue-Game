@@ -44,6 +44,7 @@ void SceneTransitionController::Shutdown()
     myApplySceneCallback = {};
     mySceneTransitionCallback = {};
     myCurrentSceneCallback = {};
+    myPostMaster->Unsubscribe(MessageType::LoadScene, this);
 }
 
 bool SceneTransitionController::LoadBootScene(const std::string& aScenePath)

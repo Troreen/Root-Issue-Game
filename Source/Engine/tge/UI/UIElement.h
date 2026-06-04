@@ -75,7 +75,7 @@ enum class VerticalAlign
 
 struct UIText
 {
-    char text[128] = "Hello World!";
+    char text[256] = "Hello World!";
     int fontSize = 30;
     float fontScale = 1.0f;
     HorizontalAlign horizontalAlign = HorizontalAlign::Left;

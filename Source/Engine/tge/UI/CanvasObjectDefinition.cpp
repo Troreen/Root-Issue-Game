@@ -185,12 +185,12 @@ void CanvasObjectDefinition::RenameUIElement(const int aUIElementOfIndex)
 
     if (uiElement->generalProperties.name[0] == '\0')
     {
-        snprintf(uiElement->generalProperties.name, 128, "*");
+        snprintf(uiElement->generalProperties.name, 256, "*");
     }
 
-    char baseName[128];
-    strncpy(baseName, uiElement->generalProperties.name, 128);
-    baseName[127] = '\0';
+    char baseName[256];
+    strncpy(baseName, uiElement->generalProperties.name, 256);
+    baseName[255] = '\0';
 
     char* bracket = strrchr(baseName, '(');
     if (bracket)
@@ -215,15 +215,15 @@ void CanvasObjectDefinition::RenameUIElement(const int aUIElementOfIndex)
     while (!foundValidName)
     {
         foundValidName = true;
-        char candidate[128];
+        char candidate[256];
 
         if (nameIteration == 1)
         {
-            snprintf(candidate, 128, "%s", baseName);
+            snprintf(candidate, 256, "%s", baseName);
         }
         else
         {
-            snprintf(candidate, 128, "%s (%d)", baseName, nameIteration);
+            snprintf(candidate, 256, "%s (%d)", baseName, nameIteration);
         }
 
         for (int i = 0; i < myUIElements.size(); i++)
@@ -240,7 +240,7 @@ void CanvasObjectDefinition::RenameUIElement(const int aUIElementOfIndex)
         if (!foundValidName)
             nameIteration++;
         else
-            snprintf(uiElement->generalProperties.name, 128, "%s", candidate);
+            snprintf(uiElement->generalProperties.name, 256, "%s", candidate);
     }
 }
 

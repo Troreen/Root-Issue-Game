@@ -30,9 +30,9 @@
         "path": "animations\\SK\\SK_ENV_Lever.fbx",
         "textures": [
           [
-            "",
-            "",
-            "",
+            "Assets\\Art\\Textures\\Decoration\\T_Roots_01_c.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Roots_01_n.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Roots_01_m.dds",
             ""
           ],
           [
@@ -58,6 +58,24 @@
     },
     {
       "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "w_activated",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "w_reactivated",
+      "type": "Float",
+      "value": 0.0
+    },
+    {
+      "description": "",
       "group": "Animation",
       "is-dynamic": false,
       "is-per-instance": false,
@@ -70,10 +88,32 @@
       "group": "Animation",
       "is-dynamic": false,
       "is-per-instance": false,
+      "name": "clip_activate",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Lever_Root_Open.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
         "clip_path": "animations\\TGAC\\ENV\\A_ENV_Lever.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_reactivate",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Lever_Root_Reactivate.tgac"
       }
     },
     {

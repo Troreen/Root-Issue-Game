@@ -7,6 +7,12 @@
 void KnockbackComponent::ApplyImpulse(const CommonUtilities::Vector3<float>& anImpulse)
 {
     myVelocity += anImpulse;
+    myDirection = myVelocity;
+}
+
+const CommonUtilities::Vector3<float>& KnockbackComponent::GetDirection()
+{
+    return myDirection;
 }
 
 void KnockbackComponent::OnUpdate(float aDeltaTime)

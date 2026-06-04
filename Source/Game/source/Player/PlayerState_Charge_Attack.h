@@ -11,7 +11,7 @@ public:
 
 	void Update(float aDeltaTime, PlayerControllerComponent& aController) override;
 	void SetValues() override;
-
+	void ResetValues() override;
 private:
 	float myChargeTimer;
 	BulletComponent* myBullet;

@@ -41,6 +41,8 @@ public:
 	void FireBullet();
 	void EnableGun(bool aEnable);
 
+	bool HasGun() const;
+
 	bool IsMoveInput();
 	bool IsFireInput();
 

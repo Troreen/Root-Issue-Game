@@ -1,0 +1,47 @@
+{
+  "parent": "",
+  "referenceResolution": [
+    1920,
+    1080
+  ],
+  "renderOrder": [
+    0
+  ],
+  "showBounds": true,
+  "uiElements": [
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Cursor.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": true,
+      "hiercharyDisplayOrder": 0,
+      "name": "CursorImage",
+      "pivot": [
+        0.47999998927116394,
+        -0.75
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        50.0,
+        50.0
+      ],
+      "type": "Image"
+    }
+  ]
+}

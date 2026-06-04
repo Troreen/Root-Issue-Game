@@ -2,6 +2,18 @@
   "name": "HubDoor_02",
   "object-definition": "HubDoor_02",
   "path": "",
+  "properties": [
+    {
+      "name": "IsActivated?",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "name": "UniqueID",
+      "type": "Int",
+      "value": 9
+    }
+  ],
   "rotation": [
     0.0,
     -0.0,

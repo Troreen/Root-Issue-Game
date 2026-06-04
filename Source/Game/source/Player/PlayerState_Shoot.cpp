@@ -14,12 +14,15 @@ void PlayerState_Shoot::Update(float aDeltaTime, PlayerControllerComponent& aCon
 	}
 
 	myFireTimer -= aDeltaTime;
-	myAnimationGraph->SetFloatParameter("w_ranged_attack", 1);
+	myPlayerAnimation->BlendTo(PlayerAnimationState::RangeAttack, 20);
 
 	if (myFireTimer < 0)
 	{
-		myAnimationGraph->SetFloatParameter("w_ranged_attack", 0);
-		aController.SetState(PlayerState_Master::Instance().myWalkState.get());
+		if (aController.IsMoveInput())
+		{
+			myPlayerAnimation->BlendTo(PlayerAnimationState::None, 20);
+			aController.SetState(PlayerState_Master::Instance().myWalkState.get());
+		}
 	}
 }
 

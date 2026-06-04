@@ -24,7 +24,9 @@
     16,
     17,
     18,
-    19
+    19,
+    20,
+    21
   ],
   "showBounds": true,
   "uiElements": [
@@ -89,10 +91,10 @@
         0.0
       ],
       "renderOrder": 0,
-      "scaleUniformly": true,
+      "scaleUniformly": false,
       "size": [
-        1925.0,
-        1085.0
+        2000.0,
+        1300.0
       ],
       "type": "Image"
     },
@@ -102,11 +104,11 @@
         0.0
       ],
       "data": {
-        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_SettingsContainer.dds",
         "tint": [
-          0.0,
+          0.8610038757324219,
           1.0,
-          0.9420850276947021,
+          0.9919500350952148,
           1.0
         ]
       },
@@ -125,8 +127,8 @@
       "renderOrder": 1,
       "scaleUniformly": true,
       "size": [
-        512.0,
-        1024.0
+        480.0,
+        960.0
       ],
       "type": "Image"
     },
@@ -138,7 +140,7 @@
       "data": {
         "customMouseSelectionBounds": false,
         "image": {
-          "sceneReference": "DefaultUIAssets/DefaultUIButtonBackground.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Button_Background.dds",
           "tint": [
             1.0,
             1.0,
@@ -157,10 +159,10 @@
           -1
         ],
         "text": {
-          "fontScale": 2.0,
+          "fontScale": 1.0,
           "fontSize": 24,
           "horizontalAlign": 1,
-          "sceneReference": "DefaultUIAssets\\Arial.ttf",
+          "sceneReference": "",
           "text": "Resume",
           "tint": [
             0.0,
@@ -181,13 +183,13 @@
       ],
       "position": [
         0.0,
-        300.0
+        150.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
       "size": [
         300.0,
-        200.0
+        100.0
       ],
       "type": "Button"
     },
@@ -199,7 +201,7 @@
       "data": {
         "customMouseSelectionBounds": false,
         "image": {
-          "sceneReference": "DefaultUIAssets/DefaultUIButtonBackground.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Button_Background.dds",
           "tint": [
             1.0,
             1.0,
@@ -221,7 +223,7 @@
           "fontScale": 2.0,
           "fontSize": 24,
           "horizontalAlign": 1,
-          "sceneReference": "DefaultUIAssets\\Arial.ttf",
+          "sceneReference": "",
           "text": "Settings",
           "tint": [
             0.0,
@@ -242,13 +244,13 @@
       ],
       "position": [
         0.0,
-        100.0
+        0.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
       "size": [
         300.0,
-        200.0
+        100.0
       ],
       "type": "Button"
     },
@@ -260,7 +262,7 @@
       "data": {
         "customMouseSelectionBounds": false,
         "image": {
-          "sceneReference": "DefaultUIAssets/DefaultUIButtonBackground.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Button_Background.dds",
           "tint": [
             1.0,
             1.0,
@@ -279,15 +281,15 @@
           -1
         ],
         "text": {
-          "fontScale": 2.0,
-          "fontSize": 18,
+          "fontScale": 1.0,
+          "fontSize": 24,
           "horizontalAlign": 1,
-          "sceneReference": "DefaultUIAssets\\Arial.ttf",
-          "text": "Main Menu",
+          "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+          "text": "\nMain Menu",
           "tint": [
-            0.0,
-            0.0,
-            0.0,
+            1.0,
+            1.0,
+            1.0,
             1.0
           ],
           "verticalAlign": 1
@@ -303,13 +305,13 @@
       ],
       "position": [
         0.0,
-        -100.0
+        -150.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
       "size": [
         300.0,
-        200.0
+        100.0
       ],
       "type": "Button"
     },
@@ -321,7 +323,7 @@
       "data": {
         "customMouseSelectionBounds": false,
         "image": {
-          "sceneReference": "DefaultUIAssets/DefaultUIButtonBackground.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Button_Background.dds",
           "tint": [
             1.0,
             1.0,
@@ -340,15 +342,15 @@
           -1
         ],
         "text": {
-          "fontScale": 2.0,
+          "fontScale": 1.0,
           "fontSize": 24,
           "horizontalAlign": 1,
-          "sceneReference": "DefaultUIAssets\\Arial.ttf",
-          "text": "Quit",
+          "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+          "text": "\nQuit",
           "tint": [
-            0.0,
-            0.0,
-            0.0,
+            1.0,
+            1.0,
+            1.0,
             1.0
           ],
           "verticalAlign": 1
@@ -370,7 +372,7 @@
       "scaleUniformly": true,
       "size": [
         300.0,
-        200.0
+        100.0
       ],
       "type": "Button"
     },
@@ -403,7 +405,7 @@
       ],
       "position": [
         0.0,
-        440.0
+        325.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
@@ -476,7 +478,7 @@
       ],
       "position": [
         0.0,
-        440.0
+        325.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
@@ -494,7 +496,7 @@
       "data": {
         "customMouseSelectionBounds": false,
         "image": {
-          "sceneReference": "DefaultUIAssets/DefaultUIButtonBackground.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Button_Background.dds",
           "tint": [
             1.0,
             1.0,
@@ -513,15 +515,15 @@
           -1
         ],
         "text": {
-          "fontScale": 2.0,
-          "fontSize": 30,
+          "fontScale": 1.0,
+          "fontSize": 24,
           "horizontalAlign": 1,
-          "sceneReference": "DefaultUIAssets\\Arial.ttf",
-          "text": "Back",
+          "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+          "text": "\nBack",
           "tint": [
-            0.0,
-            0.0,
-            0.0,
+            1.0,
+            1.0,
+            1.0,
             1.0
           ],
           "verticalAlign": 1
@@ -543,7 +545,7 @@
       "scaleUniformly": true,
       "size": [
         300.0,
-        200.0
+        100.0
       ],
       "type": "Button"
     },
@@ -553,11 +555,11 @@
         0.0
       ],
       "data": {
-        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_SettingsContainer.dds",
         "tint": [
-          0.0,
+          0.8627451062202454,
           1.0,
-          0.20077204704284668,
+          0.9921568632125854,
           1.0
         ]
       },
@@ -576,8 +578,8 @@
       "renderOrder": 1,
       "scaleUniformly": true,
       "size": [
-        512.0,
-        1024.0
+        480.0,
+        960.0
       ],
       "type": "Image"
     },
@@ -588,7 +590,7 @@
       ],
       "data": {
         "background": {
-          "sceneReference": "DefaultUIAssets/DefaultUISliderBackground.ddS",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Slider_Background.dds",
           "tint": [
             1.0,
             1.0,
@@ -599,7 +601,7 @@
         "customMouseSelectionBounds": false,
         "defaultValue": 0.5,
         "fill": {
-          "sceneReference": "DefaultUIAssets/DefaultUISliderFill.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Slider_Container.dds",
           "tint": [
             1.0,
             1.0,
@@ -608,7 +610,7 @@
           ]
         },
         "handle": {
-          "sceneReference": "DefaultUIAssets/DefaultUISliderHandle.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Slider_Handle.dds",
           "tint": [
             1.0,
             1.0,
@@ -639,13 +641,13 @@
       ],
       "position": [
         0.0,
-        240.0
+        200.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
       "size": [
-        300.0,
-        100.0
+        350.0,
+        50.0
       ],
       "type": "Slider"
     },
@@ -656,10 +658,10 @@
       ],
       "data": {
         "fontScale": 1.0,
-        "fontSize": 30,
+        "fontSize": 24,
         "horizontalAlign": 1,
-        "sceneReference": "DefaultUIAssets/arial.ttf",
-        "text": "Master Volume",
+        "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+        "text": "\nMaster Volume",
         "tint": [
           1.0,
           1.0,
@@ -678,7 +680,7 @@
       ],
       "position": [
         0.0,
-        300.0
+        250.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
@@ -695,10 +697,10 @@
       ],
       "data": {
         "fontScale": 1.0,
-        "fontSize": 30,
+        "fontSize": 24,
         "horizontalAlign": 1,
-        "sceneReference": "DefaultUIAssets/arial.ttf",
-        "text": "Music Volume",
+        "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+        "text": "\nMusic Volume",
         "tint": [
           1.0,
           1.0,
@@ -717,7 +719,7 @@
       ],
       "position": [
         0.0,
-        150.0
+        100.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
@@ -734,7 +736,7 @@
       ],
       "data": {
         "background": {
-          "sceneReference": "DefaultUIAssets/DefaultUISliderBackground.ddS",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Slider_Background.dds",
           "tint": [
             1.0,
             1.0,
@@ -745,7 +747,7 @@
         "customMouseSelectionBounds": false,
         "defaultValue": 0.5,
         "fill": {
-          "sceneReference": "DefaultUIAssets/DefaultUISliderFill.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Slider_Container.dds",
           "tint": [
             1.0,
             1.0,
@@ -754,7 +756,7 @@
           ]
         },
         "handle": {
-          "sceneReference": "DefaultUIAssets/DefaultUISliderHandle.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Slider_Handle.dds",
           "tint": [
             1.0,
             1.0,
@@ -785,13 +787,13 @@
       ],
       "position": [
         0.0,
-        90.0
+        50.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
       "size": [
-        300.0,
-        100.0
+        350.0,
+        50.0
       ],
       "type": "Slider"
     },
@@ -802,10 +804,10 @@
       ],
       "data": {
         "fontScale": 1.0,
-        "fontSize": 30,
+        "fontSize": 24,
         "horizontalAlign": 1,
-        "sceneReference": "DefaultUIAssets/arial.ttf",
-        "text": "SFX Volume",
+        "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+        "text": "\nSFX Volume",
         "tint": [
           1.0,
           1.0,
@@ -824,7 +826,7 @@
       ],
       "position": [
         0.0,
-        0.0
+        -50.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
@@ -841,7 +843,7 @@
       ],
       "data": {
         "background": {
-          "sceneReference": "DefaultUIAssets/DefaultUISliderBackground.ddS",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Slider_Background.dds",
           "tint": [
             1.0,
             1.0,
@@ -852,7 +854,7 @@
         "customMouseSelectionBounds": false,
         "defaultValue": 0.5,
         "fill": {
-          "sceneReference": "DefaultUIAssets/DefaultUISliderFill.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Slider_Container.dds",
           "tint": [
             1.0,
             1.0,
@@ -861,7 +863,7 @@
           ]
         },
         "handle": {
-          "sceneReference": "DefaultUIAssets/DefaultUISliderHandle.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Slider_Handle.dds",
           "tint": [
             1.0,
             1.0,
@@ -892,13 +894,13 @@
       ],
       "position": [
         0.0,
-        -60.0
+        -100.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
       "size": [
-        300.0,
-        100.0
+        350.0,
+        50.0
       ],
       "type": "Slider"
     },
@@ -909,10 +911,10 @@
       ],
       "data": {
         "fontScale": 1.0,
-        "fontSize": 30,
+        "fontSize": 24,
         "horizontalAlign": 0,
-        "sceneReference": "DefaultUIAssets/arial.ttf",
-        "text": "Fullscreen",
+        "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+        "text": "\nFullscreen",
         "tint": [
           1.0,
           1.0,
@@ -931,7 +933,7 @@
       ],
       "position": [
         0.0,
-        -150.0
+        -200.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
@@ -948,7 +950,7 @@
       ],
       "data": {
         "background": {
-          "sceneReference": "DefaultUIAssets/DefaultUIToggleBackground.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_FullscreenToggle_Box.dds",
           "tint": [
             1.0,
             1.0,
@@ -957,7 +959,7 @@
           ]
         },
         "checkmark": {
-          "sceneReference": "DefaultUIAssets/DefaultUIToggleCheckmark.dds",
+          "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_FullscreenToggle_Check.dds",
           "tint": [
             1.0,
             1.0,
@@ -988,7 +990,7 @@
       ],
       "position": [
         100.0,
-        -150.0
+        -200.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
@@ -997,6 +999,84 @@
         50.0
       ],
       "type": "Toggle"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 24,
+        "horizontalAlign": 1,
+        "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+        "text": "\nResume",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 0,
+      "hide": false,
+      "hiercharyDisplayOrder": 20,
+      "name": "ResumeText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        150.0
+      ],
+      "renderOrder": -1,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        120.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 24,
+        "horizontalAlign": 1,
+        "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+        "text": "\nOptions",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 0,
+      "hide": false,
+      "hiercharyDisplayOrder": 21,
+      "name": "OptionsText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": -1,
+      "scaleUniformly": true,
+      "size": [
+        300.0,
+        120.0
+      ],
+      "type": "Text"
     }
   ]
 }

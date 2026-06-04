@@ -2,13 +2,28 @@
   "links": [
     {
       "id": 0,
-      "sourcePin": 1,
+      "sourcePin": 6,
       "targetPin": 3
     },
     {
       "id": 1,
       "sourcePin": 5,
       "targetPin": 0
+    },
+    {
+      "id": 2,
+      "sourcePin": 1,
+      "targetPin": 8
+    },
+    {
+      "id": 3,
+      "sourcePin": 9,
+      "targetPin": 7
+    },
+    {
+      "id": 4,
+      "sourcePin": 13,
+      "targetPin": 11
     }
   ],
   "nodes": [
@@ -27,8 +42,8 @@
       "id": 1,
       "name": "",
       "position": [
-        547.0,
-        268.0
+        601.0,
+        197.0
       ],
       "type": "Animate Model"
     },
@@ -37,10 +52,40 @@
       "id": 2,
       "name": "",
       "position": [
-        103.0,
-        113.0
+        92.0,
+        164.0
       ],
       "type": "Read Animation Clip Property"
+    },
+    {
+      "customData": null,
+      "id": 3,
+      "name": "",
+      "position": [
+        343.0,
+        353.0
+      ],
+      "type": "Adjust Speed"
+    },
+    {
+      "customData": null,
+      "id": 4,
+      "name": "",
+      "position": [
+        -23.0,
+        380.0
+      ],
+      "type": "float *"
+    },
+    {
+      "customData": null,
+      "id": 5,
+      "name": "",
+      "position": [
+        -206.0,
+        437.0
+      ],
+      "type": "Read Float Property"
     }
   ],
   "pins": [
@@ -94,6 +139,78 @@
       "id": 5,
       "name": "Value",
       "node": 2,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 6,
+      "name": "Pose",
+      "node": 3,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Float",
+      "id": 7,
+      "name": "Rate Scale",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": -1.0
+    },
+    {
+      "datatype": "Pose",
+      "id": 8,
+      "name": "Pose",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Float",
+      "id": 9,
+      "name": "Value",
+      "node": 4,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Float",
+      "id": 10,
+      "name": "First",
+      "node": 4,
+      "role": "Input",
+      "type": "Property",
+      "value": 1.0
+    },
+    {
+      "datatype": "Float",
+      "id": 11,
+      "name": "Second",
+      "node": 4,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 12,
+      "name": "Name",
+      "node": 5,
+      "role": "Input",
+      "type": "Property",
+      "value": "w_Active"
+    },
+    {
+      "datatype": "Float",
+      "id": 13,
+      "name": "Value",
+      "node": 5,
       "role": "Output",
       "type": "Property",
       "value": null

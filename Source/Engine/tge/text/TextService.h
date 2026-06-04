@@ -30,6 +30,7 @@ namespace Tga
 		float MeasureWidth(const Tga::Text& textTemplate, const std::string& str) const;
 		float GetSentenceWidth(Tga::Text& aText);
 		float GetSentenceHeight(Tga::Text& aText);
+		float GetSentenceHeightWithoutLines(Tga::Text& aText);
 		float GetLineHeight(const Tga::Text& text) const;
 		float GetAscender(const Tga::Text& text) const;
 		float GetDescender(const Tga::Text& text) const;

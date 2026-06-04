@@ -21,15 +21,15 @@
         "path": "Assets\\Art\\3D\\Level Assets\\SK_P_Smashroom_01_Lvl1.fbx",
         "textures": [
           [
-            "",
-            "",
-            "",
+            "Assets\\Art\\Textures\\T_Smashroom_c.dds",
+            "Assets\\Art\\Textures\\T_Smashroom_n.dds",
+            "Assets\\Art\\Textures\\T_Smashroom_m.dds",
             ""
           ],
           [
-            "",
-            "",
-            "",
+            "Assets\\Art\\Textures\\T_Smashroom_c.dds",
+            "Assets\\Art\\Textures\\T_Smashroom_n.dds",
+            "Assets\\Art\\Textures\\T_Smashroom_m.dds",
             ""
           ],
           [

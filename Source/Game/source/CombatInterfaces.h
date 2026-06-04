@@ -38,10 +38,6 @@ struct CombatTargetMask
 
     bool Contains(ObjectLayer aLayer) const
     {
-        if (aLayer == ObjectLayer::Switch)
-        {
-            return true;
-        }
         return (bits & (1u << static_cast<std::uint32_t>(aLayer))) != 0u;
     }
 };

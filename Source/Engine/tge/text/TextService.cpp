@@ -655,6 +655,20 @@ float Tga::TextService::GetSentenceHeight(Tga::Text& aText)
 	return lineCount * fontData->myLineHeight * aText.myScale;
 }
 
+float Tga::TextService::GetSentenceHeightWithoutLines(Tga::Text& aText)
+{
+	if (aText.myText.empty())
+		return 0.0f;
+
+	const InternalTextAndFontData* fontData = aText.myFont.myData.get();
+	if (!fontData)
+		return 0.0f;
+
+	int lineCount = 1;
+
+	return lineCount * fontData->myLineHeight * aText.myScale;
+}
+
 float TextService::MeasureStringWidth(const Text& templateText,
 	const std::string& str)
 {

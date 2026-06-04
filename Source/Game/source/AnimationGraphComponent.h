@@ -52,6 +52,10 @@ public:
 
     void Reset() override;
 
+    AnimationGraphRuntime* GetRuntime() {
+        return &myRuntime;
+    };
+
 protected:
     void OnStart() override;
     void OnUpdate(float aDeltaTime) override;

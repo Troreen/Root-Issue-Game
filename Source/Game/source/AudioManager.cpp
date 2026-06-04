@@ -232,17 +232,22 @@ void AudioManager::RegisterAllEvents()
 
 	SoundEngine::RegisterEvent("event:/Gore", SoundID::eGore);
 	myMusicList.insert({ SoundID::eGore, SoundEngine::CreateEventInstance(SoundID::eGore) });
-
+	SoundEngine::RegisterEvent("event:/RootDoor", SoundID::eRootDoor);
+	myMusicList.insert({ SoundID::eRootDoor, SoundEngine::CreateEventInstance(SoundID::eRootDoor) });
 
 	SoundEngine::RegisterEvent("event:/MainMenuMusic", SoundID::eMainMenuMusic);
 	myMusicList.insert({ SoundID::eMainMenuMusic, SoundEngine::CreateEventInstance(SoundID::eMainMenuMusic) });
 	SoundEngine::RegisterEvent("event:/Level1Music", SoundID::eMusicLevel1);
 	myMusicList.insert({ SoundID::eMusicLevel1, SoundEngine::CreateEventInstance(SoundID::eMusicLevel1) });
+	SoundEngine::RegisterEvent("event:/Level2Music", SoundID::eMusicLevel2);
+	myMusicList.insert({ SoundID::eMusicLevel2, SoundEngine::CreateEventInstance(SoundID::eMusicLevel2) });
 	SoundEngine::RegisterEvent("event:/Level3Music", SoundID::eMusicLevel3);
 	myMusicList.insert({ SoundID::eMusicLevel3, SoundEngine::CreateEventInstance(SoundID::eMusicLevel3) });
 
 	SoundEngine::RegisterEvent("event:/IntroSFX", SoundID::eIntroSFX);
 	myMusicList.insert({ SoundID::eIntroSFX, SoundEngine::CreateEventInstance(SoundID::eIntroSFX) });
+	SoundEngine::RegisterEvent("event:/OutroSFX", SoundID::eOutroSFX);
+	myMusicList.insert({ SoundID::eOutroSFX, SoundEngine::CreateEventInstance(SoundID::eOutroSFX) });
 }
 
 AudioManager::AudioManager()

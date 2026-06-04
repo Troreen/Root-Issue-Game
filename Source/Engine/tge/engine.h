@@ -169,6 +169,9 @@ namespace Tga
         void SetBorderless(bool aBorderless);
 
         bool GetIsBorderless();
+
+        void LockCursorToWindow();
+        void UnlockCursor();
 		
 		void SetClearColor(const Color& aClearColor);
         const Color& GetClearColor() const { return myWindowConfiguration.myClearColor; }

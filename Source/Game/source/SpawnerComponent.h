@@ -7,6 +7,8 @@ class SpanwnerComponent : public ScriptComponent
 {
 public:
 
+	SpanwnerComponent();
+
 	void OnStart() override;
 	void OnUpdate(float) override;
 	void Reset() override;

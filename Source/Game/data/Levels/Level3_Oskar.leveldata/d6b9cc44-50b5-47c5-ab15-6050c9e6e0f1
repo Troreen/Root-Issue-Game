@@ -1,0 +1,20 @@
+{
+  "name": "FluffCluster_03_Lvl3",
+  "object-definition": "FluffCluster_03_Lvl3",
+  "path": "",
+  "rotation": [
+    0.0,
+    -32.59577560424805,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    1046.2452392578125,
+    6.0,
+    978.0914306640625
+  ]
+}

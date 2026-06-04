@@ -5,6 +5,7 @@
 #include "PlayerState_Shoot.h"
 #include "PlayerState_Death.h"
 #include "PlayerState_Pickup_Gun.h"
+#include "PlayerState_Hurt.h"
 #include "GameObject.h"
 #include <memory>
 
@@ -22,6 +23,7 @@ public:
 	static inline std::unique_ptr<PlayerState_Shoot> myShootState;
 	static inline std::unique_ptr<PlayerState_Death> myDeathState;
 	static inline std::unique_ptr<PlayerState_Pickup_Gun> myUpgradeState;
+	static inline std::unique_ptr<PlayerState_Hurt> myHurtState;
 private:
 };
 

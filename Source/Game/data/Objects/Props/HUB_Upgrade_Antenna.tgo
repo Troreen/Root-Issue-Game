@@ -18,7 +18,7 @@
       "name": "model",
       "type": "Model",
       "value": {
-        "path": "Assets\\Art\\3D\\Environment\\HUB\\SM_P_Fuse.fbx",
+        "path": "animations\\SK\\SK_P_Satellite.fbx",
         "textures": [
           [
             "Assets\\Art\\Textures\\HUB\\T_HUBUpgrade_01_c.dds",
@@ -64,7 +64,7 @@
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "animations\\TGAC\\ENV\\A_P_Fuse.tgac"
+        "clip_path": "animations\\TGAC\\ENV\\A_P_AntennaIdle.tgac"
       }
     },
     {
@@ -75,7 +75,7 @@
       "name": "clip_pickup",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "animations\\TGAC\\ENV\\A_P_FusePickup.tgac"
+        "clip_path": "animations\\TGAC\\ENV\\A_P_Antenna.tgac"
       }
     },
     {
@@ -152,7 +152,7 @@
       "is-per-instance": true,
       "name": "targetScene",
       "type": "StringId",
-      "value": ""
+      "value": "TransitionScene2"
     },
     {
       "description": "",

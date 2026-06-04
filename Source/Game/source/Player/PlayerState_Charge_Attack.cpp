@@ -25,11 +25,21 @@ void PlayerState_Charge_Attack::Update(float aDeltaTime, PlayerControllerCompone
 	}
 
 	bool held = Essentials::GetEssentials().globalInputManager->PressingPlayerAim();
-	Tga::Vector2f direction = Essentials::globalInputManager->RightStickHeldDown() ? Essentials::globalInputManager->RightStick() : myMouse->GetWorldDirection();
+	Tga::Vector2f direction;
+
+	if (myInput->IsCharging())
+	{
+		direction.x = myInput->GetAimingDirection().x;
+		direction.y = myInput->GetAimingDirection().z;
+	}
+	else
+	{
+		direction = myMouse->GetWorldDirection();
+	}
 
 	if (held)
 	{
-		owner->GetTransform().SetYawPitchRollRadians(std::atan2f(myMouse->GetWorldDirection().y, myMouse->GetWorldDirection().x), 0, 0);
+		owner->GetTransform().SetYawPitchRollRadians(std::atan2f(direction.x, direction.y), 0, 0);
 	}
 
 	myChargeTimer -= aDeltaTime;
@@ -40,20 +50,22 @@ void PlayerState_Charge_Attack::Update(float aDeltaTime, PlayerControllerCompone
 		{
 			Essentials::globalAudioManager->PlaySFX(SoundID::eCharge);
 		}
-		myAnimationGraph->SetFloatParameter("w_ranged_charge", 1);
-		myAnimationGraph->SetFloatParameter("w_ranged_charge_idle", 0);
+		myPlayerAnimation->BlendTo(PlayerAnimationState::RangeCharge, 20);
+
 	}
 	else
 	{
-		myAnimationGraph->SetFloatParameter("w_ranged_charge", 0);
-		myAnimationGraph->SetFloatParameter("w_ranged_charge_idle", 1);
+		myEmitter->SetEnabled(true);
+		myPlayerAnimation->BlendTo(PlayerAnimationState::RangeChargeIdle, 100);
 	}
 
+	myEmitter->SetOffset(ParticleType::EnergySmall, { -15, 75, 120 });
+	myEmitter->SetEmissionDirection(ParticleType::EnergySmall, myOwner->GetTransform().GetForward());
 
 	if (!held)
 	{
-		myAnimationGraph->SetFloatParameter("w_ranged_charge", 0);
-		myAnimationGraph->SetFloatParameter("w_ranged_charge_idle", 0);
+		myPlayerAnimation->BlendTo(PlayerAnimationState::None, 20);
+
 		Essentials::globalAudioManager->StopMusic(SoundID::eCharge, true);
 
 		if (myChargeTimer > 0)
@@ -73,4 +85,16 @@ void PlayerState_Charge_Attack::Update(float aDeltaTime, PlayerControllerCompone
 void PlayerState_Charge_Attack::SetValues()
 {
 	myChargeTimer = 0.5f;
+
+	Essentials::myCursor->SetCursorVisible(Essentials::globalInputManager->IsKeyHeld(static_cast<int>(Keys::MOUSELBUTTON)));
+
+	mySprite->SetEnabled(true);
+}
+
+void PlayerState_Charge_Attack::ResetValues()
+{
+	myEmitter->SetEnabled(false);
+	Essentials::myCursor->SetCursorVisible(false);
+
+	mySprite->SetEnabled(false);
 }

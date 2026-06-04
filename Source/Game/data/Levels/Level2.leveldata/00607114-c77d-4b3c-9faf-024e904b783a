@@ -1,0 +1,20 @@
+{
+  "name": "FluffyCluster_04_Lvl2(34)",
+  "object-definition": "FluffyCluster_04_Lvl2",
+  "path": "Setdressing",
+  "rotation": [
+    0.0,
+    30.82220458984375,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    1226.323486328125,
+    280.74688720703125,
+    1200.217041015625
+  ]
+}

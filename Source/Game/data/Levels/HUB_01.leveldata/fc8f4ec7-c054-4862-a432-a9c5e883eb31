@@ -1,0 +1,32 @@
+{
+  "name": "SwitchDoor",
+  "object-definition": "SwitchDoor",
+  "path": "",
+  "properties": [
+    {
+      "name": "UniqueID",
+      "type": "Int",
+      "value": 7
+    },
+    {
+      "name": "TriggerOnce",
+      "type": "Bool",
+      "value": true
+    }
+  ],
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    1150.0,
+    0.0,
+    -600.0
+  ]
+}

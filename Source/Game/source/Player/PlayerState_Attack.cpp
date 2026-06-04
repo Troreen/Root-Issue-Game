@@ -67,7 +67,7 @@ void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aCo
 		myHasSpawnedHitbox = true;
 	}
 
-	if (myAttackTimer < myNextAttackTime + 0.2f && Essentials::GetEssentials().globalInputManager->IsKeyPressed(static_cast<int>(Keys::SPACE)))
+	if (myAttackTimer < myNextAttackTime + 0.2f && Essentials::GetEssentials().globalInputManager->PressingPlayerAttack())
 	{
 		myInputAttack = true;
 	}
@@ -87,10 +87,15 @@ void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aCo
 			myAttackFromRight = !myAttackFromRight;
 			myAttackLungeSpeed = myAttackLungeImpulse;
 			myHasSpawnedHitbox = false;
+			if (myAttackFromRight)
+			{
+				myPlayerAnimation->BlendTo(PlayerAnimationState::Attack2, 20);
+			}
+			else
+			{
+				myPlayerAnimation->BlendTo(PlayerAnimationState::Attack3, 20);
+			}
 
-			myAnimationGraph->SetFloatParameter("w_attack_basic01", 0.f);
-			myAnimationGraph->SetFloatParameter("w_attack_basic02", myAttackFromRight ? 1.f : 0.f);
-			myAnimationGraph->SetFloatParameter("w_attack_basic03", myAttackFromRight ? 0.f : 1.f);
 		}
 
 		else if (aController.IsMoveInput())
@@ -104,7 +109,9 @@ void PlayerState_Attack::Update(float aDeltaTime, PlayerControllerComponent& aCo
 
 void PlayerState_Attack::SetValues()
 {
-	myAnimationGraph->SetFloatParameter("w_attack_basic01", 1.f);
+	//myAnimationGraph->SetFloatParameter("w_attack_basic01", 1.f);
+
+	myPlayerAnimation->BlendTo(PlayerAnimationState::Attack1, 20);
 
 	myEnd = false;
 	myInputAttack = false;
@@ -116,7 +123,9 @@ void PlayerState_Attack::SetValues()
 
 void PlayerState_Attack::ResetValues()
 {
-	myAnimationGraph->SetFloatParameter("w_attack_basic01", 0);
-	myAnimationGraph->SetFloatParameter("w_attack_basic02", 0);
-	myAnimationGraph->SetFloatParameter("w_attack_basic03", 0);
+	//myAnimationGraph->SetFloatParameter("w_attack_basic01", 0);
+	//myAnimationGraph->SetFloatParameter("w_attack_basic02", 0);
+	//myAnimationGraph->SetFloatParameter("w_attack_basic03", 0);
+	myPlayerAnimation->BlendTo(PlayerAnimationState::None);
+
 }

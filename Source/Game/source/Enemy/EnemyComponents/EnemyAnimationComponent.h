@@ -36,9 +36,7 @@ public:
 	void OnStart() override;
 	void OnUpdate(float aDeltaTime) override;
 
-	void BlendTo(const EnemyAnimationState& aState);
-
-	void SetBlendSpeed(float aSpeed);
+	void BlendTo(EnemyAnimationState aState, float aBlendSpeed = 2.0f);
 
 private:
 

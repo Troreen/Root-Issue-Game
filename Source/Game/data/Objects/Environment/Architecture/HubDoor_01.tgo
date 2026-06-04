@@ -64,7 +64,7 @@
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Root_Door_Closed_Flat_Idle.tgac"
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Root_Door_Open_Flat.tgac"
       }
     },
     {

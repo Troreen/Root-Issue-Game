@@ -1,24 +1,33 @@
 #pragma once
 #include "ScriptComponent.h"
+#include <Vector.hpp>
 
-class EnemyAIComponent;
+class GameObject;
 
 class EnemyTargetingComponent : public ScriptComponent
 {
 public:
 
-	EnemyTargetingComponent() = delete;
-	EnemyTargetingComponent(float aDetectionRange);
-	~EnemyTargetingComponent();
+    EnemyTargetingComponent(float aDetectionRange);
+    ~EnemyTargetingComponent();
 
-	void OnUpdate(float aDeltaTime) override;
+    void OnUpdate(float aDeltaTime) override;
 
-	bool IsTargetInRange() const;
+    bool IsTargetInRange() const;
+
+    GameObject* GetTarget() const;
+
+    float GetDistanceToTarget() const;
+
+    CommonUtilities::Vector3<float> GetDirectionToTarget() const;
 
 private:
 
-	float myDetectionRange;
-	bool myTargetIsInRange;
+    float myDetectionRange = 1000.0f;
 
+    bool myTargetIsInRange = false;
+
+    float myDistanceToTarget = 0.0f;
+
+    GameObject* myTarget = nullptr;
 };
-

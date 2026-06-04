@@ -347,18 +347,18 @@
     },
     {
       "id": 69,
-      "sourcePin": 164,
-      "targetPin": 177
-    },
-    {
-      "id": 70,
       "sourcePin": 174,
       "targetPin": 178
     },
     {
-      "id": 71,
+      "id": 70,
       "sourcePin": 176,
       "targetPin": 179
+    },
+    {
+      "id": 71,
+      "sourcePin": 164,
+      "targetPin": 177
     },
     {
       "id": 72,
@@ -367,18 +367,18 @@
     },
     {
       "id": 73,
-      "sourcePin": 180,
-      "targetPin": 187
-    },
-    {
-      "id": 74,
       "sourcePin": 184,
       "targetPin": 188
     },
     {
-      "id": 75,
+      "id": 74,
       "sourcePin": 186,
       "targetPin": 189
+    },
+    {
+      "id": 75,
+      "sourcePin": 180,
+      "targetPin": 187
     }
   ],
   "nodes": [
@@ -1077,8 +1077,8 @@
       "id": 69,
       "name": "",
       "position": [
-        8660.0,
-        120.0
+        8800.0,
+        121.0
       ],
       "type": "Read Animation Clip Property"
     },
@@ -1087,8 +1087,8 @@
       "id": 70,
       "name": "",
       "position": [
-        8880.0,
-        260.0
+        9030.0,
+        257.0
       ],
       "type": "Play Clip"
     },
@@ -1097,8 +1097,8 @@
       "id": 71,
       "name": "",
       "position": [
-        8880.0,
-        430.0
+        8995.0,
+        419.0
       ],
       "type": "Read Float Property"
     },
@@ -1107,8 +1107,8 @@
       "id": 72,
       "name": "",
       "position": [
-        9120.0,
-        320.0
+        9240.0,
+        319.0
       ],
       "type": "Blend Pose"
     },
@@ -1117,8 +1117,8 @@
       "id": 73,
       "name": "",
       "position": [
-        9180.0,
-        120.0
+        9240.0,
+        121.0
       ],
       "type": "Read Animation Clip Property"
     },
@@ -1127,8 +1127,8 @@
       "id": 74,
       "name": "",
       "position": [
-        9400.0,
-        260.0
+        9470.0,
+        257.0
       ],
       "type": "Play Clip"
     },
@@ -1137,8 +1137,8 @@
       "id": 75,
       "name": "",
       "position": [
-        9400.0,
-        430.0
+        9435.0,
+        419.0
       ],
       "type": "Read Float Property"
     },
@@ -1147,8 +1147,8 @@
       "id": 76,
       "name": "",
       "position": [
-        9640.0,
-        320.0
+        9680.0,
+        319.0
       ],
       "type": "Blend Pose"
     }

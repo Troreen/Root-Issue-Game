@@ -485,6 +485,9 @@ void CameraSystem::RenderDebugUi()
 
     bool& showCombatHitboxes = GameDebugSettings::ShowCombatHitboxes();
     ImGui::Checkbox("Show Combat Hitboxes", &showCombatHitboxes);
+
+    bool& showEnemyAvoidance = GameDebugSettings::ShowEnemyAvoidanceDebugLines();
+    ImGui::Checkbox("Show Enemy Avoidance Rays", &showEnemyAvoidance);
 #ifdef _DEBUG
     bool& enableCollisionDebugLog = GameDebugSettings::EnableCollisionDebugLog();
     ImGui::Checkbox("Log Collision Checks", &enableCollisionDebugLog);
@@ -545,6 +548,41 @@ void CameraSystem::RenderDebugUi()
     ImGui::SliderFloat("Directional Roll (deg)", &lightingSettings.directionalRotationDegrees[2], -180.0f, 180.0f, "%.1f");
     ImGui::ColorEdit3("Directional Color", lightingSettings.directionalColor, ImGuiColorEditFlags_HDR);
     ImGui::DragFloat("Directional Intensity", &lightingSettings.directionalIntensity, 0.01f, 0.0f, 100.0f, "%.3f");
+    ImGui::SliderFloat("Directional Softness", &lightingSettings.directionalSoftness, 0.0f, 1.0f, "%.3f");
+
+    const char* ambientModeNames[] = { "Uniform", "Uniform Above Horizon", "Custom" };
+    int ambientModeIndex = 0;
+    switch (lightingSettings.ambientMode)
+    {
+    case Tga::AmbientLightType::UniformAboveHorizon:
+        ambientModeIndex = 1;
+        break;
+    case Tga::AmbientLightType::Custom:
+        ambientModeIndex = 2;
+        break;
+    case Tga::AmbientLightType::Uniform:
+    default:
+        ambientModeIndex = 0;
+        break;
+    }
+
+    if (ImGui::Combo("Ambient Mode", &ambientModeIndex, ambientModeNames, IM_ARRAYSIZE(ambientModeNames)))
+    {
+        switch (ambientModeIndex)
+        {
+        case 1:
+            lightingSettings.ambientMode = Tga::AmbientLightType::UniformAboveHorizon;
+            break;
+        case 2:
+            lightingSettings.ambientMode = Tga::AmbientLightType::Custom;
+            break;
+        case 0:
+        default:
+            lightingSettings.ambientMode = Tga::AmbientLightType::Uniform;
+            break;
+        }
+    }
+
     ImGui::ColorEdit3("Ambient Color", lightingSettings.ambientColor, ImGuiColorEditFlags_HDR);
     ImGui::DragFloat("Ambient Intensity", &lightingSettings.ambientIntensity, 0.01f, 0.0f, 100.0f, "%.3f");
 

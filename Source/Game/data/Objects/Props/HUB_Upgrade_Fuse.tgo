@@ -149,10 +149,10 @@
       "description": "",
       "group": "Pickup",
       "is-dynamic": false,
-      "is-per-instance": false,
+      "is-per-instance": true,
       "name": "targetScene",
       "type": "StringId",
-      "value": "HUB_01"
+      "value": "TransitionScene1"
     },
     {
       "description": "",

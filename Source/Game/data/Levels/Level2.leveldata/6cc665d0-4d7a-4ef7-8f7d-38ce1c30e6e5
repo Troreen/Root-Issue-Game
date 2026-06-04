@@ -6,7 +6,7 @@
     {
       "name": "exitDirection",
       "type": "Int",
-      "value": 2
+      "value": 3
     },
     {
       "name": "pairId",
@@ -27,6 +27,6 @@
   "translation": [
     1284.566650390625,
     23.21875,
-    4378.4560546875
+    4360.14453125
   ]
 }

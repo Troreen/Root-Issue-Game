@@ -1,0 +1,20 @@
+{
+  "name": "Smashroom_01_Lvl(1-3)(60)",
+  "object-definition": "Smashroom_01_Lvl(1-3)",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    2497.365234375,
+    3.8492355346679688,
+    3279.71142578125
+  ]
+}

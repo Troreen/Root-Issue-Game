@@ -7,14 +7,28 @@
   "renderOrder": [
     5,
     0,
-    1,
-    2,
-    3,
     4,
     6,
     7,
+    9,
+    10,
+    11,
+    12,
+    13,
+    1,
+    2,
+    3,
     8,
-    9
+    22,
+    23,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
   ],
   "showBounds": true,
   "uiElements": [
@@ -38,7 +52,7 @@
         "verticalAlign": 0
       },
       "groupIndex": 4,
-      "hide": false,
+      "hide": true,
       "hiercharyDisplayOrder": 0,
       "name": "HealthText",
       "pivot": [
@@ -63,7 +77,7 @@
         1.0
       ],
       "data": {
-        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_HealthFill.dds",
         "tint": [
           1.0,
           1.0,
@@ -80,10 +94,10 @@
         0.0
       ],
       "position": [
-        275.0,
-        -145.0
+        300.0,
+        -105.0
       ],
-      "renderOrder": 0,
+      "renderOrder": -1,
       "scaleUniformly": true,
       "size": [
         50.0,
@@ -97,7 +111,7 @@
         1.0
       ],
       "data": {
-        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_HealthFill.dds",
         "tint": [
           1.0,
           1.0,
@@ -114,10 +128,10 @@
         0.0
       ],
       "position": [
-        325.0,
-        -145.0
+        350.0,
+        -105.0
       ],
-      "renderOrder": 0,
+      "renderOrder": -1,
       "scaleUniformly": true,
       "size": [
         50.0,
@@ -131,7 +145,7 @@
         1.0
       ],
       "data": {
-        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_HealthFill.dds",
         "tint": [
           1.0,
           1.0,
@@ -148,10 +162,10 @@
         0.0
       ],
       "position": [
-        375.0,
-        -145.0
+        400.0,
+        -105.0
       ],
-      "renderOrder": 0,
+      "renderOrder": -1,
       "scaleUniformly": true,
       "size": [
         50.0,
@@ -233,46 +247,7 @@
         1.0
       ],
       "data": {
-        "fontScale": 1.0,
-        "fontSize": 30,
-        "horizontalAlign": 0,
-        "sceneReference": "DefaultUIAssets/arial.ttf",
-        "text": "Weapons",
-        "tint": [
-          1.0,
-          1.0,
-          1.0,
-          1.0
-        ],
-        "verticalAlign": 0
-      },
-      "groupIndex": 4,
-      "hide": false,
-      "hiercharyDisplayOrder": 6,
-      "name": "WeaponsText",
-      "pivot": [
-        0.0,
-        0.0
-      ],
-      "position": [
-        100.0,
-        -95.0
-      ],
-      "renderOrder": 0,
-      "scaleUniformly": true,
-      "size": [
-        180.0,
-        50.0
-      ],
-      "type": "Text"
-    },
-    {
-      "anchor": [
-        -1.0,
-        1.0
-      ],
-      "data": {
-        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_WeaponIcon_Sword.dds",
         "tint": [
           1.0,
           1.0,
@@ -289,8 +264,8 @@
         0.0
       ],
       "position": [
-        60.0,
-        -170.0
+        100.0,
+        -105.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
@@ -306,7 +281,7 @@
         1.0
       ],
       "data": {
-        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_WeaponIcon_Gun.dds",
         "tint": [
           1.0,
           1.0,
@@ -323,8 +298,8 @@
         0.0
       ],
       "position": [
-        160.0,
-        -170.0
+        200.0,
+        -105.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
@@ -340,7 +315,7 @@
         1.0
       ],
       "data": {
-        "sceneReference": "DefaultUIAssets/KnightRotAd.dds",
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_HealthFill.dds",
         "tint": [
           1.0,
           1.0,
@@ -357,8 +332,42 @@
         0.0
       ],
       "position": [
-        425.0,
-        -145.0
+        450.0,
+        -105.0
+      ],
+      "renderOrder": -1,
+      "scaleUniformly": true,
+      "size": [
+        50.0,
+        50.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_HealthIcon.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 9,
+      "name": "HealthBackground1",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        300.0,
+        -105.0
       ],
       "renderOrder": 0,
       "scaleUniformly": true,
@@ -367,6 +376,503 @@
         50.0
       ],
       "type": "Image"
+    },
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_HealthIcon.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 10,
+      "name": "HealthBackground2",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        350.0,
+        -105.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        50.0,
+        50.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_HealthIcon.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 11,
+      "name": "HealthBackground3",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        400.0,
+        -105.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        50.0,
+        50.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_HealthIcon.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 12,
+      "name": "HealthBackground4",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        450.0,
+        -105.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        50.0,
+        50.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        -1.0,
+        1.0
+      ],
+      "data": {
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_WeaponIcon_Empty.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": 4,
+      "hide": false,
+      "hiercharyDisplayOrder": 13,
+      "name": "GunImageEmpty",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        200.0,
+        -105.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        100.0,
+        100.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": true,
+      "hiercharyDisplayOrder": 14,
+      "name": "PCTutorial",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": -1,
+      "scaleUniformly": true,
+      "size": [
+        100.0,
+        100.0
+      ],
+      "type": "ElementGroup"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 36,
+        "horizontalAlign": 0,
+        "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+        "text": "PC Tutorial: Use WASD to move",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 14,
+      "hide": false,
+      "hiercharyDisplayOrder": 15,
+      "name": "PCWalk",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        350.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        1000.0,
+        100.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 30,
+        "horizontalAlign": 0,
+        "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+        "text": "   Use SPACE to use melee attack",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 14,
+      "hide": false,
+      "hiercharyDisplayOrder": 16,
+      "name": "PCMelee",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        300.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        1000.0,
+        100.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": true,
+      "hiercharyDisplayOrder": 17,
+      "name": "XBOXTutorial",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": -1,
+      "scaleUniformly": true,
+      "size": [
+        100.0,
+        100.0
+      ],
+      "type": "ElementGroup"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 36,
+        "horizontalAlign": 0,
+        "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+        "text": "XBOX Tutorial: Use Left Stick to move",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 17,
+      "hide": false,
+      "hiercharyDisplayOrder": 18,
+      "name": "XBOXWalk",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        350.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        1000.0,
+        100.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 36,
+        "horizontalAlign": 0,
+        "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+        "text": "Use Right Trigger to use melee attack",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 17,
+      "hide": false,
+      "hiercharyDisplayOrder": 19,
+      "name": "XBOXMelee",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        300.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        1000.0,
+        100.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": true,
+      "hiercharyDisplayOrder": 20,
+      "name": "XBOXGunTutorial",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": -1,
+      "scaleUniformly": true,
+      "size": [
+        100.0,
+        100.0
+      ],
+      "type": "ElementGroup"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 36,
+        "horizontalAlign": 1,
+        "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+        "text": "Press Left Trigger to charge up Gun!\n\n\nRelease to fire",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 20,
+      "hide": false,
+      "hiercharyDisplayOrder": 21,
+      "name": "XBOXGunText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        350.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        1000.0,
+        100.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "groupIndex": -1,
+      "hide": true,
+      "hiercharyDisplayOrder": 22,
+      "name": "PCGunTutorial",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        100.0,
+        100.0
+      ],
+      "type": "ElementGroup"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 36,
+        "horizontalAlign": 0,
+        "sceneReference": "Assets\\Art\\2D\\UI\\Dekatron-SemiBold.otf",
+        "text": "Press Left Mouse to charge the gun!\n\n\nRelease to fire!",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 1
+      },
+      "groupIndex": 22,
+      "hide": false,
+      "hiercharyDisplayOrder": 23,
+      "name": "PCGunText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        350.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        1000.0,
+        100.0
+      ],
+      "type": "Text"
     }
   ]
 }

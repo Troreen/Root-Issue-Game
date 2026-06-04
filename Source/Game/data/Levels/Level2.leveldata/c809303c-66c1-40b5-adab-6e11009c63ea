@@ -6,7 +6,12 @@
     {
       "name": "targetScene",
       "type": "StringId",
-      "value": "HUB_02"
+      "value": "TransitionScene2"
+    },
+    {
+      "name": "fadeOutSeconds",
+      "type": "Float",
+      "value": 5.0
     }
   ],
   "rotation": [

@@ -1,0 +1,20 @@
+{
+  "name": "FluffyCluster_01_Lvl2(17)",
+  "object-definition": "FluffyCluster_01_Lvl2",
+  "path": "",
+  "rotation": [
+    180.0,
+    51.30569076538086,
+    180.0
+  ],
+  "scale": [
+    1.0000003576278687,
+    1.0,
+    1.0000003576278687
+  ],
+  "translation": [
+    3050.0,
+    600.0,
+    4200.0
+  ]
+}

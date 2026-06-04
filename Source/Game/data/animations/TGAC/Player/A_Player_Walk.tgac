@@ -4,8 +4,16 @@
   "cycle_offset": 0.0,
   "end_time": 0.9333333373069763,
   "events": [
-  { "time": 0.15, "id": "footstep_left" },
-  { "time": 0.59, "id": "footstep_right" }
+    {
+      "id": "footstep_left",
+      "script": "AnimationEvents/PlayerWalkAE",
+      "time": 0.15000000596046448
+    },
+    {
+      "id": "footstep_right",
+      "script": "AnimationEvents/PlayerWalkAE",
+      "time": 0.5899999737739563
+    }
   ],
   "is_looping": true,
   "is_sync": false,

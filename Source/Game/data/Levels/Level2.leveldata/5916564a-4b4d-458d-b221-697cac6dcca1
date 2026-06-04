@@ -1,0 +1,20 @@
+{
+  "name": "Rocks_Medium_Lvl2(15)",
+  "object-definition": "Rocks_Medium_Lvl2",
+  "path": "Setdressing",
+  "rotation": [
+    -179.9999542236328,
+    -52.922462463378906,
+    -179.9999237060547
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    146.13600158691406,
+    820.9298095703125,
+    6258.291015625
+  ]
+}

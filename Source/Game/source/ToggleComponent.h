@@ -1,11 +1,14 @@
 #pragma once
 #include "ScriptComponent.h"
 #include "PostMaster.h"
+#include "AnimationGraphComponent.h"
+#include "GameObject.h"
 
 enum class eTypeID
 {
 	eNothing,
 	eDoor,
+	eRootDoor,
 	COUNT
 };
 
@@ -28,14 +31,29 @@ public:
 	bool IsActivated() const { return myIsActivated; }
 
 private:
+
+	GameObject* myOwner = GetOwner();
+	AnimationGraphComponent* myAnimationGraph = nullptr;
+
 	PostMaster* myPostMaster;
+
 	bool myIsActivated = false;
 	int myUniqueID;
 	int myTypeID;
 
+	float myIdle;
 	float myAnimPercent;
 
 	Tga::Vector3f myStartPos;
 	Tga::Vector3f myEndPos;
+
+	void BindAnimationGraph() 
+	{
+		myOwner = GetOwner();
+		if (myOwner->HasComponent<AnimationGraphComponent>())
+		{
+			myAnimationGraph = myOwner->GetComponent<AnimationGraphComponent>();
+		}
+	};
 };
 

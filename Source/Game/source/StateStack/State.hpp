@@ -28,6 +28,7 @@ enum class eState
     eLoadThirdLevel,
     eLoadFirstLog,
     eLoadSecondLog,
+    eOutro,
     COUNT
 };
 

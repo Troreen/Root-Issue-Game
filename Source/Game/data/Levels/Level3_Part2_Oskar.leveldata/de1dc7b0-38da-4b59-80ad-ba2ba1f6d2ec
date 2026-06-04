@@ -1,0 +1,27 @@
+{
+  "name": "EnemySpawner",
+  "object-definition": "EnemySpawner",
+  "path": "",
+  "properties": [
+    {
+      "name": "triggerRadius",
+      "type": "Float",
+      "value": 300.0
+    }
+  ],
+  "rotation": [
+    -5.122641596244648e-06,
+    -7.683962394366972e-06,
+    2.417221425191768e-13
+  ],
+  "scale": [
+    0.9999998211860657,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    1433.599609375,
+    42.346893310546875,
+    1429.126708984375
+  ]
+}

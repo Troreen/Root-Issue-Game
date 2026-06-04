@@ -46,6 +46,66 @@
           ]
         ]
       }
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_graph",
+      "type": "StringId",
+      "value": "animations\\Animation Graphs\\Bush_03.tgscript"
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_idle",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Bush_03.tgac"
+      }
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderSize",
+      "type": "Float3",
+      "value": [
+        120.0,
+        100.0,
+        120.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "Int",
+      "value": 0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "layer",
+      "type": "StringId",
+      "value": "Static"
     }
   ]
 }

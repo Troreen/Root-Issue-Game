@@ -20,4 +20,3 @@ include "."
 group "Engine"
 include (dirs.external)
 include (dirs.engine)
-include (dirs.engine_tests)

@@ -5,10 +5,37 @@
       "description": "",
       "group": "",
       "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "IsActivated?",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "TypeID",
+      "type": "Int",
+      "value": 1
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": true,
+      "name": "UniqueID",
+      "type": "Int",
+      "value": 0
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
       "is-per-instance": false,
       "name": "animation_graph",
       "type": "StringId",
-      "value": "animations\\Animation Graphs\\RootDoor.tgscript"
+      "value": "animations\\Animation Graphs\\HubDoor_01.tgscript"
     },
     {
       "description": "",
@@ -18,8 +45,17 @@
       "name": "clip_idle",
       "type": "Animation Clip",
       "value": {
-        "clip_path": "animations\\TGAC\\ENV\\A_ENV_Lever.tgac"
+        "clip_path": "animations\\TGAC\\ENV\\A_EN_HubDoor.tgac"
       }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "Toggle"
     },
     {
       "description": "",
@@ -57,6 +93,86 @@
           ]
         ]
       }
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "w_Active",
+      "type": "Float",
+      "value": 1.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderHeight",
+      "type": "Float",
+      "value": 300.0
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderIsTrigger",
+      "type": "Bool",
+      "value": false
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderOffset",
+      "type": "Float3",
+      "value": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderPivotBottomMiddle",
+      "type": "Bool",
+      "value": true
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderSize",
+      "type": "Float3",
+      "value": [
+        300.0,
+        300.0,
+        100.0
+      ]
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "colliderType",
+      "type": "Int",
+      "value": 3
+    },
+    {
+      "description": "",
+      "group": "Collision",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "layer",
+      "type": "Int",
+      "value": 0
     }
   ]
 }

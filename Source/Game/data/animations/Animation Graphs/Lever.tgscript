@@ -2,13 +2,53 @@
   "links": [
     {
       "id": 0,
-      "sourcePin": 1,
+      "sourcePin": 21,
       "targetPin": 3
     },
     {
       "id": 1,
       "sourcePin": 5,
       "targetPin": 0
+    },
+    {
+      "id": 2,
+      "sourcePin": 11,
+      "targetPin": 12
+    },
+    {
+      "id": 3,
+      "sourcePin": 13,
+      "targetPin": 7
+    },
+    {
+      "id": 4,
+      "sourcePin": 1,
+      "targetPin": 6
+    },
+    {
+      "id": 5,
+      "sourcePin": 15,
+      "targetPin": 8
+    },
+    {
+      "id": 6,
+      "sourcePin": 17,
+      "targetPin": 22
+    },
+    {
+      "id": 7,
+      "sourcePin": 23,
+      "targetPin": 18
+    },
+    {
+      "id": 8,
+      "sourcePin": 9,
+      "targetPin": 19
+    },
+    {
+      "id": 9,
+      "sourcePin": 25,
+      "targetPin": 20
     }
   ],
   "nodes": [
@@ -17,8 +57,8 @@
       "id": 0,
       "name": "",
       "position": [
-        349.0,
-        185.0
+        -402.0,
+        119.0
       ],
       "type": "Play Clip"
     },
@@ -27,8 +67,8 @@
       "id": 1,
       "name": "",
       "position": [
-        547.0,
-        268.0
+        553.0,
+        270.0
       ],
       "type": "Animate Model"
     },
@@ -37,10 +77,90 @@
       "id": 2,
       "name": "",
       "position": [
-        103.0,
-        113.0
+        -613.0,
+        118.0
       ],
       "type": "Read Animation Clip Property"
+    },
+    {
+      "customData": null,
+      "id": 3,
+      "name": "",
+      "position": [
+        -212.0,
+        318.0
+      ],
+      "type": "Blend Pose"
+    },
+    {
+      "customData": null,
+      "id": 4,
+      "name": "",
+      "position": [
+        -610.0,
+        278.0
+      ],
+      "type": "Read Animation Clip Property"
+    },
+    {
+      "customData": null,
+      "id": 5,
+      "name": "",
+      "position": [
+        -397.0,
+        284.0
+      ],
+      "type": "Play Clip"
+    },
+    {
+      "customData": null,
+      "id": 6,
+      "name": "",
+      "position": [
+        -515.0,
+        443.0
+      ],
+      "type": "Read Float Property"
+    },
+    {
+      "customData": null,
+      "id": 7,
+      "name": "",
+      "position": [
+        -148.0,
+        136.0
+      ],
+      "type": "Read Animation Clip Property"
+    },
+    {
+      "customData": null,
+      "id": 8,
+      "name": "",
+      "position": [
+        222.0,
+        307.0
+      ],
+      "type": "Blend Pose"
+    },
+    {
+      "customData": null,
+      "id": 9,
+      "name": "",
+      "position": [
+        67.0,
+        140.0
+      ],
+      "type": "Play Clip"
+    },
+    {
+      "customData": null,
+      "id": 10,
+      "name": "",
+      "position": [
+        -28.0,
+        447.0
+      ],
+      "type": "Read Float Property"
     }
   ],
   "pins": [
@@ -94,6 +214,186 @@
       "id": 5,
       "name": "Value",
       "node": 2,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 6,
+      "name": "Pose A",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 7,
+      "name": "Pose B",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Float",
+      "id": 8,
+      "name": "Blend Amount",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 9,
+      "name": "Pose",
+      "node": 3,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 10,
+      "name": "Name",
+      "node": 4,
+      "role": "Input",
+      "type": "Property",
+      "value": "clip_activate"
+    },
+    {
+      "datatype": "Animation Clip",
+      "id": 11,
+      "name": "Value",
+      "node": 4,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Animation Clip",
+      "id": 12,
+      "name": "Clip",
+      "node": 5,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 13,
+      "name": "Pose",
+      "node": 5,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 14,
+      "name": "Name",
+      "node": 6,
+      "role": "Input",
+      "type": "Property",
+      "value": "w_activated"
+    },
+    {
+      "datatype": "Float",
+      "id": 15,
+      "name": "Value",
+      "node": 6,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 16,
+      "name": "Name",
+      "node": 7,
+      "role": "Input",
+      "type": "Property",
+      "value": "clip_reactivate"
+    },
+    {
+      "datatype": "Animation Clip",
+      "id": 17,
+      "name": "Value",
+      "node": 7,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 18,
+      "name": "Pose A",
+      "node": 8,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 19,
+      "name": "Pose B",
+      "node": 8,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Float",
+      "id": 20,
+      "name": "Blend Amount",
+      "node": 8,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 21,
+      "name": "Pose",
+      "node": 8,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Animation Clip",
+      "id": 22,
+      "name": "Clip",
+      "node": 9,
+      "role": "Input",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "Pose",
+      "id": 23,
+      "name": "Pose",
+      "node": 9,
+      "role": "Output",
+      "type": "Property",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 24,
+      "name": "Name",
+      "node": 10,
+      "role": "Input",
+      "type": "Property",
+      "value": "w_reactivated"
+    },
+    {
+      "datatype": "Float",
+      "id": 25,
+      "name": "Value",
+      "node": 10,
       "role": "Output",
       "type": "Property",
       "value": null

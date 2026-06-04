@@ -20,67 +20,48 @@ PlayerState_Walk::PlayerState_Walk()
 
 void PlayerState_Walk::Update(float aDeltaTime, PlayerControllerComponent& aController)
 {
-	CommonUtilities::Vector3<float> direction;
-	CommonUtilities::Vector3<float> forwardAxis = Essentials::globalCamera.get()->GetCamera().GetTransform().GetForward();
-	forwardAxis.y = 0;
-	forwardAxis.Normalize();
-	CommonUtilities::Vector3<float> rightAxis = Essentials::globalCamera.get()->GetCamera().GetTransform().GetRight();
-
-	float myWalkAnimation = 0.f;
-
-	if (Essentials::globalInputManager.get()->PressingPlayerMovingUp())
-	{
-		direction += forwardAxis;
-	}
-	if (Essentials::globalInputManager.get()->PressingPlayerMovingLeft())
-	{
-		direction -= rightAxis;
-	}
-	if (Essentials::globalInputManager.get()->PressingPlayerMovingDown())
-	{
-		direction -= forwardAxis;
-	}
-	if (Essentials::globalInputManager.get()->PressingPlayerMovingRight())
-	{
-		direction += rightAxis;
-	}
-
 	GameObject* player = aController.GetOwner();
 	if (!player)
 	{
 		return;
 	}
 
-	direction = direction.GetNormalized() * myWalkSpeed * aDeltaTime;
+	CommonUtilities::Vector3<float> direction = myInput->GetFacingDirection();
 
-	if (direction.LengthSqr() > 0)
+	float myWalkAnimation = 0.f;
+
+	if (myInput->IsWalking())
 	{	
+		direction *= myWalkSpeed * aDeltaTime;
 		myWalkAnimation = 1.f;
 		player->GetTransform().Translate(direction);
 		player->GetTransform().SetYawPitchRollRadians({ std::atan2f(direction.x, direction.z), 0, 0 });
 	}
 
-	/*if (Essentials::globalInputManager.get()->IsKeyHeld(static_cast<int>(Keys::RETURN)))
-	{
-		aController.SetState(PlayerState_Master::Instance().myDeathState.get());
-		myWalkAnimation = 0.f;
-	}*/
-
 	if (Essentials::globalInputManager.get()->PressingPlayerAim() && myHasGun)
 	{
 		myWalkAnimation = 0;
 		aController.SetState(PlayerState_Master::Instance().myChargeAttackState.get());
+		return;
 	}
-	else if (Essentials::globalInputManager.get()->IsKeyPressed(static_cast<int>(Keys::SPACE)))
+	else if (Essentials::globalInputManager.get()->PressingPlayerAttack())
 	{
 		myWalkAnimation = 0;
 		aController.SetState(PlayerState_Master::Instance().myAttackState.get());
+		return;
 	}
 	if (myAnimationGraph)
 	{
-		myAnimationGraph->SetFloatParameter("w_walk", myWalkAnimation);
+		if (myWalkAnimation > 0)
+		{
+			myPlayerAnimation->BlendTo(PlayerAnimationState::Walk, 20);
+		}
+		else
+		{
+			myPlayerAnimation->BlendTo(PlayerAnimationState::None, 20);
+		}
+		//myAnimationGraph->SetFloatParameter("w_walk", myWalkAnimation);
 	}
-
 }
 
 void PlayerState_Walk::SetHasGun(bool aGiveGun)

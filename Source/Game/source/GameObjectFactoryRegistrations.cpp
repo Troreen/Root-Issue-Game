@@ -35,6 +35,8 @@
 #include "SpawnerComponent.h"
 #include "DestructibleComponent.h"
 #include "GeneratorComponent.h"
+#include "InputComponent.h"
+#include "PlayerAnimationComponent.h"
 
 #include "SwitchComponent.h"
 #include "ToggleComponent.h"
@@ -42,7 +44,8 @@
 
 // Enemy Components
 #include "EnemyMovementComponent.h"
-#include "EnemyAIComponent.h"
+#include "RollingEnemyAIComponent.h"
+#include "MeleeEnemyAIComponent.h"
 #include "EnemyTargetingComponent.h"
 #include "EnemyAttackComponent.h"
 #include "EnemyAnimationComponent.h"
@@ -391,11 +394,11 @@ namespace
 
         MeleeEnemyData.EnemyType = EnemyType::BasicEnemy;
 
-        MeleeEnemyData.WalkSpeed = 200.0f;
-        MeleeEnemyData.ChaseSpeed = 350.0f;
+        MeleeEnemyData.WalkSpeed = 100.0f;
+        MeleeEnemyData.ChaseSpeed = 300.0f;
         MeleeEnemyData.RotationSpeed = 5.0f;
 
-        MeleeEnemyData.DetectionRange = 600.0f;
+        MeleeEnemyData.DetectionRange = 800.0f;
 
         //MeleeEnemyData.IdleTimeMin = 1.0f;
         //MeleeEnemyData.IdleTimeMax = 2.0f;
@@ -408,8 +411,9 @@ namespace
 
         MeleeEnemyData.AttackRange = 200.0f;
         MeleeEnemyData.AttackCooldown = 1.0f;
-        MeleeEnemyData.AttackWindup = 0.6f;
         MeleeEnemyData.AttackRecovery = 0.1f;
+        MeleeEnemyData.AttackWindup = 0.8f;
+        MeleeEnemyData.AttackActiveDuration = 0.1f;
 
         return MeleeEnemyData;
     }
@@ -420,11 +424,11 @@ namespace
 
         RollingEnemyData.EnemyType = EnemyType::RollingEnemy;
 
-        RollingEnemyData.WalkSpeed = 200.0f;
-        RollingEnemyData.ChaseSpeed = 300.0f;
+        RollingEnemyData.WalkSpeed = 100.0f;
+        RollingEnemyData.ChaseSpeed = 100.0f;
         RollingEnemyData.RotationSpeed = 5.0f;
 
-        RollingEnemyData.DetectionRange = 600.0f;
+        RollingEnemyData.DetectionRange = 900.0f;
 
         //RollingEnemyData.IdleTimeMin = 1.0f;
         //RollingEnemyData.IdleTimeMax = 2.0f;
@@ -437,8 +441,9 @@ namespace
 
         RollingEnemyData.AttackRange = 400.0f;
         RollingEnemyData.AttackCooldown = 1.0f;
-        RollingEnemyData.AttackWindup = 1.0f;
+        RollingEnemyData.AttackWindup = 0.6f;
         RollingEnemyData.AttackRecovery = 0.1f;
+        RollingEnemyData.StunTime = 2.0f;
 
         return RollingEnemyData;
     }
@@ -472,7 +477,7 @@ namespace
             damage = 1;
         }
         data.ShouldSpawn = aData.GetPropertyOr("spawnable", false);
-        object->AddComponent<EnemyAIComponent>(data);
+        object->AddComponent<MeleeEnemyAIComponent>(data);
 
         EnemyMovementComponent* movement = object->AddComponent<EnemyMovementComponent>();
         movement->SetMovementSpeed(data.WalkSpeed);
@@ -506,7 +511,7 @@ namespace
             object->AddComponent<CapsuleColliderComponent>(50.0f, 180.0f, Vector3f::Zero, false, true);
         }
 
-        object->AddComponent<SphereColliderComponent>(100.f, Vector3f(0,100.f,0), true);
+        //object->AddComponent<SphereColliderComponent>(100.f, Vector3f(0,100.f,0), true);
 
         EnemyData data = CreateRollingEnemyData(aData);
 
@@ -523,13 +528,14 @@ namespace
         }
         data.ShouldSpawn = aData.GetPropertyOr("spawnable", false);
 
-        object->AddComponent<EnemyAIComponent>(data);
+        object->AddComponent<RollingEnemyAIComponent>(data);
         EnemyMovementComponent* movement = object->AddComponent<EnemyMovementComponent>();
         movement->SetMovementSpeed(data.WalkSpeed);
 
         object->AddComponent<EnemyTargetingComponent>(data.DetectionRange);
         object->AddComponent<KnockbackComponent>();
         object->AddComponent<EnemyAttackComponent>(data);
+        object->AddComponent<EnemyAnimationComponent>();
         object->AddComponent<ResetComponent>(aData);
 
         DamageableComponent* damageable = object->AddComponent<DamageableComponent>(health);
@@ -556,6 +562,22 @@ namespace
         object->AddComponent<MouseDirectionComponent>();
         object->AddComponent<HUDComponent>();
         object->AddComponent<PauseMenuComponent>();
+        object->AddComponent<InputComponent>();
+        object->AddComponent<KnockbackComponent>();
+        object->AddComponent<PlayerAnimationComponent>();
+
+        SceneSpriteData spriteData;
+        spriteData.size *= 2.f;
+        spriteData.pivot = {0.5f, 0.5f};
+        spriteData.texturePath = "Assets\\Art\\2D\\UI\\T_UI_ArrowCrosshair.dds";
+        StaticSpriteComponent* sprite = object->AddComponent<StaticSpriteComponent>(std::move(spriteData));
+        sprite->SetTranslationRotationOffset({0, 0, 200}, { 90, 0, 0 });
+        sprite->SetEnabled(false);
+
+        ParticleEmitterComponent* particle = object->AddComponent<ParticleEmitterComponent>();
+        particle->AttachSettings();
+        particle->SetContinuousEmission(ParticleType::EnergySmall, true);
+        particle->SetEnabled(false);
 
         int health = aData.GetPropertyOr<int>("health", 4);
         if (health < 1)

@@ -31,14 +31,10 @@ void EnemyAnimationComponent::OnUpdate(float aDeltaTime)
 	UpdateBlendWeights(aDeltaTime);
 }
 
-void EnemyAnimationComponent::BlendTo(const EnemyAnimationState& aState)
+void EnemyAnimationComponent::BlendTo(EnemyAnimationState aState, float aBlendSpeed)
 {
 	myCurrentState = aState;
-}
-
-void EnemyAnimationComponent::SetBlendSpeed(float aSpeed)
-{
-	myBlendSpeed = aSpeed;
+	myBlendSpeed = aBlendSpeed;
 }
 
 void EnemyAnimationComponent::RegisterAnimations()
@@ -61,13 +57,20 @@ void EnemyAnimationComponent::RegisterAnimations()
 }
 void EnemyAnimationComponent::UpdateBlendWeights(float aDeltaTime)
 {
+	float blendStep = myBlendSpeed * aDeltaTime;
+
 	for (auto& [state, animation] : myAnimations)
 	{
 		float targetWeight = (state == myCurrentState) ? 1.0f : 0.0f;
 
-		animation.Weight = std::lerp(animation.Weight, targetWeight, myBlendSpeed * aDeltaTime);
-
-		animation.Weight = std::clamp(animation.Weight, 0.0f, 1.0f);
+		if (animation.Weight < targetWeight)
+		{
+			animation.Weight = std::min(animation.Weight + blendStep, targetWeight);
+		}
+		else
+		{
+			animation.Weight = std::max(animation.Weight - blendStep, targetWeight);
+		}
 		myGraph->SetFloatParameter(animation.Name, animation.Weight);
 	}
 

@@ -118,6 +118,7 @@ namespace Tga
 		void Render(Tga::SpriteShader* aCustomShaderToRenderWith);
 		float GetWidth();
 		float GetHeight();
+		float GetHeightWithoutLines();
 
 		void SetColor(const Color& aColor);
 		Color GetColor() const;
@@ -148,7 +149,7 @@ namespace Tga
 		int myRenderOrder = 0;
 
 		Tga::SpriteSharedData mySharedData;
-		Tga::Sprite2DInstanceData myInstanceData[128];
+		Tga::Sprite2DInstanceData myInstanceData[256];
 	protected:
 		std::string myText;
 		Vector2f myPosition;

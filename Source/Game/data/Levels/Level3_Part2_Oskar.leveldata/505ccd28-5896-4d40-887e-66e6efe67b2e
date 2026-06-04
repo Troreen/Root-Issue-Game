@@ -1,0 +1,27 @@
+{
+  "name": "MeleeEnemy(14)",
+  "object-definition": "MeleeEnemy",
+  "path": "",
+  "properties": [
+    {
+      "name": "spawnable",
+      "type": "Bool",
+      "value": true
+    }
+  ],
+  "rotation": [
+    -5.762971795775229e-06,
+    -8.110848284559324e-06,
+    -8.537733720004326e-07
+  ],
+  "scale": [
+    0.9999998211860657,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    1994.1796875,
+    -7.629394076502649e-06,
+    1388.080810546875
+  ]
+}

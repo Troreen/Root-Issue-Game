@@ -37,11 +37,12 @@ struct EnemyData
     float AttackRange = 200.0f;
     float AttackCooldown = 2.0f;
     float AttackWindup = 0.3f;
+    float AttackActiveDuration = 0.16f;
     float AttackRecovery = 1.0f;
 
     // Rolling enemy
     float RollSpeed = 800.0f;
     float RollDuration = 1.0f;
-    float StunTime = 1.5f;
+    float StunTime = 1.0f;
     float RollDistance = 600.0f;
 };

@@ -110,11 +110,13 @@ public:
 	bool LeftStickHeldRight();
 	bool LeftStickHeldUp();
 	bool LeftStickHeldDown();
+	bool LeftStickHeld();
 
 	bool RightStickHeldLeft();
 	bool RightStickHeldRight();
 	bool RightStickHeldUp();
 	bool RightStickHeldDown();
+	bool RightStickHeld();
 
 
 	bool PressingPlayerMovingLeft();
@@ -124,6 +126,7 @@ public:
 	bool PressingJump() const;
 	bool ReleasingJump();
 	bool PressingPlayerAim();
+	bool PressingPlayerAttack();
 
 	bool PressingToggleUp();
 	bool PressingToggleLeft() const;

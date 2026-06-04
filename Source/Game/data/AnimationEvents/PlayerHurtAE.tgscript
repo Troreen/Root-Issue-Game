@@ -1,0 +1,121 @@
+{
+  "links": [
+    {
+      "id": 0,
+      "sourcePin": 1,
+      "targetPin": 18
+    },
+    {
+      "id": 1,
+      "sourcePin": 9,
+      "targetPin": 19
+    }
+  ],
+  "nodes": [
+    {
+      "customData": null,
+      "id": 0,
+      "name": "",
+      "position": [
+        80.0,
+        120.0
+      ],
+      "type": "On Animation Event"
+    },
+    {
+      "customData": null,
+      "id": 1,
+      "name": "",
+      "position": [
+        348.0,
+        122.0
+      ],
+      "type": "Camera Shake"
+    },
+    {
+      "customData": null,
+      "id": 2,
+      "name": "",
+      "position": [
+        316.0,
+        350.0
+      ],
+      "type": "Play SFX"
+    },
+    {
+      "customData": null,
+      "id": 3,
+      "name": "",
+      "position": [
+        83.0,
+        355.0
+      ],
+      "type": "On Animation Event"
+    }
+  ],
+  "pins": [
+    {
+      "datatype": null,
+      "id": 1,
+      "name": "Out",
+      "node": 0,
+      "role": "Output",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 2,
+      "name": "Event Id",
+      "node": 0,
+      "role": "Input",
+      "type": "Property",
+      "value": "hurt_camera_shake"
+    },
+    {
+      "datatype": null,
+      "id": 9,
+      "name": "Out",
+      "node": 3,
+      "role": "Output",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 10,
+      "name": "Event Id",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": "hurt_blood_spill"
+    },
+    {
+      "datatype": null,
+      "id": 18,
+      "name": "In",
+      "node": 1,
+      "role": "Input",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": null,
+      "id": 19,
+      "name": "In",
+      "node": 2,
+      "role": "Input",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 21,
+      "name": "Sound",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": "Gore"
+    }
+  ]
+}

@@ -24,7 +24,7 @@ void PlayerState_Death::SetValues()
 	{
 		if (myAnimationGraph)
 		{
-			myAnimationGraph->SetFloatParameter("w_death", 1.0f);
+			myPlayerAnimation->BlendTo(PlayerAnimationState::Death, 20);
 		}
 	}
 	myDeathTimer = 3.f;
@@ -36,7 +36,7 @@ void PlayerState_Death::ResetValues()
 	{
 		if (myAnimationGraph)
 		{
-			myAnimationGraph->SetFloatParameter("w_death", 0.0f);
+			myPlayerAnimation->BlendTo(PlayerAnimationState::None, 20);
 		}
 	}
 }

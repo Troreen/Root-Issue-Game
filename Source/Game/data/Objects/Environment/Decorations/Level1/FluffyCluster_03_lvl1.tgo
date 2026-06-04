@@ -1,0 +1,51 @@
+{
+  "parent-object-definition": "",
+  "properties": [
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "factoryType",
+      "type": "StringId",
+      "value": "StaticWorld"
+    },
+    {
+      "description": "",
+      "group": "",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "model",
+      "type": "Model",
+      "value": {
+        "path": "Assets\\Art\\3D\\Environment\\SM_EN_FluffyCluster_Big_03.fbx",
+        "textures": [
+          [
+            "Assets\\Art\\Textures\\Decoration\\T_Fluffcluster_Lvl1_c.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_fluffcluster_n.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Fluffcluster_m.dds",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ],
+          [
+            "",
+            "",
+            "",
+            ""
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -177,6 +177,7 @@ void SceneRenderer::Render(
         lightingSettings.directionalColor[2],
         1.0f };
     const float directionalIntensity = lightingSettings.directionalIntensity;
+    const float directionalSoftness = lightingSettings.directionalSoftness;
     const Tga::Color ambientColor = {
         lightingSettings.ambientColor[0],
         lightingSettings.ambientColor[1],
@@ -202,10 +203,11 @@ void SceneRenderer::Render(
 
     if (enableDirectionalLight)
     {
+        const Tga::Color directionalLightColor = directionalIntensity * directionalColor;
         graphicsStateStack.SetDirectionalLight(Tga::DirectionalLight{
             Tga::Matrix4x4f::CreateFromRollPitchYaw(Tga::Rotator(directionalYaw, directionalPitch, directionalRoll)),
-            directionalColor,
-            directionalIntensity
+            directionalLightColor,
+            directionalSoftness
             });
     }
     else
@@ -218,7 +220,7 @@ void SceneRenderer::Render(
         const Tga::Color ambientLightColor = ambientIntensity * ambientColor;
         graphicsStateStack.SetAmbientLight(Tga::AmbientLight{
             ambientLightColor,
-            Tga::AmbientLightType::Uniform,
+            lightingSettings.ambientMode,
             nullptr
             });
     }

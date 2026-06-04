@@ -171,7 +171,7 @@ void UICanvas::NavigationControl()
 
 	if (keyNavigationDirPressed != Tga::Vector2f{ 0.f,0.f })
 	{
-		//Essentials::myCursor->SetCursorVisible(false);
+		Essentials::myCursor->SetCursorVisible(false);
 		myMouseActive = false;
 
 		SelectableUIProperties* selectableProperties;
@@ -265,7 +265,7 @@ void UICanvas::NavigationControl()
 		Tga::Vector2f mouseDelta = Essentials::globalInputManager->GetMouseDelta();
 		if (mouseDelta.x > 0.f || mouseDelta.y > 0.f)
 		{
-			//Essentials::myCursor->SetCursorVisible(true);
+			Essentials::myCursor->SetCursorVisible(true);
 			myMouseActive = true;
 		}
 
@@ -353,7 +353,7 @@ void UICanvas::InteractionControl()
 			if constexpr (std::is_same_v<T, UISlider>)
 			{
 				isFocused = !isFocused;
-				//Essentials::myCursor->SetCursorVisible(false);
+				Essentials::myCursor->SetCursorVisible(false);
 			}
 			else if constexpr (std::is_same_v<T, UIToggle>)
 			{
@@ -369,7 +369,7 @@ void UICanvas::InteractionControl()
 			if constexpr (std::is_same_v<T, UISlider>)
 			{
 				isFocused = false;
-				//Essentials::myCursor->SetCursorVisible(!isFocused);
+				Essentials::myCursor->SetCursorVisible(!isFocused);
 			}
 			}, mySelectedElement->definition->uiElementProperties);
 	}

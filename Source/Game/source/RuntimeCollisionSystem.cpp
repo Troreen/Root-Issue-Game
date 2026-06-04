@@ -212,6 +212,73 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
             return true;
         };
 
+    auto resolveDynamicPair = [&](GameObject& aFirstDynamicObject, GameObject& aSecondDynamicObject, const bool aRegisterContact)
+        {
+            const std::uint64_t pairKey = MakeCollisionPairKey(aFirstDynamicObject, aSecondDynamicObject);
+            const bool isNewPair = myCollisionPairsLastFrame.find(pairKey) == myCollisionPairsLastFrame.end();
+            const Vector3f firstOriginBefore = aFirstDynamicObject.GetTransform().GetPosition();
+            const Vector3f secondOriginBefore = aSecondDynamicObject.GetTransform().GetPosition();
+            const CollisionShape firstShape = GetCollisionShape(aFirstDynamicObject);
+            const CollisionShape secondShape = GetCollisionShape(aSecondDynamicObject);
+            const CommonUtilities::AABB3D<float> firstAabb = firstShape.bounds;
+            const CommonUtilities::AABB3D<float> secondAabb = secondShape.bounds;
+            const Vector3f overlaps = GetOverlapDepths(firstAabb, secondAabb);
+            Vector3f separation;
+            Vector3f normal;
+            float penetration = 0.0f;
+            if (!TryComputeShapeSeparation(firstShape, secondShape, separation, normal, penetration))
+            {
+                if (logCollisionDebug && logPairChecks)
+                {
+                    std::ostringstream stream;
+                    stream << "dynamic pair miss rule=" << ToRuleName(CollisionRule::Block)
+                        << " first=" << DescribeObject(aFirstDynamicObject)
+                        << " second=" << DescribeObject(aSecondDynamicObject)
+                        << " firstAabb={" << DescribeAabb(firstAabb) << "}"
+                        << " secondAabb={" << DescribeAabb(secondAabb) << "}"
+                        << " overlapDepths=" << ToString(overlaps);
+                    logCollisionDebugLine(stream.str());
+                }
+                return false;
+            }
+
+            const Vector3f halfSeparation = separation * 0.5f;
+            aFirstDynamicObject.GetTransform().Translate(halfSeparation);
+            aSecondDynamicObject.GetTransform().Translate(-halfSeparation);
+            RefreshRuntimeCollider(aFirstDynamicObject);
+            RefreshRuntimeCollider(aSecondDynamicObject);
+
+            if (logCollisionDebug && (logResolutionDetails || isNewPair))
+            {
+                const CommonUtilities::AABB3D<float> resolvedFirstAabb = GetCollisionShape(aFirstDynamicObject).bounds;
+                const CommonUtilities::AABB3D<float> resolvedSecondAabb = GetCollisionShape(aSecondDynamicObject).bounds;
+                std::ostringstream stream;
+                stream << "dynamic pair hit"
+                    << " first=" << DescribeObject(aFirstDynamicObject)
+                    << " second=" << DescribeObject(aSecondDynamicObject)
+                    << " firstOriginBefore=" << ToString(firstOriginBefore)
+                    << " firstOriginAfter=" << ToString(aFirstDynamicObject.GetTransform().GetPosition())
+                    << " secondOriginBefore=" << ToString(secondOriginBefore)
+                    << " secondOriginAfter=" << ToString(aSecondDynamicObject.GetTransform().GetPosition())
+                    << " firstAabbBefore={" << DescribeAabb(firstAabb) << "}"
+                    << " firstAabbAfter={" << DescribeAabb(resolvedFirstAabb) << "}"
+                    << " secondAabbBefore={" << DescribeAabb(secondAabb) << "}"
+                    << " secondAabbAfter={" << DescribeAabb(resolvedSecondAabb) << "}"
+                    << " overlapDepths=" << ToString(overlaps)
+                    << " separation=" << ToString(separation)
+                    << " normal=" << ToString(normal)
+                    << " penetration=" << penetration;
+                logCollisionDebugLine(stream.str());
+            }
+
+            if (aRegisterContact)
+            {
+                registerContact(&aFirstDynamicObject, &aSecondDynamicObject, normal, penetration);
+            }
+
+            return true;
+        };
+
     auto tryProjectileSweep = [&](GameObject& aProjectile, const std::vector<GameObject*>& someTargets)
         {
             const auto previousIt = myPreviousColliderPositionsById.find(aProjectile.GetCollisionId());
@@ -431,6 +498,49 @@ void RuntimeCollisionSystem::Run(std::vector<std::unique_ptr<GameObject>>& someG
         }
     }
 
+    for (int iteration = 0; iteration < kMaxCollisionIterations; ++iteration)
+    {
+        bool didResolve = false;
+        for (size_t firstIndex = 0; firstIndex < enemyObjects.size(); ++firstIndex)
+        {
+            GameObject* firstEnemy = enemyObjects[firstIndex];
+            if (firstEnemy == nullptr || !firstEnemy->IsActive())
+            {
+                continue;
+            }
+
+            for (size_t secondIndex = firstIndex + 1; secondIndex < enemyObjects.size(); ++secondIndex)
+            {
+                GameObject* secondEnemy = enemyObjects[secondIndex];
+                if (secondEnemy == nullptr || !secondEnemy->IsActive())
+                {
+                    continue;
+                }
+
+                if (HasTriggerCollider(*firstEnemy) || HasTriggerCollider(*secondEnemy))
+                {
+                    registerTrigger(*firstEnemy, *secondEnemy);
+                    continue;
+                }
+
+                if (rules.Get(firstEnemy->GetLayer(), secondEnemy->GetLayer()) != CollisionRule::Block)
+                {
+                    continue;
+                }
+
+                if (resolveDynamicPair(*firstEnemy, *secondEnemy, true))
+                {
+                    didResolve = true;
+                }
+            }
+        }
+
+        if (!didResolve)
+        {
+            break;
+        }
+    }
+
     for (GameObject* player : playerObjects)
     {
         for (GameObject* enemy : enemyObjects)
@@ -624,7 +734,7 @@ bool RuntimeCollisionSystem::Raycast(
             direction,
             aQuery.maxDistance,
             GetCollisionShape(*object),
-            0.0f,
+            aQuery.radiusPadding,
             hit))
         {
             continue;
@@ -653,4 +763,30 @@ bool RuntimeCollisionSystem::Raycast(
 const std::vector<CollisionContact>& RuntimeCollisionSystem::GetContacts() const
 {
     return myContacts;
+}
+
+RuntimeCollisionSystem* RuntimeCollisionService::ourSystem = nullptr;
+std::vector<std::unique_ptr<GameObject>>* RuntimeCollisionService::ourGameObjects = nullptr;
+
+void RuntimeCollisionService::Set(RuntimeCollisionSystem* aSystem, std::vector<std::unique_ptr<GameObject>>* someGameObjects)
+{
+    ourSystem = aSystem;
+    ourGameObjects = someGameObjects;
+}
+
+void RuntimeCollisionService::Clear()
+{
+    ourSystem = nullptr;
+    ourGameObjects = nullptr;
+}
+
+bool RuntimeCollisionService::Raycast(const CollisionRaycastQuery& aQuery, CollisionRaycastHit& outHit)
+{
+    if (!ourSystem || !ourGameObjects)
+    {
+        outHit = {};
+        return false;
+    }
+
+    return ourSystem->Raycast(*ourGameObjects, aQuery, outHit);
 }

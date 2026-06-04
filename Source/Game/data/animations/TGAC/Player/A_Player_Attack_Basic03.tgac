@@ -5,9 +5,14 @@
   "end_time": 1.5,
   "events": [
     {
+      "id": "debug_attack_event",
+      "script": "AnimationEvents/PlayerDebugVFX",
+      "time": 0.1
+    },
+    {
       "id": "attack_end",
       "script": "AnimationEvents/PlayerAttackEnd",
-      "time": 1.5
+      "time": 1.2
     }
   ],
   "is_looping": false,

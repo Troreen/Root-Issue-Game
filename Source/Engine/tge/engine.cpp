@@ -308,6 +308,31 @@ bool Tga::Engine::GetIsBorderless()
 	return myIsBorderless;
 }
 
+void Tga::Engine::LockCursorToWindow()
+{
+	RECT rect;
+	if (GetClientRect(*myWindowConfiguration.myHwnd, &rect))
+	{
+		POINT ul = { rect.left, rect.top };
+		POINT lr = { rect.right, rect.bottom };
+
+		ClientToScreen(*myWindowConfiguration.myHwnd, &ul);
+		ClientToScreen(*myWindowConfiguration.myHwnd, &lr);
+
+		rect.left = ul.x;
+		rect.top = ul.y;
+		rect.right = lr.x;
+		rect.bottom = lr.y;
+
+		ClipCursor(&rect);
+	}
+}
+
+void Tga::Engine::UnlockCursor()
+{
+	ClipCursor(nullptr);
+}
+
 bool Tga::Engine::IsDebugFeatureOn(DebugFeature aFeature) const
 {
 	const bool all = ((myWindowConfiguration.myActivateDebugSystems & DebugFeature::All) == DebugFeature::All);

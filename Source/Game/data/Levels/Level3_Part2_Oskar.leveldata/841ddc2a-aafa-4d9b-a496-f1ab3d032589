@@ -1,0 +1,20 @@
+{
+  "name": "MeleeEnemy(2)",
+  "object-definition": "MeleeEnemy",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    4400.0,
+    -1900.0,
+    3500.0
+  ]
+}

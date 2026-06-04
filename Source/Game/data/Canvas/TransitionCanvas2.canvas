@@ -1,0 +1,127 @@
+{
+  "parent": "",
+  "referenceResolution": [
+    1920,
+    1080
+  ],
+  "renderOrder": [
+    0,
+    1,
+    2
+  ],
+  "showBounds": true,
+  "uiElements": [
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "sceneReference": "Assets\\Art\\2D\\UI\\T_UI_Console_Background.dds",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "groupIndex": -1,
+      "hide": false,
+      "hiercharyDisplayOrder": 0,
+      "name": "Background",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": 1,
+      "scaleUniformly": true,
+      "size": [
+        1920.0,
+        1080.0
+      ],
+      "type": "Image"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 30,
+        "horizontalAlign": 0,
+        "sceneReference": "DefaultUIAssets/arial.ttf",
+        "text": ">connection established\n>sending distress signal\n>. . .\n\n>help is on the way\n>rendezvous point at -55.607943387686745,\n>12.97985002231541\n\n\n>good luck\n\n\n<Press anything to Continue>",
+        "tint": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "verticalAlign": 0
+      },
+      "groupIndex": -1,
+      "hide": true,
+      "hiercharyDisplayOrder": 1,
+      "name": "UIText",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        100.0,
+        100.0
+      ],
+      "type": "Text"
+    },
+    {
+      "anchor": [
+        0.0,
+        0.0
+      ],
+      "data": {
+        "fontScale": 1.0,
+        "fontSize": 30,
+        "horizontalAlign": 0,
+        "sceneReference": "Assets\\Art\\2D\\UI\\OCRAEXT.TTF",
+        "text": "",
+        "tint": [
+          0.8117647171020508,
+          0.9960784316062927,
+          0.8078431487083435,
+          1.0
+        ],
+        "verticalAlign": 0
+      },
+      "groupIndex": -1,
+      "hide": false,
+      "hiercharyDisplayOrder": 2,
+      "name": "UITarget",
+      "pivot": [
+        0.0,
+        0.0
+      ],
+      "position": [
+        0.0,
+        0.0
+      ],
+      "renderOrder": 0,
+      "scaleUniformly": true,
+      "size": [
+        1789.0,
+        958.0
+      ],
+      "type": "Text"
+    }
+  ]
+}

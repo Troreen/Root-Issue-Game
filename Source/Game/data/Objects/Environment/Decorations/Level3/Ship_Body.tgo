@@ -21,15 +21,15 @@
         "path": "Assets\\Art\\3D\\Level Assets\\SM_A_Ship_Body.fbx",
         "textures": [
           [
-            "",
-            "",
-            "",
+            "Assets\\Art\\Textures\\HUB\\T_HUB_Trimsheet_02_c.dds",
+            "Assets\\Art\\Textures\\HUB\\T_HUB_Trimsheet_02_n.dds",
+            "Assets\\Art\\Textures\\HUB\\T_HUB_Trimsheet_02_m.dds",
             ""
           ],
           [
-            "",
-            "",
-            "",
+            "Assets\\Art\\Textures\\T_SpaceshipWindows_c.dds",
+            "Assets\\Art\\Textures\\T_SpaceshipWindows_n.dds",
+            "Assets\\Art\\Textures\\T_SpaceshipWindows_m.dds",
             ""
           ],
           [

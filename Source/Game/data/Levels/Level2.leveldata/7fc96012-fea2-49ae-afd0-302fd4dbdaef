@@ -1,0 +1,20 @@
+{
+  "name": "Saplings(16)",
+  "object-definition": "Saplings",
+  "path": "Setdressing",
+  "rotation": [
+    0.0,
+    -57.47294616699219,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    -686.2636108398438,
+    -265.1082763671875,
+    3480.66552734375
+  ]
+}

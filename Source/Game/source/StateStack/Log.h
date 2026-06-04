@@ -1,5 +1,9 @@
 #pragma once
 #include "State.hpp"
+#include "UICanvas.h"
+#include "tge/text/text.h"
+#include "RandomFloat.h"
+#include <bitset>
 
 class LogTransition : public State
 {
@@ -11,5 +15,13 @@ public:
 	void Render() override;
 
 private:
+	void UpdateTextRes();
+	UICanvas myUICanvas;
+	float myCounter;
+	float myNextCharTimer;
+	int mySize;
 
+	std::bitset<1> myWaits;
+
+	Tga::Text myText;
 };

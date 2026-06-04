@@ -1,0 +1,12 @@
+{
+  "animation_source_path": "animations\\FBX\\Environment\\A_EN_Shroom_01.fbx",
+  "cycle_count": 1.0,
+  "cycle_offset": 0.0,
+  "end_time": 3.3333332538604736,
+  "events": [],
+  "is_looping": true,
+  "is_sync": false,
+  "playback_rate": 1.0,
+  "preview_model_path": "Assets\\Art\\3D\\Environment\\SM_EN_Shroom_02.fbx",
+  "start_time": 0.0
+}

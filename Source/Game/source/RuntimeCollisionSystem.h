@@ -29,3 +29,15 @@ private:
     std::unordered_map<std::uint64_t, RuntimeCollision::CollisionPairState> myCollisionPairsLastFrame;
     std::unordered_map<std::uint64_t, CommonUtilities::Vector3<float>> myPreviousColliderPositionsById;
 };
+
+class RuntimeCollisionService final
+{
+public:
+    static void Set(RuntimeCollisionSystem* aSystem, std::vector<std::unique_ptr<GameObject>>* someGameObjects);
+    static void Clear();
+    static bool Raycast(const CollisionRaycastQuery& aQuery, CollisionRaycastHit& outHit);
+
+private:
+    static RuntimeCollisionSystem* ourSystem;
+    static std::vector<std::unique_ptr<GameObject>>* ourGameObjects;
+};

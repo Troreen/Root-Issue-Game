@@ -49,6 +49,26 @@
     },
     {
       "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "animation_graph",
+      "type": "StringId",
+      "value": "animations\\Animation Graphs\\Gun.tgscript"
+    },
+    {
+      "description": "",
+      "group": "Animation",
+      "is-dynamic": false,
+      "is-per-instance": false,
+      "name": "clip_idle",
+      "type": "Animation Clip",
+      "value": {
+        "clip_path": "animations\\TGAC\\ENV\\A_P_Gun.tgac"
+      }
+    },
+    {
+      "description": "",
       "group": "Collision",
       "is-dynamic": false,
       "is-per-instance": false,

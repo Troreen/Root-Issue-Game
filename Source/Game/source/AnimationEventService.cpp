@@ -219,7 +219,10 @@ void AnimationEventScriptUpdateContext::StartCombatAttack(const Tga::AnimationEv
 	attack.knockbackStrength = (std::max)(0.0f, anAttack.knockbackStrength);
 	attack.damage = (std::max)(0, anAttack.damage);
 	attack.onlyHitForwardHemisphere = anAttack.onlyHitForwardHemisphere;
-	attack.targetLayers.AddLayer(ResolveObjectLayer(anAttack.targetLayer, attack.team));
+	//attack.targetLayers.AddLayer(ResolveObjectLayer(anAttack.targetLayer, attack.team));
+	attack.targetLayers.AddLayer(ObjectLayer::Enemy);		   //
+	attack.targetLayers.AddLayer(ObjectLayer::WorldDamageable);// Need to move attack data to player
+	attack.targetLayers.AddLayer(ObjectLayer::Switch);		   //
 
 	if (attack.collisionShape == CollisionShapeType::Box &&
 		attack.size.x <= 0.0f &&

@@ -1,0 +1,20 @@
+{
+  "name": "SandGround_6x6",
+  "object-definition": "SandGround_6x6",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    2100.0,
+    0.0,
+    2100.0
+  ]
+}

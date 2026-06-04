@@ -1,25 +1,460 @@
 {
+  "Levels/Level1PowerUpCave.tgs": {
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
+  },
+  "Levels/Level2.tgs": {
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
+  },
+  "Levels/Level2_Demo.tgs": {
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
+  },
+  "Levels/Level3_Oskar.tgs": {
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
+  },
+  "Levels/Level3_Part2_Oskar.tgs": {
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
+  },
+  "Levels/PipelineTest.tgs": {
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
+  },
+  "Levels/TestScenes/JohannesTestScene.tgs": {
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
+  },
+  "Levels/TestScenes/KasperTestScene.tgs": {
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
+  },
+  "Levels/TestScenes/MainMenuTest.tgs": {
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
+  },
+  "Levels/TestScenes/PabloTestingScene.tgs": {
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
+  },
+  "Levels/TestScenes/RasmusTestScene.tgs": {
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
+  },
+  "Levels/TestScenes/UITestingScene.tgs": {
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
+  },
   "sceneLighting": {
     "Levels/HUB_00.tgs": {
+      "ambientColor": [
+        0.31472399830818176,
+        0.40154439210891724,
+        0.33818894624710083
+      ],
+      "ambientIntensity": 1.0299999713897705,
+      "ambientMode": "UniformAboveHorizon",
+      "directionalColor": [
+        0.760617733001709,
+        0.7255014777183533,
+        0.7048195004463196
+      ],
+      "directionalIntensity": 0.6800000071525574,
+      "directionalRotationDegrees": [
+        -121.0,
+        -8.0,
+        19.200000762939453
+      ],
+      "directionalSoftness": 0.22100000083446503,
+      "enableAmbientLight": true,
+      "enableDirectionalLight": true
+    },
+    "Levels/HUB_01.tgs": {
       "ambientColor": [
         0.5,
         0.5,
         0.5
       ],
       "ambientIntensity": 1.0,
+      "ambientMode": "Uniform",
       "directionalColor": [
         1.0,
         1.0,
         1.0
       ],
-      "directionalIntensity": 0.10000000149011612,
+      "directionalIntensity": 1.0,
       "directionalRotationDegrees": [
         225.0,
         -45.0,
         0.0
       ],
+      "directionalSoftness": 0.1,
       "enableAmbientLight": true,
       "enableDirectionalLight": true
-    }
+    },
+    "Levels/HUB_02.tgs": {
+      "ambientColor": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "ambientIntensity": 1.0,
+      "ambientMode": "Uniform",
+      "directionalColor": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "directionalIntensity": 1.0,
+      "directionalRotationDegrees": [
+        225.0,
+        -45.0,
+        0.0
+      ],
+      "directionalSoftness": 0.1,
+      "enableAmbientLight": true,
+      "enableDirectionalLight": true
+    },
+    "Levels/Level1.tgs": {
+      "ambientColor": [
+        0.48262548446655273,
+        0.48030877113342285,
+        0.3969082236289978
+      ],
+      "ambientIntensity": 1.8200000524520874,
+      "directionalColor": [
+        0.8855711817741394,
+        1.0,
+        0.7065637111663818
+      ],
+      "directionalIntensity": 0.0,
+      "directionalRotationDegrees": [
+        -11.800000190734863,
+        10.899999618530273,
+        16.200000762939453
+      ],
+      "enableAmbientLight": true,
+      "enableDirectionalLight": true
+    },
+    "Levels/Level2.tgs": {
+      "ambientColor": [
+        0.40571847558021545,
+        0.5559845566749573,
+        0.5438008308410645
+      ],
+      "ambientIntensity": 1.190000057220459,
+      "ambientMode": "Uniform",
+      "directionalColor": [
+        0.8957529067993164,
+        0.7089936137199402,
+        0.8041759729385376
+      ],
+      "directionalIntensity": 1.7799999713897705,
+      "directionalRotationDegrees": [
+        -78.19999694824219,
+        -67.80000305175781,
+        -39.79999923706055
+      ],
+      "directionalSoftness": 0.39800000190734863,
+      "enableAmbientLight": true,
+      "enableDirectionalLight": true
+    },
+    "Levels/Level3_Oskar.tgs": {
+      "ambientColor": [
+        0.29650717973709106,
+        0.3900977671146393,
+        0.5019304752349854
+      ],
+      "ambientIntensity": 1.0800000429153442,
+      "ambientMode": "Uniform",
+      "directionalColor": [
+        1.0,
+        0.975730836391449,
+        0.830115795135498
+      ],
+      "directionalIntensity": 1.2100000381469727,
+      "directionalRotationDegrees": [
+        -109.19999694824219,
+        -0.699999988079071,
+        -7.400000095367432
+      ],
+      "directionalSoftness": 0.2750000059604645,
+      "enableAmbientLight": true,
+      "enableDirectionalLight": true
+    },
+    "Levels/Level3_Part2_Oskar.tgs": {
+      "ambientColor": [
+        0.29650717973709106,
+        0.3900977671146393,
+        0.5019304752349854
+      ],
+      "ambientIntensity": 1.0800000429153442,
+      "ambientMode": "Uniform",
+      "directionalColor": [
+        1.0,
+        0.975730836391449,
+        0.830115795135498
+      ],
+      "directionalIntensity": 1.2100000381469727,
+      "directionalRotationDegrees": [
+        -109.19999694824219,
+        -0.699999988079071,
+        -7.400000095367432
+      ],
+      "directionalSoftness": 0.2750000059604645,
+      "enableAmbientLight": true,
+      "enableDirectionalLight": true
+    },
+    "ambientColor": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "ambientIntensity": 1.0,
+    "ambientMode": "Uniform",
+    "directionalColor": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "directionalIntensity": 1.0,
+    "directionalRotationDegrees": [
+      225.0,
+      -45.0,
+      0.0
+    ],
+    "directionalSoftness": 0.1,
+    "enableAmbientLight": true,
+    "enableDirectionalLight": true
   }
 }

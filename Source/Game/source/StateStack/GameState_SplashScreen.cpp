@@ -31,13 +31,12 @@ void SplashScreen::Init(CameraSystem& aCamera, const char* argv[])
 eState SplashScreen::Update()
 {
 	myInputHandler.UpdateInput();
-	for (int i = 0; i < static_cast<int>(Keys::OEM_CLEAR); i++)
-	{	
-		if (Essentials::globalInputManager.get()->IsKeyPressed(i))
-		{
-			return eState::eMainMenu;
-		}
+
+	if (Essentials::globalInputManager->AnyInputPressed())
+	{
+		return eState::eMainMenu;
 	}
+
 	if (mySpriteProperties.myColor.a < 0.99f && !mySplashScreenState[0])
 	{
 		mySpriteProperties.myColor.a += 0.01f;

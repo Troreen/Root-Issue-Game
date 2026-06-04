@@ -1,33 +1,65 @@
 #include "EnemyTargetingComponent.h"
-#include "EnemyAIComponent.h"
+
 #include "Essentials.h"
 #include "GameObject.h"
 
 EnemyTargetingComponent::EnemyTargetingComponent(float aDetectionRange)
 {
-	myDetectionRange = aDetectionRange;
+    myDetectionRange = aDetectionRange;
 }
 
 EnemyTargetingComponent::~EnemyTargetingComponent()
 {
 }
 
-void EnemyTargetingComponent::OnUpdate(float /*aDeltaTime*/)
+void EnemyTargetingComponent::OnUpdate(float)
 {
-	auto& playerPos = Essentials::GetPlayer()->GetTransform().GetPosition();
-	auto& ownerPos = GetOwner()->GetTransform().GetPosition();
+    myTarget = Essentials::GetPlayer();
 
-	Vector3f diff = playerPos - ownerPos;
+    if (!myTarget)
+    {
+        myTargetIsInRange = false;
+        return;
+    }
 
-	myTargetIsInRange = diff.Length() < myDetectionRange;
+    auto& playerPos = myTarget->GetTransform().GetPosition();
+
+    auto& ownerPos = GetOwner()->GetTransform().GetPosition();
+
+    Vector3f diff = playerPos - ownerPos;
+
+    float distance = diff.Length();
+
+    myDistanceToTarget = distance;
+
+    myTargetIsInRange = distance <= myDetectionRange;
 }
 
 bool EnemyTargetingComponent::IsTargetInRange() const
 {
-	return myTargetIsInRange;
+    return myTargetIsInRange;
 }
 
-//void EnemyTargetingComponent::Update(float aDeltaTime)
-//{
-//	Essentials::GetPlayer();
-//}
+GameObject* EnemyTargetingComponent::GetTarget() const
+{
+    return myTarget;
+}
+
+float EnemyTargetingComponent::GetDistanceToTarget() const
+{
+    return myDistanceToTarget;
+}
+
+CommonUtilities::Vector3<float> EnemyTargetingComponent::GetDirectionToTarget() const
+{
+    if (!myTarget)
+    {
+        return {};
+    }
+
+    auto direction = myTarget->GetTransform().GetPosition() - GetOwner()->GetTransform().GetPosition();
+
+    direction.Normalize();
+
+    return direction;
+}

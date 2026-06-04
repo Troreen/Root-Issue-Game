@@ -1,0 +1,12 @@
+{
+  "animation_source_path": "animations\\FBX\\Props\\A_P_AntennaPlace.fbx",
+  "cycle_count": 1.0,
+  "cycle_offset": 0.0,
+  "end_time": 4.833333492279053,
+  "events": [],
+  "is_looping": false,
+  "is_sync": false,
+  "playback_rate": 1.0,
+  "preview_model_path": "animations\\SK\\SK_P_Satellite.fbx",
+  "start_time": 0.0
+}

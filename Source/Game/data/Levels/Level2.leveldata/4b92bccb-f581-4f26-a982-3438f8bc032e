@@ -2,6 +2,13 @@
   "name": "MeleeEnemy(2)",
   "object-definition": "MeleeEnemy",
   "path": "",
+  "properties": [
+    {
+      "name": "spawnable",
+      "type": "Bool",
+      "value": true
+    }
+  ],
   "rotation": [
     0.0,
     -0.0,
@@ -13,8 +20,8 @@
     1.0
   ],
   "translation": [
-    2700.0,
+    2600.0,
     0.0,
-    3950.0
+    3800.0
   ]
 }

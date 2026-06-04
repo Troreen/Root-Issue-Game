@@ -24,7 +24,7 @@ void Cursor::UpdatePosition()
 		return;
 
 	Tga::Vector2f res = Essentials::GetResolution();
-	std::cout << "RES: " << res << std::endl;
+	//std::cout << "RES: " << res << std::endl;
 
     Tga::Vector2f mousePos;
     mousePos = Essentials::globalInputManager->GetMousePosition() - (res/2.f);
@@ -32,6 +32,7 @@ void Cursor::UpdatePosition()
 	screenPos.x = mousePos.x + res.x * 0.5f;
 	screenPos.y = res.y * 0.5f - mousePos.y;
 	myCursorElement->generalProperties.pos = CanvasObjectDefinition::ScreenPosToUIPos(screenPos, myCursorElement->generalProperties, *myUICanvas.GetCanvas(), Essentials::GetResolutionInt());
+	std::cout << "Mouse Screen pos: X: " << screenPos.x << " Y: " << screenPos.y << std::endl;
 }
 
 bool Cursor::GetCursorVisible()

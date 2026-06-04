@@ -1,0 +1,20 @@
+{
+  "name": "Shroom_01",
+  "object-definition": "Shroom_01",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    3805.31005859375,
+    5.0,
+    3052.859619140625
+  ]
+}

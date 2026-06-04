@@ -2,6 +2,13 @@
   "name": "RollingEnemy(3)",
   "object-definition": "RollingEnemy",
   "path": "",
+  "properties": [
+    {
+      "name": "spawnable",
+      "type": "Bool",
+      "value": false
+    }
+  ],
   "rotation": [
     0.0,
     -0.0,

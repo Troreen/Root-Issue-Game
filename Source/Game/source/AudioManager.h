@@ -20,11 +20,13 @@ enum SoundID
 	eEnemyDeadVox,
 	eBasicAttackVox,
 	eGore,
+	eRootDoor,
 	eMainMenuMusic,
 	eMusicLevel1,
 	eMusicLevel2,
 	eMusicLevel3,
 	eIntroSFX,
+	eOutroSFX,
 	eUnknown
 };
 

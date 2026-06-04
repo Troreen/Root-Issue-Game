@@ -1,0 +1,130 @@
+{
+  "links": [
+    {
+      "id": 0,
+      "sourcePin": 1,
+      "targetPin": 3
+    },
+    {
+      "id": 1,
+      "sourcePin": 9,
+      "targetPin": 11
+    }
+  ],
+  "nodes": [
+    {
+      "customData": null,
+      "id": 0,
+      "name": "",
+      "position": [
+        80.0,
+        120.0
+      ],
+      "type": "On Animation Event"
+    },
+    {
+      "customData": null,
+      "id": 1,
+      "name": "",
+      "position": [
+        377.0,
+        121.0
+      ],
+      "type": "Play SFX"
+    },
+    {
+      "customData": null,
+      "id": 2,
+      "name": "",
+      "position": [
+        67.0,
+        286.0
+      ],
+      "type": "On Animation Event"
+    },
+    {
+      "customData": null,
+      "id": 3,
+      "name": "",
+      "position": [
+        379.0,
+        285.0
+      ],
+      "type": "Play SFX"
+    }
+  ],
+  "pins": [
+    {
+      "datatype": null,
+      "id": 1,
+      "name": "Out",
+      "node": 0,
+      "role": "Output",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 2,
+      "name": "Event Id",
+      "node": 0,
+      "role": "Input",
+      "type": "Property",
+      "value": "footstep_left"
+    },
+    {
+      "datatype": null,
+      "id": 3,
+      "name": "In",
+      "node": 1,
+      "role": "Input",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 5,
+      "name": "Sound",
+      "node": 1,
+      "role": "Input",
+      "type": "Property",
+      "value": "VineBoom"
+    },
+    {
+      "datatype": null,
+      "id": 9,
+      "name": "Out",
+      "node": 2,
+      "role": "Output",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 10,
+      "name": "Event Id",
+      "node": 2,
+      "role": "Input",
+      "type": "Property",
+      "value": "footstep_right"
+    },
+    {
+      "datatype": null,
+      "id": 11,
+      "name": "In",
+      "node": 3,
+      "role": "Input",
+      "type": "Flow",
+      "value": null
+    },
+    {
+      "datatype": "StringId",
+      "id": 16,
+      "name": "Sound",
+      "node": 3,
+      "role": "Input",
+      "type": "Property",
+      "value": "VineBoom"
+    }
+  ]
+}

@@ -94,6 +94,7 @@ namespace RuntimeCollision
         rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::WorldDamageable, CollisionRule::Block);
         rules.SetSymmetric(ObjectLayer::Enemy, ObjectLayer::WorldStatic, CollisionRule::Block);
         rules.SetSymmetric(ObjectLayer::Enemy, ObjectLayer::WorldDamageable, CollisionRule::Block);
+        rules.SetSymmetric(ObjectLayer::Enemy, ObjectLayer::Enemy, CollisionRule::Block);
         rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::Enemy, CollisionRule::Block);
         rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::Trigger, CollisionRule::Trigger);
         rules.SetSymmetric(ObjectLayer::Player, ObjectLayer::Pickup, CollisionRule::Trigger);

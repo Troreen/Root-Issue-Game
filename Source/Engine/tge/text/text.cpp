@@ -86,6 +86,16 @@ float Tga::Text::GetHeight()
     return myTextService->GetSentenceHeight(*this);
 }
 
+float Tga::Text::GetHeightWithoutLines()
+{
+    if (!myTextService)
+    {
+        return 0.0f;
+    }
+
+    return myTextService->GetSentenceHeightWithoutLines(*this);
+}
+
 void Tga::Text::SetColor(const Color& aColor)
 {
     myColor = aColor;

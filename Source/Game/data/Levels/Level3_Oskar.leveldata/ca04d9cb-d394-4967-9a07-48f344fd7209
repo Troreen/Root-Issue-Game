@@ -1,0 +1,20 @@
+{
+  "name": "CollisionBlock_cylinderBig(73)",
+  "object-definition": "CollisionBlock_cylinderBig",
+  "path": "",
+  "rotation": [
+    0.0,
+    -0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "translation": [
+    5900.0,
+    0.0,
+    450.0
+  ]
+}

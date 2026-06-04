@@ -6,7 +6,7 @@
 
 
 class EnemyMovementComponent;
-class AnimationGraphComponent;
+class EnemyAnimationComponent;
 
 enum class AttackState
 {
@@ -33,26 +33,40 @@ public:
 
     bool IsAttacking() const;
     bool CanAttack() const;
+    void CancelAttack();
+
+
+    bool ConsumeWallHit();
+    void FinishRollingAttack();
+    bool IsRollingActive() const;
+
+    bool DidRollHitPlayerThisFrame() const;
+    bool DidRollHitWallThisFrame() const;
+
 
 private:
+
 
     void UpdateWindup(float aDeltaTime);
     void UpdateActive(float aDeltaTime);
     void UpdateRecovery(float aDeltaTime);
 
     void PerformAttack();
-    void FinishRollingAttack();
     void StopRollingAttackOnWorldCollision(GameObject& anOther);
+
+
 
 private:
 
     EnemyMovementComponent* myMovement = nullptr;
-    AnimationGraphComponent* myAnimationGraph = nullptr;
+    EnemyAnimationComponent* myAnimation = nullptr;
 
     EnemyData myEnemyData;
     AttackData myAttackData;
 
     AttackState myState = AttackState::Idle;
+
+    std::uint64_t myCombatAttackId = 0;
 
     float myTimer = 0.0f;
     float myCooldownTimer = 0.0f;
@@ -61,5 +75,7 @@ private:
     CommonUtilities::Vector3<float> myRollStartPosition;
 
     bool myHasAppliedAttack = false;
+    bool myFinishedRollingAttack = false;
+    bool myDidCollideWithWall = false;
 };
 

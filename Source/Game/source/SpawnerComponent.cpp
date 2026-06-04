@@ -3,11 +3,15 @@
 #include "Essentials/Essentials.h"
 #include "EnemyAIComponent.h"
 
+SpanwnerComponent::SpanwnerComponent()
+{
+	myTriggerRadius = 100.f;
+}
+
 void SpanwnerComponent::OnStart()
 {
 	Essentials::PushEnemyInto(myEnemies);
 	myIsTrigger = false;
-	myTriggerRadius = 100.f;
 	myIndex = 0;
 }
 

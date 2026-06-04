@@ -33,7 +33,7 @@ public:
 		return anEssentials;
 	}
 
-
+	static void InitCursor();
 	static float GetTotalTime();
 	static float GetDeltaTime();
 	static float GetUnscaledTotalTime();
@@ -64,8 +64,10 @@ public:
 
 	static inline bool ShutdownQueued;
 
+	static inline bool FirstTimeGunPickup;
+
 private:
-	
+
 	static inline std::unique_ptr<std::vector<std::unique_ptr<GameObject>>> myDynamicGameObjects;
 	static inline std::unique_ptr<std::vector<EnemyAIComponent*>> myEnemiesToSpawn;
 	static inline GameObject* myPlayer;

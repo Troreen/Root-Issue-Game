@@ -16,5 +16,7 @@ private:
 	
 	bool myHasGun;
 	float myWalkSpeed;
+
+
 };
 

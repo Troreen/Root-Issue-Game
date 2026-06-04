@@ -21,9 +21,9 @@
         "path": "Assets\\Art\\3D\\Environment\\SM_EN_FluffyCluster_02.fbx",
         "textures": [
           [
-            "",
-            "",
-            "",
+            "Assets\\Art\\Textures\\Decoration\\T_Fluffcluster_Lvl2_c.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_fluffcluster_n.dds",
+            "Assets\\Art\\Textures\\Decoration\\T_Fluffcluster_m.dds",
             ""
           ],
           [

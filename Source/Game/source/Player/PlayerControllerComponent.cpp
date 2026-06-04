@@ -6,6 +6,7 @@
 #include "PlayerState_Walk.h"
 #include "PlayerState_Master.h"
 #include "AnimationGraphComponent.h"
+#include "PlayerAnimationComponent.h"
 #include "MeshComponent.h"
 #include "ParticleEmitterComponent.h"
 #include "CapsuleColliderComponent.h"
@@ -16,6 +17,28 @@
 #include <algorithm>
 #include <cmath>
 #include <utility>
+
+namespace
+{
+	bool TryGetScriptedPickupState(
+		const std::string& aParameterName,
+		PlayerAnimationState& outState)
+	{
+		if (aParameterName == "w_fuse_pickup")
+		{
+			outState = PlayerAnimationState::FusePickup;
+			return true;
+		}
+
+		if (aParameterName == "w_antenna_place")
+		{
+			outState = PlayerAnimationState::AntennaPlace;
+			return true;
+		}
+
+		return false;
+	}
+}
 
 PlayerControllerComponent::PlayerControllerComponent(const SceneObjectData& aData)
 {
@@ -64,6 +87,10 @@ void PlayerControllerComponent::OnUpdate(float aDeltaTime)
 		myState != PlayerState_Master::Instance().myDeathState.get())
 	{
 		SetState(PlayerState_Master::Instance().myDeathState.get());
+	}
+	else if (GetOwner()->GetComponent<DamageableComponent>()->TookDamageThisFrame())
+	{
+		SetState(PlayerState_Master::Instance().myHurtState.get());
 	}
 
 	myState->BindToOwner(GetOwner());
@@ -116,7 +143,13 @@ void PlayerControllerComponent::EnableGun(bool aEnable)
 	if (PlayerState_Walk* walk = PlayerState_Master::myWalkState.get())
 	{
 		walk->SetHasGun(aEnable);
+		myHasGun = true;
 	}
+}
+
+bool PlayerControllerComponent::HasGun() const
+{
+	return myHasGun;
 }
 
 bool PlayerControllerComponent::IsMoveInput()
@@ -138,6 +171,7 @@ void PlayerControllerComponent::OnAnimationEvent(const AnimationEventContext& aE
 
 	if (eventName == "attack_end")
 	{
+		GetOwner()->GetComponent<PlayerAnimationComponent>()->BlendTo(PlayerAnimationState::None, 20);
 		SetState(PlayerState_Master::Instance().myWalkState.get());
 	}
 }
@@ -184,9 +218,15 @@ bool PlayerControllerComponent::StartScriptedPickupAnimation(
 		return false;
 	}
 
+	auto* playerAnimation = owner->GetComponent<PlayerAnimationComponent>();
+	PlayerAnimationState pickupAnimationState = PlayerAnimationState::None;
+	if (!playerAnimation || !TryGetScriptedPickupState(aParameterName, pickupAnimationState))
+	{
+		return false;
+	}
+
 	StopForcedMove();
 	StopScriptedPickupAnimation(false);
-	SetWalkAnimation(0.0f);
 
 	if (myState)
 	{
@@ -198,7 +238,7 @@ bool PlayerControllerComponent::StartScriptedPickupAnimation(
 	myScriptedPickupTimer = aDuration;
 	myScriptedPickupCompleteCallback = std::move(aOnComplete);
 	myScriptedPickupActive = true;
-	animationGraph->SetFloatParameter(myScriptedPickupParameterName, 1.0f);
+	playerAnimation->BlendTo(pickupAnimationState, 20.0f);
 	return true;
 }
 
@@ -279,9 +319,9 @@ void PlayerControllerComponent::StopScriptedPickupAnimation(const bool aShouldCo
 	GameObject* owner = GetOwner();
 	if (owner)
 	{
-		if (auto* animationGraph = owner->GetComponent<AnimationGraphComponent>())
+		if (auto* playerAnimation = owner->GetComponent<PlayerAnimationComponent>())
 		{
-			animationGraph->SetFloatParameter(myScriptedPickupParameterName, 0.0f);
+			playerAnimation->BlendTo(PlayerAnimationState::None, 20.0f);
 		}
 	}
 

@@ -2,7 +2,19 @@
   "animation_source_path": "animations\\FBX\\Player\\A_Player_Hurt.fbx",
   "cycle_count": 1.0,
   "cycle_offset": 0.0,
-  "end_time": 0.30000001192092896,
+  "end_time": 0.6666666865348816,
+  "events": [
+    {
+      "id": "hurt_camera_shake",
+      "script": "AnimationEvents/PlayerHurtAE",
+      "time": 0.1
+    },
+    {
+    "id": "hurt_blood_spill",
+    "script": "AnimationEvents/PlayerHurtAE",
+    "time": 0.1
+    }
+  ],
   "is_looping": false,
   "is_sync": false,
   "playback_rate": 1.0,

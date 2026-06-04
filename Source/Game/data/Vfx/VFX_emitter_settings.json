@@ -349,7 +349,8 @@
       "editorname": "Player",
       "emitters": [
         "bloodCone",
-        "smokeCone"
+        "smokeCone",
+        "bulletTrail"
       ]
     },
     {

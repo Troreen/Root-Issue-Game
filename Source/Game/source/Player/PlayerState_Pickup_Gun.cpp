@@ -16,10 +16,10 @@ void PlayerState_Pickup_Gun::SetValues()
 {
 	myPickupTimer = 3.f;
 
-	myAnimationGraph->SetFloatParameter("w_upgrade", 1.f);
+	myPlayerAnimation->BlendTo(PlayerAnimationState::Upgrade, 20);
 }
 
 void PlayerState_Pickup_Gun::ResetValues()
 {
-	myAnimationGraph->SetFloatParameter("w_upgrade", 0.f);
+	myPlayerAnimation->BlendTo(PlayerAnimationState::None, 20);
 }

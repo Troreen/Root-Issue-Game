@@ -3,6 +3,9 @@
 #include <iostream>
 #include "GameObject.h"
 #include "BoxColliderComponent.h"
+#include "ObbColliderComponent.h"
+#include "AnimationGraphComponent.h"
+#include "AnimatedMeshComponent.h"
 #include "tge/engine.h"
 
 ToggleComponent::ToggleComponent(int anID, bool aActive, int anTypeID) : myUniqueID(anID), myIsActivated(aActive), myTypeID(anTypeID), myPostMaster(Essentials::globalPostMaster.get())
@@ -23,21 +26,20 @@ void ToggleComponent::Init(Tga::Engine& anEngine)
 
 void ToggleComponent::Initialize()
 {
+	BindAnimationGraph();
 	if (myIsActivated == true)
 	{
-		auto& transform = GetOwner()->GetTransform();
 		myIsActivated = !myIsActivated;
-		myStartPos = Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z);
-		myEndPos = Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y - 400.0f, transform.GetPosition().z);
+		myStartPos = Tga::Vector3f(0.f, 0.f, 0.f);
+		myEndPos = Tga::Vector3f(0.f,  -400.0f, 0.f);
 		Toggle();
 	}
 	else
 	{
-		auto& transform = GetOwner()->GetTransform();
-		myStartPos = Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y, transform.GetPosition().z);
-		myEndPos = Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y - 400.0f, transform.GetPosition().z);
+		myStartPos = Tga::Vector3f(0.f, 0.f, 0.f);
+		myEndPos = Tga::Vector3f(0.f, -400.0f, 0.f);
+		myIdle = -1.0f;
 	}
-	myAnimPercent = 0.f;
 }
 
 void ToggleComponent::OnUpdate(float /*aDeltaTime*/)
@@ -45,15 +47,14 @@ void ToggleComponent::OnUpdate(float /*aDeltaTime*/)
 	switch (static_cast<eTypeID>(myTypeID))
 	{
 	case eTypeID::eDoor:
-		if (myAnimPercent > 0.00f && !myIsActivated)
+		if (myOwner->HasComponent<ObbColliderComponent>())
 		{
-			myAnimPercent -= 0.01f;
+			myOwner->GetComponent<ObbColliderComponent>()->SetOffset(Tga::Vector3f::Lerp(myStartPos, myEndPos, myIsActivated));
 		}
-		else if (myAnimPercent < 1.0f && myIsActivated)
+		if (myOwner->HasComponent<AnimationGraphComponent>())
 		{
-			myAnimPercent += 0.01f;
+			myOwner->GetComponent<AnimationGraphComponent>()->SetFloatParameter("w_Active", myIdle);
 		}
-		this->GetOwner()->GetTransform().SetPosition(Tga::Vector3f::Lerp(myStartPos, myEndPos, myAnimPercent));
 		break;
 	default:
 		break;
@@ -76,8 +77,6 @@ void ToggleComponent::Receive(const Message& aMSG)
 void ToggleComponent::Toggle()
 {
 	myIsActivated = !myIsActivated;
-	auto& engine = *Tga::Engine::GetInstance();
-	/*auto& transform = GetOwner()->GetTransform();*/
 	if (myIsActivated)
 	{
 		switch (static_cast<eTypeID>(myTypeID))
@@ -85,10 +84,18 @@ void ToggleComponent::Toggle()
 		case eTypeID::eNothing:
 			break;
 		case eTypeID::eDoor:
-			/*this->GetOwner()->GetTransform().SetPosition(Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y - 400.0f, transform.GetPosition().z));*/
-			if (GetOwner()->HasComponent<BoxColliderComponent>())
+			if (myAnimationGraph)
 			{
-				GetOwner()->GetComponent<BoxColliderComponent>()->Init(engine);
+				if (myOwner->GetObjDefinition() == "HubDoor_01")
+				{
+					if (!Essentials::globalAudioManager.get()->IsEventPlaying(SoundID::eRootDoor))
+					{
+						Essentials::globalAudioManager.get()->PlaySFXAtLocation(SoundID::eRootDoor, (GetOwner()->GetTransform().GetPosition().ToTga() - Essentials::GetPlayer()->GetTransform().GetPosition().ToTga()));
+					}
+				}
+				myAnimationGraph->SetEnabled(true);
+				myIdle = 1.0f;
+				myOwner->GetComponent<AnimationGraphComponent>()->SetFloatParameter("w_Active", myIdle);
 			}
 			break;
 		default:
@@ -102,10 +109,11 @@ void ToggleComponent::Toggle()
 		case eTypeID::eNothing:
 			break;
 		case eTypeID::eDoor:
-			/*transform.SetPosition(Tga::Vector3f(transform.GetPosition().x, transform.GetPosition().y + 400.0f, transform.GetPosition().z));*/
-			if (GetOwner()->HasComponent<BoxColliderComponent>())
+			if (myAnimationGraph)
 			{
-				GetOwner()->GetComponent<BoxColliderComponent>()->Init(engine);
+				myAnimationGraph->SetEnabled(true);
+				myIdle = -1.0f;
+				myOwner->GetComponent<AnimationGraphComponent>()->SetFloatParameter("w_Active", myIdle);
 			}
 			break;
 		default:
@@ -113,5 +121,3 @@ void ToggleComponent::Toggle()
 		}
 	}
 }
-
-

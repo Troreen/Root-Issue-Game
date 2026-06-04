@@ -25,6 +25,8 @@ public:
     void Init(Tga::Engine& anEngine) override;
     void Render() override;
 
+    void SetTranslationRotationOffset(const Tga::Vector3f& aTranslation, const Tga::Vector3f& aRotations);
+
 private:
     SceneSpriteData mySpriteData;
     const Tga::TextureResource* myTexture = nullptr;
@@ -32,6 +34,7 @@ private:
     Tga::SpriteSharedData mySharedData;
     Tga::Sprite3DInstanceData myInstanceData;
     std::unique_ptr<Tga::SpriteShader> myPbrSpriteShader;
+    Tga::Matrix4x4f myRotationOffset;
     bool myWarnedMissingTexture = false;
     bool myHasMaterialMaps = false;
     bool myPbrSpriteShaderInitialized = false;

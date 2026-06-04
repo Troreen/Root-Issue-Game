@@ -1,10 +1,10 @@
 {
-  "animation_source_path": "animations\\FBX\\Environment\\A_ENV_Lever.fbx",
+  "animation_source_path": "animations\\FBX\\Environment\\A_ENV_Root_Lever_Idle.fbx",
   "cycle_count": 1.0,
   "cycle_offset": 0.0,
-  "end_time": 0.5666666626930237,
+  "end_time": 3.299999952316284,
   "events": [],
-  "is_looping": false,
+  "is_looping": true,
   "is_sync": false,
   "playback_rate": 1.0,
   "preview_model_path": "animations\\SK\\SK_ENV_Lever.fbx",

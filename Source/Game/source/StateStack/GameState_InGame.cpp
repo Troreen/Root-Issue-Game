@@ -16,6 +16,7 @@
 #include "ObbColliderComponent.h"
 #include "SphereColliderComponent.h"
 #include "PauseMenuComponent.h"
+#include "StaticSpriteComponent.h"
 
 #include <tge/drawers/SpriteDrawer.h>
 #include <tge/graphics/DX11.h>
@@ -142,6 +143,7 @@ InGame::~InGame()
 	{
 		Essentials::globalAnimationEvents->Clear();
 	}
+	RuntimeCollisionService::Clear();
 	mySceneTransitionController.Shutdown();
 	WorldTransitionService::SetListener(nullptr);
 	WorldTransitionService::EndSequence();
@@ -163,6 +165,7 @@ void InGame::Init(CameraSystem& aCamera, const char* argv[])
 	RegisterAnimationGraphNodesOnce();
 	myCameraSystem->Init();
 	CombatService::Set(&myCombatSystem);
+	RuntimeCollisionService::Set(&myRuntimeCollisionSystem, &myGameObjects);
 
 	RegisterGameObjectFactories();
 
@@ -208,6 +211,7 @@ void InGame::Init(CameraSystem& aCamera, const char* argv[])
 eState InGame::Update()
 {
 	CombatService::Set(&myCombatSystem);
+	RuntimeCollisionService::Set(&myRuntimeCollisionSystem, &myGameObjects);
 
 	myTimer.Update();
 	myInputHandler.UpdateInput();
@@ -246,6 +250,9 @@ eState InGame::Update()
 	/*myCameraSystem->UpdateDebugCamera(deltaTime, myInputHandler);*/
 	/*myCameraSystem->Update(deltaTime);*/
 
+	UICanvas::UpdateAll();
+	Essentials::myCursor->UpdatePosition();
+
 	for (auto& object : myGameObjects)
 	{
 		if (!object || !object->IsActive())
@@ -283,20 +290,74 @@ eState InGame::Update()
 
 	myVfxSystem.Update(deltaTime);
 
+	if (mySceneName == "Levels/Level1.tgs")
+	{
+		if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eMusicLevel1))
+		{
+			Essentials::globalAudioManager->StopMusic(SoundID::eMusicLevel2, true);
+			Essentials::globalAudioManager->StopMusic(SoundID::eMusicLevel3, true);
+			Essentials::globalAudioManager->StopMusic(SoundID::eMusicLoop, true);
+			Essentials::globalAudioManager->PlayMusic(SoundID::eMusicLevel1);
+		}
+	}
+	else if (mySceneName == "Levels/Level2.tgs")
+	{
+		if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eMusicLevel2))
+		{
+			Essentials::globalAudioManager->StopMusic(SoundID::eMusicLevel1, true);
+			Essentials::globalAudioManager->StopMusic(SoundID::eMusicLevel3, true);
+			Essentials::globalAudioManager->StopMusic(SoundID::eMusicLoop, true);
+			Essentials::globalAudioManager->PlayMusic(SoundID::eMusicLevel2);
+		}
+	}
+	else if (mySceneName == "Levels/Level3_Oskar.tgs" || mySceneName == "Levels/Level3_Part2_Oskar.tgs")
+	{
+		if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eMusicLevel3))
+		{
+			Essentials::globalAudioManager->StopMusic(SoundID::eMusicLevel1, true);
+			Essentials::globalAudioManager->StopMusic(SoundID::eMusicLevel2, true);
+			Essentials::globalAudioManager->StopMusic(SoundID::eMusicLoop, true);
+			Essentials::globalAudioManager->PlayMusic(SoundID::eMusicLevel3);
+		}
+	}
+	else
 	if (!Essentials::globalAudioManager->IsEventPlaying(SoundID::eMusicLoop))
 	{
+		Essentials::globalAudioManager->StopMusic(SoundID::eMusicLevel1, true);
+		Essentials::globalAudioManager->StopMusic(SoundID::eMusicLevel3, true);
+		Essentials::globalAudioManager->StopMusic(SoundID::eMusicLevel2, true);
 		Essentials::globalAudioManager->PlayMusic(SoundID::eMusicLoop);
 	}
 
 	Essentials::globalAudioManager->Update(deltaTime);
 	Essentials::PushGameObjectsInto(myGameObjects);
-	UICanvas::UpdateAll();
 	mySceneTransitionController.Update(deltaTime);
 
-	if (Essentials::GetPlayer()->GetComponent<PauseMenuComponent>()->ReturnToMainMenu())
+	if (Essentials::GetPlayer())
 	{
-		Essentials::globalAudioManager->StopAllEvents();
-		return eState::ePopState;
+		if (!myGameObjects.empty())
+		{
+			if (Essentials::GetPlayer()->GetComponent<PauseMenuComponent>()->ReturnToMainMenu())
+			{
+				Essentials::globalAudioManager->StopAllEvents();
+				return eState::ePopState;
+			}
+		}
+	}
+
+	if (mySceneName == "Levels/TransitionScene1.tgs")
+	{
+		return eState::eLoadFirstLog;
+	}
+
+	if (mySceneName == "Levels/TransitionScene2.tgs")
+	{
+		return eState::eLoadSecondLog;
+	}
+
+	if (mySceneName == "Levels/OutroScene.tgs")
+	{
+		return eState::eOutro;
 	}
 
 	return eState::COUNT;
@@ -313,7 +374,20 @@ void InGame::Render()
 		myEnableAmbientLight,
 		true);
 	myCombatSystem.RenderDebug();
+
+	{
+		Tga::DX11::BackBuffer->SetAsActiveTarget();
+		auto* sprite = Essentials::GetPlayer()->GetComponent<StaticSpriteComponent>();
+		if (sprite && sprite->IsEnabled())
+		{
+			sprite->Render();
+		}
+		Tga::DX11::BackBuffer->SetAsActiveTarget(Tga::DX11::DepthBuffer);
+	}
+	UICanvas::RenderAll();
+
 	RenderSceneFadeOverlay();
+
 
 #ifndef _RETAIL
 	myCameraSystem->RenderDebugUi();
@@ -340,6 +414,7 @@ void InGame::ApplyTransitionScene(
 {
 	(void)aTargetSpawnId;
 	ApplyLoadedScene(std::move(someObjects), aScenePath);
+	RuntimeCollisionService::Set(&myRuntimeCollisionSystem, &myGameObjects);
 	myRuntimeCollisionSystem.AuditRequiredColliders(myGameObjects);
 }
 
@@ -428,11 +503,13 @@ void InGame::ConsumeCollisionContacts(const std::vector<CollisionContact>& someC
 	{
 		if (contact.first != nullptr)
 		{
+			contact.first->DispatchCollisionContact(contact);
 			DispatchTriggerPhase(*contact.first, contact.phase);
 		}
 
 		if (contact.second != nullptr)
 		{
+			contact.second->DispatchCollisionContact(contact);
 			DispatchTriggerPhase(*contact.second, contact.phase);
 		}
 	}

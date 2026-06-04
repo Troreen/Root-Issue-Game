@@ -117,6 +117,7 @@ struct CollisionRaycastQuery
     CommonUtilities::Vector3<float> origin = { 0.0f, 0.0f, 0.0f };
     CommonUtilities::Vector3<float> direction = { 0.0f, 0.0f, 1.0f };
     float maxDistance = 0.0f;
+    float radiusPadding = 0.0f;
     CollisionLayerMask layers;
     GameObject* ignoredObject = nullptr;
     bool includeTriggerColliders = true;

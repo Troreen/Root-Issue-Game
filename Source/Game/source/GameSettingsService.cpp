@@ -21,6 +21,34 @@ namespace
         return Tga::Settings::GameAssetRoot() / kGameSettingsFileName;
     }
 
+    std::string AmbientModeToString(const Tga::AmbientLightType anAmbientMode)
+    {
+        switch (anAmbientMode)
+        {
+        case Tga::AmbientLightType::UniformAboveHorizon:
+            return "UniformAboveHorizon";
+        case Tga::AmbientLightType::Custom:
+            return "Custom";
+        case Tga::AmbientLightType::Uniform:
+        default:
+            return "Uniform";
+        }
+    }
+
+    Tga::AmbientLightType AmbientModeFromString(const std::string& anAmbientMode)
+    {
+        if (anAmbientMode == "UniformAboveHorizon")
+        {
+            return Tga::AmbientLightType::UniformAboveHorizon;
+        }
+        if (anAmbientMode == "Custom")
+        {
+            return Tga::AmbientLightType::Custom;
+        }
+
+        return Tga::AmbientLightType::Uniform;
+    }
+
     Json LoadSettingsJson()
     {
         const std::filesystem::path settingsPath = GetSettingsPath();
@@ -91,7 +119,9 @@ namespace
                 someSettings.directionalColor[1],
                 someSettings.directionalColor[2] }) },
             { "directionalIntensity", someSettings.directionalIntensity },
+            { "directionalSoftness", someSettings.directionalSoftness },
             { "enableAmbientLight", someSettings.enableAmbientLight },
+            { "ambientMode", AmbientModeToString(someSettings.ambientMode) },
             { "ambientColor", Json::array({
                 someSettings.ambientColor[0],
                 someSettings.ambientColor[1],
@@ -122,8 +152,17 @@ namespace
         settings.enableDirectionalLight = aJson.value("enableDirectionalLight", settings.enableDirectionalLight);
         ReadFloatArray3(aJson, "directionalRotationDegrees", settings.directionalRotationDegrees);
         ReadFloatArray3(aJson, "directionalColor", settings.directionalColor);
-        settings.directionalIntensity = aJson.value("directionalIntensity", settings.directionalIntensity);
+        if (aJson.contains("directionalSoftness"))
+        {
+            settings.directionalIntensity = aJson.value("directionalIntensity", settings.directionalIntensity);
+            settings.directionalSoftness = aJson.value("directionalSoftness", settings.directionalSoftness);
+        }
+        else
+        {
+            settings.directionalSoftness = aJson.value("directionalIntensity", settings.directionalSoftness);
+        }
         settings.enableAmbientLight = aJson.value("enableAmbientLight", settings.enableAmbientLight);
+        settings.ambientMode = AmbientModeFromString(aJson.value("ambientMode", AmbientModeToString(settings.ambientMode)));
         ReadFloatArray3(aJson, "ambientColor", settings.ambientColor);
         settings.ambientIntensity = aJson.value("ambientIntensity", settings.ambientIntensity);
         return settings;

@@ -58,26 +58,6 @@
     },
     {
       "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "animation_graph",
-      "type": "StringId",
-      "value": "animations\\Animation Graphs\\MushroomTree.tgscript"
-    },
-    {
-      "description": "",
-      "group": "Animation",
-      "is-dynamic": false,
-      "is-per-instance": false,
-      "name": "clip_idle",
-      "type": "Animation Clip",
-      "value": {
-        "clip_path": "AnimationClips\\\\Grafik\\\\SK_EN_MushroomTree_idle.tgac"
-      }
-    },
-    {
-      "description": "",
       "group": "Collision",
       "is-dynamic": false,
       "is-per-instance": false,

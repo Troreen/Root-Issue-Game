@@ -18,7 +18,7 @@
       "name": "model",
       "type": "Model",
       "value": {
-        "path": "Assets\\Art\\3D\\Environment\\SM_EN_Rocks_Large_Lvl3.fbx",
+        "path": "Assets\\Art\\3D\\Environment\\SM_EN_Rocks_Large_Lvl1.fbx",
         "textures": [
           [
             "Assets\\Art\\Textures\\Decoration\\T_Rocks_03_c.dds",

@@ -16,12 +16,17 @@
     {
       "name": "targetScene",
       "type": "StringId",
-      "value": "HUB_01"
+      "value": "TransitionScene1"
     },
     {
       "name": "IsActivated?",
       "type": "Bool",
       "value": false
+    },
+    {
+      "name": "fadeOutSeconds",
+      "type": "Float",
+      "value": 5.0
     }
   ],
   "rotation": [
@@ -35,8 +40,8 @@
     1.0
   ],
   "translation": [
-    650.0,
-    900.0,
+    200.0,
+    600.0,
     2450.0
   ]
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <tge/graphics/AmbientLight.h>
 #include <tge/render/RenderCommon.h>
 
 namespace GameDebugSettings
@@ -11,9 +12,11 @@ namespace GameDebugSettings
         bool enableDirectionalLight = true;
         float directionalRotationDegrees[3] = { 225.0f, -45.0f, 0.0f };
         float directionalColor[3] = { 1.0f, 1.0f, 1.0f };
-        float directionalIntensity = 0.1f;
+        float directionalIntensity = 1.0f;
+        float directionalSoftness = 0.1f;
 
         bool enableAmbientLight = true;
+        Tga::AmbientLightType ambientMode = Tga::AmbientLightType::Uniform;
         float ambientColor[3] = { 0.5f, 0.5f, 0.5f };
         float ambientIntensity = 1.0f;
     };
@@ -47,6 +50,12 @@ namespace GameDebugSettings
     }
 
     inline bool& ShowCombatHitboxes()
+    {
+        static bool value = false;
+        return value;
+    }
+
+    inline bool& ShowEnemyAvoidanceDebugLines()
     {
         static bool value = false;
         return value;
